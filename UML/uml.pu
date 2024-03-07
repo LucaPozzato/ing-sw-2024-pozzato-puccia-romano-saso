@@ -1,47 +1,131 @@
 @startuml
 
+hide empty fields
+
+'2DO: '
+'1. Enumerazione simboli e colori '
+'2. frecce di composizione per struttura - carte '
+'3. metodi Game '
+'4. tutto controller '
+'5. come inserire, cosa inserire per la view '
+'6. inserire network? '
 
 class Controller {
 
-'attributi
-- game: Game
+    'attributi
+    - game: Game
 
-'metodi
-+ void: StartGame()
+    'metodi'
+    + void: StartGame()
 
 
 }
 
 class Game {
-
+    - int: NumeroGiocatori
+    - int: GiocatoriEntrati
+    '- ?StadioGioco '
+    - COLORE: CurrentPlayer
+    '?Board con dizionario colore punteggio'
+    'check sull'istanza array
+    - Int[2]: ObiettiviComuni
+    - Int[2][2]: CarteTerra
 }
 
 class Player {
+   - char[16]: Nickname
+   - COLORE: ColorePlayer
 
+   + char[16]: getNickname()
+   + COLORE: getColorePlayer()
 }
-class InitialPlayer extends Player {
 
-}
 
 class Card {
+    'colore lo codifichiam nell'id? o lo salviamo in una var?
+   - int: IdCard
+   - char[]: CodeFront
+   - char[]: CodeBack
+   - int[]: PointsCard
+
+   + int: getIdCard()
+   + char[]: getCodeFront()
+   + char[]: getCodeBack()
+   + int[]: getPointsCard()
 
 }
 
 class ObjectiveCard extends Card {
 
+    'tipo dell'obiettivo con enum? o codificato?'
+    'non chiarissimo come caratterizzare l'obiettivo'
+
 }
 
 class AngledCard extends Card {
 
+    - int[2][2]: CornersCard
+    'decidere valore di default per corner non presente, corner presente non collegato, Id/puntatore carrta'
+    - SIMBOLO[2][2]: SimboliCarta
+
+    + int[2][2]: getCornersCard()
+    + SIMBOLO[2][2]: getSimboliCarta()
 }
 
-class GoldCard extends AngledCard {}
-class ResourceCard extends AngledCard {}
-class sas extends AngledCard {}
 
-Controller "1" -- "1" Game
+class GoldCard extends AngledCard {
+
+    - SIMBOLO[5]: Richieste
+    'tipo ^ da capire'
+    'caratterizzare tipo obiettivo'
+
+    + SIMBOLO[5]: getRichieste()
+
+}
+
+
+class InitialCard extends AngledCard {
+
+    - SIMBOLO[3]: RisorseCentro
+    'tipo da capire'
+
+    + SIMBOLO[3]: getRisorseCentro()
+}
+
+class ResourceCard extends AngledCard {}
+
+class Struttura {
+
+}
+
+
+class Mazzo {
+
+    'check sul tipo dinamico statico'
+    - List<Card>: MazzoGold
+    - List<Card>: MazzoRisorse
+
+}
+
+class Mano {
+
+    - int: ObiettivoSegreto
+    - int[3]: CarteMano
+
+    + int: getObiettivoSegreto()
+    + int[3]: getCarteMano()
+}
+
+
+Controller  --  Game
 Game "1" -- "1...4" Player
-Card  --  Game
+Game -- Mazzo
+Mazzo -- Card
+Player -- Struttura
+Player -- Mano
+Struttura -- Card
+
+
 
 
 @enduml
