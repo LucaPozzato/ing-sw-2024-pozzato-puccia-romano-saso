@@ -1,0 +1,51 @@
+@startuml
+
+
+class Controller {
+
+'attributi
+- game: Game
+
+'metodi
++ void: StartGame()
+
+
+}
+
+class Game {
+
+}
+
+class Player {
+
+}
+class InitialPlayer extends Player {
+
+}
+
+class Card {
+
+}
+
+class ObjectiveCard extends Card {
+
+}
+
+class AngledCard extends Card {
+
+}
+
+class GoldCard extends AngledCard {}
+class ResourceCard extends AngledCard {}
+class InitialCard extends AngledCard {}
+
+Controller "1" -- "1" Game
+Game "1" -- "1...4" Player
+Card  --  Game
+
+
+@enduml
+
+
+
+
