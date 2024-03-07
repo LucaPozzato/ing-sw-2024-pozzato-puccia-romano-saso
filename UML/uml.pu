@@ -37,7 +37,7 @@ class AngledCard extends Card {
 
 class GoldCard extends AngledCard {}
 class ResourceCard extends AngledCard {}
-class InitialCard extends AngledCard {}
+class sas extends AngledCard {}
 
 Controller "1" -- "1" Game
 Game "1" -- "1...4" Player
