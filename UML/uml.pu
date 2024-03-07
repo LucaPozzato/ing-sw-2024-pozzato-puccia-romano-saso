@@ -93,6 +93,7 @@ class InitialCard extends AngledCard {
 }
 
 class ResourceCard extends AngledCard {}
+class sas0 extends AngledCard {}
 
 class Struttura {
 
