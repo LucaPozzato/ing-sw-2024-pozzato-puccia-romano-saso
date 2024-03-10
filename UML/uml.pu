@@ -22,13 +22,21 @@ package model {
         - commonObjectives: int[2]
         - placedCards: int[2][2]
 
+        'General'
 
         'Initial'
         + drawResourceCards() : void
         + drawGoldCard() : void
         + drawSecretObjective() : void
-        'General'
-        + getPoints() : void
+        'Board'
+        + getPoints( COLORE colore) : int
+        + futurePoints () : int
+        'Structure'
+        + insertCard() : void
+        + checkPattern(): void
+        + calculateCurrentResources(): void
+        + calculatePoints(): void
+
 
     }
 
@@ -40,6 +48,10 @@ package model {
         + getColorPlayer(): COLOR
     }
 
+    class Board {
+        + getPoints( COLORE colore) : int
+        + futurePoints () : int
+    }
 
     class Card {
         'colore lo codifichiam nell'id? o lo salviamo in una var?
@@ -85,7 +97,12 @@ package model {
 
     class ResourceCard extends AngledCard {}
 
-    class Structure {}
+    class Structure {
+        + insertCard() : void
+        + checkPattern(): void
+        + calculateCurrentResources(): void
+        + calculatePoints(): void
+    }
 
     class Deck {
         'check sul tipo dinamico statico'
@@ -99,6 +116,23 @@ package model {
 
         + getSecretObjective(): int
         + getCardsHand(): int[3]
+    }
+
+    enum COLORE {
+        YELLOW
+        BLUE
+        GREEN
+        RED
+    }
+
+    enum SIMBOLI {
+        VEGETABLE
+        ANIMAL
+        INSECT
+        SHROOM
+        FEATHER
+        INK
+        SCROLL
     }
 }
 
@@ -169,6 +203,7 @@ Game -- GameController
 Game -- GameHandler
 Game -- PlayerController
 Game "1" -- "1...4" Player
+Game -- Board
 Game -- Deck
 Deck -- Card
 Player -- Structure
