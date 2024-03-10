@@ -154,7 +154,15 @@ package View {
 
 }
 
+Interface Observer {
+    + Update() : void
+}
 
+Class Observable {
+    + AddObserver(): void
+    + RemoveObserver(): void
+    + Notify(): void
+}
 
 Game -- InitialGameController
 Game -- GameController
