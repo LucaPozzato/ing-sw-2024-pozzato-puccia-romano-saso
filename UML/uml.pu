@@ -10,7 +10,8 @@ hide empty fields
 '5. come inserire, cosa inserire per la view '
 '6. inserire network? '
 
-package Model {
+package model {
+
     class Game {
         - numPlayers: int
         - numParticipants: int
@@ -20,6 +21,14 @@ package Model {
         'check sull'istanza array
         - commonObjectives: int[2]
         - placedCards: int[2][2]
+
+        'Initial'
+        + drawResourceCards() : void
+        + drawGoldCard() : void
+        + drawSecretObjective() : void
+        'General'
+        + getPoints() : void
+
     }
 
     class Player {
@@ -92,6 +101,64 @@ package Model {
     }
 }
 
+package controller {
+
+    class ClientController {
+        - view : View
+        + showAllowedConnections() : void
+        + isLegal() : void
+        + isMyTurn() : void
+        + deny() : void
+        + notify() : void
+    }
+
+    class PlayerController {
+        - game : Game
+        + createPlayer() : void
+        + setColour() : void
+        + serNickname() : void
+        + joinGame() : void
+    }
+
+    class GameController {
+        - game : Game
+        + drawCard() : void
+        + getPoints() : void
+        + playCard() : void
+        + choosePosition() : void
+        + chooseSide() : void
+        + chooseCard() : void
+    }
+
+    class GameHandler {
+        - game : Game
+        + getGames() : void
+        + startGames() : void
+        + endGame() : void
+    }
+
+    class InitialGameController {
+        - game : Game
+        + selectStartSide() : void
+        + selectColour() : void
+        + drawCommonObjective() : void
+        + chooseSecretObjectiveCard() : void
+        + PickFirstPlayer() : void
+    }
+}
+
+
+package View {
+
+
+}
+
+
+
+Game -- InitialGameController
+Game -- GameController
+Game -- GameHandler
+Game -- PlayerController
 Game "1" -- "1...4" Player
 Game -- Deck
 Deck -- Card
@@ -99,12 +166,6 @@ Player -- Structure
 Player -- Hand
 Structure -- Card
 
-package Controller {
 
-}
-
-package View {
-    
-}
 
 @enduml
