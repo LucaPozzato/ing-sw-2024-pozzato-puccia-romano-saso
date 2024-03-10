@@ -99,7 +99,9 @@ Player -- Structure
 Player -- Hand
 Structure -- Card
 
-package Controller {}
+package Controller {
+    
+}
 
 package View {}
 
