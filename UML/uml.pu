@@ -22,6 +22,7 @@ package model {
         - commonObjectives: int[2]
         - placedCards: int[2][2]
 
+
         'Initial'
         + drawResourceCards() : void
         + drawGoldCard() : void
