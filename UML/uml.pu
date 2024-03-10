@@ -188,14 +188,18 @@ package View {
 
 }
 
-Interface Observer {
-    + Update() : void
-}
+Package opps {
 
-Class Observable {
-    + AddObserver(): void
-    + RemoveObserver(): void
-    + Notify(): void
+    Interface Observer {
+        + Update() : void
+    }
+
+    Class Observable {
+        + AddObserver(): void
+        + RemoveObserver(): void
+        + Notify(): void
+    }
+
 }
 
 Game -- InitialGameController
