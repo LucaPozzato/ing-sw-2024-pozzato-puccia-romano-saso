@@ -186,51 +186,7 @@ package model {
     }
 }
 
-package controller {
-
-    class ClientController {
-        - view : View
-        + showAllowedConnections() : void
-        + isLegal() : void
-        + isMyTurn() : void
-        + deny() : void
-        + notify() : void
-    }
-
-    class PlayerController {
-        - game : Game
-        + createPlayer() : void
-        + setColour() : void
-        + serNickname() : void
-        + joinGame() : void
-    }
-
-    class GameController {
-        - game : Game
-        + drawCard() : void
-        + getPoints() : void
-        + playCard() : void
-        + choosePosition() : void
-        + chooseSide() : void
-        + chooseCard() : void
-    }
-
-    class GameHandler {
-        - game : Game
-        + getGames() : void
-        + startGames() : void
-        + endGame() : void
-    }
-
-    class InitialGameController {
-        - game : Game
-        + selectStartSide() : void
-        + selectColour() : void
-        + drawCommonObjective() : void
-        + chooseSecretObjectiveCard() : void
-        + PickFirstPlayer() : void
-    }
-}
+package controller {}
 
 package view {
     abstract View {
