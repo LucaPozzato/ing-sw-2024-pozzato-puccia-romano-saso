@@ -147,29 +147,80 @@ package model {
 
     class NewPlayerEvent extends Event{
         + createPlayerEvent(playerView: View): void
+        +type:NewPlayerEventType
     }
 
     class NewGameEvent extends Event{
         + createGameEvent(gameView: View): void
+        +type:NewGameEventType
     }
 
     package updategameevent {
+
+        enum BoardEventType{
+            NEXT_TURN
+            LAST_TURN
+            NEXT_PLAYER
+            NEW_POSITION
+            NEW_POINTS
+        }
+        enum DeckEventType{
+            INIT
+            CARD_PICKED
+            NO_MORE_CARDS
+        }
+        enum HandEventType{
+            CARD_PICKED
+            CARD_PLACED
+        }
+        enum StructureEventType{
+            CARD_PLACED
+            RESOURCE_COUNT
+        }
+
         class GameBoardUpdateEvent {
             + createGameBoardEvent(boardView: View): void
+            +type:BoardEventType
+ 
         }
 
         class GameDeckUpdateEvent {
             + createGameDeckEvent(deckview: View): void
+            +type:DeckEventType
         }
 
         class GameHandUpdateEvent {
             + createGameHandEvent(handView: View): void
+            +type:HandEventType
         }
 
         class GameStructureUpdateEvent {
             + createGameStructureEvent(structureView: View): void
+            +type:StructureEventType
         }
+
+        GameBoardUpdateEvent --> BoardEventType : type
+        GameDeckUpdateEvent --> DeckEventType : type
+        GameHandUpdateEvent --> HandEventType : type
+        GameStructureUpdateEvent --> StructureEventType : type
+
     }
+
+            enum NewPlayerEventType{
+            PLAYER_JOINED
+            ERROR_WHILE_ENTERING
+            PLAYER_READY_TO_PLAY
+            DISCONNECTED_PLAYER
+        }
+
+        enum NewGameEventType{
+            GAME_STARTED
+            GAME_ENDED
+            GAME_ALREADY_FULL
+        }
+
+        NewPlayerEvent --> NewPlayerEventType : type
+        NewGameEvent --> NewGameEventType : type
 
     class ChatMessage {
         - messageId: int
@@ -184,6 +235,13 @@ package model {
         + addMessage(message: ChatMessage): void
         + removeMessage(message: ChatMessage): void
     }
+
+    package exceptions{
+        exception AlreadyExistingNicknameException{}
+        exception IllegalPlacementAnglesException{}
+        exception IllegalPlacementResourcesException{}
+        exception IllegalSequeceException{}
+    }
 }
 
 package controller {
@@ -197,29 +255,22 @@ package controller {
         -modelChat: Chat 
         -modelGame: Game
         -modelPlayer: Player
-
-
         ' Controller state changes
-
         + lastTurn(): void
         + initialTurn(): void
         + computePoints(playerList:List<Player>) : List<int>
         + computePointsBy(player: Player): int
         + turnEnded(): void
-
         + cardPlaced(card:angledCard, player:Player):void
         + computeStructurePointsBy(player:Player)
-
         +drawCard():void
         +placeCard():void
-
         +sendMessage(message:String): void
-
-
         'User gesture consumer from view 
-
         +update():void
         +selectView():void
+        +addEvent(event: Event): void
+        +removeEvent(event: Event): void
     }
 
     note bottom
@@ -245,11 +296,10 @@ package controller {
         +setNickname(nick:String):void throws AlreadyExistingNicknameException
         +setNumPlayers(num:int):void
         +setConnectionType():void
-
-
         'User gesture consumer from view 
-
         +update():void
+        +addEvent(event: Event): void
+        +removeEvent(event: Event): void
     }
 
     note bottom
@@ -273,6 +323,8 @@ package controller {
         'User gesture consumer from view 
 
         +update():void
+        +addEvent(event: Event): void
+        +removeEvent(event: Event): void
     }
 
     note bottom
