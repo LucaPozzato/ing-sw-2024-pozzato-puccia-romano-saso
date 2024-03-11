@@ -13,6 +13,8 @@ hide empty fields
 package model {
 
     class Game {
+        - gameId: int
+        - observerList: List<View>
         - numPlayers: int
         - numParticipants: int
         '- ?StadioGioco
@@ -36,8 +38,9 @@ package model {
         + checkPattern(): void
         + calculateCurrentResources(): void
         + calculatePoints(): void
-
-
+        + notifyAll(): void
+        + addObserver(view: View): void
+        + removeObserver(view: View): void
     }
 
     class Player {
@@ -134,6 +137,53 @@ package model {
         INK
         SCROLL
     }
+
+    abstract class Event {
+        - id: int
+        - timeStamp: long
+        + getEventId(): int
+        + getTimeStamp(): long
+    }
+
+    class NewPlayerEvent extends Event{
+        + createPlayerEvent(id: int, timeStamp: long, playerView: View): void
+    }
+
+    class NewGameEvent extends Event{
+        + createGameEvent(id: int, timeStamp: long, gameView: View): void
+    }
+
+    package updategameevent {
+        class GameBoardUpdateEvent {
+            + createGameBoardEvent(id: int, timeStamp: long, boardView: View): void
+        }
+
+        class GameDeckUpdateEvent {
+            + createGameDeckEvent(id: int, timeStamp: long, deckview: View): void
+        }
+
+        class GameHandUpdateEvent {
+            + createGameHandEvent(id: int, timeStamp: long, handView: View): void
+        }
+
+        class GameStructureUpdateEvent {
+            + createGameStructureEvent(id: int, timeStamp: long, structureView: View): void
+        }
+    }
+
+    class ChatMessage {
+        - messageId: int
+        - message: String
+        - sender: Player
+        - receiver: List<Player>
+        - timeStamp: long
+    }
+
+    class Chat {
+        - chatMessages: List<ChatMessage>
+        + addMessage(message: ChatMessage): void
+        + removeMessage(message: ChatMessage): void
+    }
 }
 
 package controller {
@@ -182,38 +232,66 @@ package controller {
     }
 }
 
-
-package View {
-
-
-}
-
-Package opps {
-
-    Interface Observer {
-        + Update() : void
+package view {
+    abstract View {
+        - gameModel: Game
+        - boardModel: Board
+        - playerModel: Player
+        - deckModel: Deck
+        - handModel: Hand
+        - structureModel: Structure
+        - eventQueue: Queue<Event>
+        - controllerList: List<Controller>
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
+        + update(): void
+        + addListener(controller: Controller): void
+        + removeListener(controller: Controller): void
+        + notifyAll(): void
     }
 
-    Class Observable {
-        + AddObserver(): void
-        + RemoveObserver(): void
-        + Notify(): void
+    package boardview {
+        class BoardViewGui extends View {}
+        class BoardViewCli extends View {}
     }
 
+    package playerview {
+        class PlayerViewGui extends View {}
+        class PlayerViewCli extends View {}
+    }
+
+    package deckview {
+        class DeckViewGui extends View {}
+        class DeckViewCli extends View {}
+    }
+
+    package handview {
+        class HandViewGui extends View {}
+        class HandViewCli extends View {}
+    }
+
+    package structureview {
+        class StructureViewGui extends View {}
+        class StructureViewCli extends View {}
+    }
+
+    package gameview {
+        class GameViewGui extends View {}
+        class GameViewCli extends View {}
+    }
 }
 
-Game -- InitialGameController
-Game -- GameController
-Game -- GameHandler
-Game -- PlayerController
-Game "1" -- "1...4" Player
-Game -- Board
+Game -- Player
 Game -- Deck
+Game -- Board
 Deck -- Card
-Player -- Structure
 Player -- Hand
+Player -- Structure
 Structure -- Card
+Hand -- Card
 
+Chat -- ChatMessage
 
+updategameevent --|> Event
 
 @enduml
