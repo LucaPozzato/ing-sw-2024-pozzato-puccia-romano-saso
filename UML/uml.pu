@@ -186,7 +186,107 @@ package model {
     }
 }
 
-package controller {}
+package controller {
+
+class ServerController{
+-view: View
+-modelBoard: Board 
+-eventQueue: Queue<Event>
+-modelStructure: Structure
+-modelHand: Handwritten
+-modelDeck: Deck 
+-modelChat: Chat 
+-modelGame: Game
+-modelPlayer: Player
+
+
+' Controller state changes
+
++ lastTurn(): void
++ initialTurn(): void
++ computePoints(playerList:List<Player>) : List<int>
++ computePointsBy(player: Player): int
++ turnEnded(): void
+
++ cardPlaced(card:angledCard, player:Player):void
++ computeStructurePointsBy(player:Player)
+
++drawCard():void
++placeCard():void
+
++sendMessage(message:String): void
+
+'User gesture consumer from view 
+
++update():void
++selectView():void
+
+}
+
+note bottom
+It reacts to events thrown by the view by updating 
+the task queue and holds the logics to compute the 
+result of user actions and perform changes on the
+state. It acts selectiong the view that requires changes.
+end note
+
+
+class FlowController{
+-view: View
+-modelBoard: Board 
+-modelGame: Game
+-eventQueue: Queue<Event>
+
+
+'Controller state changes
+
++createGame():void
++deleteGame():void
++admitPlayer():void
++setNickname(nick:String):void throws AlreadyExistingNicknameException
++setNumPlayers(num:int):void
++setConnectionType():void
+
+
+'User gesture consumer from view 
+
++update():void
+
+}
+
+note bottom
+It holds the multiplayer logic and the management
+of inital settings
+end note
+
+class ClientController{
+-view: View
+-eventQueue: Queue<Event>
+
+
+'Action performed by user that doesn't affect the state of the model
+
++whosTurn():Player throws NotYourTurnException 
++suitablePlaced():boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
++suitableOrder():boolean throws IllegalSequeceException 
++hint():Card
+
+
+'User gesture consumer from view 
+
++update():void
+
+}
+
+note bottom
+It handles part of game's logic. Specifically it reacts to user's attempt to make 
+illegal moves blocking him from changing the state of the model and, given the current state
+of the game it gives hints on the best card choice.
+It doesn't interact with the model.
+
+end note
+
+}
 
 package view {
     abstract View {
