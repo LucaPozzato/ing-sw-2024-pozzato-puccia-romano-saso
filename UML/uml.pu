@@ -1,6 +1,7 @@
 @startuml uml
 
 hide empty fields
+skinparam linetype ortho
 
 'TODO: '
 '1. Enumerazione simboli e colori '
@@ -412,5 +413,4 @@ GameStructureUpdateEvent --> StructureEventType : type
 
 NewPlayerEvent --> NewPlayerEventType : type
 NewGameEvent --> NewGameEventType : type
-
 @enduml
