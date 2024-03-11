@@ -307,33 +307,33 @@ package view {
     }
 
     package boardview {
-        class BoardViewGui extends View {}
-        class BoardViewCli extends View {}
+        class BoardViewGui {}
+        class BoardViewCli {}
     }
 
     package playerview {
-        class PlayerViewGui extends View {}
-        class PlayerViewCli extends View {}
+        class PlayerViewGui {}
+        class PlayerViewCli {}
     }
 
     package deckview {
-        class DeckViewGui extends View {}
-        class DeckViewCli extends View {}
+        class DeckViewGui {}
+        class DeckViewCli {}
     }
 
     package handview {
-        class HandViewGui extends View {}
-        class HandViewCli extends View {}
+        class HandViewGui {}
+        class HandViewCli {}
     }
 
     package structureview {
-        class StructureViewGui extends View {}
-        class StructureViewCli extends View {}
+        class StructureViewGui {}
+        class StructureViewCli {}
     }
 
     package gameview {
-        class GameViewGui extends View {}
-        class GameViewCli extends View {}
+        class GameViewGui {}
+        class GameViewCli {}
     }
 }
 
@@ -349,5 +349,18 @@ Hand -- Card
 Chat -- ChatMessage
 
 updategameevent --|> Event
+
+BoardViewGui --|> View
+BoardViewCli --|> View
+PlayerViewGui --|> View
+PlayerViewCli --|> View
+DeckViewGui --|> View
+DeckViewCli --|> View
+HandViewGui --|> View
+HandViewCli --|> View
+StructureViewGui --|> View
+StructureViewCli --|> View
+GameViewGui --|> View
+GameViewCli --|> View
 
 @enduml
