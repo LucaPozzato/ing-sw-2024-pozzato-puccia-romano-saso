@@ -146,28 +146,28 @@ package model {
     }
 
     class NewPlayerEvent extends Event{
-        + createPlayerEvent(id: int, timeStamp: long, playerView: View): void
+        + createPlayerEvent(playerView: View): void
     }
 
     class NewGameEvent extends Event{
-        + createGameEvent(id: int, timeStamp: long, gameView: View): void
+        + createGameEvent(gameView: View): void
     }
 
     package updategameevent {
         class GameBoardUpdateEvent {
-            + createGameBoardEvent(id: int, timeStamp: long, boardView: View): void
+            + createGameBoardEvent(boardView: View): void
         }
 
         class GameDeckUpdateEvent {
-            + createGameDeckEvent(id: int, timeStamp: long, deckview: View): void
+            + createGameDeckEvent(deckview: View): void
         }
 
         class GameHandUpdateEvent {
-            + createGameHandEvent(id: int, timeStamp: long, handView: View): void
+            + createGameHandEvent(handView: View): void
         }
 
         class GameStructureUpdateEvent {
-            + createGameStructureEvent(id: int, timeStamp: long, structureView: View): void
+            + createGameStructureEvent(structureView: View): void
         }
     }
 
