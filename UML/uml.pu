@@ -14,19 +14,23 @@ skinparam linetype ortho
 package model {
 
     class Game {
+        - board: Board
+        - players : Player[4]
         - gameId: int
         - observerList: List<View>
         - numPlayers: int
         - numParticipants: int
         '- ?StadioGioco
         - currentPlayer: COLORE
-        '?Board con dizionario colore punteggio
-        'check sull'istanza array
+        - nextPlayer : COLORE
         - commonObjectives: int[2]
         - placedCards: int[2][2]
 
         'General'
-
+        + game(): Game
+        + notifyAll(): void
+        + addObserver(view: View): void
+        + removeObserver(view: View): void
         'Initial'
         + drawResourceCards() : void
         + drawGoldCard() : void
@@ -39,22 +43,27 @@ package model {
         + checkPattern(): void
         + calculateCurrentResources(): void
         + calculatePoints(): void
-        + notifyAll(): void
-        + addObserver(view: View): void
-        + removeObserver(view: View): void
     }
 
     class Player {
         - nickname: String
         - colorPlayer: COLOR
-
+        - structure : Structure
+        - hand: Hand
+        + player() : Player
         + getNickname(): String
         + getColorPlayer(): COLOR
-    }
+           }
 
     class Board {
-        + getPoints( COLORE colore) : int
-        + futurePoints () : int
+        - Scores : Map < COLORE, int >
+
+        + board() : Board
+        + updateScore(COLORE player, int newPoints) : void
+        'modifica la mappa dello Scores'
+        + getCurrentPoints(COLORE player) : int
+        + getFuturePoints (COLORE player) : int
+        + isLastTurn(): boolean
     }
 
     class Card {
@@ -64,6 +73,7 @@ package model {
         - codeBack: char[]
         - cardPoints: int[]
 
+        + card() : Card
         + getIdCard(): int
         + getCodeFront(): char[]
         + getCodeBack(): char[]
@@ -73,6 +83,8 @@ package model {
     class ObjectiveCard extends Card {
         'tipo dell'obiettivo con enum? o codificato?'
         'non chiarissimo come caratterizzare l'obiettivo'
+
+        +card(): ObjectiveCard
     }
 
     class AngledCard extends Card {
@@ -80,6 +92,7 @@ package model {
         'decidere valore di default per corner non presente, corner presente non collegato, Id/puntatore carrta'
         - cardSymbols: SIMBOLO[2][2]
 
+        + card(): AngledCard
         + getCardCorners(): int[2][2]
         + getCardSymbols(): SIMBOLO[2][2]
     }
@@ -89,6 +102,7 @@ package model {
         'tipo ^ da capire'
         'caratterizzare tipo obiettivo'
 
+        + card(): GoldCard
         + getResources(): SIMBOLO[5]
     }
 
@@ -96,12 +110,21 @@ package model {
         - centerResources: SIMBOLO[3]
         'tipo da capire'
 
+        + card(): InitialCard
         + getCenterResources(): SIMBOLO[3]
     }
 
     class ResourceCard extends AngledCard {}
 
     class Structure {
+
+        'è necessario che abbia player se è unico di un playre?'
+        - player: COLORE
+        - playedCards(): List<Cards>
+        'può restituire la prima carta della struttura da cui ripercorrere ricorsivamente le connessioni'
+        'può restituire una lista con le connessioni ordinate'
+        - connections(): int
+
         + insertCard() : void
         + checkPattern(): void
         + calculateCurrentResources(): void
@@ -112,6 +135,10 @@ package model {
         'check sul tipo dinamico statico'
         - goldDeck: List<Card>
         - resourceDeck: List<Card>
+
+        + deck(): Deck
+        + getGoldDeck() : List<Card>
+        + getResourceDeck(): List<Card>
     }
 
     class Hand {
