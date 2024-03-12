@@ -441,6 +441,5 @@ GameStructureUpdateEvent --> StructureEventType : type
 NewPlayerEvent --> NewPlayerEventType : type
 NewGameEvent --> NewGameEventType : type
 
-view --[hidden]up-- controller
 left to right direction
 @enduml
