@@ -3,26 +3,17 @@
 hide empty fields
 skinparam linetype ortho
 
-'TODO: '
-'1. Enumerazione simboli e colori '
-'2. frecce di composizione per struttura - carte '
-'3. metodi Game '
-'4. tutto controller '
-'5. come inserire, cosa inserire per la view '
-'6. inserire network? '
-
 package model {
-
     class Game {
         - board: Board
-        - players : Player[4]
+        - players: Player[4]
         - gameId: int
         - observerList: List<View>
         - numPlayers: int
         - numParticipants: int
         '- ?StadioGioco
-        - currentPlayer: COLORE
-        - nextPlayer : COLORE
+        - currentPlayer: Color
+        - nextPlayer: Color
         - commonObjectives: int[2]
         - placedCards: int[2][2]
 
@@ -32,14 +23,14 @@ package model {
         + addObserver(view: View): void
         + removeObserver(view: View): void
         'Initial'
-        + drawResourceCards() : void
-        + drawGoldCard() : void
-        + drawSecretObjective() : void
+        + drawResourceCards(): void
+        + drawGoldCard(): void
+        + drawSecretObjective(): void
         'Board'
-        + getPoints( COLORE colore) : int
-        + futurePoints () : int
+        + getPoints(color: Color): int
+        + futurePoints(): int
         'Structure'
-        + insertCard() : void
+        + insertCard(): void
         + checkPattern(): void
         + calculateCurrentResources(): void
         + calculatePoints(): void
@@ -47,27 +38,27 @@ package model {
 
     class Player {
         - nickname: String
-        - colorPlayer: COLOR
-        - structure : Structure
+        - colorPlayer: Color
+        - structure: Structure
         - hand: Hand
-        + player() : Player
+        + player(): Player
         + getNickname(): String
-        + getColorPlayer(): COLOR
-           }
+        + getColorPlayer(): Color
+        }
 
     class Board {
-        - Scores : Map < COLORE, int >
+        - Scores: Map<Color, int>
 
-        + board() : Board
-        + updateScore(COLORE player, int newPoints) : void
+        + board(): Board
+        + updateScore(player: Color, newPoints: int): void
         'modifica la mappa dello Scores'
-        + getCurrentPoints(COLORE player) : int
-        + getFuturePoints (COLORE player) : int
+        + getCurrentPoints(player: Color): int
+        + getFuturePoints(player: Color): int
         + isLastTurn(): boolean
     }
 
     class Card {
-        'colore lo codifichiam nell'id? o lo salviamo in una var?
+        'Color lo codifichiam nell'id? o lo salviamo in una var?
         - idCard: int
         - codeFront: char[]
         - codeBack: char[]
@@ -84,47 +75,45 @@ package model {
         'tipo dell'obiettivo con enum? o codificato?'
         'non chiarissimo come caratterizzare l'obiettivo'
 
-        +card(): ObjectiveCard
+        + card(): ObjectiveCard
     }
 
     class AngledCard extends Card {
         - cardCorners: int[2][2]
         'decidere valore di default per corner non presente, corner presente non collegato, Id/puntatore carrta'
-        - cardSymbols: SIMBOLO[2][2]
+        - cardSymbols: Symbol[2][2]
 
         + card(): AngledCard
         + getCardCorners(): int[2][2]
-        + getCardSymbols(): SIMBOLO[2][2]
+        + getCardSymbols(): Symbol[2][2]
     }
 
     class GoldCard extends AngledCard {
-        - resources: SIMBOLO[5]
+        - resources: Symbol[5]
         'tipo ^ da capire'
         'caratterizzare tipo obiettivo'
 
         + card(): GoldCard
-        + getResources(): SIMBOLO[5]
+        + getResources(): Symbol[5]
     }
 
     class InitialCard extends AngledCard {
-        - centerResources: SIMBOLO[3]
+        - centerResources: Symbol[3]
         'tipo da capire'
 
         + card(): InitialCard
-        + getCenterResources(): SIMBOLO[3]
+        + getCenterResources(): Symbol[3]
     }
 
     class ResourceCard extends AngledCard {}
 
     class Structure {
-
         'è necessario che abbia player se è unico di un playre?'
-        - player: COLORE
-        - playedCards(): List<Cards>
+        - player: Color
+        + playedCards(): List<Cards>
         'può restituire la prima carta della struttura da cui ripercorrere ricorsivamente le connessioni'
         'può restituire una lista con le connessioni ordinate'
-        - connections(): int
-
+        + connections(): int
         + insertCard() : void
         + checkPattern(): void
         + calculateCurrentResources(): void
@@ -149,14 +138,14 @@ package model {
         + getCardsHand(): int[3]
     }
 
-    enum COLORE {
+    enum Color {
         YELLOW
         BLUE
         GREEN
         RED
     }
 
-    enum SIMBOLI {
+    enum Symbol {
         VEGETABLE
         ANIMAL
         INSECT
@@ -184,7 +173,6 @@ package model {
     }
 
     package updategameevent {
-
         enum BoardEventType{
             NEXT_TURN
             LAST_TURN
@@ -208,23 +196,23 @@ package model {
 
         class GameBoardUpdateEvent {
             + createGameBoardEvent(boardView: View): void
-            +type:BoardEventType
+            + type:BoardEventType
  
         }
 
         class GameDeckUpdateEvent {
             + createGameDeckEvent(deckview: View): void
-            +type:DeckEventType
+            + type:DeckEventType
         }
 
         class GameHandUpdateEvent {
             + createGameHandEvent(handView: View): void
-            +type:HandEventType
+            + type:HandEventType
         }
 
         class GameStructureUpdateEvent {
             + createGameStructureEvent(structureView: View): void
-            +type:StructureEventType
+            + type:StructureEventType
         }
     }
 
@@ -265,15 +253,15 @@ package model {
 
 package controller {
     class ServerController{
-        -view: View
-        -modelBoard: Board 
-        -eventQueue: Queue<Event>
-        -modelStructure: Structure
-        -modelHand: Handwritten
-        -modelDeck: Deck 
-        -modelChat: Chat 
-        -modelGame: Game
-        -modelPlayer: Player
+        - view: View
+        - modelBoard: Board 
+        - eventQueue: Queue<Event>
+        - modelStructure: Structure
+        - modelHand: Handwritten
+        - modelDeck: Deck 
+        - modelChat: Chat 
+        - modelGame: Game
+        - modelPlayer: Player
         ' Controller state changes
         + lastTurn(): void
         + initialTurn(): void
@@ -282,14 +270,14 @@ package controller {
         + turnEnded(): void
         + cardPlaced(card:angledCard, player:Player):void
         + computeStructurePointsBy(player:Player)
-        +drawCard():void
-        +placeCard():void
-        +sendMessage(message:String): void
+        + drawCard():void
+        + placeCard():void
+        + sendMessage(message:String): void
         'User gesture consumer from view 
-        +update():void
-        +selectView():void
-        +addEvent(event: Event): void
-        +removeEvent(event: Event): void
+        + update():void
+        + selectView():void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
     }
 
     note bottom
@@ -299,26 +287,22 @@ package controller {
     state. It acts selectiong the view that requires changes.
     end note
 
-
     class FlowController{
-        -view: View
-        -modelBoard: Board 
-        -modelGame: Game
-        -eventQueue: Queue<Event>
-
-
+        - view: View
+        - modelBoard: Board 
+        - modelGame: Game
+        - eventQueue: Queue<Event>
         'Controller state changes
-
-        +createGame():void
-        +deleteGame():void
-        +admitPlayer():void
-        +setNickname(nick:String):void throws AlreadyExistingNicknameException
-        +setNumPlayers(num:int):void
-        +setConnectionType():void
+        + createGame():void
+        + deleteGame():void
+        + admitPlayer():void
+        + setNickname(nick:String):void throws AlreadyExistingNicknameException
+        + setNumPlayers(num:int):void
+        + setConnectionType():void
         'User gesture consumer from view 
-        +update():void
-        +addEvent(event: Event): void
-        +removeEvent(event: Event): void
+        + update():void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
     }
 
     note bottom
@@ -327,23 +311,17 @@ package controller {
     end note
 
     class ClientController{
-        -view: View
-        -eventQueue: Queue<Event>
-
-
+        - view: View
+        - eventQueue: Queue<Event>
         'Action performed by user that doesn't affect the state of the model
-
-        +whosTurn():Player throws NotYourTurnException 
-        +suitablePlaced():boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
-        +suitableOrder():boolean throws IllegalSequeceException 
-        +hint():Card
-
-
+        + whosTurn():Player throws NotYourTurnException 
+        + suitablePlaced():boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
+        + suitableOrder():boolean throws IllegalSequeceException 
+        + hint():Card
         'User gesture consumer from view 
-
-        +update():void
-        +addEvent(event: Event): void
-        +removeEvent(event: Event): void
+        + update():void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
     }
 
     note bottom
@@ -351,7 +329,6 @@ package controller {
     illegal moves blocking him from changing the state of the model and, given the current state
     of the game it gives hints on the best card choice.
     It doesn't interact with the model.
-
     end note
 }
 
