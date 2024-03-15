@@ -1,5 +1,4 @@
 @startuml uml
-
 hide empty fields
 skinparam linetype ortho
 
@@ -57,7 +56,7 @@ package model {
         + isLastTurn(): boolean
     }
 
-    class Card {
+    abstract class Card {
         'Color lo codifichiam nell'id? o lo salviamo in una var?
         - idCard: int
         - codeFront: char[]
@@ -162,14 +161,27 @@ package model {
         + getTimeStamp(): long
     }
 
+    enum NewPlayerEventType{
+        PLAYER_JOINED
+        ERROR_WHILE_ENTERING
+        PLAYER_READY_TO_PLAY
+        DISCONNECTED_PLAYER
+    }
+
+    enum NewGameEventType{
+        GAME_STARTED
+        GAME_ENDED
+        GAME_ALREADY_FULL
+    }
+
     class NewPlayerEvent extends Event{
+        - type: NewPlayerEventType
         + createPlayerEvent(playerView: View): void
-        +type:NewPlayerEventType
     }
 
     class NewGameEvent extends Event{
+        - type: NewGameEventType
         + createGameEvent(gameView: View): void
-        +type:NewGameEventType
     }
 
     package updategameevent {
@@ -195,38 +207,24 @@ package model {
         }
 
         class GameBoardUpdateEvent {
+            - type: BoardEventType
             + createGameBoardEvent(boardView: View): void
-            + type:BoardEventType
- 
         }
 
         class GameDeckUpdateEvent {
+            - type: DeckEventType
             + createGameDeckEvent(deckview: View): void
-            + type:DeckEventType
         }
 
         class GameHandUpdateEvent {
+            - type: HandEventType
             + createGameHandEvent(handView: View): void
-            + type:HandEventType
         }
 
         class GameStructureUpdateEvent {
+            - type: StructureEventType
             + createGameStructureEvent(structureView: View): void
-            + type:StructureEventType
         }
-    }
-
-    enum NewPlayerEventType{
-        PLAYER_JOINED
-        ERROR_WHILE_ENTERING
-        PLAYER_READY_TO_PLAY
-        DISCONNECTED_PLAYER
-    }
-
-    enum NewGameEventType{
-        GAME_STARTED
-        GAME_ENDED
-        GAME_ALREADY_FULL
     }
 
     class ChatMessage {
@@ -265,17 +263,17 @@ package controller {
         ' Controller state changes
         + lastTurn(): void
         + initialTurn(): void
-        + computePoints(playerList:List<Player>) : List<int>
+        + computePoints(playerList: List<Player>): List<int>
         + computePointsBy(player: Player): int
         + turnEnded(): void
-        + cardPlaced(card:angledCard, player:Player):void
-        + computeStructurePointsBy(player:Player)
-        + drawCard():void
-        + placeCard():void
+        + cardPlaced(card: angledCard, player: Player): void
+        + computeStructurePointsBy(player: Player)
+        + drawCard(): void
+        + placeCard(): void
         + sendMessage(message:String): void
         'User gesture consumer from view 
-        + update():void
-        + selectView():void
+        + update(): void
+        + selectView(): void
         + addEvent(event: Event): void
         + removeEvent(event: Event): void
     }
@@ -293,14 +291,14 @@ package controller {
         - modelGame: Game
         - eventQueue: Queue<Event>
         'Controller state changes
-        + createGame():void
-        + deleteGame():void
-        + admitPlayer():void
-        + setNickname(nick:String):void throws AlreadyExistingNicknameException
-        + setNumPlayers(num:int):void
-        + setConnectionType():void
+        + createGame(): void
+        + deleteGame(): void
+        + admitPlayer(): void
+        + setNickname(nickName: String): void throws AlreadyExistingNicknameException
+        + setNumPlayers(num: int): void
+        + setConnectionType(): void
         'User gesture consumer from view 
-        + update():void
+        + update(): void
         + addEvent(event: Event): void
         + removeEvent(event: Event): void
     }
@@ -314,12 +312,12 @@ package controller {
         - view: View
         - eventQueue: Queue<Event>
         'Action performed by user that doesn't affect the state of the model
-        + whosTurn():Player throws NotYourTurnException 
-        + suitablePlaced():boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
-        + suitableOrder():boolean throws IllegalSequeceException 
-        + hint():Card
+        + whosTurn(): Player throws NotYourTurnException 
+        + suitablePlaced(): boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
+        + suitableOrder(): boolean throws IllegalSequeceException 
+        + hint(): Card
         'User gesture consumer from view 
-        + update():void
+        + update(): void
         + addEvent(event: Event): void
         + removeEvent(event: Event): void
     }
@@ -419,4 +417,12 @@ NewPlayerEvent --> NewPlayerEventType : type
 NewGameEvent --> NewGameEventType : type
 
 left to right direction
+
+' [ ] Sistema metodi duplicati
+' [ ] Metodi specifici per aggiornamento modello
+' [ ] Struttura classe 'Structure' da chiarire
+' [ ] Strategy pattern per controller -> stucture
+' [x] Sintassi controller
+' [x] Sistemare tipi eventi
+
 @enduml
