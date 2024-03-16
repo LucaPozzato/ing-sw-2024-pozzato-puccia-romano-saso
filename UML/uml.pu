@@ -1,38 +1,33 @@
 @startuml uml
 hide empty fields
-skinparam linetype ortho
+' skinparam linetype ortho
 
 package model {
     class Game {
-        - board: Board
-        - players: Player[4]
         - gameId: int
-        - observerList: List<View>
+        - gameState: State
+        - players: Player[4]
+        - playerHand: Hand[4]
+        - playerStructure: Structure[4]
+        - deck: Deck
+        - board: Board
         - numPlayers: int
         - numParticipants: int
         '- ?StadioGioco
-        - currentPlayer: Color
-        - nextPlayer: Color
-        - commonObjectives: int[2]
-        - placedCards: int[2][2]
-
+        - currentPlayer: Player
+        - nextPlayer: Player
+        - observerList: List<View>
         'General'
-        + game(): Game
+        
+        + game(): void
         + notifyAll(): void
         + addObserver(view: View): void
         + removeObserver(view: View): void
-        'Initial'
-        + drawResourceCards(): void
-        + drawGoldCard(): void
-        + drawSecretObjective(): void
-        'Board'
-        + getPoints(color: Color): int
-        + futurePoints(): int
-        'Structure'
-        + insertCard(): void
-        + checkPattern(): void
-        + calculateCurrentResources(): void
-        + calculatePoints(): void
+        + setState(state: State): void
+        + getCurrentPlater(): Player
+        + getState(): State
+        + getDeck(): Deck
+        + getBoard(): Board
     }
 
     class Player {
@@ -40,15 +35,66 @@ package model {
         - colorPlayer: Color
         - structure: Structure
         - hand: Hand
+        
         + player(): Player
         + getNickname(): String
         + getColorPlayer(): Color
         }
 
-    class Board {
-        - Scores: Map<Color, int>
+    abstract class State {
+        - game: Game
 
-        + board(): Board
+        + State(): void
+        + initialize(): void
+        + joinGame(): void
+        + placedCard(): void
+        + drawnCard(): void
+        + matchEnded(): void
+    }
+
+    class InitState {
+        + InitState(): void
+        + initialized(): void
+        - createDecks(): void
+        - dealHands(): void
+        - dealSecretObjective(): void
+        - dealCommonObjective(): void
+        - createFirstPlayer(): void
+    }
+
+    note bottom
+    createDecks parses the json file and forall card in it calls the Deck's method "addCard". When finished it shuffles the deck calling on it the method "shuffle".
+    end note
+    
+    class WaitPlayerState {
+        + WaitPlayerState(): void
+        + joinGame(): void
+        - createNewPlayers(): void
+        - isFull(): void
+    }
+
+    class PlacedCardState {
+        + PlacedCardState(): void
+        + placedCard(): void
+        - addCard(): void
+        - computePoints(): void
+    }
+
+    class DrawnCardState {
+        + DrawnCardState(): void
+        + drawnCard(): void
+        + matchEnded(): void
+        - updateDeck(): void
+        - nextTurn(): void
+        - endMatch(): void
+    }
+
+    class Board {
+        - scores: Map<Color, int>
+        - commonObjectives: int[2]
+        - uncoveredCards: int[2][2]
+
+        + Board(): void
         + updateScore(player: Color, newPoints: int): void
         'modifica la mappa dello Scores'
         + getCurrentPoints(player: Color): int
@@ -63,7 +109,7 @@ package model {
         - codeBack: char[]
         - cardPoints: int[]
 
-        + card() : Card
+        + Card(): void
         + getIdCard(): int
         + getCodeFront(): char[]
         + getCodeBack(): char[]
@@ -125,8 +171,14 @@ package model {
         - resourceDeck: List<Card>
 
         + deck(): Deck
-        + getGoldDeck() : List<Card>
+        + getGoldDeck(): List<Card>
         + getResourceDeck(): List<Card>
+        + addGoldCard(card: GoldCard): void
+        + addResourceCard(card: ResourceCard): void
+        + drawGoldCard(): GoldCard
+        + drawResourceCard(): ResourceCard
+        + shuffleGoldDeck(): void
+        + shuffleResourceDeck(): void
     }
 
     class Hand {
@@ -408,6 +460,13 @@ StructureViewCli -up-|> View
 GameViewGui -up-|> View
 GameViewCli -up-|> View
 
+InitState -up-|> State
+WaitPlayerState -up-|> State
+PlacedCardState -up-|> State
+DrawnCardState -up-|> State
+
+Game *-up-> State
+
 GameBoardUpdateEvent --> BoardEventType : type
 GameDeckUpdateEvent --> DeckEventType : type
 GameHandUpdateEvent --> HandEventType : type
@@ -419,10 +478,12 @@ NewGameEvent --> NewGameEventType : type
 left to right direction
 
 ' [ ] Sistema metodi duplicati
-' [ ] Metodi specifici per aggiornamento modello
-' [ ] Struttura classe 'Structure' da chiarire
-' [ ] Strategy pattern per controller -> stucture
+' [ ] Metodi specifici per aggiornamento modello -> Card, Board, Structure, Player, Hand
+' [x] Struttura classe 'Structure' da chiarire -> Albero
+' [ ] Strategy pattern per computePoints model
 ' [x] Sintassi controller
 ' [x] Sistemare tipi eventi
+' [ ] Finire commenti metodi
+' [ ] Abstract factory pattern per createPlayer
 
 @enduml
