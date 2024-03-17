@@ -1,14 +1,14 @@
 @startuml uml
 hide empty fields
-' skinparam linetype ortho
+skinparam linetype ortho
 
 package model {
     class Game {
         - gameId: int
         - gameState: State
-        - players: Player[4]
-        - playerHand: Hand[4]
-        - playerStructure: Structure[4]
+        - players: List<Player>
+        - playerHand: List<Hand>
+        - playerStructure: List<Structure>
         - deck: Deck
         - board: Board
         - numPlayers: int
@@ -19,27 +19,93 @@ package model {
         - observerList: List<View>
         'General'
         
-        + game(): void
+        + game(gameId: int): void
         + notifyAll(): void
         + addObserver(view: View): void
         + removeObserver(view: View): void
-        + setState(state: State): void
+        + addPlayer(player: Player): void
         + getCurrentPlater(): Player
+        + getNextPlayer(): Player
         + getState(): State
         + getDeck(): Deck
         + getBoard(): Board
+        + getNumPlayers(): int
+        + getNumParticipants(): int
+        + getGameId(): int
+        + getPlayers(): List<Player>
+        + getHandByPlayer(player: Player): Hand
+        + getStructureByPlayer(player: Player): Structure
+        + setState(state: State): void
+        + setNumPlayers(num: int): void
+        + setNumParticipants(num: int): void
+        + setDeck(deck: Deck): void
+        + setBoard(board: Board): void
+        + setPlayerHand(player: Player, hand: Hand): void
+        + setPlayerStructure(player: Player, structure: Structure): void
+        + setCurrentPlayer(player: Player): void 
+        + setNextPlayer(player: Player): void 
     }
-
+    
     class Player {
         - nickname: String
         - colorPlayer: Color
-        - structure: Structure
-        - hand: Hand
         
-        + player(): Player
+        + Player(nickname: String, colorPlayer: Color): void
         + getNickname(): String
         + getColorPlayer(): Color
         }
+    
+    class AbstractPlayerFactory{
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Gui
+
+    }
+    class CliPlayerFactory extends AbstractPlayerFactory{
+        - cliRmi: CliRmiPlayer
+        - cliSocket: CliSocketPlayer
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Socket
+    }
+
+    class GuiPlayerFactory extends AbstractPlayerFactory{
+        - guiRmi: GuiRmiPlayer
+        - guiSocket: GuiSocketPlayer
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Socket
+    }
+    class CliRmiPlayer extends Player{
+        'override
+        + assemble(): void 
+        ' contiene la logica per costruire un cliRmiPlayer
+    }
+
+    class CliSocketPlayer extends Player{
+        'override
+        + assemble(): void 
+        ' contiene la logica per costruire un cliSocketPlayer
+    }
+
+    class GuiRmiPlayer extends Player {
+        'override
+        + assemble(): void 
+        ' contiene la logica per costruire un guiRmiPlayer
+    }
+
+    class GuiSocketPlayer extends Player {
+        'override
+        + assemble(): void 
+        ' contiene la logica per costruire un guiSocketPlayer
+    }
+
+    interface Rmi{
+        + assemble(): void
+        'contiene la logica per costruire un generico RmiPlayer
+    }
+
+    interface Socket{
+        + assemble(): void
+        'contiene la logica per costruire un generico SocketPlayer
+    }
 
     abstract class State {
         - game: Game
@@ -56,15 +122,46 @@ package model {
         + InitState(): void
         + initialized(): void
         - createDecks(): void
+        - createFirstPlayer(): void
         - dealHands(): void
         - dealSecretObjective(): void
         - dealCommonObjective(): void
-        - createFirstPlayer(): void
     }
 
-    note bottom
-    createDecks parses the json file and forall card in it calls the Deck's method "addCard". When finished it shuffles the deck calling on it the method "shuffle".
+    note right of InitState::createDecks
+    createDecks parses the json file and forall 
+    card in it calls the Deck's method "addCard". 
+    When finished it shuffles the deck calling on 
+    it the method "shuffle".
     end note
+
+    note right of InitState::createFirstPlayer
+    createFirstPlayer creates a new player calling the constructor
+    method in Player. The controller will manage to acquire the 
+    informations regarding the total number of players admitted inside
+    the lobby and will pass them to the createFirstPlayer method so that 
+    it sets the state informations in Game.
+    end note
+
+    note right of InitState::dealHands
+    dealHands draws 3 cards for each player from 
+    the deck and adds them to each player hand
+    end note
+
+    note right of InitState::dealSecretObjective
+    dealSecretObjective parses the json file searching
+    for the "secret objective" cards and selects two 
+    of them for each player. Those cards will be added 
+    to the "chooseBetweenObj" attribute in the Hand class
+    end note
+    
+    note right of InitState::dealCommonObjective
+    dealCommonObjective parses the json file searching
+    for the "common objective" cards andranoy selects two 
+    of them. Those cards will be added to the 
+    "commonObjectives" atribute in the Board class
+    end note
+
     
     class WaitPlayerState {
         + WaitPlayerState(): void
@@ -73,12 +170,36 @@ package model {
         - isFull(): void
     }
 
+    note right of WaitPlayerState::createNewPlayer
+    createNewPlayer calls the constructor method in Player, 
+    updates the attributes related to the number of players 
+    in Game, associates the player with his hands and
+    structure by calling the setPlayerHand and setPlayerStructure 
+    methods
+    end note
+
+    note right of WaitPlayerState::isFull
+    checks in Game if getNumPartecipants()==getNumPlayers and 
+    according to the boolean value returned it allows the state
+    to change
+    end note
+
     class PlacedCardState {
         + PlacedCardState(): void
         + placedCard(): void
         - addCard(): void
-        - computePoints(): void
+        - updatePoints(): void
     }
+
+    note right of PlacedCardState::addCard
+    calls the Structure's method insertCard and update the 
+    currentResources and currentObjects attributes
+    end note
+
+    note right of PlacedCardState::updatePoints
+    takes the new score scenario computed by the controller 
+    and calls the Board's method updateScore 
+    end note
 
     class DrawnCardState {
         + DrawnCardState(): void
@@ -89,90 +210,142 @@ package model {
         - endMatch(): void
     }
 
+    note right of DrawnCardState::updateDeck
+    calls the method of Deck responible of drawing a 
+    card from one of the decks and add it to a specific
+    player's hand
+    end note
+
+    note right of DrawnCardState::nextTurn
+    calls the Game's setter methods so that 
+    currentPlayer()==nextPlayer()
+    end note
+
     class Board {
-        - scores: Map<Color, int>
-        - commonObjectives: int[2]
-        - uncoveredCards: int[2][2]
+        - scores: Map<Player, int>
+        - commonObjective: ObjectiveCard
+        - uncoveredCards: List<Card>
 
         + Board(): void
-        + updateScore(player: Color, newPoints: int): void
-        'modifica la mappa dello Scores'
-        + getCurrentPoints(player: Color): int
-        + getFuturePoints(player: Color): int
+        + setCommonObjective(commonObjective: ObjectiveCard): void
+        + getScores(): Map<Player, int>
+        + getCommonObjective(): ObjectiveCard
+        + getUncoveredCards(): List<Card>
+        + updateScore(player: Player, newPoints: int): void
+        + addUncoveredCard(card: Card): void
+        + removeUncoveredCard(card: Card): void
         + isLastTurn(): boolean
     }
 
     abstract class Card {
-        'Color lo codifichiam nell'id? o lo salviamo in una var?
         - idCard: int
-        - codeFront: char[]
-        - codeBack: char[]
-        - cardPoints: int[]
+        - cardFrontImage: String
+        - cardBackImage: String
 
-        + Card(): void
+        + Card(idCard: int, cardFrontImage: String, cardBackImage: String): void
         + getIdCard(): int
-        + getCodeFront(): char[]
-        + getCodeBack(): char[]
-        + getCardPoints(): int[]
+        + getCardFrontImage(): String
+        + getCardBackImage(): String
     }
 
     class ObjectiveCard extends Card {
-        'tipo dell'obiettivo con enum? o codificato?'
-        'non chiarissimo come caratterizzare l'obiettivo'
+        ' FIXME: codificare il tipo di obiettivo -> Risorse, Oggetti, Pattern
+        - objectiveType: ObjectiveCardType
 
-        + card(): ObjectiveCard
+        + ObjectiveCard(): void
+        + getObjectiveType(): ObjectiveCardType
+        + setObjectiveType(objectiveType: ObjectiveCardType): void
     }
 
-    class AngledCard extends Card {
-        - cardCorners: int[2][2]
-        'decidere valore di default per corner non presente, corner presente non collegato, Id/puntatore carrta'
-        - cardSymbols: Symbol[2][2]
+    class InitialCard extends Card {
+        - topCardCorners: Resource[4]
+        - topCardResources: Resource[3]
+        - bottomCardCorners: Resource[4]
 
-        + card(): AngledCard
-        + getCardCorners(): int[2][2]
-        + getCardSymbols(): Symbol[2][2]
+        + InitialCard(): void
+        + getTopCardCorners(): Resource[4]
+        + getBottomCardCorners(): boolean[4]
+        + getBottomCardResources(): Resource[3]
+        + setTopCardCorners(topCardCorners: Resource[4]): void
+        + setTopCardResources(topCardResources: Resource[3]): void
+        + setBottomCardCorners(bottomCardCorners: boolean[4]): void
     }
 
-    class GoldCard extends AngledCard {
-        - resources: Symbol[5]
-        'tipo ^ da capire'
-        'caratterizzare tipo obiettivo'
-
-        + card(): GoldCard
-        + getResources(): Symbol[5]
+    class GoldCard extends Card {
+        - cardType: Resource
+        - cardCorners: Resource[4]
+        - resourceRequired: Resource[4]
+        - cardPoints: int
+        - pointType: GoldCardPointType
+        ' FIXME: definire il tipo di punti -> Angoli, Oggetti, Punti Gratuiti
+        
+        + GoldCard(): void
+        + getCardType(): Resource
+        + getCardCorners(): Resource[4]
+        + getResourceRequired(): Resource[4]
+        + getCardPoints(): int
+        + getPointType(): GoldCardPointType
+        + setCardType(cardType: Resource): void
+        + setCardCorners(cardCorners: Resource[4]): void
+        + setResourceRequired(resourceRequired: Resource[4]): void
+        + setCardPoints(cardPoints: int): void
+        + setPointType(pointType: GoldCardPointType): void
     }
 
-    class InitialCard extends AngledCard {
-        - centerResources: Symbol[3]
-        'tipo da capire'
-
-        + card(): InitialCard
-        + getCenterResources(): Symbol[3]
+    class ResourceCard extends Card {
+        - cardType: Resource
+        - cardCorners: Resource[4]
+        - cardPoints: int
+        
+        + ResourceCard(idCard: int, cardFrontImage: String, cardBackImage: String, cardType: Resource, cardCorners: Resource[4], cardPoints: int): void
+        + getCardType(): Resource
+        + getCardCorners(): Resource[4]
+        + getCardPoints(): int
     }
-
-    class ResourceCard extends AngledCard {}
 
     class Structure {
-        'è necessario che abbia player se è unico di un playre?'
-        - player: Color
-        + playedCards(): List<Cards>
-        'può restituire la prima carta della struttura da cui ripercorrere ricorsivamente le connessioni'
-        'può restituire una lista con le connessioni ordinate'
-        + connections(): int
-        + insertCard() : void
-        + checkPattern(): void
-        + calculateCurrentResources(): void
-        + calculatePoints(): void
+        - root: StructureNode
+        - currentResources: Map<Resource, int>
+        - currentObjects: Map<Objects, int>
+
+        + Structure(): void
+        + getRoot(): StructureNode
+        + getCurrentResources(): Map<Resource, int>
+        + getCurrentObjects(): Map<Objects, int>
+        + insertCard(father: Card, card: Card): void
+        + updateResources(resource: Resource, quantity: int): void
+        + updateObjects(object: Objects, quantity: int): void
+    }
+
+    class StructureNode {
+        - card: Card
+        - topLeftChild: StructureNode
+        - topRightChild: StructureNode
+        - bottomRightChild: StructureNode
+        - bottomLeftChild: StructureNode
+        - father: StructureNode
+
+        + StructureNode(card: Card, father: StructureNode): void
+        + getCard(): Card
+        + getFather(): StructureNode
+        + getTopLeftChild(): StructureNode
+        + getTopRightChild(): StructureNode
+        + getBottomRightChild(): StructureNode
+        + getBottomLeftChild(): StructureNode
+        + setTopLeftChild(child: StructureNode): void
+        + setTopRightChild(child: StructureNode): void
+        + setBottomRightChild(child: StructureNode): void
+        + setBottomLeftChild(child: StructureNode): void
     }
 
     class Deck {
         'check sul tipo dinamico statico'
-        - goldDeck: List<Card>
-        - resourceDeck: List<Card>
+        - goldDeck: Stack<Card>
+        - resourceDeck: Stack<Card>
 
         + deck(): Deck
-        + getGoldDeck(): List<Card>
-        + getResourceDeck(): List<Card>
+        + getGoldDeck(): Stack<Card>
+        + getResourceDeck(): Stack<Card>
         + addGoldCard(card: GoldCard): void
         + addResourceCard(card: ResourceCard): void
         + drawGoldCard(): GoldCard
@@ -182,11 +355,16 @@ package model {
     }
 
     class Hand {
-        - secretObjective: int
-        - cardsHand: int[3]
+        - chooseBetweenObj: List<Card>
+        - secretObjective: Card
+        - cardsHand: List<Card>
 
-        + getSecretObjective(): int
-        + getCardsHand(): int[3]
+        + Hand(): void
+        + getSecretObjective(): Card
+        + getCardsHand(): List<Card>
+        + addCard(card: Card): void
+        + removeCard(card: Card): void
+        + setSecretObjective(secretObjective: Card): void
     }
 
     enum Color {
@@ -195,15 +373,48 @@ package model {
         GREEN
         RED
     }
-
-    enum Symbol {
+    
+    enum Resource {
         VEGETABLE
         ANIMAL
         INSECT
         SHROOM
+        EMPTY
+    }
+
+   enum Objects {
         FEATHER
         INK
         SCROLL
+        EMPTY
+    }
+
+    enum GoldCardPointType {
+        CORNERS
+        INK
+        FEATHER
+        SCROLL
+        FREE
+    }
+
+    enum ObjectiveCardType {
+        ANIMAL
+        VEGETABLE
+        INSECT
+        SHROOM
+        INK_INK
+        SCROL_SCROLL
+        FEATHER_FEATHER
+        INK_FEATHER_SCROLL
+        RED_UR_RED_DL_RED
+        GREEN_UL_GREEN_DR_GREEN
+        BLUE_UR_BLUE_DL_BLUE
+        PURPLE_UL_PURPLE_DR_PURPLE
+        RED_U_RED_DR_GREEN
+        GREEN_U_GREEN_DL_PURPLE
+        BLUE_D_BLUE_UR_RED
+        ' i pattern si leggono che il primo colore è quello centrale e gli altri due in relazione a quello centrale, UR -> Upper Right, DL -> Down Left ...
+        ' ad esempio RED_UR_RED_DL_RED si legge -> rosso al centro, rosso in alto a destra e rosso in basso a sinistra
     }
 
     abstract class Event {
@@ -285,10 +496,19 @@ package model {
         - sender: Player
         - receiver: List<Player>
         - timeStamp: long
+        + ChatMessage(message: String, sender: Player, receiver: List<Player>, timeStamp: long): void
+        + getMessageId(): int
+        + getMessage(): String
+        + getSender(): Player
+        + getReceiver(): List<Player>
+        + getTimeStamp(): long
     }
 
     class Chat {
         - chatMessages: List<ChatMessage>
+
+        + Chat(): void
+        + getChatMessages(): List<ChatMessage>
         + addMessage(message: ChatMessage): void
         + removeMessage(message: ChatMessage): void
     }
@@ -431,13 +651,14 @@ package view {
     }
 }
 
-Game -- Player
+Game -up- Player
 Game -- Deck
 Game -- Board
+Game -- Hand
+Game -- Structure
 Deck -- Card
-Player -- Hand
-Player -- Structure
-Structure -- Card
+Structure -- StructureNode
+StructureNode -- Card
 Hand -- Card
 
 Chat -- ChatMessage
@@ -460,12 +681,12 @@ StructureViewCli -up-|> View
 GameViewGui -up-|> View
 GameViewCli -up-|> View
 
-InitState -up-|> State
 WaitPlayerState -up-|> State
+InitState -up-|> State
 PlacedCardState -up-|> State
 DrawnCardState -up-|> State
 
-Game *-up-> State
+Game *-right-> State
 
 GameBoardUpdateEvent --> BoardEventType : type
 GameDeckUpdateEvent --> DeckEventType : type
@@ -475,15 +696,14 @@ GameStructureUpdateEvent --> StructureEventType : type
 NewPlayerEvent --> NewPlayerEventType : type
 NewGameEvent --> NewGameEventType : type
 
-left to right direction
+CliPlayerFactory -down-> CliRmiPlayer : cliRmi
+CliPlayerFactory -down-> GuiRmiPlayer : cliSocket
+GuiPlayerFactory -down-> CliSocketPlayer : guiRmi
+GuiPlayerFactory -down-> GuiSocketPlayer : guiSocket
+GuiSocketPlayer ..|> Socket
+CliSocketPlayer ..|> Socket
+CliRmiPlayer ..|> Rmi
+GuiRmiPlayer ..|> Rmi
 
-' [ ] Sistema metodi duplicati
-' [ ] Metodi specifici per aggiornamento modello -> Card, Board, Structure, Player, Hand
-' [x] Struttura classe 'Structure' da chiarire -> Albero
-' [ ] Strategy pattern per computePoints model
-' [x] Sintassi controller
-' [x] Sistemare tipi eventi
-' [ ] Finire commenti metodi
-' [ ] Abstract factory pattern per createPlayer
-
+' left to right direction
 @enduml
