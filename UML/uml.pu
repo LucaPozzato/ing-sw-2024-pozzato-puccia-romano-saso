@@ -221,6 +221,10 @@ package model {
     currentPlayer()==nextPlayer()
     end note
 
+    class EndGameState {
+        + EndGameState(): void
+    }
+
     class Board {
         - scores: Map<Player, int>
         - commonObjective: ObjectiveCard
@@ -249,7 +253,6 @@ package model {
     }
 
     class ObjectiveCard extends Card {
-        ' FIXME: codificare il tipo di obiettivo -> Risorse, Oggetti, Pattern
         - objectiveType: ObjectiveCardType
 
         + ObjectiveCard(): void
@@ -277,7 +280,6 @@ package model {
         - resourceRequired: Resource[4]
         - cardPoints: int
         - pointType: GoldCardPointType
-        ' FIXME: definire il tipo di punti -> Angoli, Oggetti, Punti Gratuiti
         
         + GoldCard(): void
         + getCardType(): Resource
@@ -312,7 +314,8 @@ package model {
         + getRoot(): StructureNode
         + getCurrentResources(): Map<Resource, int>
         + getCurrentObjects(): Map<Objects, int>
-        + insertCard(father: Card, card: Card): void
+        + getCard(id: String): Card
+        + insertCard(father: Card, card: Card, position: String): void
         + updateResources(resource: Resource, quantity: int): void
         + updateObjects(object: Objects, quantity: int): void
     }
@@ -685,6 +688,7 @@ WaitPlayerState -up-|> State
 InitState -up-|> State
 PlacedCardState -up-|> State
 DrawnCardState -up-|> State
+EndGameState -up-|> State
 
 Game *-right-> State
 
