@@ -4,5 +4,5 @@ public class AbstractPlayerFactory {
 
     public Rmi createRmiPlayer();
 
-    public Gui createSocketPlayer();
+    public Socket createSocketPlayer();
 }
