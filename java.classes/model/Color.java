@@ -1,4 +1,4 @@
-public enum COLORE {
+public enum Color {
     YELLOW,
     BLUE,
     GREEN,
