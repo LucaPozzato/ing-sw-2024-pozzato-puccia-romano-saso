@@ -1,6 +1,6 @@
 package model;
 
-public class Rmi {
+public interface Rmi {
 
     public void assemble();
 }
