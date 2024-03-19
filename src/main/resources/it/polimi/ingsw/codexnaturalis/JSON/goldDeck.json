@@ -1,0 +1,1008 @@
+[
+  {
+    "id" : "G1",
+    "symbol" : "SHROOM",
+    "points" : "1",
+    "points type" : "FEATHER",
+    "corners": ["NULL","EMPTY","EMPTY","FEATHER"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "2"
+      }
+    ]
+  },
+  {
+    "id" : "G2",
+    "symbol" : "SHROOM",
+    "points" : "1",
+    "points type" : "POTION",
+    "corners": ["EMPTY","POTION","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "1"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "2"
+      }
+    ]
+  },
+  {
+    "id" : "G3",
+    "symbol" : "SHROOM",
+    "points" : "1",
+    "points type" : "MANUSCRIPT",
+    "corners": ["MANUSCRIPT","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "1"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "2"
+      }
+    ]
+  },
+  {
+    "id" : "G4",
+    "symbol" : "SHROOM",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G5",
+    "symbol" : "SHROOM",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "1"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G6",
+    "symbol" : "SHROOM",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "1"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G7",
+    "symbol" : "SHROOM",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["EMPTY","NULL","POTION","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G8",
+    "symbol" : "SHROOM",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["FEATHER","EMPTY","NULL","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G9",
+    "symbol" : "SHROOM",
+    "points" : "3",
+    "points type" : "MANUSCRIPT",
+    "corners": ["NULL","MANUSCRIPT","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      }
+    ]
+  },
+  {
+    "id" : "G10",
+    "symbol" : "SHROOM",
+    "points" : "5",
+    "points type" : "NULL",
+    "corners": ["EMPTY","NULL","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "5"
+      }
+    ]
+  },
+
+
+  {
+    "id" : "G11",
+    "symbol" : "LEAF",
+    "points" : "1",
+    "points type" : "FEATHER",
+    "corners": ["FEATHER","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "2"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "1"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G12",
+    "symbol" : "LEAF",
+    "points" : "1",
+    "points type" : "MANUSCRIPT",
+    "corners": ["EMPTY","MANUSCRIPT","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "2"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id" : "G13",
+    "symbol" : "LEAF",
+    "points" : "1",
+    "points type" : "POTION",
+    "corners": ["EMPTY","NULL","POTION","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "2"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G14",
+    "symbol" : "LEAF",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["NULL","EMPTY","EMPTY","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "1"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G15",
+    "symbol" : "LEAF",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G16",
+    "symbol" : "LEAF",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id" : "G17",
+    "symbol" : "LEAF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["EMPTY","NULL","FEATHER","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G18",
+    "symbol" : "LEAF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["MANUSCRIPT","EMPTY","NULL","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G19",
+    "symbol" : "LEAF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["NULL","POTION","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G20",
+    "symbol" : "LEAF",
+    "points" : "5",
+    "points type" : "NULL",
+    "corners": ["EMPTY","EMPTY","NULL","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "5"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+
+
+  {
+    "id" : "G21",
+    "symbol" : "WOLF",
+    "points" : "1",
+    "points type" : "POTION",
+    "corners": ["POTION","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "2"
+      },
+      {
+        "type": "BFLY",
+        "amount": "1"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G22",
+    "symbol" : "WOLF",
+    "points" : "1",
+    "points type" : "MANUSCRIPT",
+    "corners": ["NULL","EMPTY","EMPTY","MANUSCRIPT"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "1"
+      },
+      {
+        "type": "WOLF",
+        "amount": "2"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G23",
+    "symbol" : "WOLF",
+    "points" : "1",
+    "points type" : "FEATHER",
+    "corners": ["EMPTY","NULL","FEATHER","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "2"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id" : "G24",
+    "symbol" : "WOLF",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G25",
+    "symbol" : "WOLF",
+    "points" : "1",
+    "points type" : "",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G26",
+    "symbol" : "WOLF",
+    "points" : "1",
+    "points type" : "",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G27",
+    "symbol" : "WOLF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G28",
+    "symbol" : "WOLF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "29",
+    "symbol" : "WOLF",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "30",
+    "symbol" : "WOLF",
+    "points" : "5",
+    "points type" : "",
+    "corners": ["","","",""],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+
+
+  {
+    "id" : "G31",
+    "symbol" : "BFLY",
+    "points" : "1",
+    "points type" : "FEATHER",
+    "corners": ["EMPTY","FEATHER","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "1"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "2"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G32",
+    "symbol" : "BFLY",
+    "points" : "1",
+    "points type" : "MANUSCRIPT",
+    "corners": ["EMPTY","NULL","MANUSCRIPT","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "2"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G33",
+    "symbol" : "BFLY",
+    "points" : "1",
+    "points type" : "POTION",
+    "corners": ["NULL","EMPTY","EMPTY","POTION"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "2"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id" : "G34",
+    "symbol" : "BFLY",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "1"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G35",
+    "symbol" : "BFLY",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "1"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G36",
+    "symbol" : "BFLY",
+    "points" : "2",
+    "points type" : "ANGLE",
+    "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id" : "G37",
+    "symbol" : "BFLY",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["POTION","NULL","EMPTY","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G38",
+    "symbol" : "BFLY",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["EMPTY","MANUSCRIPT","NULL","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G39",
+    "symbol" : "BFLY",
+    "points" : "3",
+    "points type" : "NULL",
+    "corners": ["NULL","NULL","FEATHER","EMPTY"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id" : "G40",
+    "symbol" : "BFLY",
+    "points" : "5",
+    "points type" : "NULL",
+    "corners": ["EMPTY","EMPTY","NULL","NULL"],
+    "resources required": [
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "5"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      }
+    ]
+  }
+]

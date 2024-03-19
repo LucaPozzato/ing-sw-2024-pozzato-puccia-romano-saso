@@ -1,0 +1,164 @@
+[
+  {
+    "id": "I1",
+    "front": {
+      "corners": ["EMPTY","LEAF","BFLY","EMPTY"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "0"
+        },
+        {
+          "type": "WOLF",
+          "amount": "0"
+        },
+        {
+          "type": "BFLY",
+          "amount": "1"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "0"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["SHROOM","LEAF","BFLY","WOLF"]
+    }
+  },
+  {
+    "id": "I2",
+    "front": {
+      "corners": ["WOLF","EMPTY","EMPTY","SHROOM"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "0"
+        },
+        {
+          "type": "WOLF",
+          "amount": "0"
+        },
+        {
+          "type": "BFLY",
+          "amount": "0"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "1"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["LEAF","WOLF","SHROOM","BFLY"]
+    }
+  },
+  {
+    "id": "I3",
+    "front": {
+      "corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "1"
+        },
+        {
+          "type": "WOLF",
+          "amount": "0"
+        },
+        {
+          "type": "BFLY",
+          "amount": "0"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "1"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["BFLY","WOLF","SHROOM","LEAF"]
+    }
+  },
+  {
+    "id": "I4",
+    "front": {
+      "corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "0"
+        },
+        {
+          "type": "WOLF",
+          "amount": "1"
+        },
+        {
+          "type": "BFLY",
+          "amount": "1"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "0"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["LEAF","BFLY","WOLF","SHROOM"]
+    }
+  },
+  {
+    "id": "I5",
+    "front": {
+      "corners": ["EMPTY","EMPTY","NULL","NULL"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "1"
+        },
+        {
+          "type": "WOLF",
+          "amount": "1"
+        },
+        {
+          "type": "BFLY",
+          "amount": "1"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "0"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["BFLY","SHROOM","LEAF","WOLF"]
+    }
+  },
+  {
+    "id": "I",
+    "front": {
+      "corners": ["EMPTY","EMPTY","NULL","NULL"],
+      "resource objective":[
+        {
+          "type": "LEAF",
+          "amount": "1"
+        },
+        {
+          "type": "WOLF",
+          "amount": "1"
+        },
+        {
+          "type": "BFLY",
+          "amount": "0"
+        },
+        {
+          "type": "SHROOM",
+          "amount": "1"
+        }
+      ]
+    },
+    "back": {
+      "corners": ["SHROOM","WOLF","LEAF","BFLY"]
+    }
+  }
+]

@@ -1,0 +1,274 @@
+[
+  {
+    "id": "OR1",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "3"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id": "OR2",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "3"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id": "OR3",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "3"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id": "OR4",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "3"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id": "OR5",
+    "points": "3",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "1"
+      },
+      {
+        "type": "POTION",
+        "amount": "1"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "1"
+      }
+    ]
+  },
+  {
+    "id": "OR6",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "2"
+      }
+    ]
+  },
+  {
+    "id": "OR7",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "0"
+      },
+      {
+        "type": "POTION",
+        "amount": "2"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  },
+  {
+    "id": "OR8",
+    "points": "2",
+    "resources required":[
+      {
+        "type": "LEAF",
+        "amount": "0"
+      },
+      {
+        "type": "WOLF",
+        "amount": "0"
+      },
+      {
+        "type": "BFLY",
+        "amount": "0"
+      },
+      {
+        "type": "SHROOM",
+        "amount": "0"
+      },
+      {
+        "type": "FEATHER",
+        "amount": "2"
+      },
+      {
+        "type": "POTION",
+        "amount": "0"
+      },
+      {
+        "type": "MANUSCRIPT",
+        "amount": "0"
+      }
+    ]
+  }
+]

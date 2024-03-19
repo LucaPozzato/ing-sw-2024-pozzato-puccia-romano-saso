@@ -1,0 +1,249 @@
+[
+  {
+  "id" : "R1",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["SHROOM","EMPTY","SHROOM","NULL"]
+  },
+  {
+  "id" : "R2",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["SHROOM","SHROOM","NULL","EMPTY"]
+  },
+  {
+  "id" : "R3",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["EMPTY","NULL","SHROOM","SHROOM"]
+  },
+  {
+  "id" : "R4",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["NULL","SHROOM","EMPTY","SHROOM"]
+  },
+  {
+  "id" : "R5",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["NULL","FEATHER","LEAF","SHROOM"]
+  },
+  {
+  "id" : "R6",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["POTION","SHROOM","NULL","WOLF"]
+  },
+  {
+  "id" : "R7",
+  "symbol" : "SHROOM",
+  "points" : 0,
+  "corners": ["SHROOM","BFLY","MANUSCRIPT","EMPTY"]
+  },
+  {
+  "id" : "R8",
+  "symbol" : "SHROOM",
+  "points" : 1,
+  "corners": ["EMPTY","SHROOM","EMPTY","NULL"]
+  },
+  {
+  "id" : "R9",
+  "symbol" : "SHROOM",
+  "points" : 1,
+  "corners": ["SHROOM","NULL","EMPTY","EMPTY"]
+  },
+  {
+  "id" : "R10",
+  "symbol" : "SHROOM",
+  "points" : 1,
+  "corners": ["NULL","EMPTY","SHROOM","EMPTY"]
+  },
+
+
+  {
+  "id" : "R11",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["LEAF","EMPTY","LEAF","NULL"]
+  },
+  {
+  "id" : "R12",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["LEAF","LEAF","NULL","EMPTY"]
+  },
+  {
+  "id" : "R13",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["EMPTY","NULL","LEAF","LEAF"]
+  },
+  {
+  "id" : "R14",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["NULL","LEAF","EMPTY","LEAF"]
+  },
+  {
+  "id" : "R15",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["NULL","BFLY","FEATHER","LEAF"]
+  },
+  {
+  "id" : "R16",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["SHROOM","LEAF","NULL","POTION"]
+  },
+  {
+  "id" : "R17",
+  "symbol" : "LEAF",
+  "points" : 0,
+  "corners": ["MANUSCRIPT","NULL","LEAF","WOLF"]
+  },
+  {
+  "id" : "R18",
+  "symbol" : "LEAF",
+  "points" : 1,
+  "corners": ["EMPTY","EMPTY","LEAF","NULL"]
+  },
+  {
+  "id" : "R19",
+  "symbol" : "LEAF",
+  "points" : 1,
+  "corners": ["EMPTY","EMPTY","NULL","LEAF"]
+  },
+  {
+  "id" : "R20",
+  "symbol" : "LEAF",
+  "points" : 1,
+  "corners": ["NULL","LEAF","EMPTY","EMPTY"]
+  },
+
+
+  {
+  "id" : "R21",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["WOLF","WOLF","EMPTY","NULL"]
+  },
+  {
+  "id" : "R22",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["NULL","EMPTY","WOLF","WOLF"]
+  },
+  {
+  "id" : "R23",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["WOLF","NULL","WOLF","EMPTY"]
+  },
+  {
+  "id" : "R24",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["EMPTY","WOLF","NULL","WOLF"]
+  },
+  {
+  "id" : "R25",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["NULL","BFLY","POTION","WOLF"]
+  },
+  {
+  "id" : "R26",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["LEAF","WOLF","NULL","MANUSCRIPT"]
+  },
+  {
+  "id" : "R27",
+  "symbol" : "WOLF",
+  "points" : 0,
+  "corners": ["FEATHER","NULL","WOLF","SHROOM"]
+  },
+  {
+  "id" : "R28",
+  "symbol" : "WOLF",
+  "points" : 1,
+  "corners": ["NULL","EMPTY","WOLF","EMPTY"]
+  },
+  {
+  "id" : "R29",
+  "symbol" : "WOLF",
+  "points" : 1,
+  "corners": ["EMPTY","NULL","EMPTY","WOLF"]
+  },
+  {
+  "id" : "R30",
+  "symbol" : "WOLF",
+  "points" : 1,
+  "corners": ["EMPTY","WOLF","EMPTY","NULL"]
+  },
+
+
+  {
+  "id" : "R31",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["BFLY","BFLY","EMPTY","NULL"]
+  },
+  {
+  "id" : "R32",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["NULL","EMPTY","BFLY","BFLY"]
+  },
+  {
+  "id" : "R33",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["BFLY","NULL","BFLY","EMPTY"]
+  },
+  {
+  "id" : "R34",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["EMPTY","BFLY","NULL","BFLY"]
+  },
+  {
+  "id" : "R35",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["NULL","FEATHER","WOLF","BFLY"]
+  },
+  {
+  "id" : "R36",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["MANUSCRIPT","BFLY","NULL","SHROOM"]
+  },
+  {
+  "id" : "R37",
+  "symbol" : "BFLY",
+  "points" : 0,
+  "corners": ["BFLY","LEAF","POTION","NULL"]
+  },
+  {
+  "id" : "R38",
+  "symbol" : "BFLY",
+  "points" : 1,
+  "corners": ["BFLY","NULL","EMPTY","EMPTY"]
+  },
+  {
+  "id" : "R39",
+  "symbol" : "BFLY",
+  "points" : 1,
+  "corners": ["EMPTY","EMPTY","NULL","BFLY"]
+  },
+  {
+  "id" : "R40",
+  "symbol" : "BFLY",
+  "points" : 1,
+  "corners": ["NULL","BFLY","EMPTY","EMPTY"]
+  }
+]
+

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "OP1",
+    "points": "2",
+    "pattern": {
+      "center card": "SHROOM",
+      "top card": "NULL",
+      "top right card": "SHROOM",
+      "top left card": "NULL",
+      "bottom right card": "NULL",
+      "bottom left card": "SHROOM",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP2",
+    "points": "2",
+    "pattern": {
+      "center card": "LEAF",
+      "top card": "NULL",
+      "top right card": "NULL",
+      "top left card": "LEAF",
+      "bottom right card": "LEAF",
+      "bottom left card": "NULL",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP3",
+    "points": "2",
+    "pattern": {
+      "center card": "WOLF",
+      "top card": "NULL",
+      "top right card": "WOLF",
+      "top left card": "NULL",
+      "bottom right card": "NULL",
+      "bottom left card": "WOLF",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP4",
+    "points": "2",
+    "pattern": {
+      "center card": "BFLY",
+      "top card": "NULL",
+      "top right card": "NULL",
+      "top left card": "BFLY",
+      "bottom right card": "BFLY",
+      "bottom left card": "NULL",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP5",
+    "points": "3",
+    "pattern": {
+      "center card": "SHROOM",
+      "top card": "SHROOM",
+      "top right card": "NULL",
+      "top left card": "NULL",
+      "bottom right card": "LEAF",
+      "bottom left card": "NULL",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP6",
+    "points": "3",
+    "pattern": {
+      "center card": "LEAF",
+      "top card": "LEAF",
+      "top right card": "NULL",
+      "top left card": "NULL",
+      "bottom right card": "NULL",
+      "bottom left card": "BFLY",
+      "bottom card": "NULL"
+    }
+  },
+  {
+    "id": "OP7",
+    "points": "3",
+    "pattern": {
+      "center card": "WOLF",
+      "top card": "NULL",
+      "top right card": "SHROOM",
+      "top left card": "NULL",
+      "bottom right card": "NULL",
+      "bottom left card": "NULL",
+      "bottom card": "WOLF"
+    }
+  },
+  {
+    "id": "OP8",
+    "points": "3",
+    "pattern": {
+      "center card": "BFLY",
+      "top card": "NULL",
+      "top right card": "NULL",
+      "top left card": "WOLF",
+      "bottom right card": "NULL",
+      "bottom left card": "NULL",
+      "bottom card": "BFLY"
+    }
+  }
+]
