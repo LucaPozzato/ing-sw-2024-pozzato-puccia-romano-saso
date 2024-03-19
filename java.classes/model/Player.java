@@ -3,9 +3,9 @@ import java.util.List;
 public class Player {
 
     private String nickname;
-    private COLORE colorPlayer;
+    private Color colorPlayer;
 
-    public Player( String nickname, COLORE colorPlayer ) {
+    public Player( String nickname, Color colorPlayer ) {
         this.nickname = nickname;
         this.colorPlayer = colorPlayer;
     }
@@ -14,7 +14,7 @@ public class Player {
         return this.nickname;
     }
 
-    public COLORE getColorPlayer() {
+    public Color getColorPlayer() {
         return colorPlayer;
     }
 

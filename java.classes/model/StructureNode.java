@@ -12,8 +12,7 @@ public class StructureNode {
 
 
     //constructor
-    public StructureNode() {
-    }
+    public StructureNode() {}
 
     //getter
     public StructureNode getTopLeftChild() {
@@ -35,6 +34,7 @@ public class StructureNode {
 
     //setter
     public void setTopLeftChild(StructureNode child){
+        //istanza new?
         topLeftChild = child;
     }
     public void setTopRightChild(StructureNode child){
