@@ -9,9 +9,7 @@ public class Hand {
     private List<Card> cardsHand;
 
     //costruttore
-    public void hand() {
-        //
-    }
+    public Hand() {}
 
     public void setSecretObjective(Card secretObjective) {
         this.secretObjective = secretObjective;
@@ -26,7 +24,11 @@ public class Hand {
         return cardsHand;
     }
 
-    public void addCard(Card card){}
-    public void removeCard(Card card){}
+    public void addCard(Card card){
+        cardsHand.add(card);
+    }
+    public void removeCard(Card card){
+        cardsHand.remove(card);
+    }
 
 }

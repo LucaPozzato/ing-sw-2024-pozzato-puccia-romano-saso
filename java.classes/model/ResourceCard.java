@@ -7,7 +7,7 @@ public class ResourceCard extends Card {
     private int cardPoints;
 
 
-    public void resourceCard ( int idCard, String cardFrontImage, String cardBackImage, Resource cardType, Resource[4] cardCorners, int cardPoints) {
+    public ResourceCard ( int idCard, String cardFrontImage, String cardBackImage, Resource cardType, Resource[4] cardCorners, int cardPoints) {
         super( idCard, cardFrontImage, cardBackImage); //check super
         this.cardType = cardType;
         this.cardCorners = cardCorners;

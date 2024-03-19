@@ -6,9 +6,7 @@ public class Structure {
     private HashMap <Resource, Integer> currentResources;
     private HashMap <Objects, Integer> currentObjects;
 
-    public void structure(){
-        //?
-    }
+    public Structure(){}
 
     public StructureNode getRoot(){
         return root;
@@ -22,16 +20,20 @@ public class Structure {
         return currentResources;
     }
 
-    public Card getCard(id: String) {
+    public Card getCard(String idCard) {
         //?
     }
 
-    public void insertCard(father: Card, card: Card, position: String)(){
+    public void insertCard(Card father, Card card, String position){
         //?
     }
 
-    public void updateObjects(object: Objects, quantity: int){
-        //?
+    public void updateResources (Resource resource, int quantity){
+        currentResources.put(resource, currentResources.get(resource) + quantity );
+    }
+
+    public void updateObjects(Objects object, int quantity){
+        currentObjects.put(object, currentObjects.get(object) + quantity );
     }
 
 }

@@ -8,7 +8,7 @@ public class GoldCard extends Card {
     private int cardPoints;
     private GoldCardPointType pointType;
 
-    public void GoldCard(int idCard, String cardFrontImage, String cardBackImage, Resource cardType, Resource[4] cardCorners, Resource[5] resourceRequired, int cardPoints, GoldCardPointType pointType){
+    public GoldCard(int idCard, String cardFrontImage, String cardBackImage, Resource cardType, Resource[4] cardCorners, Resource[5] resourceRequired, int cardPoints, GoldCardPointType pointType){
         super( idCard, cardFrontImage, cardBackImage);
         this.cardType = cardType;
         this.cardCorners = cardCorners;

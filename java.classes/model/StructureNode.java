@@ -12,8 +12,7 @@ public class StructureNode {
 
 
     //constructor
-    public void StructureNode() {
-        //
+    public StructureNode() {
     }
 
     //getter

@@ -15,9 +15,8 @@ public abstract class Game {
     private Player nextPlayer;
     private List<View> observerList;
 
-    public void game(int gameId) {
+    public Game(int gameId) {
         this.gameId = gameId;
-        //?
     }
 
     public void notifyAll() {
@@ -25,15 +24,15 @@ public abstract class Game {
     }
 
     public void addObserver (View view){
-        //...
+        observerList.add(view);
     }
 
     public void removeObserver(View view){
-        //...
+        observerList.remove(view);
     }
 
-    public void addPlayer(){
-        //...
+    public void addPlayer(Player player){
+        players.add(player);
     }
 
     public Player getCurrentPlater(){
@@ -72,11 +71,11 @@ public abstract class Game {
     }
 
     public Hand getHandByPlayer(Player player){
-        //...
+        return get(playerHand.indexOf(player));
     }
 
     public Structure getStructureByPlayer(Player player){
-        //...
+        return get(playerStructure.indexOf(player));
     }
 
     public void setState (State state){
@@ -100,11 +99,11 @@ public abstract class Game {
     }
 
     public void setPlayerHand(Player player, Hand hand){
-        //...
+        playerHand.add(players.indexOf(player), hand);
     }
 
     public void setPlayerStructure(Player player, Structure structure){
-        //...
+        playerStructure.add(players.indexOf(player), hand);
     }
 
     public void setCurrentPlayer(Player currentPlayer) {

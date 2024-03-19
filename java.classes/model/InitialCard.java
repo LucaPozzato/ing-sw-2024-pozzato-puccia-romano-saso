@@ -7,7 +7,7 @@ public class InitialCard extends Card {
     private Resource[3] backCardResources;
     private boolean[4] backCardCorners;
 
-    public void InitialCard(int idCard, String cardFrontImage, String cardBackImage, Resource[4] frontCardCorners, Resource[3] backCardResources, boolean[4] backCardCorners){
+    public InitialCard(int idCard, String cardFrontImage, String cardBackImage, Resource[4] frontCardCorners, Resource[3] backCardResources, boolean[4] backCardCorners){
         super( idCard, cardFrontImage, cardBackImage);
         this.frontCardCorners = frontCardCorners;
         this.frontCardResources = frontCardResources;

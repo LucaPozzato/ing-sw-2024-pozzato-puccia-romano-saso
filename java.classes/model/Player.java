@@ -5,7 +5,7 @@ public class Player {
     private String nickname;
     private COLORE colorPlayer;
 
-    public void player( String nickname, COLORE colorPlayer ) {
+    public Player( String nickname, COLORE colorPlayer ) {
         this.nickname = nickname;
         this.colorPlayer = colorPlayer;
     }

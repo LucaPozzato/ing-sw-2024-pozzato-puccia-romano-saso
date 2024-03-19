@@ -7,10 +7,9 @@ public class Board {
     private List<Card> uncoveredCards;
 
 
-    public void board() {
+    public Board() {
         this.scores = new HashMap<COLORE, Integer>();
-        //scores.put(YELLOW, 0); ? per numPlayers
-        //...
+        this.uncoveredCards = new List<Card>();
     }
 
     public void setCommonObjective(ObjectiveCard commonObjective){
@@ -35,15 +34,15 @@ public class Board {
     }
 
     public void addUncoveredCard(Card card){
-        //...
+        uncoveredCards.add(card);
     }
 
     public void removeUncoveredCard(Card card){
-        //...
+        uncoveredCards.remove(card);
     }
 
     public boolean isLastTurn(){
-        //...
+        //definire da dove prendere informazione
     }
 
 
