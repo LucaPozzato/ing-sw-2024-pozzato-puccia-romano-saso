@@ -12,9 +12,19 @@ public class StructureNode {
 
 
     //constructor
-    public StructureNode() {}
+    public StructureNode() {
+        //...
+    }
 
     //getter
+    public Card getCard() {
+        return card;
+    }
+
+    public List<HashMap<StructureNode, boolean>> getFathers() {
+        return fathers;
+    }
+
     public StructureNode getTopLeftChild() {
         return topLeftChild;
     }
@@ -43,7 +53,7 @@ public class StructureNode {
     public void setBottomRightChild(StructureNode child){
         bottomRightChild = child;
     }
-    public void ssetBottomLeftChild(StructureNode child){
+    public void setBottomLeftChild(StructureNode child){
         bottomLeftChild = child;
     }
 
