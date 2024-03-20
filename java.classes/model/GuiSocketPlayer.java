@@ -3,5 +3,7 @@ package model;
 public class GuiSocketPlayer {
 
 
-    public void assemble();
+    public void assemble(){
+        //...
+    }
 }

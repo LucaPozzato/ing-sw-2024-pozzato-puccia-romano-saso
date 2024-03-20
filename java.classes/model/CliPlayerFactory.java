@@ -7,7 +7,11 @@ public class CliPlayerFactory {
 
 
 
-    public Rmi createRmiPlayer();
+    public Rmi createRmiPlayer(){
+        //...
+    }
 
-    public Socket createSocketPlayer();
+    public Socket createSocketPlayer(){
+        //...
+    }
 }

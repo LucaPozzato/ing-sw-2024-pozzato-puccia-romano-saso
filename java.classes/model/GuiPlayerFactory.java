@@ -6,6 +6,10 @@ public class GuiPlayerFactory {
     private GuiSocketPlayer guiSocket;
 
 
-    public Rmi createRmiPlayer();
-    public Socket createSocketPlayer();
+    public Rmi createRmiPlayer(){
+        //...
+    }
+    public Socket createSocketPlayer(){
+        //...
+    }
 }

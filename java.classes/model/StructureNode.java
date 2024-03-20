@@ -12,8 +12,13 @@ public class StructureNode {
 
 
     //constructor
-    public StructureNode() {
-        //...
+    public StructureNode(Card card, List <HashMap<StructureNode, boolean>> fathers) {
+        this.card = card;
+        this.topLeftChild = null;
+        this.topRightChild = null;
+        this.bottomLeftChild = null;
+        this.bottomRightChild = null;
+        this.fathers = fathers;
     }
 
     //getter

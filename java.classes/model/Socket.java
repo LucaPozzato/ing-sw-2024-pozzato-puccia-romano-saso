@@ -2,5 +2,7 @@ package model;
 
 public interface Socket {
 
-    public void assemble();
+    public void assemble(){
+        //...
+    }
 }
