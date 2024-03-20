@@ -27,19 +27,19 @@
   "id" : "R5",
   "symbol" : "SHROOM",
   "points" : 0,
-  "corners": ["NULL","FEATHER","LEAF","SHROOM"]
+  "corners": ["NULL","FEATHER","VEGETABLE","SHROOM"]
   },
   {
   "id" : "R6",
   "symbol" : "SHROOM",
   "points" : 0,
-  "corners": ["POTION","SHROOM","NULL","WOLF"]
+  "corners": ["INK","SHROOM","NULL","ANIMAL"]
   },
   {
   "id" : "R7",
   "symbol" : "SHROOM",
   "points" : 0,
-  "corners": ["SHROOM","BFLY","MANUSCRIPT","EMPTY"]
+  "corners": ["SHROOM","INSECT","SCROLL","EMPTY"]
   },
   {
   "id" : "R8",
@@ -63,187 +63,187 @@
 
   {
   "id" : "R11",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["LEAF","EMPTY","LEAF","NULL"]
+  "corners": ["VEGETABLE","EMPTY","VEGETABLE","NULL"]
   },
   {
   "id" : "R12",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["LEAF","LEAF","NULL","EMPTY"]
+  "corners": ["VEGETABLE","VEGETABLE","NULL","EMPTY"]
   },
   {
   "id" : "R13",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["EMPTY","NULL","LEAF","LEAF"]
+  "corners": ["EMPTY","NULL","VEGETABLE","VEGETABLE"]
   },
   {
   "id" : "R14",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["NULL","LEAF","EMPTY","LEAF"]
+  "corners": ["NULL","VEGETABLE","EMPTY","VEGETABLE"]
   },
   {
   "id" : "R15",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["NULL","BFLY","FEATHER","LEAF"]
+  "corners": ["NULL","INSECT","FEATHER","VEGETABLE"]
   },
   {
   "id" : "R16",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["SHROOM","LEAF","NULL","POTION"]
+  "corners": ["SHROOM","VEGETABLE","NULL","INK"]
   },
   {
   "id" : "R17",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 0,
-  "corners": ["MANUSCRIPT","NULL","LEAF","WOLF"]
+  "corners": ["SCROLL","NULL","VEGETABLE","ANIMAL"]
   },
   {
   "id" : "R18",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 1,
-  "corners": ["EMPTY","EMPTY","LEAF","NULL"]
+  "corners": ["EMPTY","EMPTY","VEGETABLE","NULL"]
   },
   {
   "id" : "R19",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 1,
-  "corners": ["EMPTY","EMPTY","NULL","LEAF"]
+  "corners": ["EMPTY","EMPTY","NULL","VEGETABLE"]
   },
   {
   "id" : "R20",
-  "symbol" : "LEAF",
+  "symbol" : "VEGETABLE",
   "points" : 1,
-  "corners": ["NULL","LEAF","EMPTY","EMPTY"]
+  "corners": ["NULL","VEGETABLE","EMPTY","EMPTY"]
   },
 
 
   {
   "id" : "R21",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["WOLF","WOLF","EMPTY","NULL"]
+  "corners": ["ANIMAL","ANIMAL","EMPTY","NULL"]
   },
   {
   "id" : "R22",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["NULL","EMPTY","WOLF","WOLF"]
+  "corners": ["NULL","EMPTY","ANIMAL","ANIMAL"]
   },
   {
   "id" : "R23",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["WOLF","NULL","WOLF","EMPTY"]
+  "corners": ["ANIMAL","NULL","ANIMAL","EMPTY"]
   },
   {
   "id" : "R24",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["EMPTY","WOLF","NULL","WOLF"]
+  "corners": ["EMPTY","ANIMAL","NULL","ANIMAL"]
   },
   {
   "id" : "R25",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["NULL","BFLY","POTION","WOLF"]
+  "corners": ["NULL","INSECT","INK","ANIMAL"]
   },
   {
   "id" : "R26",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["LEAF","WOLF","NULL","MANUSCRIPT"]
+  "corners": ["VEGETABLE","ANIMAL","NULL","SCROLL"]
   },
   {
   "id" : "R27",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 0,
-  "corners": ["FEATHER","NULL","WOLF","SHROOM"]
+  "corners": ["FEATHER","NULL","ANIMAL","SHROOM"]
   },
   {
   "id" : "R28",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 1,
-  "corners": ["NULL","EMPTY","WOLF","EMPTY"]
+  "corners": ["NULL","EMPTY","ANIMAL","EMPTY"]
   },
   {
   "id" : "R29",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 1,
-  "corners": ["EMPTY","NULL","EMPTY","WOLF"]
+  "corners": ["EMPTY","NULL","EMPTY","ANIMAL"]
   },
   {
   "id" : "R30",
-  "symbol" : "WOLF",
+  "symbol" : "ANIMAL",
   "points" : 1,
-  "corners": ["EMPTY","WOLF","EMPTY","NULL"]
+  "corners": ["EMPTY","ANIMAL","EMPTY","NULL"]
   },
 
 
   {
   "id" : "R31",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["BFLY","BFLY","EMPTY","NULL"]
+  "corners": ["INSECT","INSECT","EMPTY","NULL"]
   },
   {
   "id" : "R32",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["NULL","EMPTY","BFLY","BFLY"]
+  "corners": ["NULL","EMPTY","INSECT","INSECT"]
   },
   {
   "id" : "R33",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["BFLY","NULL","BFLY","EMPTY"]
+  "corners": ["INSECT","NULL","INSECT","EMPTY"]
   },
   {
   "id" : "R34",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["EMPTY","BFLY","NULL","BFLY"]
+  "corners": ["EMPTY","INSECT","NULL","INSECT"]
   },
   {
   "id" : "R35",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["NULL","FEATHER","WOLF","BFLY"]
+  "corners": ["NULL","FEATHER","ANIMAL","INSECT"]
   },
   {
   "id" : "R36",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["MANUSCRIPT","BFLY","NULL","SHROOM"]
+  "corners": ["SCROLL","INSECT","NULL","SHROOM"]
   },
   {
   "id" : "R37",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 0,
-  "corners": ["BFLY","LEAF","POTION","NULL"]
+  "corners": ["INSECT","VEGETABLE","INK","NULL"]
   },
   {
   "id" : "R38",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 1,
-  "corners": ["BFLY","NULL","EMPTY","EMPTY"]
+  "corners": ["INSECT","NULL","EMPTY","EMPTY"]
   },
   {
   "id" : "R39",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 1,
-  "corners": ["EMPTY","EMPTY","NULL","BFLY"]
+  "corners": ["EMPTY","EMPTY","NULL","INSECT"]
   },
   {
   "id" : "R40",
-  "symbol" : "BFLY",
+  "symbol" : "INSECT",
   "points" : 1,
-  "corners": ["NULL","BFLY","EMPTY","EMPTY"]
+  "corners": ["NULL","INSECT","EMPTY","EMPTY"]
   }
 ]
 

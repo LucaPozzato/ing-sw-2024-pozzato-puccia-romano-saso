@@ -7,15 +7,15 @@
     "corners": ["NULL","EMPTY","EMPTY","FEATHER"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -32,15 +32,15 @@
     "corners": ["EMPTY","POTION","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "1"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -53,19 +53,19 @@
     "id" : "G3",
     "symbol" : "SHROOM",
     "points" : "1",
-    "points type" : "MANUSCRIPT",
-    "corners": ["MANUSCRIPT","EMPTY","EMPTY","NULL"],
+    "points type" : "SCROLL",
+    "corners": ["SCROLL","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "1"
       },
       {
@@ -82,15 +82,15 @@
     "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -107,15 +107,15 @@
     "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "1"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -132,15 +132,15 @@
     "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "1"
       },
       {
@@ -157,15 +157,15 @@
     "corners": ["EMPTY","NULL","POTION","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -182,15 +182,15 @@
     "corners": ["FEATHER","EMPTY","NULL","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -203,19 +203,19 @@
     "id" : "G9",
     "symbol" : "SHROOM",
     "points" : "3",
-    "points type" : "MANUSCRIPT",
-    "corners": ["NULL","MANUSCRIPT","NULL","EMPTY"],
+    "points type" : "SCROLL",
+    "corners": ["NULL","SCROLL","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -232,15 +232,15 @@
     "corners": ["EMPTY","NULL","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -253,21 +253,21 @@
 
   {
     "id" : "G11",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "1",
     "points type" : "FEATHER",
     "corners": ["FEATHER","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "2"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "1"
       },
       {
@@ -278,21 +278,21 @@
   },
   {
     "id" : "G12",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "1",
-    "points type" : "MANUSCRIPT",
-    "corners": ["EMPTY","MANUSCRIPT","NULL","EMPTY"],
+    "points type" : "SCROLL",
+    "corners": ["EMPTY","SCROLL","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "2"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -303,21 +303,21 @@
   },
   {
     "id" : "G13",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "1",
     "points type" : "POTION",
     "corners": ["EMPTY","NULL","POTION","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "2"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -328,21 +328,21 @@
   },
   {
     "id" : "G14",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["NULL","EMPTY","EMPTY","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "1"
       },
       {
@@ -353,21 +353,21 @@
   },
   {
     "id" : "G15",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -378,21 +378,21 @@
   },
   {
     "id" : "G16",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -403,21 +403,21 @@
   },
   {
     "id" : "G17",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["EMPTY","NULL","FEATHER","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -428,21 +428,21 @@
   },
   {
     "id" : "G18",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "3",
     "points type" : "NULL",
-    "corners": ["MANUSCRIPT","EMPTY","NULL","NULL"],
+    "corners": ["SCROLL","EMPTY","NULL","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -453,21 +453,21 @@
   },
   {
     "id" : "G19",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["NULL","POTION","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -478,21 +478,21 @@
   },
   {
     "id" : "G20",
-    "symbol" : "LEAF",
+    "symbol" : "VEGETABLE",
     "points" : "5",
     "points type" : "NULL",
     "corners": ["EMPTY","EMPTY","NULL","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "5"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -505,21 +505,21 @@
 
   {
     "id" : "G21",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "1",
     "points type" : "POTION",
     "corners": ["POTION","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "2"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "1"
       },
       {
@@ -530,21 +530,21 @@
   },
   {
     "id" : "G22",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "1",
-    "points type" : "MANUSCRIPT",
-    "corners": ["NULL","EMPTY","EMPTY","MANUSCRIPT"],
+    "points type" : "SCROLL",
+    "corners": ["NULL","EMPTY","EMPTY","SCROLL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "1"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "2"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -555,21 +555,21 @@
   },
   {
     "id" : "G23",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "1",
     "points type" : "FEATHER",
     "corners": ["EMPTY","NULL","FEATHER","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "2"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -580,21 +580,21 @@
   },
   {
     "id" : "G24",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -605,21 +605,21 @@
   },
   {
     "id" : "G25",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "1",
     "points type" : "",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -630,21 +630,21 @@
   },
   {
     "id" : "G26",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "1",
     "points type" : "",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -655,21 +655,21 @@
   },
   {
     "id" : "G27",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -680,21 +680,21 @@
   },
   {
     "id" : "G28",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -705,21 +705,21 @@
   },
   {
     "id" : "29",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -730,21 +730,21 @@
   },
   {
     "id" : "30",
-    "symbol" : "WOLF",
+    "symbol" : "ANIMAL",
     "points" : "5",
     "points type" : "",
     "corners": ["","","",""],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -757,21 +757,21 @@
 
   {
     "id" : "G31",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "1",
     "points type" : "FEATHER",
     "corners": ["EMPTY","FEATHER","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "1"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "2"
       },
       {
@@ -782,21 +782,21 @@
   },
   {
     "id" : "G32",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "1",
-    "points type" : "MANUSCRIPT",
-    "corners": ["EMPTY","NULL","MANUSCRIPT","EMPTY"],
+    "points type" : "SCROLL",
+    "corners": ["EMPTY","NULL","SCROLL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "2"
       },
       {
@@ -807,21 +807,21 @@
   },
   {
     "id" : "G33",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "1",
     "points type" : "POTION",
     "corners": ["NULL","EMPTY","EMPTY","POTION"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "2"
       },
       {
@@ -832,21 +832,21 @@
   },
   {
     "id" : "G34",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","EMPTY","NULL","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "1"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -857,21 +857,21 @@
   },
   {
     "id" : "G35",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","EMPTY","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "1"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -882,21 +882,21 @@
   },
   {
     "id" : "G36",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "2",
     "points type" : "ANGLE",
     "corners": ["EMPTY","NULL","EMPTY","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -907,21 +907,21 @@
   },
   {
     "id" : "G37",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["POTION","NULL","EMPTY","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -932,21 +932,21 @@
   },
   {
     "id" : "G38",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "3",
     "points type" : "NULL",
-    "corners": ["EMPTY","MANUSCRIPT","NULL","NULL"],
+    "corners": ["EMPTY","SCROLL","NULL","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -957,21 +957,21 @@
   },
   {
     "id" : "G39",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "3",
     "points type" : "NULL",
     "corners": ["NULL","NULL","FEATHER","EMPTY"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -982,21 +982,21 @@
   },
   {
     "id" : "G40",
-    "symbol" : "BFLY",
+    "symbol" : "INSECT",
     "points" : "5",
     "points type" : "NULL",
     "corners": ["EMPTY","EMPTY","NULL","NULL"],
     "resources required": [
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "5"
       },
       {

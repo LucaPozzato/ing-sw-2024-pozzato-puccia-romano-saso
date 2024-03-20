@@ -4,15 +4,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -28,7 +28,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]
@@ -38,15 +38,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "3"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -62,7 +62,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]
@@ -72,15 +72,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "3"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -96,7 +96,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]
@@ -106,15 +106,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "3"
       },
       {
@@ -130,7 +130,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]
@@ -140,15 +140,15 @@
     "points": "3",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -164,7 +164,7 @@
         "amount": "1"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "1"
       }
     ]
@@ -174,15 +174,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -198,7 +198,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "2"
       }
     ]
@@ -208,15 +208,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -232,7 +232,7 @@
         "amount": "2"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]
@@ -242,15 +242,15 @@
     "points": "2",
     "resources required":[
       {
-        "type": "LEAF",
+        "type": "VEGETABLE",
         "amount": "0"
       },
       {
-        "type": "WOLF",
+        "type": "ANIMAL",
         "amount": "0"
       },
       {
-        "type": "BFLY",
+        "type": "INSECT",
         "amount": "0"
       },
       {
@@ -266,7 +266,7 @@
         "amount": "0"
       },
       {
-        "type": "MANUSCRIPT",
+        "type": "SCROLL",
         "amount": "0"
       }
     ]

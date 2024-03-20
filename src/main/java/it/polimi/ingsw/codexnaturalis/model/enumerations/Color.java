@@ -1,4 +1,8 @@
 package it.polimi.ingsw.codexnaturalis.model.enumerations;
 
-public class Color {
+public enum Color {
+    YELLOW,
+    BLUE,
+    GREEN,
+    RED
 }

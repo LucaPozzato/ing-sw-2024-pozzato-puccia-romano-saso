@@ -16,11 +16,11 @@
     "id": "OP2",
     "points": "2",
     "pattern": {
-      "center card": "LEAF",
+      "center card": "VEGETABLE",
       "top card": "NULL",
       "top right card": "NULL",
-      "top left card": "LEAF",
-      "bottom right card": "LEAF",
+      "top left card": "VEGETABLE",
+      "bottom right card": "VEGETABLE",
       "bottom left card": "NULL",
       "bottom card": "NULL"
     }
@@ -29,12 +29,12 @@
     "id": "OP3",
     "points": "2",
     "pattern": {
-      "center card": "WOLF",
+      "center card": "ANIMAL",
       "top card": "NULL",
-      "top right card": "WOLF",
+      "top right card": "ANIMAL",
       "top left card": "NULL",
       "bottom right card": "NULL",
-      "bottom left card": "WOLF",
+      "bottom left card": "ANIMAL",
       "bottom card": "NULL"
     }
   },
@@ -42,11 +42,11 @@
     "id": "OP4",
     "points": "2",
     "pattern": {
-      "center card": "BFLY",
+      "center card": "INSECT",
       "top card": "NULL",
       "top right card": "NULL",
-      "top left card": "BFLY",
-      "bottom right card": "BFLY",
+      "top left card": "INSECT",
+      "bottom right card": "INSECT",
       "bottom left card": "NULL",
       "bottom card": "NULL"
     }
@@ -59,7 +59,7 @@
       "top card": "SHROOM",
       "top right card": "NULL",
       "top left card": "NULL",
-      "bottom right card": "LEAF",
+      "bottom right card": "VEGETABLE",
       "bottom left card": "NULL",
       "bottom card": "NULL"
     }
@@ -68,12 +68,12 @@
     "id": "OP6",
     "points": "3",
     "pattern": {
-      "center card": "LEAF",
-      "top card": "LEAF",
+      "center card": "VEGETABLE",
+      "top card": "VEGETABLE",
       "top right card": "NULL",
       "top left card": "NULL",
       "bottom right card": "NULL",
-      "bottom left card": "BFLY",
+      "bottom left card": "INSECT",
       "bottom card": "NULL"
     }
   },
@@ -81,26 +81,26 @@
     "id": "OP7",
     "points": "3",
     "pattern": {
-      "center card": "WOLF",
+      "center card": "ANIMAL",
       "top card": "NULL",
       "top right card": "SHROOM",
       "top left card": "NULL",
       "bottom right card": "NULL",
       "bottom left card": "NULL",
-      "bottom card": "WOLF"
+      "bottom card": "ANIMAL"
     }
   },
   {
     "id": "OP8",
     "points": "3",
     "pattern": {
-      "center card": "BFLY",
+      "center card": "INSECT",
       "top card": "NULL",
       "top right card": "NULL",
-      "top left card": "WOLF",
+      "top left card": "ANIMAL",
       "bottom right card": "NULL",
       "bottom left card": "NULL",
-      "bottom card": "BFLY"
+      "bottom card": "INSECT"
     }
   }
 ]
