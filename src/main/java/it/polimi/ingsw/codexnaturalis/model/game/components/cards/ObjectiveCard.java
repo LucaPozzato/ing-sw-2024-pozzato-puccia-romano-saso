@@ -1,22 +1,27 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
-import it.polimi.ingsw.codexnaturalis.model.enumerations.ObjectiveCardType;
+public class ObjectiveCard extends Card{
+    private String idCard;
+    private int points;
+    private String shape;
+    private String mustHave;
 
-public class ObjectiveCard extends Card {
 
-    private ObjectiveCardType objectiveType;
-
-    public ObjectiveCard(String idCard, String cardFrontImage, String cardBackImage, ObjectiveCardType objectiveType) {
-        super(idCard);
-        this.objectiveType = objectiveType;
+    public ObjectiveCard(String idCard, int points, String shape, String mustHave) {
+        this.idCard = idCard;
+        this.points = points;
+        this.shape = shape;
+        this.mustHave = mustHave;
     }
 
-    public ObjectiveCardType getObjectiveType() {
-        return objectiveType;
-    }
-
-    public void setObjectiveType(ObjectiveCardType objectiveType) {
-        this.objectiveType = objectiveType;
+    @Override
+    public String toString() {
+        return "ObjectiveCard{" +
+                "idCard='" + idCard + '\'' +
+                ", points=" + points +
+                ", shape='" + shape + '\'' +
+                ", mustHave='" + mustHave + '\'' +
+                '}';
     }
 
 }

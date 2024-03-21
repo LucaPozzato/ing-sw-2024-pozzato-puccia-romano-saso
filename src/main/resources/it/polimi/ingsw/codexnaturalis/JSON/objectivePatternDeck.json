@@ -2,105 +2,49 @@
   {
     "id": "OP1",
     "points": "2",
-    "pattern": {
-      "center card": "SHROOM",
-      "top card": "NULL",
-      "top right card": "SHROOM",
-      "top left card": "NULL",
-      "bottom right card": "NULL",
-      "bottom left card": "SHROOM",
-      "bottom card": "NULL"
-    }
+    "shape": "STAIRS",
+    "mustHave": "RED"
   },
   {
     "id": "OP2",
     "points": "2",
-    "pattern": {
-      "center card": "VEGETABLE",
-      "top card": "NULL",
-      "top right card": "NULL",
-      "top left card": "VEGETABLE",
-      "bottom right card": "VEGETABLE",
-      "bottom left card": "NULL",
-      "bottom card": "NULL"
-    }
+    "shape": "STAIRS",
+    "mustHave": "GREEN"
   },
   {
     "id": "OP3",
     "points": "2",
-    "pattern": {
-      "center card": "ANIMAL",
-      "top card": "NULL",
-      "top right card": "ANIMAL",
-      "top left card": "NULL",
-      "bottom right card": "NULL",
-      "bottom left card": "ANIMAL",
-      "bottom card": "NULL"
-    }
+    "shape": "STAIRS",
+    "mustHave": "BLUE"
   },
   {
     "id": "OP4",
     "points": "2",
-    "pattern": {
-      "center card": "INSECT",
-      "top card": "NULL",
-      "top right card": "NULL",
-      "top left card": "INSECT",
-      "bottom right card": "INSECT",
-      "bottom left card": "NULL",
-      "bottom card": "NULL"
-    }
+    "shape": "STAIRS",
+    "mustHave": "PURPLE"
   },
   {
     "id": "OP5",
     "points": "3",
-    "pattern": {
-      "center card": "SHROOM",
-      "top card": "SHROOM",
-      "top right card": "NULL",
-      "top left card": "NULL",
-      "bottom right card": "VEGETABLE",
-      "bottom left card": "NULL",
-      "bottom card": "NULL"
-    }
+    "shape": "CHAIR",
+    "mustHave": "RED"
   },
   {
     "id": "OP6",
     "points": "3",
-    "pattern": {
-      "center card": "VEGETABLE",
-      "top card": "VEGETABLE",
-      "top right card": "NULL",
-      "top left card": "NULL",
-      "bottom right card": "NULL",
-      "bottom left card": "INSECT",
-      "bottom card": "NULL"
-    }
+    "shape": "CHAIR",
+    "mustHave": "GREEN"
   },
   {
     "id": "OP7",
     "points": "3",
-    "pattern": {
-      "center card": "ANIMAL",
-      "top card": "NULL",
-      "top right card": "SHROOM",
-      "top left card": "NULL",
-      "bottom right card": "NULL",
-      "bottom left card": "NULL",
-      "bottom card": "ANIMAL"
-    }
+    "shape": "CHAIR",
+    "mustHave": "BLUE"
   },
   {
     "id": "OP8",
     "points": "3",
-    "pattern": {
-      "center card": "INSECT",
-      "top card": "NULL",
-      "top right card": "NULL",
-      "top left card": "ANIMAL",
-      "bottom right card": "NULL",
-      "bottom left card": "NULL",
-      "bottom card": "INSECT"
-    }
+    "shape": "CHAIR",
+    "mustHave": "PURPLE"
   }
 ]

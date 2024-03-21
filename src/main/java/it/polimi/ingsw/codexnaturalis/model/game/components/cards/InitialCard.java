@@ -2,43 +2,39 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Resource;
 
+import java.util.List;
+
 public class InitialCard extends Card {
+    private String idCard;
+    private List<String> frontCornerRes;
+    private List<String> frontCentreRes;
+    private List<String> backCornerRes;
 
-    // modifiche da rivedere/inserire su uml
-    private Resource[] frontCardCorners;
-    private Resource[] backCardResources;
-    private boolean[] backCardCorners;
-
-    public InitialCard(String idCard, String cardFrontImage, String cardBackImage, Resource[] frontCardCorners,
-            Resource[] backCardResources, boolean[] backCardCorners) {
-        super(idCard);
-        this.frontCardCorners = frontCardCorners;
-        this.backCardResources = backCardResources;
-        this.backCardCorners = backCardCorners;
+    public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCentreRes, List<String> backCornerRes) {
+        this.idCard = idCard;
+        this.frontCornerRes = frontCornerRes;
+        this.frontCentreRes = frontCentreRes;
+        this.backCornerRes = backCornerRes;
     }
 
-    public Resource[] getFrontCardCorners() {
-        return frontCardCorners;
-    }
+    public List<String> getFrontCornerRes() {return frontCornerRes;}
 
-    public Resource[] getBackCardResources() {
-        return backCardResources;
-    }
+    public List<String> getFrontCentreRes() {return frontCentreRes;}
 
-    public boolean[] getBackCardCorners() {
-        return backCardCorners;
-    }
+    public List<String> getBackCornerRes() {return backCornerRes;}
 
-    public void setFrontCardCorners(Resource[] frontCardCorners) {
-        this.frontCardCorners = frontCardCorners;
-    }
+    public void setFrontCornerRes(List<String> frontCornerRes) {this.frontCornerRes = frontCornerRes;}
 
-    public void setBackCardResources(Resource[] backCardResources) {
-        this.backCardResources = backCardResources;
-    }
+    public void setFrontCentreRes(List<String> frontCentreRes) {this.frontCentreRes = frontCentreRes;}
 
-    public void setBackCardCorners(boolean[] backCardCorners) {
-        this.backCardCorners = backCardCorners;
-    }
+    public void setBackCornerRes(List<String> backCornerRes) {this.backCornerRes = backCornerRes;}
 
+    public String toString() {
+        return "InitialCard{" +
+                "idCard='" + idCard + '\'' +
+                ", frontCornerRes=" + frontCornerRes +
+                ", frontCentreRes=" + frontCentreRes +
+                ", backCornerRes=" + backCornerRes +
+                '}';
+    }
 }

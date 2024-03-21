@@ -5,60 +5,33 @@ import java.util.List;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.*;
 
 public class GoldCard extends Card {
+    private String idCard;
+    private String symbol;
+    private int points;
+    private String pointsType;
+    private List<String> corners;
+    private List<String> requirements;
 
-    private String cardType;
-    private List<String> cardCorners;
-    private List<String> resourceRequired; // uml segna 4
-    private int cardPoints;
-    private String pointType;
-
-    public GoldCard(String idCard, String cardType,
-            String pointType, List<String> cardCorners, List<String> resourceRequired, int cardPoints) {
-        super(idCard);
-        this.cardType = cardType;
-        this.cardCorners = cardCorners;
-        this.resourceRequired = resourceRequired;
-        this.cardPoints = cardPoints;
-        this.pointType = pointType;
+    public GoldCard(String idCard, String symbol, int points, String pointsType, List<String> corners, List<String> requirements){
+        this.idCard = idCard;
+        this.symbol = symbol;
+        this.points = points;
+        this.pointsType = pointsType;
+        this.corners = corners;
+        this.requirements = requirements;
     }
 
-    public String getCardType() {
-        return cardType;
-    }
-
-    public List<String> getCardCorners() {
-        return cardCorners;
-    }
-
-    public List<String> getResourceRequired() {
-        return resourceRequired;
-    }
-
-    public int getCardPoints() {
-        return cardPoints;
-    }
-
-    public String getPointType() {
-        return pointType;
-    }
-
-    public void setCardType(String cardType) {
-        this.cardType = cardType;
-    }
-
-    public void setCardCorners(List<String> cardCorners) {
-        this.cardCorners = cardCorners;
-    }
-
-    public void setResourceRequired(List<String> resourceRequired) {
-        this.resourceRequired = resourceRequired;
-    }
-
-    public void setCardPoints(int cardPoints) {
-        this.cardPoints = cardPoints;
-    }
-
-    public void setPointType(String pointType) {
-        this.pointType = pointType;
-    }
+    public String getIdCard() {return idCard;}
+    public String getSymbol() {return symbol;}
+    public int getPoints() {return points;}
+    public String getPointsType() { return pointsType;}
+    public List<String> getCorners() { return corners;}
+    public List<String> getRequirements() {return requirements;}
+    public void setIdCard(String idCard) {this.idCard = idCard;}
+    public void setSymbol(String symbol) {this.symbol = symbol;}
+    public void setPoints(int points) {this.points = points;}
+    public void setPointsType(String pointsType) {this.pointsType = pointsType;}
+    public void setCorners(List<String> corners) {this.corners = corners;}
+    public void setRequirements(List<String> requirements) {this.requirements = requirements;}
+    public void print(){System.out.println("id: " + idCard + " symbol: " + symbol + " points: " + points + "pointsType: " + pointsType + "corners: " + corners + " requirements" + requirements);}
 }

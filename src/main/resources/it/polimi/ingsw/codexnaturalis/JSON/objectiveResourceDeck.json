@@ -2,273 +2,51 @@
   {
     "id": "OR1",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "3"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "IDOL",
+    "mustHave": "SHROOM"
   },
   {
     "id": "OR2",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "3"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "IDOL",
+    "mustHave": "VEGETABLES"
   },
   {
     "id": "OR3",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "3"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "IDOL",
+    "mustHave": "ANIMALS"
   },
   {
     "id": "OR4",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "3"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "IDOL",
+    "mustHave": "INSECTS"
   },
   {
     "id": "OR5",
-    "points": "3",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "1"
-      },
-      {
-        "type": "POTION",
-        "amount": "1"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "1"
-      }
-    ]
+    "points": "2",
+    "shape": "WISEMAN",
+    "mustHave": "FOLDEDHANDS"
   },
   {
     "id": "OR6",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "2"
-      }
-    ]
+    "shape": "WISEMAN",
+    "mustHave": "SCROLL"
   },
   {
     "id": "OR7",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "0"
-      },
-      {
-        "type": "POTION",
-        "amount": "2"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "WISEMAN",
+    "mustHave": "INK"
   },
   {
     "id": "OR8",
     "points": "2",
-    "resources required":[
-      {
-        "type": "VEGETABLE",
-        "amount": "0"
-      },
-      {
-        "type": "ANIMAL",
-        "amount": "0"
-      },
-      {
-        "type": "INSECT",
-        "amount": "0"
-      },
-      {
-        "type": "SHROOM",
-        "amount": "0"
-      },
-      {
-        "type": "FEATHER",
-        "amount": "2"
-      },
-      {
-        "type": "POTION",
-        "amount": "0"
-      },
-      {
-        "type": "SCROLL",
-        "amount": "0"
-      }
-    ]
+    "shape": "WISEMAN",
+    "mustHave": "FEATHER"
   }
+
 ]
+

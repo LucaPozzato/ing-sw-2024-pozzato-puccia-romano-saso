@@ -2,30 +2,19 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
 import java.util.List;
 
-public class ResourceCard extends Card {
+public class ResourceCard extends Card{
+    private String idCard;
+    private String symbol;
+    private int points;
+    private List<String> corners;
 
-    private String cardType;
-    private List<String> cardCorners;
-    private int cardPoints;
-
-    public ResourceCard(String idCard, String cardType,
-            List<String> cardCorners, int cardPoints) {
-        super(idCard); // check super
-        this.cardType = cardType;
-        this.cardCorners = cardCorners;
-        this.cardPoints = cardPoints;
+    public ResourceCard(String idCard, String symbol, int points, List<String> corners){
+        this.idCard = idCard;
+        this.symbol = symbol;
+        this.points = points;
+        this.corners = corners;
     }
-
-    public String getCardType() {
-        return cardType;
+    public void print(){
+        System.out.println("id: " + idCard + " symbol: " + symbol + " points: " + points + " corners: " + corners);
     }
-
-    public List<String> getCardCorners() {
-        return cardCorners;
-    }
-
-    public int getCardPoints() {
-        return cardPoints;
-    }
-
 }

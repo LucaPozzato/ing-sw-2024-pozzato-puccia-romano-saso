@@ -1,249 +1,249 @@
 [
   {
-  "id" : "R1",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["SHROOM","EMPTY","SHROOM","NULL"]
+    "id" : "R1",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["SHROOM","EMPTY","SHROOM","NULL"]
   },
   {
-  "id" : "R2",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["SHROOM","SHROOM","NULL","EMPTY"]
+    "id" : "R2",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["SHROOM","SHROOM","NULL","EMPTY"]
   },
   {
-  "id" : "R3",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["EMPTY","NULL","SHROOM","SHROOM"]
+    "id" : "R3",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["EMPTY","NULL","SHROOM","SHROOM"]
   },
   {
-  "id" : "R4",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["NULL","SHROOM","EMPTY","SHROOM"]
+    "id" : "R4",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["NULL","SHROOM","EMPTY","SHROOM"]
   },
   {
-  "id" : "R5",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["NULL","FEATHER","VEGETABLE","SHROOM"]
+    "id" : "R5",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["NULL","FEATHER","VEGETABLE","SHROOM"]
   },
   {
-  "id" : "R6",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["INK","SHROOM","NULL","ANIMAL"]
+    "id" : "R6",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["INK","SHROOM","NULL","ANIMAL"]
   },
   {
-  "id" : "R7",
-  "symbol" : "SHROOM",
-  "points" : 0,
-  "corners": ["SHROOM","INSECT","SCROLL","EMPTY"]
+    "id" : "R7",
+    "symbol" : "SHROOM",
+    "points" : 0,
+    "corners": ["SHROOM","INSECT","SCROLL","EMPTY"]
   },
   {
-  "id" : "R8",
-  "symbol" : "SHROOM",
-  "points" : 1,
-  "corners": ["EMPTY","SHROOM","EMPTY","NULL"]
+    "id" : "R8",
+    "symbol" : "SHROOM",
+    "points" : 1,
+    "corners": ["EMPTY","SHROOM","EMPTY","NULL"]
   },
   {
-  "id" : "R9",
-  "symbol" : "SHROOM",
-  "points" : 1,
-  "corners": ["SHROOM","NULL","EMPTY","EMPTY"]
+    "id" : "R9",
+    "symbol" : "SHROOM",
+    "points" : 1,
+    "corners": ["SHROOM","NULL","EMPTY","EMPTY"]
   },
   {
-  "id" : "R10",
-  "symbol" : "SHROOM",
-  "points" : 1,
-  "corners": ["NULL","EMPTY","SHROOM","EMPTY"]
-  },
-
-
-  {
-  "id" : "R11",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["VEGETABLE","EMPTY","VEGETABLE","NULL"]
-  },
-  {
-  "id" : "R12",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["VEGETABLE","VEGETABLE","NULL","EMPTY"]
-  },
-  {
-  "id" : "R13",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["EMPTY","NULL","VEGETABLE","VEGETABLE"]
-  },
-  {
-  "id" : "R14",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["NULL","VEGETABLE","EMPTY","VEGETABLE"]
-  },
-  {
-  "id" : "R15",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["NULL","INSECT","FEATHER","VEGETABLE"]
-  },
-  {
-  "id" : "R16",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["SHROOM","VEGETABLE","NULL","INK"]
-  },
-  {
-  "id" : "R17",
-  "symbol" : "VEGETABLE",
-  "points" : 0,
-  "corners": ["SCROLL","NULL","VEGETABLE","ANIMAL"]
-  },
-  {
-  "id" : "R18",
-  "symbol" : "VEGETABLE",
-  "points" : 1,
-  "corners": ["EMPTY","EMPTY","VEGETABLE","NULL"]
-  },
-  {
-  "id" : "R19",
-  "symbol" : "VEGETABLE",
-  "points" : 1,
-  "corners": ["EMPTY","EMPTY","NULL","VEGETABLE"]
-  },
-  {
-  "id" : "R20",
-  "symbol" : "VEGETABLE",
-  "points" : 1,
-  "corners": ["NULL","VEGETABLE","EMPTY","EMPTY"]
+    "id" : "R10",
+    "symbol" : "SHROOM",
+    "points" : 1,
+    "corners": ["NULL","EMPTY","SHROOM","EMPTY"]
   },
 
 
   {
-  "id" : "R21",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["ANIMAL","ANIMAL","EMPTY","NULL"]
+    "id" : "R11",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["VEGETABLE","EMPTY","VEGETABLE","NULL"]
   },
   {
-  "id" : "R22",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["NULL","EMPTY","ANIMAL","ANIMAL"]
+    "id" : "R12",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["VEGETABLE","VEGETABLE","NULL","EMPTY"]
   },
   {
-  "id" : "R23",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["ANIMAL","NULL","ANIMAL","EMPTY"]
+    "id" : "R13",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["EMPTY","NULL","VEGETABLE","VEGETABLE"]
   },
   {
-  "id" : "R24",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["EMPTY","ANIMAL","NULL","ANIMAL"]
+    "id" : "R14",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["NULL","VEGETABLE","EMPTY","VEGETABLE"]
   },
   {
-  "id" : "R25",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["NULL","INSECT","INK","ANIMAL"]
+    "id" : "R15",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["NULL","INSECT","FEATHER","VEGETABLE"]
   },
   {
-  "id" : "R26",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["VEGETABLE","ANIMAL","NULL","SCROLL"]
+    "id" : "R16",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["SHROOM","VEGETABLE","NULL","INK"]
   },
   {
-  "id" : "R27",
-  "symbol" : "ANIMAL",
-  "points" : 0,
-  "corners": ["FEATHER","NULL","ANIMAL","SHROOM"]
+    "id" : "R17",
+    "symbol" : "VEGETABLE",
+    "points" : 0,
+    "corners": ["SCROLL","NULL","VEGETABLE","ANIMAL"]
   },
   {
-  "id" : "R28",
-  "symbol" : "ANIMAL",
-  "points" : 1,
-  "corners": ["NULL","EMPTY","ANIMAL","EMPTY"]
+    "id" : "R18",
+    "symbol" : "VEGETABLE",
+    "points" : 1,
+    "corners": ["EMPTY","EMPTY","VEGETABLE","NULL"]
   },
   {
-  "id" : "R29",
-  "symbol" : "ANIMAL",
-  "points" : 1,
-  "corners": ["EMPTY","NULL","EMPTY","ANIMAL"]
+    "id" : "R19",
+    "symbol" : "VEGETABLE",
+    "points" : 1,
+    "corners": ["EMPTY","EMPTY","NULL","VEGETABLE"]
   },
   {
-  "id" : "R30",
-  "symbol" : "ANIMAL",
-  "points" : 1,
-  "corners": ["EMPTY","ANIMAL","EMPTY","NULL"]
+    "id" : "R20",
+    "symbol" : "VEGETABLE",
+    "points" : 1,
+    "corners": ["NULL","VEGETABLE","EMPTY","EMPTY"]
   },
 
 
   {
-  "id" : "R31",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["INSECT","INSECT","EMPTY","NULL"]
+    "id" : "R21",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["ANIMAL","ANIMAL","EMPTY","NULL"]
   },
   {
-  "id" : "R32",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["NULL","EMPTY","INSECT","INSECT"]
+    "id" : "R22",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["NULL","EMPTY","ANIMAL","ANIMAL"]
   },
   {
-  "id" : "R33",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["INSECT","NULL","INSECT","EMPTY"]
+    "id" : "R23",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["ANIMAL","NULL","ANIMAL","EMPTY"]
   },
   {
-  "id" : "R34",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["EMPTY","INSECT","NULL","INSECT"]
+    "id" : "R24",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["EMPTY","ANIMAL","NULL","ANIMAL"]
   },
   {
-  "id" : "R35",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["NULL","FEATHER","ANIMAL","INSECT"]
+    "id" : "R25",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["NULL","INSECT","INK","ANIMAL"]
   },
   {
-  "id" : "R36",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["SCROLL","INSECT","NULL","SHROOM"]
+    "id" : "R26",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["VEGETABLE","ANIMAL","NULL","SCROLL"]
   },
   {
-  "id" : "R37",
-  "symbol" : "INSECT",
-  "points" : 0,
-  "corners": ["INSECT","VEGETABLE","INK","NULL"]
+    "id" : "R27",
+    "symbol" : "ANIMAL",
+    "points" : 0,
+    "corners": ["FEATHER","NULL","ANIMAL","SHROOM"]
   },
   {
-  "id" : "R38",
-  "symbol" : "INSECT",
-  "points" : 1,
-  "corners": ["INSECT","NULL","EMPTY","EMPTY"]
+    "id" : "R28",
+    "symbol" : "ANIMAL",
+    "points" : 1,
+    "corners": ["NULL","EMPTY","ANIMAL","EMPTY"]
   },
   {
-  "id" : "R39",
-  "symbol" : "INSECT",
-  "points" : 1,
-  "corners": ["EMPTY","EMPTY","NULL","INSECT"]
+    "id" : "R29",
+    "symbol" : "ANIMAL",
+    "points" : 1,
+    "corners": ["EMPTY","NULL","EMPTY","ANIMAL"]
   },
   {
-  "id" : "R40",
-  "symbol" : "INSECT",
-  "points" : 1,
-  "corners": ["NULL","INSECT","EMPTY","EMPTY"]
+    "id" : "R30",
+    "symbol" : "ANIMAL",
+    "points" : 1,
+    "corners": ["EMPTY","ANIMAL","EMPTY","NULL"]
+  },
+
+
+  {
+    "id" : "R31",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["INSECT","INSECT","EMPTY","NULL"]
+  },
+  {
+    "id" : "R32",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["NULL","EMPTY","INSECT","INSECT"]
+  },
+  {
+    "id" : "R33",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["INSECT","NULL","INSECT","EMPTY"]
+  },
+  {
+    "id" : "R34",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["EMPTY","INSECT","NULL","INSECT"]
+  },
+  {
+    "id" : "R35",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["NULL","FEATHER","ANIMAL","INSECT"]
+  },
+  {
+    "id" : "R36",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["SCROLL","INSECT","NULL","SHROOM"]
+  },
+  {
+    "id" : "R37",
+    "symbol" : "INSECT",
+    "points" : 0,
+    "corners": ["INSECT","VEGETABLE","INK","NULL"]
+  },
+  {
+    "id" : "R38",
+    "symbol" : "INSECT",
+    "points" : 1,
+    "corners": ["INSECT","NULL","EMPTY","EMPTY"]
+  },
+  {
+    "id" : "R39",
+    "symbol" : "INSECT",
+    "points" : 1,
+    "corners": ["EMPTY","EMPTY","NULL","INSECT"]
+  },
+  {
+    "id" : "R40",
+    "symbol" : "INSECT",
+    "points" : 1,
+    "corners": ["NULL","INSECT","EMPTY","EMPTY"]
   }
 ]
 

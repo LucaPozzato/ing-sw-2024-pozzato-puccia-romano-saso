@@ -3,11 +3,7 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 public abstract class Card {
     // TODO: UML change to string -> id is a string
     // UML -> add isIstance
-    private String idCard;
-
-    public Card(String idCard) {
-        this.idCard = idCard;
-    }
+    protected String idCard;
 
     public String getIdCard() {
         return idCard;

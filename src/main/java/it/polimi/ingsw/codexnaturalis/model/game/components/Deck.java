@@ -6,13 +6,12 @@ import java.util.Stack;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.*;
 
 public class Deck {
-
     private Stack<GoldCard> goldDeck;
     private Stack<ResourceCard> resourceDeck;
 
-    public Deck() {
-        this.goldDeck = new Stack<GoldCard>();
-        this.resourceDeck = new Stack<ResourceCard>();
+    public Deck(Stack<GoldCard> goldDeck, Stack<ResourceCard> resourceDeck) {
+        this.goldDeck = goldDeck;
+        this.resourceDeck = resourceDeck;
     }
 
     public Stack<GoldCard> getGoldDeck() {
@@ -54,4 +53,5 @@ public class Deck {
     public boolean emptyRes() {
         return resourceDeck.isEmpty();
     }
+
 }
