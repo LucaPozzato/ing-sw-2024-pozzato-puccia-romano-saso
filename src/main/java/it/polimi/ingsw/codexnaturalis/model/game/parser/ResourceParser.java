@@ -14,13 +14,13 @@ import com.google.gson.JsonParser;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
 public class ResourceParser {
-    Stack<ResourceCard> Resourcedeck;
+    private Stack<ResourceCard> ResourceDeck;
 
     public ResourceParser() {
-        Resourcedeck = new Stack<>();
+        ResourceDeck = new Stack<>();
     }
 
-    public Stack<ResourceCard> Parse() {
+    public Stack<ResourceCard> parse() {
         File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json");
         JsonElement fileElement = null;
         try {
@@ -37,11 +37,11 @@ public class ResourceParser {
             JsonArray corners = cardsObject.get("corners").getAsJsonArray();
             List<String> array = new ArrayList<>();
             for (JsonElement corner : corners) {
-                array.add(corner.toString());
+                array.add(corner.getAsString());
             }
             ResourceCard resCard = new ResourceCard(idCard, symbol, points, array);
-            Resourcedeck.push(resCard);
+            ResourceDeck.push(resCard);
         }
-        return Resourcedeck;
+        return ResourceDeck;
     }
 }

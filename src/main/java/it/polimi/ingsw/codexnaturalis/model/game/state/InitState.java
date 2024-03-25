@@ -21,27 +21,28 @@ public class InitState extends State {
     }
 
     private void createDecks() {
-        //Creates instances of the needed parser
-        resPar= new ResourceParser();
-        goldPar=new GoldParser();
-        //Creates an instance of deck and assigns it to the Game
-        super.game.setDeck(new Deck(goldPar.Parse(), resPar.Parse()));
-        //Shuffles the decks
+        // Creates instances of the needed parser
+        resPar = new ResourceParser();
+        goldPar = new GoldParser();
+        // Creates an instance of deck and assigns it to the Game
+        super.game.setDeck(new Deck(goldPar.parse(), resPar.parse()));
+        // Shuffles the decks
         super.game.getDeck().shuffleGoldDeck();
         super.game.getDeck().shuffleResourceDeck();
     }
 
     private void createFirstPlayer(String nick, Color color, int numPlayers) {
-        // TODO togliere dal costruttore di Players il nickname e il colore e istituire dei setter specifici
+        // TODO togliere dal costruttore di Players il nickname e il colore e istituire
+        // dei setter specifici
 
-        //Creates the same number of player as specified by the first one
+        // Creates the same number of player as specified by the first one
         for (int i = 0; i < numPlayers; i++) {
             super.game.addPlayer(new Player());
         }
-        //Allows the first player to insert his parameters
+        // Allows the first player to insert his parameters
         super.game.getPlayers().get(0).setNickname(nick);
         super.game.getPlayers().get(0).setColor(color);
-        //Gives information about the match to Game class
+        // Gives information about the match to Game class
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
     }
@@ -52,7 +53,8 @@ public class InitState extends State {
 
         for (int i = 0; i < numPlayers; i++) {
             super.game.setPlayerHand(super.game.getPlayers().get(i), new Hand());
-            //The hand is made of 2 resource card and a gold one randomly selected from the deck
+            // The hand is made of 2 resource card and a gold one randomly selected from the
+            // deck
             for (int j = 0; j < 2; j++) {
                 super.game.getHandByPlayer(super.game.getPlayers().get(i))
                         .addCard(super.game.getDeck().drawResourceCard());
@@ -61,24 +63,25 @@ public class InitState extends State {
                     .addCard(super.game.getDeck().drawGoldCard());
         }
     }
-    private void dealInitialCard(){
+
+    private void dealInitialCard() {
         initPar = new InitialParser();
-        for(Player player : game.getPlayers()){
-            game.getHandByPlayer(player).setInitCard(initPar.Parse().removeFirst());
+        for (Player player : game.getPlayers()) {
+            game.getHandByPlayer(player).setInitCard(initPar.parse().removeFirst());
         }
     }
 
     private void dealSecretObjective() {
         objPar = new ObjectiveParser();
-        for(Player player : game.getPlayers()){
-            game.getHandByPlayer(player).setSecretObjective(objPar.Parse().removeFirst());
+        for (Player player : game.getPlayers()) {
+            game.getHandByPlayer(player).setSecretObjective(objPar.parse().removeFirst());
         }
     }
 
     private void dealCommonObjective() {
-        for(Player player : game.getPlayers()){
-            for(int i=0; i< 2; i++){
-                game.getHandByPlayer(player).getChooseBetweenObj().add(objPar.Parse().removeFirst());
+        for (Player player : game.getPlayers()) {
+            for (int i = 0; i < 2; i++) {
+                game.getHandByPlayer(player).getChooseBetweenObj().add(objPar.parse().removeFirst());
             }
         }
     }

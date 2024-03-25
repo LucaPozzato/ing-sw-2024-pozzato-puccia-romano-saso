@@ -22,12 +22,13 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 //Va cambiato il tipo di commonObjective nell'UML
 
 public class ObjectiveParser {
+    private List<ObjectiveCard> collection;
+
     public ObjectiveParser() {
+        collection = new ArrayList<>();
     }
 
-    public List<ObjectiveCard> Parse() {
-        List<ObjectiveCard> collection = new ArrayList<>();
-
+    public List<ObjectiveCard> parse() {
         File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/objectivePatternDeck.json");
         JsonElement fileElement = null;
         try {
@@ -66,8 +67,7 @@ public class ObjectiveParser {
             ObjectiveCard objCard = new ObjectiveCard(idCard, points, shape, mustHave);
             collection.add(objCard);
         }
-        Collections.shuffle(collection);
-        // System.out.println(collection);
+        // Collections.shuffle(collection);
         return collection;
     }
 }

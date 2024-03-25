@@ -18,6 +18,10 @@ public class InitialCard extends Card {
         this.backCornerRes = backCornerRes;
     }
 
+    public String getIdCard() {
+        return idCard;
+    }
+
     public List<String> getFrontCornerRes() {
         return frontCornerRes;
     }
@@ -49,5 +53,11 @@ public class InitialCard extends Card {
                 ", frontCentreRes=" + frontCentreRes +
                 ", backCornerRes=" + backCornerRes +
                 '}';
+    }
+
+    @Override
+    public void print() {
+        System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCornerRes + "\n\tfrontCentreRes: "
+                + frontCentreRes + "\n\tbackCornerRes: " + backCornerRes);
     }
 }

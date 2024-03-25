@@ -1,9 +1,12 @@
 package it.polimi.ingsw.codexnaturalis.model.enumerations;
 
-public enum Resource {
+public enum CornerType {
+    FEATHER,
+    INK,
+    SCROLL,
     VEGETABLE,
-    ANIMAL,
     INSECT,
+    ANIMAL,
     SHROOM,
     EMPTY,
     NULL

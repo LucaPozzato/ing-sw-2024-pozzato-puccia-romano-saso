@@ -5,5 +5,6 @@ public enum GoldCardPointType {
     INK,
     FEATHER,
     SCROLL,
-    FREE
+    ANGLE,
+    NULL
 }

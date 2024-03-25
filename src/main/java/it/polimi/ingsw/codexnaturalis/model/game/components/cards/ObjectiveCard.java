@@ -55,4 +55,9 @@ public class ObjectiveCard extends Card {
                 '}';
     }
 
+    @Override
+    public void print() {
+        System.out.println(
+                "id: " + idCard + "\n\tpoints: " + points + "\n\tshape: " + shape + "\n\tmustHave: " + mustHave);
+    }
 }

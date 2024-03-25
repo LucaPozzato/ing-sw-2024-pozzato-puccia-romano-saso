@@ -70,8 +70,10 @@ public class GoldCard extends Card {
         this.requirements = requirements;
     }
 
+    @Override
     public void print() {
-        System.out.println("id: " + idCard + " symbol: " + symbol + " points: " + points + "pointsType: " + pointsType
-                + "corners: " + corners + " requirements" + requirements);
+        System.out.println(
+                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tpointsType: " + pointsType
+                        + "\n\tcorners: " + corners + "\n\trequirements: " + requirements);
     }
 }

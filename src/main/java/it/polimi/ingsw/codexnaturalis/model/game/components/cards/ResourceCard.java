@@ -47,7 +47,9 @@ public class ResourceCard extends Card {
         this.corners = corners;
     }
 
+    @Override
     public void print() {
-        System.out.println("id: " + idCard + " symbol: " + symbol + " points: " + points + " corners: " + corners);
+        System.out.println(
+                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + corners);
     }
 }

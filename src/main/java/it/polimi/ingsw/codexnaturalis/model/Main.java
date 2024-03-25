@@ -15,18 +15,25 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         ResourceParser resPars = new ResourceParser();
-        Stack<ResourceCard> resourceDeck = resPars.Parse();
+        Stack<ResourceCard> resourceDeck = resPars.parse();
 
         GoldParser goldPars = new GoldParser();
-        Stack<GoldCard> goldDeck = goldPars.Parse();
+        Stack<GoldCard> goldDeck = goldPars.parse();
 
         Deck deck = new Deck(goldDeck, resourceDeck);
         deck.printGoldDeck();
         deck.printResourceDeck();
 
         ObjectiveParser secPars = new ObjectiveParser();
-        secPars.Parse();
+        for (ObjectiveCard card : secPars.parse()) {
+            card.print();
+        }
+
+        System.out.println("\n");
+
         InitialParser initPars = new InitialParser();
-        initPars.Parse();
+        for (InitialCard card : initPars.parse()) {
+            card.print();
+        }
     }
 }

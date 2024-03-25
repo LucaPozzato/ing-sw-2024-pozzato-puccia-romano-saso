@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         GoldParser goldParser = new GoldParser();
         try {
-            goldParser.Parse();
+            goldParser.parse();
         } catch (Exception e) {
             e.printStackTrace();
         }

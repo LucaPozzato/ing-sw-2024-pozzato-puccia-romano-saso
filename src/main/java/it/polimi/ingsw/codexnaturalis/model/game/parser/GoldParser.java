@@ -14,13 +14,13 @@ import com.google.gson.JsonParser;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 
 public class GoldParser {
-    Stack<GoldCard> goldDeck;
+    private Stack<GoldCard> goldDeck;
 
     public GoldParser() {
         goldDeck = new Stack<>();
     }
 
-    public Stack<GoldCard> Parse() {
+    public Stack<GoldCard> parse() {
         File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/goldDeck.json");
         JsonElement fileElement = null;
         try {
@@ -38,7 +38,7 @@ public class GoldParser {
             JsonArray corners = cardsObject.get("corners").getAsJsonArray();
             List<String> listCorner = new ArrayList<>();
             for (JsonElement corner : corners) {
-                listCorner.add(corner.toString());
+                listCorner.add(corner.getAsString());
             }
             JsonArray arrayOfReq = cardsObject.get("resources required").getAsJsonArray();
             List<String> listReq = new ArrayList<>();

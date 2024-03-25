@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonArray;
@@ -14,13 +13,13 @@ import com.google.gson.JsonParser;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 
 public class InitialParser {
+    private List<InitialCard> collection;
 
     public InitialParser() {
+        collection = new ArrayList<>();
     }
 
-    public List<InitialCard> Parse() {
-        List<InitialCard> collection = new ArrayList<>();
-
+    public List<InitialCard> parse() {
         File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/initialDeck.json");
         JsonElement fileElement = null;
         try {
@@ -37,27 +36,25 @@ public class InitialParser {
             List<String> frontCornRes = new ArrayList<>();
             JsonArray array = cardsObject.get("front corners").getAsJsonArray();
             for (JsonElement corner : array) {
-                frontCornRes.add(corner.toString());
+                frontCornRes.add(corner.getAsString());
             }
 
             List<String> frontCentRes = new ArrayList<>();
             JsonArray array2 = cardsObject.get("front centre").getAsJsonArray();
             for (JsonElement centre : array2) {
-                frontCentRes.add(centre.toString());
+                frontCentRes.add(centre.getAsString());
             }
 
             List<String> backCornRes = new ArrayList<>();
             JsonArray array3 = cardsObject.get("back corners").getAsJsonArray();
             for (JsonElement centre : array3) {
-                backCornRes.add(centre.toString());
+                backCornRes.add(centre.getAsString());
             }
 
             InitialCard initCard = new InitialCard(id, frontCornRes, frontCentRes, backCornRes);
             collection.add(initCard);
-            Collections.shuffle(collection);
+            // Collections.shuffle(collection);
         }
-        // Stampa
-        // System.out.println(collection);
         return collection;
     }
 }
