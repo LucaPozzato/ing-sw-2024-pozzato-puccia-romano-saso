@@ -1,38 +1,38 @@
 [
-  {
-    "id": "I1",
-    "front corners": ["EMPTY","VEGETABLE","INSECT","EMPTY"],
-    "front centre": ["INSECT"],
-    "back corners": ["SHROOM","VEGETABLE","INSECT","ANIMAL"]
-  },
-  {
-    "id": "I2",
-    "front corners": ["ANIMAL","EMPTY","EMPTY","SHROOM"],
-    "front centre": ["SHROOM"],
-    "back corners": ["VEGETABLE", "ANIMAL","SHROOM","INSECT"]
-  },
-  {
-    "id": "I3",
-    "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
-    "front centre": ["VEGETABLE", "SHROOM"],
-    "back corners": ["INSECT","ANIMAL","SHROOM","VEGETABLE"]
-  },
-  {
-    "id": "I4",
-    "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
-    "front centre": ["INSECT", "ANIMAL"],
-    "back corners": ["VEGETABLE","INSECT","ANIMAL","SHROOM"]
-  },
-  {
-    "id": "I5",
-    "front corners": ["EMPTY","EMPTY","NULL","NULL"],
-    "front centre": ["ANIMAL","INSECT","VEGETABLE"],
-    "back corners": ["INSECT","SHROOM","VEGETABLE","ANIMAL"]
-  },
-  {
-    "id": "I6",
-    "front corners": ["EMPTY","EMPTY","NULL","NULL"],
-    "front centre": ["VEGETABLE", "ANIMAL", "SHROOM"],
-    "back corners": ["SHROOM","ANIMAL","VEGETABLE","INSECT"]
-  }
+    {
+        "id": "I1",
+        "front corners": ["EMPTY","VEGETABLE","INSECT","EMPTY"],
+        "front centre": ["INSECT"],
+        "back corners": ["SHROOM","VEGETABLE","INSECT","ANIMAL"]
+    },
+    {
+        "id": "I2",
+        "front corners": ["ANIMAL","EMPTY","EMPTY","SHROOM"],
+        "front centre": ["SHROOM"],
+        "back corners": ["VEGETABLE", "ANIMAL","SHROOM","INSECT"]
+    },
+    {
+        "id": "I3",
+        "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+        "front centre": ["VEGETABLE", "SHROOM"],
+        "back corners": ["INSECT","ANIMAL","SHROOM","VEGETABLE"]
+    },
+    {
+        "id": "I4",
+        "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+        "front centre": ["INSECT", "ANIMAL"],
+        "back corners": ["VEGETABLE","INSECT","ANIMAL","SHROOM"]
+    },
+    {
+        "id": "I5",
+        "front corners": ["EMPTY","EMPTY","NULL","NULL"],
+        "front centre": ["ANIMAL","INSECT","VEGETABLE"],
+        "back corners": ["INSECT","SHROOM","VEGETABLE","ANIMAL"]
+    },
+    {
+        "id": "I6",
+        "front corners": ["EMPTY","EMPTY","NULL","NULL"],
+        "front centre": ["VEGETABLE", "ANIMAL", "SHROOM"],
+        "back corners": ["SHROOM","ANIMAL","VEGETABLE","INSECT"]
+    }
 ]

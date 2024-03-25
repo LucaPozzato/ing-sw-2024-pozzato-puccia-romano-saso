@@ -19,7 +19,7 @@ package model {
         - observerList: List<View>
         'General'
         
-        + game(gameId: int): void
+        + game(gameId: int)
         + notifyAll(): void
         + addObserver(view: View): void
         + removeObserver(view: View): void
@@ -50,7 +50,7 @@ package model {
         - nickname: String
         - colorPlayer: Color
         
-        + Player(nickname: String, colorPlayer: Color): void
+        + Player(nickname: String, colorPlayer: Color)
         + getNickname(): String
         + getColorPlayer(): Color
         }
@@ -110,7 +110,7 @@ package model {
     abstract class State {
         - game: Game
 
-        + State(): void
+        + State()
         + initialize(): void
         + joinGame(): void
         + placedCard(): void
@@ -119,7 +119,7 @@ package model {
     }
 
     class InitState {
-        + InitState(): void
+        + InitState()
         + initialized(): void
         - createDecks(): void
         - createFirstPlayer(): void
@@ -185,7 +185,7 @@ package model {
     end note
 
     class PlacedCardState {
-        + PlacedCardState(): void
+        + PlacedCardState()
         + placedCard(): void
         - addCard(): void
         - updatePoints(): void
@@ -202,7 +202,7 @@ package model {
     end note
 
     class DrawnCardState {
-        + DrawnCardState(): void
+        + DrawnCardState()
         + drawnCard(): void
         + matchEnded(): void
         - updateDeck(): void
@@ -222,7 +222,7 @@ package model {
     end note
 
     class EndGameState {
-        + EndGameState(): void
+        + EndGameState()
     }
 
     class Board {
@@ -230,7 +230,7 @@ package model {
         - commonObjective: ObjectiveCard
         - uncoveredCards: List<Card>
 
-        + Board(): void
+        + Board()
         + setCommonObjective(commonObjective: ObjectiveCard): void
         + getScores(): Map<Player, int>
         + getCommonObjective(): ObjectiveCard
@@ -246,7 +246,7 @@ package model {
         - cardFrontImage: String
         - cardBackImage: String
 
-        + Card(idCard: int, cardFrontImage: String, cardBackImage: String): void
+        + Card(idCard: int, cardFrontImage: String, cardBackImage: String)
         + getIdCard(): int
         + getCardFrontImage(): String
         + getCardBackImage(): String
@@ -255,7 +255,7 @@ package model {
     class ObjectiveCard extends Card {
         - objectiveType: ObjectiveCardType
 
-        + ObjectiveCard(): void
+        + ObjectiveCard()
         + getObjectiveType(): ObjectiveCardType
         + setObjectiveType(objectiveType: ObjectiveCardType): void
     }
@@ -265,7 +265,7 @@ package model {
         - topCardResources: Resource[3]
         - bottomCardCorners: Resource[4]
 
-        + InitialCard(): void
+        + InitialCard()
         + getTopCardCorners(): Resource[4]
         + getBottomCardCorners(): boolean[4]
         + getBottomCardResources(): Resource[3]
@@ -281,7 +281,7 @@ package model {
         - cardPoints: int
         - pointType: GoldCardPointType
         
-        + GoldCard(): void
+        + GoldCard()
         + getCardType(): Resource
         + getCardCorners(): Resource[4]
         + getResourceRequired(): Resource[4]
@@ -299,7 +299,7 @@ package model {
         - cardCorners: Resource[4]
         - cardPoints: int
         
-        + ResourceCard(idCard: int, cardFrontImage: String, cardBackImage: String, cardType: Resource, cardCorners: Resource[4], cardPoints: int): void
+        + ResourceCard(idCard: int, cardFrontImage: String, cardBackImage: String, cardType: Resource, cardCorners: Resource[4], cardPoints: int)
         + getCardType(): Resource
         + getCardCorners(): Resource[4]
         + getCardPoints(): int
@@ -310,12 +310,12 @@ package model {
         - currentResources: Map<Resource, int>
         - currentObjects: Map<Objects, int>
 
-        + Structure(): void
+        + Structure(card: Card)
         + getRoot(): StructureNode
         + getCurrentResources(): Map<Resource, int>
         + getCurrentObjects(): Map<Objects, int>
         + getCard(id: String): Card
-        + insertCard(father: Card, card: Card, position: String): void
+        + insertCard(fathers: List <HashMap<StructureNode, boolean>>, card: Card, positions: HashMap<StructureNode, Positions>): void
         + updateResources(resource: Resource, quantity: int): void
         + updateObjects(object: Objects, quantity: int): void
     }
@@ -326,9 +326,9 @@ package model {
         - topRightChild: StructureNode
         - bottomRightChild: StructureNode
         - bottomLeftChild: StructureNode
-        - father: StructureNode
+        - fathers: List <HashMap<StructureNode, boolean>>
 
-        + StructureNode(card: Card, father: StructureNode): void
+        + StructureNode(card: Card, father: List <HashMap<StructureNode, boolean>>)
         + getCard(): Card
         + getFather(): StructureNode
         + getTopLeftChild(): StructureNode
@@ -346,7 +346,7 @@ package model {
         - goldDeck: Stack<Card>
         - resourceDeck: Stack<Card>
 
-        + deck(): Deck
+        + Deck()
         + getGoldDeck(): Stack<Card>
         + getResourceDeck(): Stack<Card>
         + addGoldCard(card: GoldCard): void
@@ -362,7 +362,7 @@ package model {
         - secretObjective: Card
         - cardsHand: List<Card>
 
-        + Hand(): void
+        + Hand()
         + getSecretObjective(): Card
         + getCardsHand(): List<Card>
         + addCard(card: Card): void
@@ -418,6 +418,13 @@ package model {
         BLUE_D_BLUE_UR_RED
         ' i pattern si leggono che il primo colore è quello centrale e gli altri due in relazione a quello centrale, UR -> Upper Right, DL -> Down Left ...
         ' ad esempio RED_UR_RED_DL_RED si legge -> rosso al centro, rosso in alto a destra e rosso in basso a sinistra
+    }
+
+     enum Positions{
+        TOP_RIGHT
+        TOP_LEFT
+        BOTTOM_RIGHT
+        BOTTOM_LEFT
     }
 
     abstract class Event {
@@ -499,7 +506,7 @@ package model {
         - sender: Player
         - receiver: List<Player>
         - timeStamp: long
-        + ChatMessage(message: String, sender: Player, receiver: List<Player>, timeStamp: long): void
+        + ChatMessage(message: String, sender: Player, receiver: List<Player>, timeStamp: long)
         + getMessageId(): int
         + getMessage(): String
         + getSender(): Player
@@ -510,7 +517,7 @@ package model {
     class Chat {
         - chatMessages: List<ChatMessage>
 
-        + Chat(): void
+        + Chat()
         + getChatMessages(): List<ChatMessage>
         + addMessage(message: ChatMessage): void
         + removeMessage(message: ChatMessage): void

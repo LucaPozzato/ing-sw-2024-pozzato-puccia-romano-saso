@@ -17,10 +17,24 @@ public class StructureNode {
     private List<HashMap<StructureNode, Boolean>> fathers;
 
     // constructor
-    public StructureNode() {
+    public StructureNode(Card card, List<HashMap<StructureNode, Boolean>> fathers) {
+        this.card = card;
+        this.topLeftChild = null;
+        this.topRightChild = null;
+        this.bottomLeftChild = null;
+        this.bottomRightChild = null;
+        this.fathers = fathers;
     }
 
     // getter
+    public Card getCard() {
+        return card;
+    }
+
+    public List<HashMap<StructureNode, Boolean>> getFathers() {
+        return fathers;
+    }
+
     public StructureNode getTopLeftChild() {
         return topLeftChild;
     }
@@ -39,6 +53,7 @@ public class StructureNode {
 
     // setter
     public void setTopLeftChild(StructureNode child) {
+        // istanza new?
         topLeftChild = child;
     }
 
@@ -50,7 +65,7 @@ public class StructureNode {
         bottomRightChild = child;
     }
 
-    public void ssetBottomLeftChild(StructureNode child) {
+    public void setBottomLeftChild(StructureNode child) {
         bottomLeftChild = child;
     }
 

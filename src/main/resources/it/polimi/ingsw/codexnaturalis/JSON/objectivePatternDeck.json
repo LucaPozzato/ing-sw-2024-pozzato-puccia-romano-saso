@@ -1,50 +1,50 @@
 [
-  {
-    "id": "OP1",
-    "points": "2",
-    "shape": "STAIRS",
-    "mustHave": "RED"
-  },
-  {
-    "id": "OP2",
-    "points": "2",
-    "shape": "STAIRS",
-    "mustHave": "GREEN"
-  },
-  {
-    "id": "OP3",
-    "points": "2",
-    "shape": "STAIRS",
-    "mustHave": "BLUE"
-  },
-  {
-    "id": "OP4",
-    "points": "2",
-    "shape": "STAIRS",
-    "mustHave": "PURPLE"
-  },
-  {
-    "id": "OP5",
-    "points": "3",
-    "shape": "CHAIR",
-    "mustHave": "RED"
-  },
-  {
-    "id": "OP6",
-    "points": "3",
-    "shape": "CHAIR",
-    "mustHave": "GREEN"
-  },
-  {
-    "id": "OP7",
-    "points": "3",
-    "shape": "CHAIR",
-    "mustHave": "BLUE"
-  },
-  {
-    "id": "OP8",
-    "points": "3",
-    "shape": "CHAIR",
-    "mustHave": "PURPLE"
-  }
+    {
+        "id": "OP1",
+        "points": "2",
+        "shape": "STAIRS",
+        "mustHave": "RED"
+    },
+    {
+        "id": "OP2",
+        "points": "2",
+        "shape": "STAIRS",
+        "mustHave": "GREEN"
+    },
+    {
+        "id": "OP3",
+        "points": "2",
+        "shape": "STAIRS",
+        "mustHave": "BLUE"
+    },
+    {
+        "id": "OP4",
+        "points": "2",
+        "shape": "STAIRS",
+        "mustHave": "PURPLE"
+    },
+    {
+        "id": "OP5",
+        "points": "3",
+        "shape": "CHAIR",
+        "mustHave": "RED"
+    },
+    {
+        "id": "OP6",
+        "points": "3",
+        "shape": "CHAIR",
+        "mustHave": "GREEN"
+    },
+    {
+        "id": "OP7",
+        "points": "3",
+        "shape": "CHAIR",
+        "mustHave": "BLUE"
+    },
+    {
+        "id": "OP8",
+        "points": "3",
+        "shape": "CHAIR",
+        "mustHave": "PURPLE"
+    }
 ]

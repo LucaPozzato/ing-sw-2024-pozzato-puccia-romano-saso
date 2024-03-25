@@ -10,24 +10,37 @@ public class InitialCard extends Card {
     private List<String> frontCentreRes;
     private List<String> backCornerRes;
 
-    public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCentreRes, List<String> backCornerRes) {
+    public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCentreRes,
+            List<String> backCornerRes) {
         this.idCard = idCard;
         this.frontCornerRes = frontCornerRes;
         this.frontCentreRes = frontCentreRes;
         this.backCornerRes = backCornerRes;
     }
 
-    public List<String> getFrontCornerRes() {return frontCornerRes;}
+    public List<String> getFrontCornerRes() {
+        return frontCornerRes;
+    }
 
-    public List<String> getFrontCentreRes() {return frontCentreRes;}
+    public List<String> getFrontCentreRes() {
+        return frontCentreRes;
+    }
 
-    public List<String> getBackCornerRes() {return backCornerRes;}
+    public List<String> getBackCornerRes() {
+        return backCornerRes;
+    }
 
-    public void setFrontCornerRes(List<String> frontCornerRes) {this.frontCornerRes = frontCornerRes;}
+    public void setFrontCornerRes(List<String> frontCornerRes) {
+        this.frontCornerRes = frontCornerRes;
+    }
 
-    public void setFrontCentreRes(List<String> frontCentreRes) {this.frontCentreRes = frontCentreRes;}
+    public void setFrontCentreRes(List<String> frontCentreRes) {
+        this.frontCentreRes = frontCentreRes;
+    }
 
-    public void setBackCornerRes(List<String> backCornerRes) {this.backCornerRes = backCornerRes;}
+    public void setBackCornerRes(List<String> backCornerRes) {
+        this.backCornerRes = backCornerRes;
+    }
 
     public String toString() {
         return "InitialCard{" +

@@ -54,4 +54,19 @@ public class Deck {
         return resourceDeck.isEmpty();
     }
 
+    public void printGoldDeck() {
+        System.out.println("Gold Deck:");
+        for (GoldCard card : goldDeck) {
+            card.print();
+        }
+        System.out.println("\n");
+    }
+
+    public void printResourceDeck() {
+        System.out.println("Resource Deck:");
+        for (ResourceCard card : resourceDeck) {
+            card.print();
+        }
+        System.out.println("\n");
+    }
 }

@@ -1,4 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,15 +21,14 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 //In ogni caso andranno selezionate randomicamente due carte tra quelle che collection contiene e posizionate sulla board come common Objective
 //Va cambiato il tipo di commonObjective nell'UML
 
-
 public class ObjectiveParser {
-    public ObjectiveParser(){
+    public ObjectiveParser() {
     }
 
-    public List<ObjectiveCard> Parse(){
+    public List<ObjectiveCard> Parse() {
         List<ObjectiveCard> collection = new ArrayList<>();
 
-        File input = new File("/Users/niccolo/Desktop/Università/Ingegneria_SW/ing-sw-2024-pozzato-puccia-romano-saso/src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/objectivePatternDeck.json");
+        File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/objectivePatternDeck.json");
         JsonElement fileElement = null;
         try {
             fileElement = JsonParser.parseReader(new FileReader(input));
@@ -47,7 +47,8 @@ public class ObjectiveParser {
             collection.add(objCard);
         }
 
-        File input2 = new File("/Users/niccolo/Desktop/Università/Ingegneria_SW/ing-sw-2024-pozzato-puccia-romano-saso/src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/objectiveResourceDeck.json");
+        File input2 = new File(
+                "src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/objectiveResourceDeck.json");
         JsonElement fileElement2 = null;
         try {
             fileElement2 = JsonParser.parseReader(new FileReader(input2));
@@ -66,7 +67,7 @@ public class ObjectiveParser {
             collection.add(objCard);
         }
         Collections.shuffle(collection);
-        //System.out.println(collection);
+        // System.out.println(collection);
         return collection;
     }
 }

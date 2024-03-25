@@ -1,52 +1,52 @@
 [
-  {
-    "id": "OR1",
-    "points": "2",
-    "shape": "IDOL",
-    "mustHave": "SHROOM"
-  },
-  {
-    "id": "OR2",
-    "points": "2",
-    "shape": "IDOL",
-    "mustHave": "VEGETABLES"
-  },
-  {
-    "id": "OR3",
-    "points": "2",
-    "shape": "IDOL",
-    "mustHave": "ANIMALS"
-  },
-  {
-    "id": "OR4",
-    "points": "2",
-    "shape": "IDOL",
-    "mustHave": "INSECTS"
-  },
-  {
-    "id": "OR5",
-    "points": "2",
-    "shape": "WISEMAN",
-    "mustHave": "FOLDEDHANDS"
-  },
-  {
-    "id": "OR6",
-    "points": "2",
-    "shape": "WISEMAN",
-    "mustHave": "SCROLL"
-  },
-  {
-    "id": "OR7",
-    "points": "2",
-    "shape": "WISEMAN",
-    "mustHave": "INK"
-  },
-  {
-    "id": "OR8",
-    "points": "2",
-    "shape": "WISEMAN",
-    "mustHave": "FEATHER"
-  }
+    {
+        "id": "OR1",
+        "points": "2",
+        "shape": "IDOL",
+        "mustHave": "SHROOM"
+    },
+    {
+        "id": "OR2",
+        "points": "2",
+        "shape": "IDOL",
+        "mustHave": "VEGETABLES"
+    },
+    {
+        "id": "OR3",
+        "points": "2",
+        "shape": "IDOL",
+        "mustHave": "ANIMALS"
+    },
+    {
+        "id": "OR4",
+        "points": "2",
+        "shape": "IDOL",
+        "mustHave": "INSECTS"
+    },
+    {
+        "id": "OR5",
+        "points": "2",
+        "shape": "WISEMAN",
+        "mustHave": "FOLDEDHANDS"
+    },
+    {
+        "id": "OR6",
+        "points": "2",
+        "shape": "WISEMAN",
+        "mustHave": "SCROLL"
+    },
+    {
+        "id": "OR7",
+        "points": "2",
+        "shape": "WISEMAN",
+        "mustHave": "INK"
+    },
+    {
+        "id": "OR8",
+        "points": "2",
+        "shape": "WISEMAN",
+        "mustHave": "FEATHER"
+    }
 
 ]
 

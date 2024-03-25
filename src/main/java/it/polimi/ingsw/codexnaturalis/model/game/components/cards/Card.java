@@ -5,6 +5,9 @@ public abstract class Card {
     // UML -> add isIstance
     protected String idCard;
 
+    public Card() {
+    };
+
     public String getIdCard() {
         return idCard;
     }

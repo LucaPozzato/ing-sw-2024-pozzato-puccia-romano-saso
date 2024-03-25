@@ -1,4 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,19 +11,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
-
 public class ResourceParser {
+    Stack<ResourceCard> Resourcedeck;
 
-    public ResourceParser(){
+    public ResourceParser() {
+        Resourcedeck = new Stack<>();
     }
-    public Stack<ResourceCard> Parse()  {
-        Stack<ResourceCard> Resourcedeck = new Stack<>();
-        ResourceCard drawn;
-        File input = new File("/Users/niccolo/Desktop/Università/Ingegneria_SW/ing-sw-2024-pozzato-puccia-romano-saso/src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json");
+
+    public Stack<ResourceCard> Parse() {
+        File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json");
         JsonElement fileElement = null;
         try {
             fileElement = JsonParser.parseReader(new FileReader(input));
@@ -43,12 +42,6 @@ public class ResourceParser {
             ResourceCard resCard = new ResourceCard(idCard, symbol, points, array);
             Resourcedeck.push(resCard);
         }
-        //Stampa le carte parsate
-        //drawn = Resourcedeck.drawResourceCard();
-        //while(!deck.emptyRes()){
-        //    drawn.print();
-        //    drawn = Resourcedeck.drawResourceCard();
-        //}
         return Resourcedeck;
     }
 }

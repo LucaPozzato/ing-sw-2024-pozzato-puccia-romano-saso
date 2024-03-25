@@ -3,11 +3,11 @@ package it.polimi.ingsw.codexnaturalis.model.game;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.state.State;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.view.View;
 
 public abstract class Game {
@@ -34,18 +34,18 @@ public abstract class Game {
     }
 
     public void addObserver(View view) {
-        this.observerList.add(view);
+        observerList.add(view);
     }
 
     public void removeObserver(View view) {
-        this.observerList.remove(view);
+        observerList.remove(view);
     }
 
     public void addPlayer(Player player) {
-        this.players.add(player);
+        players.add(player);
     }
 
-    public Player getCurrentPlayer() {
+    public Player getCurrentPlater() {
         return currentPlayer;
     }
 
@@ -55,6 +55,10 @@ public abstract class Game {
 
     public State getState() {
         return gameState;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public Deck getDeck() {
@@ -114,7 +118,7 @@ public abstract class Game {
     }
 
     public void setPlayerStructure(Player player, Structure structure) {
-        this.playerStructure.add(players.indexOf(player), structure);
+        playerStructure.add(players.indexOf(player), structure);
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -124,4 +128,5 @@ public abstract class Game {
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
     }
+
 }

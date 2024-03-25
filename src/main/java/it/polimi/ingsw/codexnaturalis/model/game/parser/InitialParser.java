@@ -1,4 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,15 +13,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 
-
 public class InitialParser {
 
-    public InitialParser(){
+    public InitialParser() {
     }
-    public List<InitialCard> Parse(){
+
+    public List<InitialCard> Parse() {
         List<InitialCard> collection = new ArrayList<>();
 
-        File input = new File("/Users/niccolo/Desktop/Università/Ingegneria_SW/ing-sw-2024-pozzato-puccia-romano-saso/src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/initialDeck.json");
+        File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/initialDeck.json");
         JsonElement fileElement = null;
         try {
             fileElement = JsonParser.parseReader(new FileReader(input));
@@ -31,7 +32,7 @@ public class InitialParser {
         for (JsonElement cards : fileArray) {
             JsonObject cardsObject = cards.getAsJsonObject();
 
-            String id =  cardsObject.get("id").getAsString();
+            String id = cardsObject.get("id").getAsString();
 
             List<String> frontCornRes = new ArrayList<>();
             JsonArray array = cardsObject.get("front corners").getAsJsonArray();
@@ -55,8 +56,8 @@ public class InitialParser {
             collection.add(initCard);
             Collections.shuffle(collection);
         }
-        //Stampa
-        //System.out.println(collection);
+        // Stampa
+        // System.out.println(collection);
         return collection;
     }
 }

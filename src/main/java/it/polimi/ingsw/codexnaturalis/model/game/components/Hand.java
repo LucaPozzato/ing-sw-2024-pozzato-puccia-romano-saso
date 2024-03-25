@@ -24,6 +24,7 @@ public class Hand {
     public Card getSecretObjective() {
         return secretObjective;
     }
+
     public List<Card> getChooseBetweenObj() {
         return chooseBetweenObj;
     }
@@ -39,7 +40,8 @@ public class Hand {
     public void removeCard(Card card) {
         cardsHand.remove(card);
     }
-    public void setInitCard(InitialCard initCard){
+
+    public void setInitCard(InitialCard initCard) {
         this.initCard = initCard;
     }
 

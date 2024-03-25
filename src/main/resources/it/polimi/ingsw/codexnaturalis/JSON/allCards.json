@@ -1,4 +1,472 @@
-[   
+[
+    {
+        "id": "I1",
+        "type" : "Starter",
+        "front": {
+            "corners": ["EMPTY","LEAF","BFLY","EMPTY"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "0"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "0"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "1"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "0"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["SHROOM","LEAF","BFLY","WOLF"]
+        }
+    },
+    {
+        "id": "I2",
+        "type" : "Starter",
+        "front": {
+            "corners": ["WOLF","EMPTY","EMPTY","SHROOM"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "0"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "0"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "0"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "1"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["LEAF","WOLF","SHROOM","BFLY"]
+        }
+    },
+    {
+        "id": "I3",
+        "type" : "Starter",
+        "front": {
+            "corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "1"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "0"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "0"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "1"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["BFLY","WOLF","SHROOM","LEAF"]
+        }
+    },
+    {
+        "id": "I4",
+        "type" : "Starter",
+        "front": {
+            "corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "0"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "1"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "1"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "0"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["LEAF","BFLY","WOLF","SHROOM"]
+        }
+    },
+    {
+        "id": "I5",
+        "type" : "Starter",
+        "front": {
+            "corners": ["EMPTY","EMPTY","NULL","NULL"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "1"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "1"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "1"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "0"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["BFLY","SHROOM","LEAF","WOLF"]
+        }
+    },
+    {
+        "id": "I6",
+        "type" : "Starter",
+        "front": {
+            "corners": ["EMPTY","EMPTY","NULL","NULL"],
+            "resource objective":[
+                {
+                    "type": "LEAF",
+                    "amount": "1"
+                },
+                {
+                    "type": "WOLF",
+                    "amount": "1"
+                },
+                {
+                    "type": "BFLY",
+                    "amount": "0"
+                },
+                {
+                    "type": "SHROOM",
+                    "amount": "1"
+                }
+            ]   
+        },
+        "back": {
+            "corners": ["SHROOM","WOLF","LEAF","BFLY"]
+        }
+    },
+
+
+
+
+
+
+
+    {
+        "id" : "R1",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["SHROOM","EMPTY","SHROOM","NULL"]     
+    },
+    {
+        "id" : "R2",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["SHROOM","SHROOM","NULL","EMPTY"]     
+    },
+    {
+        "id" : "R3",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["EMPTY","NULL","SHROOM","SHROOM"]     
+    },
+    {
+        "id" : "R4",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["NULL","SHROOM","EMPTY","SHROOM"]     
+    },
+    {
+        "id" : "R5",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["NULL","FEATHER","LEAF","SHROOM"]     
+    },
+    {
+        "id" : "R6",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["POTION","SHROOM","NULL","WOLF"]     
+    },
+    {
+        "id" : "R7",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 0,
+        "corners": ["SHROOM","BFLY","MANUSCRIPT","EMPTY"]     
+    },
+    {
+        "id" : "R8",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 1,
+        "corners": ["EMPTY","SHROOM","EMPTY","NULL"]     
+    },
+    {
+        "id" : "R9",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 1,
+        "corners": ["SHROOM","NULL","EMPTY","EMPTY"]     
+    },
+    {
+        "id" : "R10",
+        "type" : "Resource",
+        "symbol" : "SHROOM",
+        "points" : 1,
+        "corners": ["NULL","EMPTY","SHROOM","EMPTY"]     
+    },
+
+
+    {
+        "id" : "R11",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["LEAF","EMPTY","LEAF","NULL"]     
+    },
+    {
+        "id" : "R12",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["LEAF","LEAF","NULL","EMPTY"]     
+    },
+    {
+        "id" : "R13",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["EMPTY","NULL","LEAF","LEAF"]     
+    },
+    {
+        "id" : "R14",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["NULL","LEAF","EMPTY","LEAF"]     
+    },
+    {
+        "id" : "R15",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["NULL","BFLY","FEATHER","LEAF"]     
+    },
+    {
+        "id" : "R16",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["SHROOM","LEAF","NULL","POTION"]     
+    },
+    {
+        "id" : "R17",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 0,
+        "corners": ["MANUSCRIPT","NULL","LEAF","WOLF"]     
+    },
+    {
+        "id" : "R18",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 1,
+        "corners": ["EMPTY","EMPTY","LEAF","NULL"]     
+    },
+    {
+        "id" : "R19",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 1,
+        "corners": ["EMPTY","EMPTY","NULL","LEAF"]     
+    },
+    {
+        "id" : "R20",
+        "type" : "Resource",
+        "symbol" : "LEAF",
+        "points" : 1,
+        "corners": ["NULL","LEAF","EMPTY","EMPTY"]     
+    },
+
+
+    {
+        "id" : "R21",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["WOLF","WOLF","EMPTY","NULL"]     
+    },
+    {
+        "id" : "R22",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["NULL","EMPTY","WOLF","WOLF"]     
+    },
+    {
+        "id" : "R23",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["WOLF","NULL","WOLF","EMPTY"]     
+    },
+    {
+        "id" : "R24",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["EMPTY","WOLF","NULL","WOLF"]     
+    },
+    {
+        "id" : "R25",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["NULL","BFLY","POTION","WOLF"]     
+    },
+    {
+        "id" : "R26",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["LEAF","WOLF","NULL","MANUSCRIPT"]     
+    },
+    {
+        "id" : "R27",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 0,
+        "corners": ["FEATHER","NULL","WOLF","SHROOM"]     
+    },
+    {
+        "id" : "R28",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 1,
+        "corners": ["NULL","EMPTY","WOLF","EMPTY"]     
+    },
+    {
+        "id" : "R29",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 1,
+        "corners": ["EMPTY","NULL","EMPTY","WOLF"]     
+    },
+    {
+        "id" : "R30",
+        "type" : "Resource",
+        "symbol" : "WOLF",
+        "points" : 1,
+        "corners": ["EMPTY","WOLF","EMPTY","NULL"]
+    },
+
+
+    {
+        "id" : "R31",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["BFLY","BFLY","EMPTY","NULL"]     
+    },
+    {
+        "id" : "R32",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["NULL","EMPTY","BFLY","BFLY"]     
+    },
+    {
+        "id" : "R33",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["BFLY","NULL","BFLY","EMPTY"]     
+    },
+    {
+        "id" : "R34",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["EMPTY","BFLY","NULL","BFLY"]     
+    },
+    {
+        "id" : "R35",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["NULL","FEATHER","WOLF","BFLY"]     
+    },
+    {
+        "id" : "R36",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["MANUSCRIPT","BFLY","NULL","SHROOM"]     
+    },
+    {
+        "id" : "R37",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 0,
+        "corners": ["BFLY","LEAF","POTION","NULL"]     
+    },
+    {
+        "id" : "R38",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 1,
+        "corners": ["BFLY","NULL","EMPTY","EMPTY"]     
+    },
+    {
+        "id" : "R39",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 1,
+        "corners": ["EMPTY","EMPTY","NULL","BFLY"]     
+    },
+    {
+        "id" : "R40",
+        "type" : "Resource",
+        "symbol" : "BFLY",
+        "points" : 1,
+        "corners": ["NULL","BFLY","EMPTY","EMPTY"]     
+    },
+
+
+
+
+
+
+
     {
         "id" : "G1",
         "type" : "Gold",
@@ -1044,5 +1512,408 @@
                 "amount": "0"
             }
         ]  
+    },
+
+
+
+
+
+
+
+    {
+        "id": "OP1",
+        "type": "ObjectivePattern",
+        "points": "2",
+        "pattern": {
+            "center card": "SHROOM",
+            "top card": "NULL",
+            "top right card": "SHROOM",
+            "top left card": "NULL",
+            "bottom right card": "NULL",
+            "bottom left card": "SHROOM",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP2",
+        "type": "ObjectivePattern",
+        "points": "2",
+        "pattern": {
+            "center card": "LEAF",
+            "top card": "NULL",
+            "top right card": "NULL",
+            "top left card": "LEAF",
+            "bottom right card": "LEAF",
+            "bottom left card": "NULL",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP3",
+        "type": "ObjectivePattern",
+        "points": "2",
+        "pattern": {
+            "center card": "WOLF",
+            "top card": "NULL",
+            "top right card": "WOLF",
+            "top left card": "NULL",
+            "bottom right card": "NULL",
+            "bottom left card": "WOLF",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP4",
+        "type": "ObjectivePattern",
+        "points": "2",
+        "pattern": {
+            "center card": "BFLY",
+            "top card": "NULL",
+            "top right card": "NULL",
+            "top left card": "BFLY",
+            "bottom right card": "BFLY",
+            "bottom left card": "NULL",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP5",
+        "type": "ObjectivePattern",
+        "points": "3",
+        "pattern": {
+            "center card": "SHROOM",
+            "top card": "SHROOM",
+            "top right card": "NULL",
+            "top left card": "NULL",
+            "bottom right card": "LEAF",
+            "bottom left card": "NULL",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP6",
+        "type": "ObjectivePattern",
+        "points": "3",
+        "pattern": {
+            "center card": "LEAF",
+            "top card": "LEAF",
+            "top right card": "NULL",
+            "top left card": "NULL",
+            "bottom right card": "NULL",
+            "bottom left card": "BFLY",
+            "bottom card": "NULL"
+        }
+    },
+    {
+        "id": "OP7",
+        "type": "ObjectivePattern",
+        "points": "3",
+        "pattern": {
+            "center card": "WOLF",
+            "top card": "NULL",
+            "top right card": "SHROOM",
+            "top left card": "NULL",
+            "bottom right card": "NULL",
+            "bottom left card": "NULL",
+            "bottom card": "WOLF"
+        }
+    },
+    {
+        "id": "OP8",
+        "type": "ObjectivePattern",
+        "points": "3",
+        "pattern": {
+            "center card": "BFLY",
+            "top card": "NULL",
+            "top right card": "NULL",
+            "top left card": "WOLF",
+            "bottom right card": "NULL",
+            "bottom left card": "NULL",
+            "bottom card": "BFLY"
+        }
+    },
+
+
+    {
+        "id": "OR1",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "3"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
+    },
+    {
+        "id": "OR2",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "3"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
+    },
+    {
+        "id": "OR3",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "3"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
+    },
+    {
+        "id": "OR4",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "3"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
+    },
+    {
+        "id": "OR5",
+        "type": "ObjectiveResource",
+        "points": "3",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "1"
+            },
+            {
+                "type": "POTION",
+                "amount": "1"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "1"
+            }
+        ]
+    },
+    {
+        "id": "OR6",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "2"
+            }
+        ]
+    },
+    {
+        "id": "OR7",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "0"
+            },
+            {
+                "type": "POTION",
+                "amount": "2"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
+    },
+    {
+        "id": "OR8",
+        "type": "ObjectiveResource",
+        "points": "2",
+        "resources required":[
+            {
+                "type": "LEAF",
+                "amount": "0"
+            },
+            {
+                "type": "WOLF",
+                "amount": "0"
+            },
+            {
+                "type": "BFLY",
+                "amount": "0"
+            },
+            {
+                "type": "SHROOM",
+                "amount": "0"
+            },
+            {
+                "type": "FEATHER",
+                "amount": "2"
+            },
+            {
+                "type": "POTION",
+                "amount": "0"
+            },
+            {
+                "type": "MANUSCRIPT",
+                "amount": "0"
+            }
+        ]
     }
 ]
+    
+    
