@@ -19,10 +19,10 @@ public class StructureNode {
     // constructor
     public StructureNode(Card card, List<HashMap<StructureNode, Boolean>> fathers) {
         this.card = card;
-        this.topLeftChild = null;
-        this.topRightChild = null;
-        this.bottomLeftChild = null;
-        this.bottomRightChild = null;
+        this.setTopLeftChild(null);
+        this.setTopRightChild(null);
+        this.setBottomLeftChild(null);
+        this.setBottomRightChild(null);
         this.fathers = fathers;
     }
 

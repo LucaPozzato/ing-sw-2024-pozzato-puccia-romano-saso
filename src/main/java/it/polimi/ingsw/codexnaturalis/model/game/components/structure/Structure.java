@@ -15,35 +15,34 @@ public class Structure {
         root = new StructureNode(card, null); // passare un hashmap vuota dei fathers al costruttore
     }
 
-    // public void insertCard(List<HashMap<StructureNode, Boolean>> fathers, Card
-    // card,
-    // HashMap<StructureNode, Positions> positions) {
-
-    // StructureNode newNode = new StructureNode(card, fathers);
-
-    // for (StructureNode father : fathers) {
-    // if (fathers(father)) { // non ricordo a cosa serve il boolean comuqnue
-    // consideriamolo
-    // switch (positions(father)) {
-    // case "TOP_RIGHT":
-    // father.topRightChild = newNode;
-    // break;
-    // case "TOP_LEFT":
-    // father.topLeftChild = newNode;
-    // break;
-    // case "BOTTOM_RIGHT":
-    // father.bottomRightChild = newNode;
-    // break;
-    // case "BOTTOM_LEFT":
-    // father.bottomLeftChild = newNode;
-    // break;
-    // default:
-    // // throw?
-    // break;
-    // }
-    // }
-    // }
-    // }
+//     public void insertCard(List<HashMap<StructureNode, Boolean>> fathers, Card
+//     card,
+//     HashMap<StructureNode, Positions> positions) {
+//
+//     StructureNode newNode = new StructureNode(card, fathers);
+//
+//     for (StructureNode father : fathers) {
+//         if (fathers(father)) { // non ricordo a cosa serve il boolean comuqnue consideriamolo
+//             switch (positions(father)) {
+//                 case "TOP_RIGHT":
+//                    father.setTopRightChild(newNode);
+//                    break;
+//                 case "TOP_LEFT":
+//                     father.setTopLeftChild(newNode);
+//                    break;
+//                 case "BOTTOM_RIGHT":
+//                     father.setBottomRightChild(newNode);
+//                     break;
+//                 case "BOTTOM_LEFT":
+//                    father.setBottomLeftChild(newNode);
+//                   break;
+//                 default:
+//                   // throw?
+//                   break;
+//                 }
+//             }
+//         }
+//     }
 
     // FIXME: all the code that is commented does not compile
 
