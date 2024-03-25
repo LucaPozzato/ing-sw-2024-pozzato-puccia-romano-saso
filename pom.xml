@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.0</junit.version>
+        <maven.test.skip>false</maven.test.skip>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
     </properties>
 
     <dependencies>
@@ -86,10 +88,22 @@
                 <configuration>
                 <archive>
                     <manifest>
-                    <mainClass>it.polimi.ingsw.codexnaturalis.Main</mainClass>
+                    <mainClass>it.polimi.ingsw.codexnaturalis.model.Main</mainClass>
                     </manifest>
                 </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.4.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
