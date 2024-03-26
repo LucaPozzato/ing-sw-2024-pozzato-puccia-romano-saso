@@ -19,7 +19,7 @@ package model {
         - observerList: List<View>
         'General'
         
-        + game(gameId: int)
+        + Game(gameId: int)
         + notifyAllObservers(): void
         + addObserver(view: View): void
         + removeObserver(view: View): void
@@ -139,39 +139,39 @@ package model {
         - dealCommonObjective(): void
     }
 
-    note right of InitState::createDecks
-    createDecks parses the json file and forall 
-    card in it calls the Deck's method "addCard". 
-    When finished it shuffles the deck calling on 
-    it the method "shuffle".
-    end note
+    ' note right of InitState::createDecks
+    ' createDecks parses the json file and forall 
+    ' card in it calls the Deck's method "addCard". 
+    ' When finished it shuffles the deck calling on 
+    ' it the method "shuffle".
+    ' end note
 
-    note right of InitState::createFirstPlayer
-    createFirstPlayer creates a new player calling the constructor
-    method in Player. The controller will manage to acquire the 
-    informations regarding the total number of players admitted inside
-    the lobby and will pass them to the createFirstPlayer method so that 
-    it sets the state informations in Game.
-    end note
+    ' note right of InitState::createFirstPlayer
+    ' createFirstPlayer creates a new player calling the constructor
+    ' method in Player. The controller will manage to acquire the 
+    ' informations regarding the total number of players admitted inside
+    ' the lobby and will pass them to the createFirstPlayer method so that 
+    ' it sets the state informations in Game.
+    ' end note
 
-    note right of InitState::dealHands
-    dealHands draws 3 cards for each player from 
-    the deck and adds them to each player hand
-    end note
+    ' note right of InitState::dealHands
+    ' dealHands draws 3 cards for each player from 
+    ' the deck and adds them to each player hand
+    ' end note
 
-    note right of InitState::dealSecretObjective
-    dealSecretObjective parses the json file searching
-    for the "secret objective" cards and selects two 
-    of them for each player. Those cards will be added 
-    to the "chooseBetweenObj" attribute in the Hand class
-    end note
+    ' note right of InitState::dealSecretObjective
+    ' dealSecretObjective parses the json file searching
+    ' for the "secret objective" cards and selects two 
+    ' of them for each player. Those cards will be added 
+    ' to the "chooseBetweenObj" attribute in the Hand class
+    ' end note
     
-    note right of InitState::dealCommonObjective
-    dealCommonObjective parses the json file searching
-    for the "common objective" cards andranoy selects two 
-    of them. Those cards will be added to the 
-    "commonObjectives" atribute in the Board class
-    end note
+    ' note right of InitState::dealCommonObjective
+    ' dealCommonObjective parses the json file searching
+    ' for the "common objective" cards andranoy selects two 
+    ' of them. Those cards will be added to the 
+    ' "commonObjectives" atribute in the Board class
+    ' end note
 
     
     class WaitPlayerState {
@@ -181,19 +181,19 @@ package model {
         - isFull(): void
     }
 
-    note right of WaitPlayerState::createNewPlayer
-    createNewPlayer calls the constructor method in Player, 
-    updates the attributes related to the number of players 
-    in Game, associates the player with his hands and
-    structure by calling the setPlayerHand and setPlayerStructure 
-    methods
-    end note
+    ' note right of WaitPlayerState::createNewPlayer
+    ' createNewPlayer calls the constructor method in Player, 
+    ' updates the attributes related to the number of players 
+    ' in Game, associates the player with his hands and
+    ' structure by calling the setPlayerHand and setPlayerStructure 
+    ' methods
+    ' end note
 
-    note right of WaitPlayerState::isFull
-    checks in Game if getNumPartecipants()==getNumPlayers and 
-    according to the boolean value returned it allows the state
-    to change
-    end note
+    ' note right of WaitPlayerState::isFull
+    ' checks in Game if getNumPartecipants()==getNumPlayers and 
+    ' according to the boolean value returned it allows the state
+    ' to change
+    ' end note
 
     class PlacedCardState {
         + PlacedCardState(game: Game)
@@ -202,15 +202,15 @@ package model {
         - updatePoints(points: int): void
     }
 
-    note right of PlacedCardState::addCard
-    calls the Structure's method insertCard and update the 
-    currentResources and currentObjects attributes
-    end note
+    ' note right of PlacedCardState::addCard
+    ' calls the Structure's method insertCard and update the 
+    ' currentResources and currentObjects attributes
+    ' end note
 
-    note right of PlacedCardState::updatePoints
-    takes the new score scenario computed by the controller 
-    and calls the Board's method updateScore 
-    end note
+    ' note right of PlacedCardState::updatePoints
+    ' takes the new score scenario computed by the controller 
+    ' and calls the Board's method updateScore 
+    ' end note
 
     class DrawnCardState {
         + DrawnCardState(game: Game)
@@ -221,16 +221,16 @@ package model {
         - endMatch(): void
     }
 
-    note right of DrawnCardState::updateDeck
-    calls the method of Deck responible of drawing a 
-    card from one of the decks and add it to a specific
-    player's hand
-    end note
+    ' note right of DrawnCardState::updateDeck
+    ' calls the method of Deck responible of drawing a 
+    ' card from one of the decks and add it to a specific
+    ' player's hand
+    ' end note
 
-    note right of DrawnCardState::nextTurn
-    calls the Game's setter methods so that 
-    currentPlayer()==nextPlayer()
-    end note
+    ' note right of DrawnCardState::nextTurn
+    ' calls the Game's setter methods so that 
+    ' currentPlayer()==nextPlayer()
+    ' end note
 
     class EndGameState {
         + EndGameState(game: Game)
@@ -411,65 +411,64 @@ package model {
         + setSecretObjective(secretObjective: Card): void
         + setInitialCard(initCard: InitialCard): void
     }
+    package enumerations {
+        enum Color {
+            YELLOW
+            BLUE
+            GREEN
+            RED
+        }
 
-    enum Color {
-        YELLOW
-        BLUE
-        GREEN
-        RED
+        enum CornerType {
+            FEATHER
+            INK
+            SCROLL
+            VEGETABLE
+            INSECT
+            ANIMAL
+            SHROOM
+            EMPTY
+            NULL
+        }
+        
+        enum Resource {
+            VEGETABLE
+            ANIMAL
+            INSECT
+            SHROOM
+            EMPTY
+            NULL
+        }
+
+    enum Objects {
+            FEATHER
+            INK
+            SCROLL
+        }
+
+        enum GoldCardPointType {
+            CORNERS
+            INK
+            FEATHER
+            SCROLL
+            ANGLE 
+            NULL
+        }
+
+        enum ObjectiveCardType {
+            STAIRS 
+            CHAIR
+            IDOL
+            WISEMAN
+        }
+
+        enum Positions{
+            TOP_RIGHT
+            TOP_LEFT
+            BOTTOM_RIGHT
+            BOTTOM_LEFT
+        }
     }
-
-    enum CornerType {
-        FEATHER
-        INK
-        SCROLL
-        VEGETABLE
-        INSECT
-        ANIMAL
-        SHROOM
-        EMPTY
-        NULL
-    }
-    
-    enum Resource {
-        VEGETABLE
-        ANIMAL
-        INSECT
-        SHROOM
-        EMPTY
-        NULL
-    }
-
-   enum Objects {
-        FEATHER
-        INK
-        SCROLL
-    }
-
-    enum GoldCardPointType {
-        CORNERS
-        INK
-        FEATHER
-        SCROLL
-        ANGLE 
-        NULL
-    }
-
-    enum ObjectiveCardType {
-        STAIRS 
-        CHAIR
-        IDOL
-        WISEMAN
-    }
-
-    enum Positions{
-        TOP_RIGHT
-        TOP_LEFT
-        BOTTOM_RIGHT
-        BOTTOM_LEFT
-    }
-
-
 
     abstract class Event {
         - id: int
@@ -748,7 +747,7 @@ package view {
     }
 }
 
-Game -up- Player
+Game -- Player
 Game -- Deck
 Game -- Board
 Game -- Hand
@@ -780,11 +779,11 @@ GameViewCli -up-|> View
 
 WaitPlayerState -up-|> State
 InitState -up-|> State
-PlacedCardState -up-|> State
-DrawnCardState -up-|> State
+PlacedCardState -down-|> State
+DrawnCardState -down-|> State
 EndGameState -up-|> State
 
-Game *-right-> State
+Game *-down-> State
 
 GameBoardUpdateEvent --> BoardEventType : type
 GameDeckUpdateEvent --> DeckEventType : type
@@ -803,5 +802,8 @@ CliSocketPlayer ..|> Socket
 CliRmiPlayer ..|> Rmi
 GuiRmiPlayer ..|> Rmi
 
+controller -down[hidden]-- view
+parser -down[hidden]- exceptions
+enumerations -down[hidden]- exceptions
 ' left to right direction
 @enduml
