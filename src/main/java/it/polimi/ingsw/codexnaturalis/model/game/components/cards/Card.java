@@ -12,10 +12,6 @@ public abstract class Card {
         return idCard;
     }
 
-    public boolean isInstance(Class<? extends Card> card) {
-        return card.isInstance(this);
-    }
-
     public void print() {
         System.out.println("Card: " + idCard);
     }

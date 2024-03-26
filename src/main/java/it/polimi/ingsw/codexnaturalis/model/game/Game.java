@@ -57,10 +57,6 @@ public abstract class Game {
         return gameState;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     public Deck getDeck() {
         return deck;
     }
@@ -69,12 +65,12 @@ public abstract class Game {
         return board;
     }
 
-    public int getNumParticipants() {
-        return numParticipants;
-    }
-
     public int getNumPlayers() {
         return numPlayers;
+    }
+
+    public int getNumParticipants() {
+        return numParticipants;
     }
 
     public int getGameId() {
@@ -83,6 +79,10 @@ public abstract class Game {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public Hand getHandByPlayer(Player player) {

@@ -7,14 +7,14 @@ import java.util.List;
 public class InitialCard extends Card {
     private String idCard;
     private List<String> frontCornerRes;
-    private List<String> frontCentreRes;
+    private List<String> frontCenterRes;
     private List<String> backCornerRes;
 
-    public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCentreRes,
+    public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCenterRes,
             List<String> backCornerRes) {
         this.idCard = idCard;
         this.frontCornerRes = frontCornerRes;
-        this.frontCentreRes = frontCentreRes;
+        this.frontCenterRes = frontCenterRes;
         this.backCornerRes = backCornerRes;
     }
 
@@ -27,7 +27,7 @@ public class InitialCard extends Card {
     }
 
     public List<String> getFrontCentreRes() {
-        return frontCentreRes;
+        return frontCenterRes;
     }
 
     public List<String> getBackCornerRes() {
@@ -38,8 +38,8 @@ public class InitialCard extends Card {
         this.frontCornerRes = frontCornerRes;
     }
 
-    public void setFrontCentreRes(List<String> frontCentreRes) {
-        this.frontCentreRes = frontCentreRes;
+    public void setFrontCentreRes(List<String> frontCenterRes) {
+        this.frontCenterRes = frontCenterRes;
     }
 
     public void setBackCornerRes(List<String> backCornerRes) {
@@ -50,7 +50,7 @@ public class InitialCard extends Card {
         return "InitialCard{" +
                 "idCard='" + idCard + '\'' +
                 ", frontCornerRes=" + frontCornerRes +
-                ", frontCentreRes=" + frontCentreRes +
+                ", frontCenterRes=" + frontCenterRes +
                 ", backCornerRes=" + backCornerRes +
                 '}';
     }
@@ -58,6 +58,6 @@ public class InitialCard extends Card {
     @Override
     public void print() {
         System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCornerRes + "\n\tfrontCentreRes: "
-                + frontCentreRes + "\n\tbackCornerRes: " + backCornerRes);
+                + frontCenterRes + "\n\tbackCornerRes: " + backCornerRes);
     }
 }

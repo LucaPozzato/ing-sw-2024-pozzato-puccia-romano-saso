@@ -34,7 +34,7 @@ public class Board {
         return uncoveredCards;
     }
 
-    public void updateScore(Player player, int newPoints) {
+    public void updateScore(Player player, Integer newPoints) {
         scores.put(player, scores.get(player) + newPoints);
     }
 

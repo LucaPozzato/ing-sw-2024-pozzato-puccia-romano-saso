@@ -27,7 +27,7 @@ public class EndGameState extends State {
     }
 
     @Override
-    public void drawnCard(String type, int id) throws IllegalCommandException {
+    public void drawnCard(String type, String id) throws IllegalCommandException {
         throw new IllegalCommandException("Match has ended");
     }
 

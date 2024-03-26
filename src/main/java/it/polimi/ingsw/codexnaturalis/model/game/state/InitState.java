@@ -111,7 +111,7 @@ public class InitState extends State {
     }
 
     @Override
-    public void drawnCard(String type, int id) throws IllegalCommandException {
+    public void drawnCard(String type, String id) throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
         throw new IllegalCommandException();
     }

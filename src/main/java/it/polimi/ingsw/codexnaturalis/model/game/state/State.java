@@ -18,7 +18,7 @@ public abstract class State {
     public abstract void placedCard(String idBottomCard, String idCard, int points, String position)
             throws IllegalCommandException;
 
-    public abstract void drawnCard(String type, int id) throws IllegalCommandException;
+    public abstract void drawnCard(String type, String id) throws IllegalCommandException;
 
     public abstract void matchEnded() throws IllegalCommandException;
 }

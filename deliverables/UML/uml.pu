@@ -20,7 +20,7 @@ package model {
         'General'
         
         + game(gameId: int)
-        + notifyAll(): void
+        + notifyAllObservers(): void
         + addObserver(view: View): void
         + removeObserver(view: View): void
         + addPlayer(player: Player): void
@@ -33,17 +33,18 @@ package model {
         + getNumParticipants(): int
         + getGameId(): int
         + getPlayers(): List<Player>
+        + getCurrentPlayer(): Player
         + getHandByPlayer(player: Player): Hand
         + getStructureByPlayer(player: Player): Structure
         + setState(state: State): void
-        + setNumPlayers(num: int): void
-        + setNumParticipants(num: int): void
+        + setNumPlayers(numPlayers: int): void
+        + setNumParticipants(numParticipants: int): void
         + setDeck(deck: Deck): void
         + setBoard(board: Board): void
         + setPlayerHand(player: Player, hand: Hand): void
         + setPlayerStructure(player: Player, structure: Structure): void
-        + setCurrentPlayer(player: Player): void 
-        + setNextPlayer(player: Player): void 
+        + setCurrentPlayer(currentPlayer: Player): void 
+        + setNextPlayer(nextPlayer: Player): void 
     }
     
     class Player {
@@ -56,6 +57,8 @@ package model {
         }
     
     class AbstractPlayerFactory{
+        
+        + AbstractPlayerFactory()
         + createRmiPlayer(): Rmi
         + createSocketPlayer(): Gui
 
@@ -63,6 +66,8 @@ package model {
     class CliPlayerFactory extends AbstractPlayerFactory{
         - cliRmi: CliRmiPlayer
         - cliSocket: CliSocketPlayer
+        
+        + CliPlayerFactory()
         + createRmiPlayer(): Rmi
         + createSocketPlayer(): Socket
     }
@@ -70,6 +75,8 @@ package model {
     class GuiPlayerFactory extends AbstractPlayerFactory{
         - guiRmi: GuiRmiPlayer
         - guiSocket: GuiSocketPlayer
+
+        + GuiPlayerFactory()
         + createRmiPlayer(): Rmi
         + createSocketPlayer(): Socket
     }
@@ -81,18 +88,21 @@ package model {
 
     class CliSocketPlayer extends Player{
         'override
+        + CliSocketPlayer()
         + assemble(): void 
         ' contiene la logica per costruire un cliSocketPlayer
     }
 
     class GuiRmiPlayer extends Player {
         'override
+        + GuiRmiPlayer()
         + assemble(): void 
         ' contiene la logica per costruire un guiRmiPlayer
     }
 
     class GuiSocketPlayer extends Player {
         'override
+        + GuiSocketPlayer()
         + assemble(): void 
         ' contiene la logica per costruire un guiSocketPlayer
     }
@@ -111,19 +121,20 @@ package model {
         - game: Game
 
         + State()
-        + initialize(): void
-        + joinGame(): void
-        + placedCard(): void
-        + drawnCard(): void
+        + initialize(nick: String, color: Color, numPlayers: int): void throws IllegalCommandException
+        + joinGame(nickname: String, color: Color): void throws IllegalCommandException
+        + placedCard(idBottomCard: String, idCard: String, points: int, position: String): void throws IllegalCommandException
+        + drawnCard(type: String, id: String): void throws IllegalCommandException
         + matchEnded(): void
     }
 
     class InitState {
-        + InitState()
-        + initialized(): void
+        + InitState(game: Game)
+        + initialized(nick: String, color: Color, numPlayers: int): void throws IllegalCommandException
         - createDecks(): void
-        - createFirstPlayer(): void
-        - dealHands(): void
+        - createFirstPlayer(nick: String, color: Color, numPlayers: int): void
+        - dealHands(numPlayers: int): void
+        - dealInitialCard(): void
         - dealSecretObjective(): void
         - dealCommonObjective(): void
     }
@@ -164,9 +175,9 @@ package model {
 
     
     class WaitPlayerState {
-        + WaitPlayerState(): void
-        + joinGame(): void
-        - createNewPlayers(): void
+        + WaitPlayerState(game: Game): void
+        + joinGame(nickname: String, color: Color, numPlayers: int): void throws IllegalCommandException
+        - createNewPlayers(nickname: String, color: Color): void
         - isFull(): void
     }
 
@@ -185,10 +196,10 @@ package model {
     end note
 
     class PlacedCardState {
-        + PlacedCardState()
-        + placedCard(): void
-        - addCard(): void
-        - updatePoints(): void
+        + PlacedCardState(game: Game)
+        + placedCard(idBottomCard: String, idCard: String, points: int, position: String): void throws IllegalCommandException
+        - addCard(idBottomCard: String, idCard: String, position: String): void
+        - updatePoints(points: int): void
     }
 
     note right of PlacedCardState::addCard
@@ -202,10 +213,10 @@ package model {
     end note
 
     class DrawnCardState {
-        + DrawnCardState()
-        + drawnCard(): void
-        + matchEnded(): void
-        - updateDeck(): void
+        + DrawnCardState(game: Game)
+        + drawnCard(type: String, id: String): void throws IllegalCommandException
+        + matchEnded(): void throws IllegalCommandException
+        - updateDeck(type: String, id: String): void
         - nextTurn(): void
         - endMatch(): void
     }
@@ -222,102 +233,126 @@ package model {
     end note
 
     class EndGameState {
-        + EndGameState()
+        + EndGameState(game: Game)
     }
 
     class Board {
-        - scores: Map<Player, int>
+        - scores: HashMap<Player, Integer>
         - commonObjective: ObjectiveCard
         - uncoveredCards: List<Card>
 
         + Board()
         + setCommonObjective(commonObjective: ObjectiveCard): void
-        + getScores(): Map<Player, int>
+        + getScores(): Map<Player, Integer>
         + getCommonObjective(): ObjectiveCard
         + getUncoveredCards(): List<Card>
-        + updateScore(player: Player, newPoints: int): void
+        + updateScore(player: Player, newPoints: Integer): void
         + addUncoveredCard(card: Card): void
         + removeUncoveredCard(card: Card): void
         + isLastTurn(): boolean
     }
 
     abstract class Card {
-        - idCard: int
-        - cardFrontImage: String
-        - cardBackImage: String
+        - idCard: String
 
-        + Card(idCard: int, cardFrontImage: String, cardBackImage: String)
-        + getIdCard(): int
-        + getCardFrontImage(): String
-        + getCardBackImage(): String
+        + Card()
+        + getIdCard(): String
+        + print(): void
     }
 
     class ObjectiveCard extends Card {
-        - objectiveType: ObjectiveCardType
+        - idCard: String
+        - points: int
+        - shape: String
+        - mustHave: String
 
-        + ObjectiveCard()
-        + getObjectiveType(): ObjectiveCardType
-        + setObjectiveType(objectiveType: ObjectiveCardType): void
+        + ObjectiveCard(idCard: String, points: int, shape: String, mustHave: String)
+        + getIdCard(): String
+        + getPoints(): int
+        + getShape(): String
+        + getMustHave(): String
+        + setPoints(points: int): void
+        + setShape(shape: String): void
+        + setMustHave(mustHave: String): void
+        + toString(): String
+        + print(): void
     }
 
     class InitialCard extends Card {
-        - topCardCorners: Resource[4]
-        - topCardResources: Resource[3]
-        - bottomCardCorners: Resource[4]
+        - idCard: String
+        - frontCornerRes: List<String>
+        - frontCenterRes: List<String>
+        - backCornerRes: List<String>
 
-        + InitialCard()
-        + getTopCardCorners(): Resource[4]
-        + getBottomCardCorners(): boolean[4]
-        + getBottomCardResources(): Resource[3]
-        + setTopCardCorners(topCardCorners: Resource[4]): void
-        + setTopCardResources(topCardResources: Resource[3]): void
-        + setBottomCardCorners(bottomCardCorners: boolean[4]): void
+        + InitialCard(idCard: String, frontCornerRes: List<String>, frontCenterRes: List<String>, backCornerRes: List<String>)
+        + getIdCard(): String
+        + getFrontCornerRes(): List<String>
+        + getFrontCenterRes(): List<String>
+        + getBackCornerRes(): List<String>
+        + setFrontCornerRes(frontCornerRes: List<String>): void
+        + setFrontCenterRes(frontCenterRes: List<String>): void
+        + setBackCornerRes(backCornerRes: List<String>): void
+        + toString(): String
+        + print(): void
     }
 
     class GoldCard extends Card {
-        - cardType: Resource
-        - cardCorners: Resource[4]
-        - resourceRequired: Resource[4]
-        - cardPoints: int
-        - pointType: GoldCardPointType
+        - idCard: String
+        - symbol: String
+        - points: int
+        - pointsType: String
+        - corners: List<String>
+        - requirements: List<String>
         
-        + GoldCard()
-        + getCardType(): Resource
-        + getCardCorners(): Resource[4]
-        + getResourceRequired(): Resource[4]
-        + getCardPoints(): int
-        + getPointType(): GoldCardPointType
-        + setCardType(cardType: Resource): void
-        + setCardCorners(cardCorners: Resource[4]): void
-        + setResourceRequired(resourceRequired: Resource[4]): void
-        + setCardPoints(cardPoints: int): void
-        + setPointType(pointType: GoldCardPointType): void
+        + GoldCard(idCard: String, symbol: String, points: int, pointsType: String, corners: List<String>, requirements: List<String>)
+        + getIdCard(): String
+        + getSymbol(): String
+        + getPoints(): int
+        + getPointsType(): String
+        + getCorners(): List<String>
+        + getRequirements(): List<String>
+        + setIdCard(idCard: String): void
+        + setSymbol(symbol: String): void
+        + setPoints(points: int): void
+        + setPointsType(pointsType: String): void
+        + setCorners(corners: List<String>): void
+        + setRequirements(requirements: List<String>): void
+        + print(): void
     }
 
     class ResourceCard extends Card {
-        - cardType: Resource
-        - cardCorners: Resource[4]
-        - cardPoints: int
         
-        + ResourceCard(idCard: int, cardFrontImage: String, cardBackImage: String, cardType: Resource, cardCorners: Resource[4], cardPoints: int)
-        + getCardType(): Resource
-        + getCardCorners(): Resource[4]
-        + getCardPoints(): int
+        - idCard: String
+        - symbol: String
+        - points: int
+        - corners: List<String> 
+
+        
+        + ResourceCard(idCard: String, symbol: String, points: int, corners: List<String>)
+        + getIdCard(): String
+        + setIdCard(idCard: String): void
+        + getSymbol(): String
+        + setSymbol(symbol: String): void
+        + getPoints(): int
+        + setPoints(points: int): void
+        + getCorners(): List<String>
+        + setCorners(corners: List<String>)
+        + print(): void
     }
 
     class Structure {
         - root: StructureNode
-        - currentResources: Map<Resource, int>
-        - currentObjects: Map<Objects, int>
+        - currentResources: Map<Resource, Integer>
+        - currentObjects: Map<Objects, Integer>
 
         + Structure(card: Card)
         + getRoot(): StructureNode
-        + getCurrentResources(): Map<Resource, int>
-        + getCurrentObjects(): Map<Objects, int>
+        + getCurrentResources(): Map<Resource, Integer>
+        + getCurrentObjects(): Map<Objects, Integer>
         + getCard(id: String): Card
-        + insertCard(fathers: List <HashMap<StructureNode, boolean>>, card: Card, positions: HashMap<StructureNode, Positions>): void
-        + updateResources(resource: Resource, quantity: int): void
-        + updateObjects(object: Objects, quantity: int): void
+        + insertCard(idBottomCard: Card, id: Card, position: String): void
+        + updateResources(resource: Resource, quantity: Integer): void
+        + updateObjects(object: Objects, quantity: Integer): void
     }
 
     class StructureNode {
@@ -326,11 +361,11 @@ package model {
         - topRightChild: StructureNode
         - bottomRightChild: StructureNode
         - bottomLeftChild: StructureNode
-        - fathers: List <HashMap<StructureNode, boolean>>
+        - fathers: List<HashMap<StructureNode, Boolean>>
 
-        + StructureNode(card: Card, father: List <HashMap<StructureNode, boolean>>)
+        + StructureNode(card: Card, father: List<HashMap<StructureNode, Boolean>>)
         + getCard(): Card
-        + getFather(): StructureNode
+        + getFathers(): List<HashMap<StructureNode, Boolean>>
         + getTopLeftChild(): StructureNode
         + getTopRightChild(): StructureNode
         + getBottomRightChild(): StructureNode
@@ -343,31 +378,38 @@ package model {
 
     class Deck {
         'check sul tipo dinamico statico'
-        - goldDeck: Stack<Card>
-        - resourceDeck: Stack<Card>
+        - goldDeck: Stack<GoldCard>
+        - resourceDeck: Stack<ResourceCard>
 
-        + Deck()
-        + getGoldDeck(): Stack<Card>
-        + getResourceDeck(): Stack<Card>
+        + Deck(goldDeck: Stack<GoldCard>, resourceDeck: Stack<ResourceCard>)
+        + getGoldDeck(): Stack<GoldCard>
+        + getResourceDeck(): Stack<ResourceCard>
         + addGoldCard(card: GoldCard): void
         + addResourceCard(card: ResourceCard): void
         + drawGoldCard(): GoldCard
         + drawResourceCard(): ResourceCard
         + shuffleGoldDeck(): void
         + shuffleResourceDeck(): void
+        + emptyGold(): boolean
+        + emptyRes(): boolean
+        + printGoldDeck(): void
+        + printResourceDeck(): void
     }
 
     class Hand {
         - chooseBetweenObj: List<Card>
         - secretObjective: Card
         - cardsHand: List<Card>
+        - initCard: InitialCard
 
         + Hand()
         + getSecretObjective(): Card
         + getCardsHand(): List<Card>
+        + getChooseBetweenObj(): List<Card>
         + addCard(card: Card): void
         + removeCard(card: Card): void
         + setSecretObjective(secretObjective: Card): void
+        + setInitialCard(initCard: InitialCard): void
     }
 
     enum Color {
@@ -376,6 +418,18 @@ package model {
         GREEN
         RED
     }
+
+    enum CornerType {
+        FEATHER
+        INK
+        SCROLL
+        VEGETABLE
+        INSECT
+        ANIMAL
+        SHROOM
+        EMPTY
+        NULL
+    }
     
     enum Resource {
         VEGETABLE
@@ -383,13 +437,13 @@ package model {
         INSECT
         SHROOM
         EMPTY
+        NULL
     }
 
    enum Objects {
         FEATHER
         INK
         SCROLL
-        EMPTY
     }
 
     enum GoldCardPointType {
@@ -397,39 +451,31 @@ package model {
         INK
         FEATHER
         SCROLL
-        FREE
+        ANGLE 
+        NULL
     }
 
     enum ObjectiveCardType {
-        ANIMAL
-        VEGETABLE
-        INSECT
-        SHROOM
-        INK_INK
-        SCROL_SCROLL
-        FEATHER_FEATHER
-        INK_FEATHER_SCROLL
-        RED_UR_RED_DL_RED
-        GREEN_UL_GREEN_DR_GREEN
-        BLUE_UR_BLUE_DL_BLUE
-        PURPLE_UL_PURPLE_DR_PURPLE
-        RED_U_RED_DR_GREEN
-        GREEN_U_GREEN_DL_PURPLE
-        BLUE_D_BLUE_UR_RED
-        ' i pattern si leggono che il primo colore è quello centrale e gli altri due in relazione a quello centrale, UR -> Upper Right, DL -> Down Left ...
-        ' ad esempio RED_UR_RED_DL_RED si legge -> rosso al centro, rosso in alto a destra e rosso in basso a sinistra
+        STAIRS 
+        CHAIR
+        IDOL
+        WISEMAN
     }
 
-     enum Positions{
+    enum Positions{
         TOP_RIGHT
         TOP_LEFT
         BOTTOM_RIGHT
         BOTTOM_LEFT
     }
 
+
+
     abstract class Event {
         - id: int
         - timeStamp: long
+
+        + Event(id: int, timeStamp: long)
         + getEventId(): int
         + getTimeStamp(): long
     }
@@ -481,22 +527,22 @@ package model {
 
         class GameBoardUpdateEvent {
             - type: BoardEventType
-            + createGameBoardEvent(boardView: View): void
+            + createGameBoardUpdateEvent(boardView: View): void
         }
 
         class GameDeckUpdateEvent {
             - type: DeckEventType
-            + createGameDeckEvent(deckview: View): void
+            + createGameDeckUpdateEvent(deckView: View): void
         }
 
         class GameHandUpdateEvent {
             - type: HandEventType
-            + createGameHandEvent(handView: View): void
+            + createGameHandUpdateEvent(handView: View): void
         }
 
         class GameStructureUpdateEvent {
             - type: StructureEventType
-            + createGameStructureEvent(structureView: View): void
+            + createGameStructureUpdateEvent(structureView: View): void
         }
     }
 
@@ -506,7 +552,7 @@ package model {
         - sender: Player
         - receiver: List<Player>
         - timeStamp: long
-        + ChatMessage(message: String, sender: Player, receiver: List<Player>, timeStamp: long)
+        + ChatMessage(messageId: int, message: String, sender: Player, receiver: List<Player>, timeStamp: long)
         + getMessageId(): int
         + getMessage(): String
         + getSender(): Player
@@ -524,10 +570,51 @@ package model {
     }
 
     package exceptions{
-        exception AlreadyExistingNicknameException{}
-        exception IllegalPlacementAnglesException{}
-        exception IllegalPlacementResourcesException{}
-        exception IllegalSequeceException{}
+        exception AlreadyExistingNicknameException{
+            + AlreadyExistingNicknameException(message: String)
+        }
+        exception IllegalCommandException{
+            + IllegalCommandException(message: String)
+        }
+        exception IllegalPlacementAnglesException{
+            + IllegalPlacementAnglesException(message: String)
+        }
+        exception IllegalPlacementResourcesException{
+            + IllegalPlacementResourcesException(message: String)
+        }
+        exception IllegalSequenceException{
+            + IllegalSequeceException(message: String)
+        }
+    }
+
+    package parser {
+        class GoldParser {
+            - goldDeck: Stack<GoldCard>
+
+            + GoldParser()
+            + parse(): Stack<GoldCard>
+        }
+
+        class ResourceParser {
+            - resourceDeck: Stack<ResourceCard>
+
+            + ResourceParser()
+            + parse(): Stack<ResourceCard>
+        }
+
+        class ObjectiveParser {
+            - collection: List<ObjectiveCard>
+
+            + ObjectiveParser()
+            + parse(): List<ObjectiveCard>
+        }
+
+        class InitialParser {
+            - collection: List<InitialCard>
+
+            + InitialParser()
+            + parse(): List<InitialCard>
+        }
     }
 }
 

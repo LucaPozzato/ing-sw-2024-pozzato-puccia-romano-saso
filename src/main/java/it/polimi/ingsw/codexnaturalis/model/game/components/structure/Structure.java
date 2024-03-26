@@ -6,7 +6,6 @@ import it.polimi.ingsw.codexnaturalis.model.enumerations.*;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 
 public class Structure {
-
     private StructureNode root;
     private HashMap<Resource, Integer> currentResources;
     private HashMap<Objects, Integer> currentObjects;
@@ -68,12 +67,11 @@ public class Structure {
         // probabilmente necessario tenere traccia dei nodi visitati
     }
 
-    public void updateResources(Resource resource, int quantity) {
+    public void updateResources(Resource resource, Integer quantity) {
         currentResources.put(resource, currentResources.get(resource) + quantity);
     }
 
-    public void updateObjects(Objects object, int quantity) {
+    public void updateObjects(Objects object, Integer quantity) {
         currentObjects.put(object, currentObjects.get(object) + quantity);
     }
-
 }
