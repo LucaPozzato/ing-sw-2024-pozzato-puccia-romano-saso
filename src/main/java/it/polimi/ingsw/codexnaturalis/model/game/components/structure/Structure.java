@@ -21,6 +21,7 @@ public class Structure {
     private Integer destinationCoord;
     private Map<String, Integer> visibleSymbols;
     private char[][] structure = new char[170][498];
+    private String[][] skeletonStructure = new String[80][80];
 
     public Structure() {
         this.timeStamp = new ArrayList<>();
@@ -234,6 +235,36 @@ public class Structure {
     }
 
     public void printSkeleton() {
+        int minX = 80;
+        int minY = 80;
+        int maxX = 0;
+        int maxY = 0;
+        int x = 0;
+        int y = 0;
+        for (Card card : timeStamp) {
+            x = cardToCoordinate.get(card).getKey() / 100;
+            y = cardToCoordinate.get(card).getKey() % 100;
+            skeletonStructure[y][x] = card.getIdCard();
+            if (x < minX)
+                minX = x;
+            if (x > maxX)
+                maxX = x;
+            if (y < minY)
+                minY = y;
+            if (y > maxY)
+                maxY = y;
+        }
+        System.out.println();
+        for (int i = minY; i <= maxY; i++) {
+            for (int j = minX; j <= maxX; j++) {
+                if (skeletonStructure[i][j] == null)
+                    System.out.print("   ");
+                else
+                    System.out.print(skeletonStructure[i][j]);
+            }
+            System.out.printf("\n");
+        }
+        System.out.println();
     }
 
     // structure is a matrix of 249x85

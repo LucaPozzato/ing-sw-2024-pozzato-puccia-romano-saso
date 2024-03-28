@@ -13,7 +13,7 @@ public class InitialParserTest {
         assertTrue(initialDeck.size() == 6);
         int i = 1;
         for (InitialCard card : initialDeck) {
-            assertTrue(card.getIdCard().equals("I" + i));
+            assertTrue(card.getIdCard().equals("I0" + i));
             assertTrue(card.getFrontCorners() != null);
             for (String corner : card.getFrontCorners()) {
                 assertTrue(

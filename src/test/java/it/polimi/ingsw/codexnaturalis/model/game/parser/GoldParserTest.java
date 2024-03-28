@@ -15,7 +15,10 @@ public class GoldParserTest {
         assertTrue(deck.size() == 40);
         int i = 1;
         for (GoldCard card : deck) {
-            assertTrue(card.getIdCard().equals("G" + i));
+            if (i < 10) {
+                assertTrue(card.getIdCard().equals("G0" + i));
+            } else
+                assertTrue(card.getIdCard().equals("G" + i));
             assertTrue(card.getSymbol() != null && card.getSymbol() != "" && !card.getSymbol().contains("\"")
                     && Resource.valueOf(card.getSymbol()) != null);
             assertTrue(card.getPoints() >= 0);

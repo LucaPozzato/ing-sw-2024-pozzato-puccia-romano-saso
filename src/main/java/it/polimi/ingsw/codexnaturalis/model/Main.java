@@ -6,9 +6,13 @@ import java.util.Random;
 import java.util.Stack;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.*;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
-import it.polimi.ingsw.codexnaturalis.model.game.parser.*;
+import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
+import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
+import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 
 public class Main {
 
@@ -71,6 +75,6 @@ public class Main {
                 }
             }
         }
-        structure.print();
+        structure.printSkeleton();
     }
 }

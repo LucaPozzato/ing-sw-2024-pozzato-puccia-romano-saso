@@ -14,7 +14,10 @@ public class ResourceParserTest {
         assertTrue(deck.size() == 40);
         int i = 1;
         for (ResourceCard card : deck) {
-            assertTrue(card.getIdCard().equals("R" + i));
+            if (i < 10) {
+                assertTrue(card.getIdCard().equals("R0" + i));
+            } else
+                assertTrue(card.getIdCard().equals("R" + i));
             assertTrue(card.getSymbol() != null && card.getSymbol() != "" && !card.getSymbol().contains("\"")
                     && Resource.valueOf(card.getSymbol()) != null);
             assertTrue(card.getPoints() >= 0);
