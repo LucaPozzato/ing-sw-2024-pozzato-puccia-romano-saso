@@ -1,36 +1,36 @@
 [
     {
-        "id": "I1",
+        "id": "I01",
         "front corners": ["EMPTY","VEGETABLE","INSECT","EMPTY"],
         "front centre": ["INSECT"],
         "back corners": ["SHROOM","VEGETABLE","INSECT","ANIMAL"]
     },
     {
-        "id": "I2",
+        "id": "I02",
         "front corners": ["ANIMAL","EMPTY","EMPTY","SHROOM"],
         "front centre": ["SHROOM"],
         "back corners": ["VEGETABLE", "ANIMAL","SHROOM","INSECT"]
     },
     {
-        "id": "I3",
+        "id": "I03",
         "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
         "front centre": ["VEGETABLE", "SHROOM"],
         "back corners": ["INSECT","ANIMAL","SHROOM","VEGETABLE"]
     },
     {
-        "id": "I4",
+        "id": "I04",
         "front corners": ["EMPTY","EMPTY","EMPTY","EMPTY"],
         "front centre": ["INSECT", "ANIMAL"],
         "back corners": ["VEGETABLE","INSECT","ANIMAL","SHROOM"]
     },
     {
-        "id": "I5",
+        "id": "I05",
         "front corners": ["EMPTY","EMPTY","NULL","NULL"],
         "front centre": ["ANIMAL","INSECT","VEGETABLE"],
         "back corners": ["INSECT","SHROOM","VEGETABLE","ANIMAL"]
     },
     {
-        "id": "I6",
+        "id": "I06",
         "front corners": ["EMPTY","EMPTY","NULL","NULL"],
         "front centre": ["VEGETABLE", "ANIMAL", "SHROOM"],
         "back corners": ["SHROOM","ANIMAL","VEGETABLE","INSECT"]

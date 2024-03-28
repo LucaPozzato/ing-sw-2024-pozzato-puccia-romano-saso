@@ -22,15 +22,15 @@ public class GoldParserTest {
             assertTrue(
                     card.getPointsType() != null && card.getPointsType() != "" && !card.getPointsType().contains("\"")
                             && GoldCardPointType.valueOf(card.getPointsType()) != null);
-            assertTrue(card.getCorners() != null);
-            for (String corner : card.getCorners()) {
+            assertTrue(card.getFrontCorners() != null);
+            for (String corner : card.getFrontCorners()) {
                 assertTrue(
                         corner != null && corner != "" && !corner.contains("\"") && CornerType.valueOf(corner) != null);
             }
             assertTrue(card.getRequirements() != null);
-            for (String requirement : card.getRequirements()) {
+            for (String requirement : card.getRequirements().keySet()) {
                 assertTrue(requirement != null && requirement != "" && !requirement.contains("\"")
-                        && Resource.valueOf(requirement) != null);
+                        && Resource.valueOf(requirement) != null && card.getRequirements().get(requirement) >= 0);
             }
             assertTrue(card instanceof GoldCard);
             i++;

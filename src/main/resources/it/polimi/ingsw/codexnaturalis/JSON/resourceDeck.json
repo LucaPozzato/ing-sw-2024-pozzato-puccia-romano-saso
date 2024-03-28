@@ -1,54 +1,54 @@
 [
     {
-        "id" : "R1",
+        "id" : "R01",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["SHROOM","EMPTY","SHROOM","NULL"]
     },
     {
-        "id" : "R2",
+        "id" : "R02",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["SHROOM","SHROOM","NULL","EMPTY"]
     },
     {
-        "id" : "R3",
+        "id" : "R03",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["EMPTY","NULL","SHROOM","SHROOM"]
     },
     {
-        "id" : "R4",
+        "id" : "R04",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["NULL","SHROOM","EMPTY","SHROOM"]
     },
     {
-        "id" : "R5",
+        "id" : "R05",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["NULL","FEATHER","VEGETABLE","SHROOM"]
     },
     {
-        "id" : "R6",
+        "id" : "R06",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["INK","SHROOM","NULL","ANIMAL"]
     },
     {
-        "id" : "R7",
+        "id" : "R07",
         "symbol" : "SHROOM",
         "points" : 0,
         "corners": ["SHROOM","INSECT","SCROLL","EMPTY"]
     },
     {
-        "id" : "R8",
+        "id" : "R08",
         "symbol" : "SHROOM",
         "points" : 1,
         "corners": ["EMPTY","SHROOM","EMPTY","NULL"]
     },
     {
-        "id" : "R9",
+        "id" : "R09",
         "symbol" : "SHROOM",
         "points" : 1,
         "corners": ["SHROOM","NULL","EMPTY","EMPTY"]

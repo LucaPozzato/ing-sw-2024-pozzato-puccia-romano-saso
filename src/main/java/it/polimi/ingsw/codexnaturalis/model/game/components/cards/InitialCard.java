@@ -1,63 +1,47 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
-import it.polimi.ingsw.codexnaturalis.model.enumerations.Resource;
-
 import java.util.List;
 
 public class InitialCard extends Card {
-    private String idCard;
-    private List<String> frontCornerRes;
-    private List<String> frontCenterRes;
-    private List<String> backCornerRes;
+    private List<String> frontCorners;
+    private List<String> frontCenterResources;
+    private List<String> backCorners;
 
     public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCenterRes,
             List<String> backCornerRes) {
-        this.idCard = idCard;
-        this.frontCornerRes = frontCornerRes;
-        this.frontCenterRes = frontCenterRes;
-        this.backCornerRes = backCornerRes;
+        super(idCard);
+        this.frontCorners = frontCornerRes;
+        this.frontCenterResources = frontCenterRes;
+        this.backCorners = backCornerRes;
     }
 
-    public String getIdCard() {
-        return idCard;
+    @Override
+    public List<String> getFrontCorners() {
+        return frontCorners;
     }
 
-    public List<String> getFrontCornerRes() {
-        return frontCornerRes;
+    @Override
+    public List<String> getBackCorners() {
+        return backCorners;
     }
 
-    public List<String> getFrontCentreRes() {
-        return frontCenterRes;
-    }
-
-    public List<String> getBackCornerRes() {
-        return backCornerRes;
-    }
-
-    public void setFrontCornerRes(List<String> frontCornerRes) {
-        this.frontCornerRes = frontCornerRes;
-    }
-
-    public void setFrontCentreRes(List<String> frontCenterRes) {
-        this.frontCenterRes = frontCenterRes;
-    }
-
-    public void setBackCornerRes(List<String> backCornerRes) {
-        this.backCornerRes = backCornerRes;
+    @Override
+    public List<String> getFrontCenterResources() {
+        return frontCenterResources;
     }
 
     public String toString() {
         return "InitialCard{" +
                 "idCard='" + idCard + '\'' +
-                ", frontCornerRes=" + frontCornerRes +
-                ", frontCenterRes=" + frontCenterRes +
-                ", backCornerRes=" + backCornerRes +
+                ", frontCornerRes=" + frontCorners +
+                ", frontCenterRes=" + frontCenterResources +
+                ", backCornerRes=" + backCorners +
                 '}';
     }
 
     @Override
     public void print() {
-        System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCornerRes + "\n\tfrontCentreRes: "
-                + frontCenterRes + "\n\tbackCornerRes: " + backCornerRes);
+        System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCorners + "\n\tfrontCentreRes: "
+                + frontCenterResources + "\n\tbackCornerRes: " + backCorners);
     }
 }

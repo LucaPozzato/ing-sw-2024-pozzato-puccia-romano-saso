@@ -18,8 +18,8 @@ public class ResourceParserTest {
             assertTrue(card.getSymbol() != null && card.getSymbol() != "" && !card.getSymbol().contains("\"")
                     && Resource.valueOf(card.getSymbol()) != null);
             assertTrue(card.getPoints() >= 0);
-            assertTrue(card.getCorners() != null);
-            for (String corner : card.getCorners()) {
+            assertTrue(card.getFrontCorners() != null);
+            for (String corner : card.getFrontCorners()) {
                 assertTrue(
                         corner != null && corner != "" && !corner.contains("\"") & CornerType.valueOf(corner) != null);
             }

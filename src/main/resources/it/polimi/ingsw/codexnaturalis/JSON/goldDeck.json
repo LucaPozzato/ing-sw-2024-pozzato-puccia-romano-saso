@@ -1,6 +1,6 @@
 [   
     {
-        "id" : "G1",
+        "id" : "G01",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "1",
@@ -26,7 +26,7 @@
         ]  
     },
     {
-        "id" : "G2",
+        "id" : "G02",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "1",
@@ -52,7 +52,7 @@
         ]  
     },
     {
-        "id" : "G3",
+        "id" : "G03",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "1",
@@ -78,7 +78,7 @@
         ]  
     },
     {
-        "id" : "G4",
+        "id" : "G04",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "2",
@@ -104,7 +104,7 @@
         ]  
     },
     {
-        "id" : "G5",
+        "id" : "G05",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "2",
@@ -130,7 +130,7 @@
         ]  
     },
     {
-        "id" : "G6",
+        "id" : "G06",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "2",
@@ -156,7 +156,7 @@
         ]  
     },
     {
-        "id" : "G7",
+        "id" : "G07",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "3",
@@ -182,7 +182,7 @@
         ]  
     },
     {
-        "id" : "G8",
+        "id" : "G08",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "3",
@@ -208,7 +208,7 @@
         ]  
     },
     {
-        "id" : "G9",
+        "id" : "G09",
         "type" : "Gold",
         "symbol" : "SHROOM",
         "points" : "3",

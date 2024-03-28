@@ -1,31 +1,32 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import it.polimi.ingsw.codexnaturalis.model.enumerations.*;
+import java.util.Map;
 
 public class GoldCard extends Card {
-    private String idCard;
     private String symbol;
     private int points;
     private String pointsType;
-    private List<String> corners;
-    private List<String> requirements;
+    private List<String> frontCorners;
+    private List<String> backCorners;
+    private Map<String, Integer> requirements;
 
-    public GoldCard(String idCard, String symbol, int points, String pointsType, List<String> corners,
-            List<String> requirements) {
-        this.idCard = idCard;
+    public GoldCard(String idCard, String symbol, int points, String pointsType, List<String> frontCorners,
+            Map<String, Integer> requirements) {
+        super(idCard);
         this.symbol = symbol;
         this.points = points;
         this.pointsType = pointsType;
-        this.corners = corners;
+        this.frontCorners = frontCorners;
+        this.backCorners = new ArrayList<String>();
+        for (int i = 0; i < 4; i++) {
+            this.backCorners.add("EMPTY");
+        }
         this.requirements = requirements;
     }
 
-    public String getIdCard() {
-        return idCard;
-    }
-
+    @Override
     public String getSymbol() {
         return symbol;
     }
@@ -38,42 +39,28 @@ public class GoldCard extends Card {
         return pointsType;
     }
 
-    public List<String> getCorners() {
-        return corners;
+    @Override
+    public List<String> getFrontCorners() {
+        return frontCorners;
     }
 
-    public List<String> getRequirements() {
+    @Override
+    public List<String> getBackCorners() {
+        return backCorners;
+    }
+
+    @Override
+    public Map<String, Integer> getRequirements() {
         return requirements;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public void setPointsType(String pointsType) {
-        this.pointsType = pointsType;
-    }
-
-    public void setCorners(List<String> corners) {
-        this.corners = corners;
-    }
-
-    public void setRequirements(List<String> requirements) {
-        this.requirements = requirements;
     }
 
     @Override
     public void print() {
         System.out.println(
                 "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tpointsType: " + pointsType
-                        + "\n\tcorners: " + corners + "\n\trequirements: " + requirements);
+                        + "\n\tcorners: " + frontCorners + "\n\trequirements: ");
+        for (Map.Entry<String, Integer> entry : requirements.entrySet()) {
+            System.out.println("\t\t" + entry.getKey() + ": " + entry.getValue());
+        }
     }
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import com.google.gson.JsonArray;
@@ -41,16 +43,12 @@ public class GoldParser {
                 listCorner.add(corner.getAsString());
             }
             JsonArray arrayOfReq = cardsObject.get("resources required").getAsJsonArray();
-            List<String> listReq = new ArrayList<>();
+            Map<String, Integer> listReq = new HashMap<>();
             for (JsonElement req : arrayOfReq) {
                 JsonObject reqObj = req.getAsJsonObject();
                 int amount = reqObj.get("amount").getAsInt();
                 String type = reqObj.get("type").getAsString();
-                if (amount != 0) {
-                    for (int i = 0; i < amount; i++) {
-                        listReq.add(type);
-                    }
-                }
+                listReq.put(type, amount);
             }
 
             // Creazione dell'oggetto goldCard

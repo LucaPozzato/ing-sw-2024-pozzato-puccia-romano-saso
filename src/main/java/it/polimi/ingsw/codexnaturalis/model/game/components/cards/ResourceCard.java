@@ -1,55 +1,47 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceCard extends Card {
-    private String idCard;
     private String symbol;
     private int points;
-    private List<String> corners;
+    private List<String> frontCorners;
+    private List<String> backCorners;
 
-    public ResourceCard(String idCard, String symbol, int points, List<String> corners) {
-        this.idCard = idCard;
+    public ResourceCard(String idCard, String symbol, int points, List<String> frontCorners) {
+        super(idCard);
         this.symbol = symbol;
         this.points = points;
-        this.corners = corners;
+        this.frontCorners = frontCorners;
+        this.backCorners = new ArrayList<String>();
+        for (int i = 0; i < 4; i++) {
+            this.backCorners.add("EMPTY");
+        }
     }
 
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
+    @Override
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public int getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    @Override
+    public List<String> getFrontCorners() {
+        return frontCorners;
     }
 
-    public List<String> getCorners() {
-        return corners;
-    }
-
-    public void setCorners(List<String> corners) {
-        this.corners = corners;
+    @Override
+    public List<String> getBackCorners() {
+        return backCorners;
     }
 
     @Override
     public void print() {
         System.out.println(
-                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + corners);
+                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + frontCorners);
     }
 }

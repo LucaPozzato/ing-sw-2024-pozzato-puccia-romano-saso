@@ -48,8 +48,8 @@ public class PlacedCardState extends State {
         // the same id and then add it to the structure and remove it from the hand
         for (Card card : hand.getCardsHand()) {
             if (card.getIdCard() == idCard) {
-                bottomCard = structure.getCard(idBottomCard);
-                structure.insertCard(bottomCard, card, position);
+                // bottomCard = structure.getCard(idBottomCard);
+                // structure.insertCard(bottomCard, card, position);
                 hand.removeCard(card);
                 break;
             }

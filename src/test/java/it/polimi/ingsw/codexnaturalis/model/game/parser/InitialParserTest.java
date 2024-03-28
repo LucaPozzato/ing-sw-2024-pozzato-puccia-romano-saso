@@ -14,18 +14,18 @@ public class InitialParserTest {
         int i = 1;
         for (InitialCard card : initialDeck) {
             assertTrue(card.getIdCard().equals("I" + i));
-            assertTrue(card.getFrontCornerRes() != null);
-            for (String corner : card.getFrontCornerRes()) {
+            assertTrue(card.getFrontCorners() != null);
+            for (String corner : card.getFrontCorners()) {
                 assertTrue(
                         corner != null && corner != "" && !corner.contains("\"") && Resource.valueOf(corner) != null);
             }
-            assertTrue(card.getFrontCentreRes() != null);
-            for (String centre : card.getFrontCentreRes()) {
+            assertTrue(card.getFrontCenterResources() != null);
+            for (String centre : card.getFrontCenterResources()) {
                 assertTrue(
                         centre != null && centre != "" && !centre.contains("\"") && Resource.valueOf(centre) != null);
             }
-            assertTrue(card.getBackCornerRes() != null);
-            for (String corner : card.getBackCornerRes()) {
+            assertTrue(card.getBackCorners() != null);
+            for (String corner : card.getBackCorners()) {
                 assertTrue(
                         corner != null && corner != "" && !corner.contains("\"") && Resource.valueOf(corner) != null);
             }
