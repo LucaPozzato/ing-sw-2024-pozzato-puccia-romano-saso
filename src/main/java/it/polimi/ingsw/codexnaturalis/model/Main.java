@@ -2,12 +2,14 @@ package it.polimi.ingsw.codexnaturalis.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
@@ -45,13 +47,12 @@ public class Main {
 
         deck.shuffleGoldDeck();
         deck.shuffleResourceDeck();
-        Card drawnCard = initPars.parse().get(0);
+        List<InitialCard> initialCards = initPars.parse();
 
         List<String> positions = List.of("TL", "TR", "BL", "BR");
         Random randGenerator = new Random();
 
         Structure structure = new Structure();
-        structure.placeCard(null, drawnCard, positions.get(randGenerator.nextInt(4)), true);
         // System.out.println("Placed initial card: " + drawnCard.getIdCard());
 
         List<Card> drawnCards = new ArrayList<>();
@@ -59,22 +60,59 @@ public class Main {
         Boolean noErr;
         String position = null;
         Card randomCard = null;
+        Boolean upFront = false;
+        Card drawnCard = initialCards.get(randGenerator.nextInt(initialCards.size()));
 
-        while (!deck.emptyRes()) {
+        // while (!deck.emptyRes() || !deck.emptyGold()) {
+        for (int i = 0; i < 20; i++) {
             noErr = false;
-            drawnCards.add(drawnCard);
-            drawnCard = deck.drawResourceCard();
             while (!noErr) {
                 try {
                     position = positions.get(randGenerator.nextInt(4));
-                    randomCard = drawnCards.get(randGenerator.nextInt(drawnCards.size()));
-                    structure.placeCard(randomCard, drawnCard, position, true);
+                    upFront = randGenerator.nextBoolean();
+                    if (drawnCards.size() > 0)
+                        randomCard = drawnCards.get(randGenerator.nextInt(drawnCards.size()));
+                    else
+                        randomCard = null;
+                    structure.placeCard(randomCard, drawnCard, position, upFront);
                     noErr = true;
+                    drawnCards.add(drawnCard);
+                    if (drawnCard instanceof InitialCard) {
+                        System.out.println(
+                                "\n\nplaced Initial card " + drawnCard.getIdCard() + "front side up -> " + upFront);
+                    } else {
+                        System.out.println(
+                                "\n\nplaced " + drawnCard.getIdCard() + " on "
+                                        + randomCard.getIdCard() + " in position " + position + ", front side up -> "
+                                        + upFront);
+                    }
+                    structure.printVisual();
+                    System.out.println("Resources:");
+                    for (Map.Entry<String, Integer> entry : structure.getVisibleObjects().entrySet()) {
+                        System.out.println("\t" + entry.getKey() + " " + entry.getValue());
+                    }
+                    for (Map.Entry<String, Integer> entry : structure.getVisibleResources().entrySet()) {
+                        System.out.println("\t" + entry.getKey() + " " + entry.getValue());
+                    }
+                    System.out.println("Timestamps:");
+                    for (Card card : structure.getTimestamp()) {
+                        System.out.print(card.getIdCard() + " ");
+                    }
+                    System.out.print("\n\n");
                 } catch (Exception e) {
-                    // System.out.println("Error: " + e.getMessage());
+                    System.out.println(
+                            "Error: " + e.getMessage() + " -> " + "tried to place " + drawnCard.getIdCard() + " on "
+                                    + randomCard.getIdCard() + " in position " + position);
+                    if (drawnCard instanceof GoldCard && !deck.emptyRes())
+                        drawnCard = deck.drawResourceCard();
                 }
             }
+            if (randGenerator.nextBoolean() && !deck.emptyRes())
+                drawnCard = deck.drawResourceCard();
+            else if (!deck.emptyGold())
+                drawnCard = deck.drawGoldCard();
         }
+        System.out.println("Skeleton:");
         structure.printSkeleton();
     }
 }

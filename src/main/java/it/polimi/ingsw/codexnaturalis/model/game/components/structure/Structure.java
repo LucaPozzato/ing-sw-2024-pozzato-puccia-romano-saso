@@ -20,8 +20,22 @@ public class Structure {
     private Map<Integer, Pair<Card, Boolean>> coordinateToCard;
     private Integer destinationCoord;
     private Map<String, Integer> visibleSymbols;
-    private char[][] structure = new char[170][498];
+    private char[][] visualStructure = new char[174][506];
     private String[][] skeletonStructure = new String[80][80];
+    private int maxXVisual = 0;
+    private int maxYVisual = 0;
+    private int minXVisual = 506;
+    private int minYVisual = 174;
+    private int maxXSkeleton = 0;
+    private int maxYSkeleton = 0;
+    private int minXSkeleton = 80;
+    private int minYSkeleton = 80;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
 
     public Structure() {
         this.timeStamp = new ArrayList<>();
@@ -42,12 +56,14 @@ public class Structure {
             if (card instanceof InitialCard) {
                 cardToCoordinate.put(card, new Pair<Integer, Boolean>(4040, frontUp));
                 coordinateToCard.put(4040, new Pair<Card, Boolean>(card, frontUp));
-                timeStamp.add(card);
             } else {
                 cardToCoordinate.put(card, new Pair<Integer, Boolean>(destinationCoord, frontUp));
                 coordinateToCard.put(destinationCoord, new Pair<Card, Boolean>(card, frontUp));
-                timeStamp.add(card);
+
             }
+            timeStamp.add(card);
+            addCardToVisual(card, frontUp);
+            addCardToSkeleton(card);
             calcVisibleSymbols(father, card, position, frontUp);
         } else {
             throw new IllegalCommandException("Card cannot be placed");
@@ -64,58 +80,47 @@ public class Structure {
 
     private void calcVisibleSymbols(Card father, Card card, String position, Boolean frontUp)
             throws IllegalCommandException {
-        if (frontUp) {
-            for (String symbol : card.getFrontCorners()) {
-                visibleSymbols.put(symbol, visibleSymbols.get(symbol) + 1);
-            }
-            if (card instanceof InitialCard) {
-                for (String symbol : card.getFrontCenterResources()) {
-                    visibleSymbols.put(symbol, visibleSymbols.get(symbol) + 1);
-                }
-            }
-        } else {
-            if (card instanceof InitialCard) {
-                for (String symbol : card.getBackCorners()) {
-                    visibleSymbols.put(symbol, visibleSymbols.get(symbol) + 1);
-                }
-            } else {
-                visibleSymbols.put(card.getSymbol(), visibleSymbols.get(card.getSymbol()) + 1);
-            }
+
+        // Resets visible symbols
+        for (String symbol : visibleSymbols.keySet()) {
+            visibleSymbols.put(symbol, 0);
         }
 
-        if (father == null)
-            return;
-
-        List<String> fFrontCorners = father.getFrontCorners();
-        List<String> fBackCorners = father.getBackCorners();
-
-        switch (position) {
-            case "TL":
-                if (cardToCoordinate.get(father).getValue())
-                    visibleSymbols.put(fFrontCorners.get(0), visibleSymbols.get(fFrontCorners.get(0)) - 1);
-                else
-                    visibleSymbols.put(fBackCorners.get(0), visibleSymbols.get(fBackCorners.get(0)) - 1);
-                break;
-            case "TR":
-                if (cardToCoordinate.get(father).getValue())
-                    visibleSymbols.put(fFrontCorners.get(1), visibleSymbols.get(fFrontCorners.get(1)) - 1);
-                else
-                    visibleSymbols.put(fBackCorners.get(1), visibleSymbols.get(fBackCorners.get(1)) - 1);
-                break;
-            case "BL":
-                if (cardToCoordinate.get(father).getValue())
-                    visibleSymbols.put(fFrontCorners.get(2), visibleSymbols.get(fFrontCorners.get(2)) - 1);
-                else
-                    visibleSymbols.put(fBackCorners.get(2), visibleSymbols.get(fBackCorners.get(2)) - 1);
-                break;
-            case "BR":
-                if (cardToCoordinate.get(father).getValue())
-                    visibleSymbols.put(fFrontCorners.get(3), visibleSymbols.get(fFrontCorners.get(3)) - 1);
-                else
-                    visibleSymbols.put(fBackCorners.get(3), visibleSymbols.get(fBackCorners.get(3)) - 1);
-                break;
-            default:
-                break;
+        // Updates visible symbols
+        for (int i = minYVisual - 2; i <= maxYVisual + 2; i++) {
+            for (int j = minXVisual - 6; j <= maxXVisual + 6; j++) {
+                switch (visualStructure[i][j]) {
+                    case 'A':
+                        visibleSymbols.put("ANIMAL", visibleSymbols.get("ANIMAL") + 1);
+                        break;
+                    case 'V':
+                        visibleSymbols.put("VEGETABLE", visibleSymbols.get("VEGETABLE") + 1);
+                        break;
+                    case 'I':
+                        visibleSymbols.put("INSECT", visibleSymbols.get("INSECT") + 1);
+                        break;
+                    case 'S':
+                        visibleSymbols.put("SHROOM", visibleSymbols.get("SHROOM") + 1);
+                        break;
+                    case 's':
+                        visibleSymbols.put("SCROLL", visibleSymbols.get("SCROLL") + 1);
+                        break;
+                    case 'i':
+                        visibleSymbols.put("INK", visibleSymbols.get("INK") + 1);
+                        break;
+                    case 'f':
+                        visibleSymbols.put("FEATHER", visibleSymbols.get("FEATHER") + 1);
+                        break;
+                    case 'N':
+                        visibleSymbols.put("NULL", visibleSymbols.get("NULL") + 1);
+                        break;
+                    case 'E':
+                        visibleSymbols.put("EMPTY", visibleSymbols.get("EMPTY") + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -133,6 +138,10 @@ public class Structure {
             visibleObjects.put(resource.name(), visibleSymbols.get(resource.name()));
         }
         return visibleObjects;
+    }
+
+    public List<Card> getTimestamp() {
+        return timeStamp;
     }
 
     /*
@@ -182,6 +191,7 @@ public class Structure {
 
         // Checks if the card can be placed in the coordinates if the bottom card's
         // angle is visible
+        // BUG: need to check the angles of the other fathers
         switch (position) {
             case "TL":
                 if (corners.get(0).equals("NULL"))
@@ -220,6 +230,12 @@ public class Structure {
             return 0;
 
         Integer fatherCoordinate = cardToCoordinate.get(father).getKey();
+
+        // Important: this coordinates are correct in the Euclidean plane, but not when
+        // thinking about the structure as a matrix. A matrix has the origin in the top
+        // left corner, while the Euclidean plane has the origin in the bottom left
+        // corner. This means that the y coordinate is inverted.
+
         switch (position) {
             case "TL":
                 return fatherCoordinate - 99;
@@ -234,29 +250,25 @@ public class Structure {
         }
     }
 
+    private void addCardToSkeleton(Card card) {
+        int x = cardToCoordinate.get(card).getKey() / 100;
+        // Inverting y coordinate to match the matrix structure
+        int y = 40 - (cardToCoordinate.get(card).getKey() % 100 - 40);
+        skeletonStructure[y][x] = card.getIdCard();
+        if (x < minXSkeleton)
+            minXSkeleton = x;
+        if (x > maxXSkeleton)
+            maxXSkeleton = x;
+        if (y < minYSkeleton)
+            minYSkeleton = y;
+        if (y > maxYSkeleton)
+            maxYSkeleton = y;
+    }
+
     public void printSkeleton() {
-        int minX = 80;
-        int minY = 80;
-        int maxX = 0;
-        int maxY = 0;
-        int x = 0;
-        int y = 0;
-        for (Card card : timeStamp) {
-            x = cardToCoordinate.get(card).getKey() / 100;
-            y = cardToCoordinate.get(card).getKey() % 100;
-            skeletonStructure[y][x] = card.getIdCard();
-            if (x < minX)
-                minX = x;
-            if (x > maxX)
-                maxX = x;
-            if (y < minY)
-                minY = y;
-            if (y > maxY)
-                maxY = y;
-        }
         System.out.println();
-        for (int i = minY; i <= maxY; i++) {
-            for (int j = minX; j <= maxX; j++) {
+        for (int i = minYSkeleton; i <= maxYSkeleton; i++) {
+            for (int j = minXSkeleton; j <= maxXSkeleton; j++) {
                 if (skeletonStructure[i][j] == null)
                     System.out.print("   ");
                 else
@@ -267,12 +279,25 @@ public class Structure {
         System.out.println();
     }
 
-    // structure is a matrix of 249x85
-    public void print() throws IllegalCommandException {
-    }
-
-    private void addCardToVisual(Card card, int x, int y, Boolean frontUp) throws IllegalCommandException {
+    private void addCardToVisual(Card card, Boolean frontUp) throws IllegalCommandException {
         List<String> corners;
+        int x = cardToCoordinate.get(card).getKey() / 100;
+        int y = cardToCoordinate.get(card).getKey() % 100;
+
+        // Center of the matrix + x offset (6 pixels per card)
+        x = 253 + ((x - 40) * 6);
+        // Inverting y coordinate to match the matrix structure, center of the matrix +
+        // y offset (2 pixels per card)
+        y = 87 - ((y - 40) * 2);
+
+        if (x < minXVisual)
+            minXVisual = x;
+        if (x > maxXVisual)
+            maxXVisual = x;
+        if (y < minYVisual)
+            minYVisual = y;
+        if (y > maxYVisual)
+            maxYVisual = y;
 
         if (frontUp) {
             corners = card.getFrontCorners();
@@ -280,82 +305,136 @@ public class Structure {
             corners = card.getBackCorners();
         }
 
-        structure[y + 2][x - 4] = '┌';
-        structure[y + 2][x - 3] = '─';
-        structure[y + 2][x - 2] = '┐';
-        structure[y + 2][x - 1] = '─';
-        structure[y + 2][x] = '─';
-        structure[y + 2][x + 1] = '─';
-        structure[y + 2][x + 2] = '┌';
-        structure[y + 2][x + 3] = '─';
-        structure[y + 2][x + 4] = '┐';
+        visualStructure[y - 2][x - 4] = '┌';
+        visualStructure[y - 2][x - 3] = '─';
+        visualStructure[y - 2][x - 2] = '┬';
+        visualStructure[y - 2][x - 1] = '─';
+        visualStructure[y - 2][x] = '─';
+        visualStructure[y - 2][x + 1] = '─';
+        visualStructure[y - 2][x + 2] = '┬';
+        visualStructure[y - 2][x + 3] = '─';
+        visualStructure[y - 2][x + 4] = '┐';
 
-        structure[y + 1][x - 4] = '│';
-        structure[y + 1][x - 3] = corners.get(0).charAt(0);
-        structure[y + 1][x - 2] = '|';
-        structure[y + 1][x - 1] = ' ';
-        if (card instanceof InitialCard && card.getFrontCenterResources().size() > 1)
-            structure[y + 1][x] = card.getFrontCenterResources().get(0).charAt(0);
+        visualStructure[y - 1][x - 4] = '│';
+        if (corners.get(0).equals("INK") || corners.get(0).equals("SCROLL") || corners.get(0).equals("FEATHER"))
+            visualStructure[y - 1][x - 3] = Character.toLowerCase(corners.get(0).charAt(0));
         else
-            structure[y + 1][x] = ' ';
-        // else if card has points -> print points
-        structure[y + 1][x + 1] = ' ';
-        structure[y + 1][x + 2] = '│';
-        structure[y + 1][x + 3] = corners.get(1).charAt(0);
-        structure[y + 1][x + 4] = '│';
-
-        structure[y][x - 4] = '|';
-        structure[y][x - 3] = '-';
-        structure[y][x - 2] = '|';
-        if (card instanceof GoldCard || card instanceof ResourceCard) {
-            structure[y][x - 1] = card.getIdCard().charAt(0);
-            structure[y][x] = card.getIdCard().charAt(1);
-            structure[y][x + 1] = card.getIdCard().charAt(2);
+            visualStructure[y - 1][x - 3] = corners.get(0).charAt(0);
+        visualStructure[y - 1][x - 2] = '│';
+        if (card instanceof GoldCard && !((GoldCard) card).getPointsType().equals("NULL")) {
+            visualStructure[y - 1][x - 1] = Character.toLowerCase(((GoldCard) card).getPointsType().charAt(0));
+            visualStructure[y - 1][x] = ' ';
+            visualStructure[y - 1][x + 1] = Integer.toString(card.getPoints()).charAt(0);
         } else {
-            structure[y][x - 1] = ' ';
-            if (card.getFrontCenterResources().size() == 3)
-                structure[y][x] = card.getFrontCenterResources().get(1).charAt(0);
-            else if (card.getFrontCenterResources().size() == 1)
-                structure[y][x] = card.getFrontCenterResources().get(0).charAt(0);
+            visualStructure[y - 1][x - 1] = ' ';
+            if (card instanceof InitialCard && card.getFrontCenterResources().size() > 1 && frontUp)
+                visualStructure[y - 1][x - 1] = card.getFrontCenterResources().get(0).charAt(0);
+            if (card instanceof InitialCard)
+                visualStructure[y - 1][x] = 'І';
+            else if ((card instanceof ResourceCard || card instanceof GoldCard) && card.getPoints() > 0)
+                visualStructure[y - 1][x] = Integer.toString(card.getPoints()).charAt(0);
             else
-                structure[y][x] = ' ';
-            structure[y][x + 1] = ' ';
+                visualStructure[y - 1][x] = ' ';
+            visualStructure[y - 1][x + 1] = ' ';
         }
-        structure[y][x + 2] = '|';
-        structure[y][x + 3] = '-';
-        structure[y][x + 4] = '|';
-
-        structure[y - 1][x - 4] = '│';
-        structure[y - 1][x - 3] = corners.get(2).charAt(0);
-        structure[y - 1][x - 2] = '|';
-        structure[y - 1][x - 1] = ' ';
-        if (card instanceof InitialCard && card.getFrontCenterResources().size() == 3)
-            structure[y - 1][x] = card.getFrontCenterResources().get(2).charAt(0);
-        else if (card instanceof InitialCard && card.getFrontCenterResources().size() == 2)
-            structure[y - 1][x] = card.getFrontCenterResources().get(1).charAt(0);
+        visualStructure[y - 1][x + 2] = '│';
+        if (corners.get(1).equals("INK") || corners.get(1).equals("SCROLL") || corners.get(1).equals("FEATHER"))
+            visualStructure[y - 1][x + 3] = Character.toLowerCase(corners.get(1).charAt(0));
         else
-            structure[y - 1][x] = ' ';
-        structure[y - 1][x + 1] = ' ';
-        structure[y - 1][x + 2] = '│';
-        structure[y - 1][x + 3] = corners.get(3).charAt(0);
-        structure[y - 1][x + 4] = '│';
+            visualStructure[y - 1][x + 3] = corners.get(1).charAt(0);
+        visualStructure[y - 1][x + 4] = '│';
 
-        structure[y - 2][x - 4] = '└';
-        structure[y - 2][x - 3] = '─';
-        structure[y - 2][x - 2] = '┘';
-        structure[y - 2][x - 1] = '─';
-        structure[y - 2][x] = '─';
-        structure[y - 2][x + 1] = '─';
-        structure[y - 2][x + 2] = '└';
-        structure[y - 2][x + 3] = '─';
-        structure[y - 2][x + 4] = '┘';
+        visualStructure[y][x - 4] = '├';
+        visualStructure[y][x - 3] = '─';
+        visualStructure[y][x - 2] = '┤';
+        if (card instanceof GoldCard || card instanceof ResourceCard) {
+            visualStructure[y][x - 1] = card.getIdCard().charAt(0);
+            visualStructure[y][x] = card.getIdCard().charAt(1);
+            visualStructure[y][x + 1] = card.getIdCard().charAt(2);
+        } else {
+            visualStructure[y][x - 1] = ' ';
+            visualStructure[y][x] = card.getIdCard().charAt(1);
+            if (card.getFrontCenterResources().size() == 3 && frontUp)
+                visualStructure[y][x + 1] = card.getFrontCenterResources().get(1).charAt(0);
+            else if (card.getFrontCenterResources().size() == 1 && frontUp)
+                visualStructure[y][x + 1] = card.getFrontCenterResources().get(0).charAt(0);
+            else
+                visualStructure[y][x + 1] = ' ';
+        }
+        visualStructure[y][x + 2] = '├';
+        visualStructure[y][x + 3] = '─';
+        visualStructure[y][x + 4] = '┤';
+
+        visualStructure[y + 1][x - 4] = '│';
+        if (corners.get(2).equals("INK") || corners.get(2).equals("SCROLL") || corners.get(2).equals("FEATHER"))
+            visualStructure[y + 1][x - 3] = Character.toLowerCase(corners.get(2).charAt(0));
+        else
+            visualStructure[y + 1][x - 3] = corners.get(2).charAt(0);
+        visualStructure[y + 1][x - 2] = '│';
+        visualStructure[y + 1][x - 1] = ' ';
+        if (card instanceof InitialCard && card.getFrontCenterResources().size() == 3 && frontUp)
+            visualStructure[y + 1][x - 1] = card.getFrontCenterResources().get(2).charAt(0);
+        else if (card instanceof InitialCard && card.getFrontCenterResources().size() == 2 && frontUp)
+            visualStructure[y + 1][x - 1] = card.getFrontCenterResources().get(1).charAt(0);
+        visualStructure[y + 1][x] = ' ';
+        if (card instanceof InitialCard)
+            visualStructure[y + 1][x] = card.getIdCard().charAt(2);
+        else if (!frontUp && (card instanceof ResourceCard || card instanceof GoldCard))
+            visualStructure[y + 1][x] = card.getSymbol().charAt(0);
+        visualStructure[y + 1][x + 1] = ' ';
+        visualStructure[y + 1][x + 2] = '│';
+        if (corners.get(3).equals("INK") || corners.get(3).equals("SCROLL") || corners.get(3).equals("FEATHER"))
+            visualStructure[y + 1][x + 3] = Character.toLowerCase(corners.get(3).charAt(0));
+        else
+            visualStructure[y + 1][x + 3] = corners.get(3).charAt(0);
+        visualStructure[y + 1][x + 4] = '│';
+
+        visualStructure[y + 2][x - 4] = '└';
+        visualStructure[y + 2][x - 3] = '─';
+        visualStructure[y + 2][x - 2] = '┴';
+        visualStructure[y + 2][x - 1] = '─';
+        visualStructure[y + 2][x] = '─';
+        visualStructure[y + 2][x + 1] = '─';
+        visualStructure[y + 2][x + 2] = '┴';
+        visualStructure[y + 2][x + 3] = '─';
+        visualStructure[y + 2][x + 4] = '┘';
+    }
+
+    // structure is a matrix of 249x85
+    public void printVisual() throws IllegalCommandException {
+        for (int i = minYVisual - 2; i <= maxYVisual + 2; i++) {
+            for (int j = minXVisual - 6; j <= maxXVisual + 6; j++) {
+                if (visualStructure[i][j] == 0)
+                    System.out.print(" ");
+                else
+                    switch (visualStructure[i][j]) {
+                        case 'A':
+                            System.out.print(ANSI_BLUE + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'V':
+                            System.out.print(ANSI_GREEN + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'I':
+                            System.out.print(ANSI_PURPLE + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'S':
+                            System.out.print(ANSI_RED + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 's':
+                            System.out.print(ANSI_YELLOW + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'i':
+                            System.out.print(ANSI_YELLOW + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'f':
+                            System.out.print(ANSI_YELLOW + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        default:
+                            System.out.print(visualStructure[i][j]);
+                            break;
+                    }
+            }
+            System.out.println();
+        }
     }
 }
-
-/*
- * ┌─┐───┌─┐
- * │N| 2 |I│
- * │─|R01|─|
- * │V| |A│
- * └─┘───└─┘
- */

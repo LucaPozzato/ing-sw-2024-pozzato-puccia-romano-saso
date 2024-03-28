@@ -38,6 +38,10 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have requirements");
     }
 
+    public int getPoints() throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have points");
+    }
+
     public void print() {
         System.out.println("Card: " + idCard);
     }
