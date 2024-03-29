@@ -3,6 +3,7 @@ package it.polimi.ingsw.codexnaturalis.model.game.state;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 
 public class WaitPlayerState extends State {
     public WaitPlayerState(Game game) {
@@ -40,7 +41,7 @@ public class WaitPlayerState extends State {
     }
 
     @Override
-    public void placedCard(String idBottomCard, String idCard, int points, String position)
+    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         throw new IllegalCommandException("Can't place card yet");
     }

@@ -129,4 +129,12 @@ public abstract class Game {
         this.nextPlayer = nextPlayer;
     }
 
+    public void calcStairPattern() {
+
+    }
+
+    public void calcChairPattern() {
+
+    }
+
 }

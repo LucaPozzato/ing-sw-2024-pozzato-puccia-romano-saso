@@ -43,6 +43,7 @@ public class Structure {
     public static final String ANSI_BG_GREEN = "\u001B[48;5;22m";
     public static final String ANSI_BG_BLUE = "\u001B[48;5;19m";
     public static final String ANSI_BG_PURPLE = "\u001B[48;5;55m";
+    private List<Card> avaiablePatterns;
 
     public Structure() {
         this.timeStamp = new ArrayList<>();
@@ -72,14 +73,6 @@ public class Structure {
         addCardToVisual(card, frontUp);
         addCardToSkeleton(card);
         calcVisibleSymbols(father, card, position, frontUp);
-    }
-
-    public void calcStairPattern() {
-
-    }
-
-    public void calcChairPattern() {
-
     }
 
     private void calcVisibleSymbols(Card father, Card card, String position, Boolean frontUp)
@@ -251,6 +244,247 @@ public class Structure {
                 return fatherCoordinate + 99;
             default:
                 return 0;
+        }
+    }
+    public int countPattern(List<Card> patternList, Card placed) throws IllegalCommandException {
+        int pointsFromPatterns = 0;
+
+        if(patternList.isEmpty()){
+            return 0;
+        }
+        else {
+            for (Card pattern : patternList) {
+                if (pattern.getShape().equals("STAIRS")) {
+                    if (searchStairPattern(pattern, placed)) {
+                        pointsFromPatterns += 2;
+                    }
+                } else if (pattern.getShape().equals("CHAIR")) {
+                    if (searchChairPattern(pattern, placed)) {
+                        pointsFromPatterns += 3;
+                    }
+                } else throw new IllegalCommandException("Unrecognized pattern");
+            }
+            return pointsFromPatterns;
+        }
+    }
+
+    private boolean searchStairPattern(Card specificPattern, Card placed) throws IllegalCommandException {
+        int placedCoordinate = cardToCoordinate.get(placed).getKey();
+        switch (specificPattern.getIdCard()){
+            case "OP1":
+                if((coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate - 198) != null && coordinateToCard.get(placedCoordinate - 198).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 198).getKey().isVisited()){
+                            placed.visit();
+                            coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                            coordinateToCard.get(placedCoordinate - 198).getKey().visit();
+                            return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 198) != null && coordinateToCard.get(placedCoordinate + 198).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate + 198).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 198).getKey().visit();
+                    return true;
+                }
+                else return false;
+            case "OP2":
+                if((coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate - 202) != null && coordinateToCard.get(placedCoordinate - 202).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate - 202).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate - 202).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 201) != null && coordinateToCard.get(placedCoordinate + 201).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 201).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 201).getKey().visit();
+                    return true;
+                }
+                else return false;
+
+            case "OP3":
+                if((coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate - 198) != null && coordinateToCard.get(placedCoordinate - 198).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 198).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                    coordinateToCard.get(placedCoordinate - 198).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 198) != null && coordinateToCard.get(placedCoordinate + 198).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 198).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 198).getKey().visit();
+                    return true;
+                }
+                else return false;
+
+            case "OP4":
+                if((coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate - 202) != null && coordinateToCard.get(placedCoordinate - 202).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate - 202).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate - 202).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                    return true;
+                }
+                else if((coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited()) &&
+                        coordinateToCard.get(placedCoordinate + 201) != null && coordinateToCard.get(placedCoordinate + 201).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate + 201).getKey().isVisited()){
+                    placed.visit();
+                    coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                    coordinateToCard.get(placedCoordinate + 201).getKey().visit();
+                    return true;
+                }
+                else return false;
+
+            default: throw new IllegalCommandException("Illegal pattern recognized");
+        }
+    }
+    private Boolean searchChairPattern(Card specificPattern, Card placed) throws IllegalCommandException {
+        int placedCoordinate= cardToCoordinate.get(placed).getKey();
+        switch(specificPattern.getIdCard()){
+            case "OP5":
+                if(placed.getSymbol().equals("VEGETABLES")){
+                    if(coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate - 201) != null && coordinateToCard.get(placedCoordinate - 201).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 201).getKey().isVisited()){
+                            placed.visit();
+                            coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                            coordinateToCard.get(placedCoordinate - 201).getKey().visit();
+                            return true;
+                    }
+                    else return false;
+                }
+                if(placed.getSymbol().equals("SHROOM")){
+                    if(coordinateToCard.get(placedCoordinate + 100) != null && coordinateToCard.get(placedCoordinate + 100).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate + 100).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate + 201) != null && coordinateToCard.get(placedCoordinate + 201).getKey().getSymbol().equals("VEGETABLE")  && !coordinateToCard.get(placedCoordinate + 201).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate + 100).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 201).getKey().visit();
+                        return true;
+                    }
+                    else if (coordinateToCard.get(placedCoordinate - 100) != null && coordinateToCard.get(placedCoordinate - 100).getKey().getSymbol().equals("SHROOM") & !coordinateToCard.get(placedCoordinate - 100).getKey().isVisited() &&
+                                    coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 100).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                        return true;
+                    }
+                    else return false;
+                }
+
+            case "OP6":
+                if(placed.getSymbol().equals("INSECT")){
+                    if(coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate - 199) != null && coordinateToCard.get(placedCoordinate - 199).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate - 199).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                        coordinateToCard.get(placedCoordinate - 199).getKey().visit();
+                        return true;
+                    }
+                    else return false;
+                }
+                if(placed.getSymbol().equals("VEGETABLE")){
+                    if(coordinateToCard.get(placedCoordinate + 100) != null && coordinateToCard.get(placedCoordinate + 100).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 100).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate + 199) != null && coordinateToCard.get(placedCoordinate + 199).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate + 199).getKey().isVisited()){
+                             placed.visit();
+                            coordinateToCard.get(placedCoordinate + 100).getKey().visit();
+                            coordinateToCard.get(placedCoordinate + 199).getKey().visit();
+                            return true;
+                    }
+                           else if (coordinateToCard.get(placedCoordinate - 100) != null && coordinateToCard.get(placedCoordinate - 100).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 100).getKey().isVisited() &&
+                                    coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("VEGETABLE") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited()){
+                                 placed.visit();
+                                 coordinateToCard.get(placedCoordinate - 100).getKey().visit();
+                                 coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                                 return true;
+                    }
+                    else return false;
+                }
+            case "OP7":
+                if(placed.getSymbol().equals("SHROOM")){
+                    if(coordinateToCard.get(placedCoordinate + 99) != null && coordinateToCard.get(placedCoordinate + 99).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 99).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate + 199) != null && coordinateToCard.get(placedCoordinate + 199).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 199).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate + 99).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 199).getKey().visit();
+                        return true;
+                    }
+                    else return false;
+                }
+                if(placed.getSymbol().equals("ANIMAL")){
+                    if(coordinateToCard.get(placedCoordinate - 99) != null && coordinateToCard.get(placedCoordinate - 99).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 99).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate + 100) != null && coordinateToCard.get(placedCoordinate + 100).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate + 100).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 99).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 100).getKey().visit();
+                        return true;
+                    }
+                        else if (coordinateToCard.get(placedCoordinate - 100) != null && coordinateToCard.get(placedCoordinate - 100).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 100).getKey().isVisited() &&
+                                    coordinateToCard.get(placedCoordinate - 199) != null && coordinateToCard.get(placedCoordinate - 199).getKey().getSymbol().equals("SHROOM") && !coordinateToCard.get(placedCoordinate - 199).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 100).getKey().visit();
+                        coordinateToCard.get(placedCoordinate - 199).getKey().visit();
+                        return true;
+                    }
+                    else return false;
+                }
+            case "OP8":
+                if(placed.getSymbol().equals("ANIMAL")){
+                    if(coordinateToCard.get(placedCoordinate + 101) != null && coordinateToCard.get(placedCoordinate + 101).getKey().getSymbol().equals("INSECT") &&  !coordinateToCard.get(placedCoordinate + 101).getKey().isVisited() &&
+                    coordinateToCard.get(placedCoordinate + 201) != null && coordinateToCard.get(placedCoordinate + 201).getKey().getSymbol().equals("INSECT") &&  !coordinateToCard.get(placedCoordinate + 201).getKey().isVisited() ){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate + 101).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 201).getKey().visit();
+                        return true;
+                    }
+                    else return false;
+                }
+                if(placed.getSymbol().equals("INSECT")){
+                    if(coordinateToCard.get(placedCoordinate - 101) != null && coordinateToCard.get(placedCoordinate - 101).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 101).getKey().isVisited() &&
+                            coordinateToCard.get(placedCoordinate + 100) != null && coordinateToCard.get(placedCoordinate + 100).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate + 100).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 101).getKey().visit();
+                        coordinateToCard.get(placedCoordinate + 100).getKey().visit();
+                        return true;
+                    }
+                        else if (coordinateToCard.get(placedCoordinate - 100) != null && coordinateToCard.get(placedCoordinate - 100).getKey().getSymbol().equals("INSECT") && !coordinateToCard.get(placedCoordinate - 100).getKey().isVisited() &&
+                                    coordinateToCard.get(placedCoordinate - 201) != null && coordinateToCard.get(placedCoordinate - 201).getKey().getSymbol().equals("ANIMAL") && !coordinateToCard.get(placedCoordinate - 201).getKey().isVisited()){
+                        placed.visit();
+                        coordinateToCard.get(placedCoordinate - 100).getKey().visit();
+                        coordinateToCard.get(placedCoordinate - 201).getKey().visit();
+                        return true;                    }
+                    else return false;
+                }
+            default: throw new IllegalCommandException("Illegal pattern recognized");
         }
     }
 

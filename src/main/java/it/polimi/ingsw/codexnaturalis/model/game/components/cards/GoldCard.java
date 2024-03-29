@@ -11,6 +11,7 @@ public class GoldCard extends Card {
     private List<String> frontCorners;
     private List<String> backCorners;
     private Map<String, Integer> requirements;
+    private boolean visited;
 
     public GoldCard(String idCard, String symbol, int points, String pointsType, List<String> frontCorners,
             Map<String, Integer> requirements) {
@@ -62,5 +63,12 @@ public class GoldCard extends Card {
         for (Map.Entry<String, Integer> entry : requirements.entrySet()) {
             System.out.println("\t\t" + entry.getKey() + ": " + entry.getValue());
         }
+    }
+    public void visit(){
+        this.visited=true;
+    }
+    @Override
+    public boolean isVisited() {
+        return visited;
     }
 }

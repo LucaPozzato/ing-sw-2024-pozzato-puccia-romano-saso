@@ -4,6 +4,7 @@ import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.*;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
@@ -71,14 +72,15 @@ public class InitState extends State {
         }
     }
 
-    private void dealSecretObjective() {
+    //Nick: il deal common objective deve aggiungere due carte a caso all'attributo common objective della board e non alla mano del giocatore
+    private void dealCommonObjective() {
         objPar = new ObjectiveParser();
-        for (Player player : game.getPlayers()) {
-            game.getHandByPlayer(player).setSecretObjective(objPar.parse().removeFirst());
+        for (int i = 0; i < 2; i++) {
+            game.getBoard().getCommonObjective().add(objPar.parse().removeFirst());
         }
     }
 
-    private void dealCommonObjective() {
+    private void dealSecretObjective() {
         for (Player player : game.getPlayers()) {
             for (int i = 0; i < 2; i++) {
                 game.getHandByPlayer(player).getChooseBetweenObj().add(objPar.parse().removeFirst());
@@ -93,8 +95,8 @@ public class InitState extends State {
         createFirstPlayer(nick, color, numPlayers);
         dealHands(numPlayers);
         dealInitialCard();
-        dealSecretObjective();
         dealCommonObjective();
+        dealSecretObjective();
     }
 
     @Override
@@ -104,7 +106,7 @@ public class InitState extends State {
     }
 
     @Override
-    public void placedCard(String idBottomCard, String idCard, int points, String position)
+    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
         throw new IllegalCommandException();

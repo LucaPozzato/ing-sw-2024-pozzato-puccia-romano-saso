@@ -8,6 +8,7 @@ public class ResourceCard extends Card {
     private int points;
     private List<String> frontCorners;
     private List<String> backCorners;
+    private boolean visited;
 
     public ResourceCard(String idCard, String symbol, int points, List<String> frontCorners) {
         super(idCard);
@@ -43,5 +44,12 @@ public class ResourceCard extends Card {
     public void print() {
         System.out.println(
                 "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + frontCorners);
+    }
+    public void visit(){
+        this.visited = true;
+    }
+    @Override
+    public boolean isVisited() {
+        return visited;
     }
 }

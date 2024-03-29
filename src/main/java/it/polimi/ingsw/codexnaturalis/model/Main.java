@@ -15,6 +15,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class Main {
 

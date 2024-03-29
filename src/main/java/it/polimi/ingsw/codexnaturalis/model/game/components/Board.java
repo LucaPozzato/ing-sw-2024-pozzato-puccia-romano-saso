@@ -10,7 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 public class Board {
 
     private HashMap<Player, Integer> scores;
-    private ObjectiveCard commonObjective;
+    private List<Card> commonObjective;
     private List<Card> uncoveredCards;
 
     public Board() {
@@ -18,15 +18,11 @@ public class Board {
         this.uncoveredCards = new ArrayList<Card>();
     }
 
-    public void setCommonObjective(ObjectiveCard commonObjective) {
-        this.commonObjective = commonObjective;
-    }
-
     public HashMap<Player, Integer> getScores() {
         return scores;
     }
 
-    public ObjectiveCard getCommonObjective() {
+    public List<Card> getCommonObjective() {
         return commonObjective;
     }
 

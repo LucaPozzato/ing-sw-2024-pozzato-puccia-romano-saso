@@ -25,7 +25,7 @@ public class DrawnCardState extends State {
     }
 
     @Override
-    public void placedCard(String idBottomCard, String idCard, int points, String position)
+    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         throw new IllegalCommandException("Card already placed");
     }

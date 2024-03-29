@@ -22,6 +22,14 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have a symbol");
     }
 
+    public String getMustHave() throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have a musthave");
+    }
+
+    public String getShape() throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have a shape");
+    }
+
     public List<String> getFrontCorners() throws IllegalCommandException {
         throw new IllegalCommandException("This card does not have front corners");
     }
@@ -50,4 +58,8 @@ public abstract class Card {
     public String toString() {
         return "Card: " + idCard;
     }
+
+    public abstract boolean isVisited() throws IllegalCommandException;
+
+    public abstract void visit() throws IllegalCommandException;
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+
 import java.util.List;
 
 public class InitialCard extends Card {
@@ -43,5 +45,14 @@ public class InitialCard extends Card {
     public void print() {
         System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCorners + "\n\tfrontCentreRes: "
                 + frontCenterResources + "\n\tbackCornerRes: " + backCorners);
+    }
+    @Override
+    public boolean isVisited() throws IllegalCommandException {
+        throw new IllegalCommandException();
+    }
+
+    @Override
+    public void visit() throws IllegalCommandException {
+        throw new IllegalCommandException();
     }
 }
