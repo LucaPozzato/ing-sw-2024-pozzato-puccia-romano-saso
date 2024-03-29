@@ -36,6 +36,8 @@ public class Structure {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_DARK_RED = "\u001B[48;5;88m";
+    public static final String ANSI_DARK_GRAY = "\u001B[38;5;242m";
 
     public Structure() {
         this.timeStamp = new ArrayList<>();
@@ -305,7 +307,7 @@ public class Structure {
             corners = card.getBackCorners();
         }
 
-        visualStructure[y - 2][x - 4] = '┌';
+        visualStructure[y - 2][x - 4] = '╭';
         visualStructure[y - 2][x - 3] = '─';
         visualStructure[y - 2][x - 2] = '┬';
         visualStructure[y - 2][x - 1] = '─';
@@ -313,7 +315,7 @@ public class Structure {
         visualStructure[y - 2][x + 1] = '─';
         visualStructure[y - 2][x + 2] = '┬';
         visualStructure[y - 2][x + 3] = '─';
-        visualStructure[y - 2][x + 4] = '┐';
+        visualStructure[y - 2][x + 4] = '╮';
 
         visualStructure[y - 1][x - 4] = '│';
         if (corners.get(0).equals("INK") || corners.get(0).equals("SCROLL") || corners.get(0).equals("FEATHER"))
@@ -389,7 +391,7 @@ public class Structure {
             visualStructure[y + 1][x + 3] = corners.get(3).charAt(0);
         visualStructure[y + 1][x + 4] = '│';
 
-        visualStructure[y + 2][x - 4] = '└';
+        visualStructure[y + 2][x - 4] = '╰';
         visualStructure[y + 2][x - 3] = '─';
         visualStructure[y + 2][x - 2] = '┴';
         visualStructure[y + 2][x - 1] = '─';
@@ -397,7 +399,7 @@ public class Structure {
         visualStructure[y + 2][x + 1] = '─';
         visualStructure[y + 2][x + 2] = '┴';
         visualStructure[y + 2][x + 3] = '─';
-        visualStructure[y + 2][x + 4] = '┘';
+        visualStructure[y + 2][x + 4] = '╯';
     }
 
     // structure is a matrix of 249x85
@@ -428,6 +430,12 @@ public class Structure {
                             break;
                         case 'f':
                             System.out.print(ANSI_YELLOW + visualStructure[i][j] + ANSI_RESET);
+                            break;
+                        case 'N':
+                            System.out.print(ANSI_DARK_RED + 'X' + ANSI_RESET);
+                            break;
+                        case 'E':
+                            System.out.print(ANSI_DARK_GRAY + '░' + ANSI_RESET);
                             break;
                         default:
                             System.out.print(visualStructure[i][j]);
