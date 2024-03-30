@@ -64,9 +64,11 @@ public class GoldCard extends Card {
             System.out.println("\t\t" + entry.getKey() + ": " + entry.getValue());
         }
     }
-    public void visit(){
-        this.visited=true;
+
+    public void visit() {
+        this.visited = true;
     }
+
     @Override
     public boolean isVisited() {
         return visited;

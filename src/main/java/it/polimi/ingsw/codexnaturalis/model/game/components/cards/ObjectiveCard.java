@@ -46,6 +46,7 @@ public class ObjectiveCard extends Card {
     public boolean isVisited() throws IllegalCommandException {
         throw new IllegalCommandException();
     }
+
     @Override
     public void visit() throws IllegalCommandException {
         throw new IllegalCommandException();

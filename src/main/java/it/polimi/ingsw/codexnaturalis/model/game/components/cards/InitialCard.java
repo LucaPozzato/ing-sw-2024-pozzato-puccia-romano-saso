@@ -46,6 +46,7 @@ public class InitialCard extends Card {
         System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCorners + "\n\tfrontCentreRes: "
                 + frontCenterResources + "\n\tbackCornerRes: " + backCorners);
     }
+
     @Override
     public boolean isVisited() throws IllegalCommandException {
         throw new IllegalCommandException();

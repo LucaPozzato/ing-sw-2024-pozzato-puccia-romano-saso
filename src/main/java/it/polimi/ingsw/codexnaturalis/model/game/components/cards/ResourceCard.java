@@ -45,9 +45,11 @@ public class ResourceCard extends Card {
         System.out.println(
                 "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + frontCorners);
     }
-    public void visit(){
+
+    public void visit() {
         this.visited = true;
     }
+
     @Override
     public boolean isVisited() {
         return visited;

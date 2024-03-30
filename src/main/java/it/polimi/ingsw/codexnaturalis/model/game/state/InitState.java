@@ -72,7 +72,8 @@ public class InitState extends State {
         }
     }
 
-    //Nick: il deal common objective deve aggiungere due carte a caso all'attributo common objective della board e non alla mano del giocatore
+    // Nick: il deal common objective deve aggiungere due carte a caso all'attributo
+    // common objective della board e non alla mano del giocatore
     private void dealCommonObjective() {
         objPar = new ObjectiveParser();
         for (int i = 0; i < 2; i++) {
