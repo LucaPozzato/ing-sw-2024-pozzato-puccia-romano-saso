@@ -33,11 +33,17 @@ public class PlacedCardState extends State {
         removeFromHand(placeThis);
         structure.placeCard(father, placeThis, position, frontUp);
 
-        // TODO: update points due to GoldCard or ResourceCard
-
-        int newPoints = structure.countPattern(getSuitablePatt(placeThis, gatherPatterns()), placeThis);
-        updateTotalPoints(newPoints);
+        //Compute the points which are direct consequence of card's placement:
+        //Points resulting from patterns that involves the placed card (these are virtual points because even
+        // if they're continuously computed they are points really assigned to the player at the end of the game)
+        int fromPatternPoints = structure.countPattern(getSuitablePatt(placeThis, gatherPatterns()), placeThis);
+        //Points assigned because the placed card is a gold card or a resource card with bonus points (these are actual points,
+        // immediately assigned to the player who placed the card and which determines a movement of his pawn on the board)
+        int fromBonusPoint = structure.bonusPoints(placeThis);
+        updateActualPoints(fromBonusPoint);
+        updateVirtualPoints(fromPatternPoints + fromBonusPoint);
         super.game.setState(new DrawnCardState(super.game));
+        //Points resulting from resources objective are computed at the end of the game (END GAME STATE) since they could be covered anytime during the match
     }
 
     @Override
@@ -135,11 +141,11 @@ public class PlacedCardState extends State {
         }
     }
 
-    private void updatePoints(int points) {
-        super.game.getBoard().updateScore(super.game.getCurrentPlayer(), points);
+    private void updateActualPoints(int points) {
+        super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
     }
 
-    private void updateTotalPoints(int points) {
-        super.game.getBoard().updateTotalScore(super.game.getCurrentPlayer(), points);
+    private void updateVirtualPoints(int points) {
+        super.game.getBoard().updateVirtualScore(super.game.getCurrentPlayer(), points);
     }
 }

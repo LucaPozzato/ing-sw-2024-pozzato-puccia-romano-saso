@@ -6,6 +6,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 
 public class EndGameState extends State {
+
+    //TODO: implement methods that compute the points resulting from resource objective for each player
+    //TODO: implement method that declare the winner
     public EndGameState(Game game) {
         super(game);
     }

@@ -35,7 +35,7 @@ public class GoldCard extends Card {
     public int getPoints() {
         return points;
     }
-
+    @Override
     public String getPointsType() {
         return pointsType;
     }
@@ -65,12 +65,4 @@ public class GoldCard extends Card {
         }
     }
 
-    public void visit() {
-        this.visited = true;
-    }
-
-    @Override
-    public boolean isVisited() {
-        return visited;
-    }
 }

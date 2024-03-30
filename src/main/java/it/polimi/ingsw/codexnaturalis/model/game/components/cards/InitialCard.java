@@ -46,14 +46,9 @@ public class InitialCard extends Card {
         System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCorners + "\n\tfrontCentreRes: "
                 + frontCenterResources + "\n\tbackCornerRes: " + backCorners);
     }
-
     @Override
-    public boolean isVisited() throws IllegalCommandException {
-        throw new IllegalCommandException();
+    public String getPointsType() throws IllegalCommandException{
+        throw  new IllegalCommandException();
     }
 
-    @Override
-    public void visit() throws IllegalCommandException {
-        throw new IllegalCommandException();
-    }
 }

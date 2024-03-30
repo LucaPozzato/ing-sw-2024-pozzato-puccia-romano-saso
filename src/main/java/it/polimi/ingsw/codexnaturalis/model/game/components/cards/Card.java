@@ -50,6 +50,8 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have points");
     }
 
+    public abstract String getPointsType() throws IllegalCommandException;
+
     public void print() {
         System.out.println("Card: " + idCard);
     }
@@ -59,7 +61,4 @@ public abstract class Card {
         return "Card: " + idCard;
     }
 
-    public abstract boolean isVisited() throws IllegalCommandException;
-
-    public abstract void visit() throws IllegalCommandException;
 }

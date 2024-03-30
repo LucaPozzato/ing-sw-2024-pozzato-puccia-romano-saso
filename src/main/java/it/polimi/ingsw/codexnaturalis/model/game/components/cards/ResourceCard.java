@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +47,8 @@ public class ResourceCard extends Card {
         System.out.println(
                 "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + frontCorners);
     }
-
-    public void visit() {
-        this.visited = true;
-    }
-
     @Override
-    public boolean isVisited() {
-        return visited;
+    public String getPointsType() throws IllegalCommandException {
+        throw  new IllegalCommandException();
     }
 }
