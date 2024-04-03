@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Stack;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
@@ -28,7 +29,8 @@ public class Main {
     // giocatori ci sono
 
     public static void main(String[] args) throws Exception {
-        Cli cli = new Cli();
+        Scanner stdin = new Scanner(System.in);
+        Cli cli = new Cli(stdin);
 
         ResourceParser resPars = new ResourceParser();
         Stack<ResourceCard> resourceDeck = resPars.parse();
@@ -83,6 +85,14 @@ public class Main {
         hand.addCard(deck.drawResourceCard());
         hand.addCard(deck.drawGoldCard());
 
+        cli.updateStructure(structure.draw());
+        cli.updateHand(hand.drawCardsHand());
+        cli.updateBoard(board.drawUncoveredCards());
+        cli.updateDecks(deck.draw());
+        cli.updateResources(structure.getVisibleObjects().toString() + "\n"
+                + structure.getVisibleResources().toString());
+        cli.print();
+
         // while (!deck.emptyRes() || !deck.emptyGold()) {
         for (int i = 0; i < 20; i++) {
             noErr = false;
@@ -128,5 +138,6 @@ public class Main {
                 }
             }
         }
+        stdin.close();
     }
 }

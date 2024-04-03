@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Cli {
     // Cursor starts from 1, 1 -> /u001B[y;xH
+    // TODO: draw scoreboard with players and points
     String structure;
     List<String> hand;
     List<String> board;
@@ -19,14 +20,17 @@ public class Cli {
     int midWidth = 0;
     int minX = 0;
     int maxX = 0;
+    Scanner stdin;
 
-    public Cli() {
+    public Cli(Scanner stdin) {
         this.structure = "";
         this.hand = new ArrayList<>(List.of(""));
         this.board = new ArrayList<>(List.of(""));
         this.decks = new ArrayList<>(List.of("", ""));
+        this.objectives = new ArrayList<>(List.of(""));
         this.resources = "";
         this.error = "";
+        this.stdin = stdin;
     }
 
     public void updateStructure(String structure) {
@@ -93,7 +97,7 @@ public class Cli {
                             + board.get(0).split("\n")[0].length() + 3);
         }
         if (structure.split("\n").length < resources.split("\n").length)
-            printResources(midHeight - structure.split("\n").length / 2 - 1,
+            printResources(midHeight + structure.split("\n").length / 2 - resources.split("\n").length + 1,
                     midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
         else
             printResources(midHeight - resources.split("\n").length / 2,
@@ -127,9 +131,10 @@ public class Cli {
         }
 
         // read input from user
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        scanner.close();
+
+        if (stdin.hasNextLine()) {
+            String input = stdin.nextLine();
+        }
     }
 
     private void printStructure(int y, int x) {
