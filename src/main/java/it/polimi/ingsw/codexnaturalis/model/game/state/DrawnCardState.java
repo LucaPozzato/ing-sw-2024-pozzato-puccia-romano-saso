@@ -43,7 +43,7 @@ public class DrawnCardState extends State {
         super.game.setState(new EndGameState(super.game));
     }
 
-    private void updateDeck(String type, String id) {
+    private void updateDeck(String type, String id) throws IllegalCommandException {
         List<Card> tempCardList = new ArrayList<>();
         Card tempCard = null;
         // if chosen deck is gold then draw from gold deck

@@ -50,10 +50,21 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have points");
     }
 
-    public abstract String getPointsType() throws IllegalCommandException;
+    public String getPointsType() throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have points type");
+    }
 
     public void print() {
         System.out.println("Card: " + idCard);
+    }
+
+    public char[][] drawVisual(char[][] drawingBoard, int x, int y, Boolean side) throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have a visual representation");
+    }
+
+    public String drawDetailedVisual(Boolean side)
+            throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have a detailed visual representation");
     }
 
     @Override

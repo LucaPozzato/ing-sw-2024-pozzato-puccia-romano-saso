@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.state;
 
+import java.util.Collections;
+
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
@@ -48,7 +50,7 @@ public class InitState extends State {
         super.game.setNumPlayers(numPlayers);
     }
 
-    private void dealHands(int numPlayers) {
+    private void dealHands(int numPlayers) throws IllegalCommandException {
         // Builds a new hand for each player
         // Fills each hand with the right number of cards drawn from the right deck
 
@@ -67,6 +69,7 @@ public class InitState extends State {
 
     private void dealInitialCard() {
         initPar = new InitialParser();
+        Collections.shuffle(initPar.parse());
         for (Player player : game.getPlayers()) {
             game.getHandByPlayer(player).setInitCard(initPar.parse().removeFirst());
         }
@@ -77,7 +80,7 @@ public class InitState extends State {
     private void dealCommonObjective() {
         objPar = new ObjectiveParser();
         for (int i = 0; i < 2; i++) {
-            game.getBoard().getCommonObjective().add(objPar.parse().removeFirst());
+            game.getBoard().getCommonObjectives().add(objPar.parse().removeFirst());
         }
     }
 
@@ -90,7 +93,7 @@ public class InitState extends State {
     }
 
     @Override
-    public void initialized(String nick, Color color, int numPlayers) {
+    public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
         super.game.setState(new PlacedCardState(super.game));
         createDecks();
         createFirstPlayer(nick, color, numPlayers);

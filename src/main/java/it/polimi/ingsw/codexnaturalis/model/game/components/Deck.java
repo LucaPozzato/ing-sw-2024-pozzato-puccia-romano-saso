@@ -1,8 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.*;
 
 public class Deck {
@@ -54,19 +57,7 @@ public class Deck {
         return resourceDeck.isEmpty();
     }
 
-    public void printGoldDeck() {
-        System.out.println("Gold Deck:");
-        for (GoldCard card : goldDeck) {
-            card.print();
-        }
-        System.out.println("\n");
-    }
-
-    public void printResourceDeck() {
-        System.out.println("Resource Deck:");
-        for (ResourceCard card : resourceDeck) {
-            card.print();
-        }
-        System.out.println("\n");
+    public List<String> draw() throws IllegalCommandException {
+        return new Printer().printDeck(List.of(resourceDeck.peek(), goldDeck.peek()));
     }
 }

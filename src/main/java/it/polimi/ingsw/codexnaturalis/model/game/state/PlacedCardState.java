@@ -11,6 +11,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 
 public class PlacedCardState extends State {
+    // TODO: remove regionMatches and use equals -> code more readable
     public PlacedCardState(Game game) {
         super(game);
     }
@@ -33,17 +34,23 @@ public class PlacedCardState extends State {
         removeFromHand(placeThis);
         structure.placeCard(father, placeThis, position, frontUp);
 
-        //Compute the points which are direct consequence of card's placement:
-        //Points resulting from patterns that involves the placed card (these are virtual points because even
-        // if they're continuously computed they are points really assigned to the player at the end of the game)
-        int fromPatternPoints = structure.countPattern(getSuitablePatt(placeThis, gatherPatterns()), placeThis);
-        //Points assigned because the placed card is a gold card or a resource card with bonus points (these are actual points,
-        // immediately assigned to the player who placed the card and which determines a movement of his pawn on the board)
-        int fromBonusPoint = structure.bonusPoints(placeThis);
+        // Compute the points which are direct consequence of card's placement:
+        // Points resulting from patterns that involves the placed card (these are
+        // virtual points because even
+        // if they're continuously computed they are points really assigned to the
+        // player at the end of the game)
+        int fromPatternPoints = structure.getPointsFromPatterns(getSuitablePatt(placeThis, gatherPatterns()),
+                placeThis);
+        // Points assigned because the placed card is a gold card or a resource card
+        // with bonus points (these are actual points,
+        // immediately assigned to the player who placed the card and which determines a
+        // movement of his pawn on the board)
+        int fromBonusPoint = structure.getPointsFromCard(placeThis);
         updateActualPoints(fromBonusPoint);
         updateVirtualPoints(fromPatternPoints + fromBonusPoint);
         super.game.setState(new DrawnCardState(super.game));
-        //Points resulting from resources objective are computed at the end of the game (END GAME STATE) since they could be covered anytime during the match
+        // Points resulting from resources objective are computed at the end of the game
+        // (END GAME STATE) since they could be covered anytime during the match
     }
 
     @Override
@@ -71,6 +78,9 @@ public class PlacedCardState extends State {
         }
     }
 
+    // FIXME: shouldn't this method be in the structure class?
+    // don't you think you could just check inside the structure method when
+    // calling countPattern?
     private List<Card> gatherPatterns() {
         // Declare a list that collects the secret objective associated with the
         // interested player and the common objectives
@@ -86,9 +96,9 @@ public class PlacedCardState extends State {
         }
 
         // gathers common objectives in totObj if they are pattern cards
-        Card commonObj0 = super.game.getBoard().getCommonObjective().get(0);
+        Card commonObj0 = super.game.getBoard().getCommonObjectives().get(0);
         String idCommonObj0 = commonObj0.getIdCard();
-        Card commonObj1 = super.game.getBoard().getCommonObjective().get(1);
+        Card commonObj1 = super.game.getBoard().getCommonObjectives().get(1);
         String idCommonObj1 = commonObj1.getIdCard();
         if (idCommonObj0.regionMatches(0, comparison, 0, 2)) {
             totPatterns.add(commonObj0);
@@ -102,10 +112,19 @@ public class PlacedCardState extends State {
         return totPatterns;
     }
 
+    // FIXME: shouldn't this method be in the structure class?
+    // definitely not needed, checking a pattern take so little that checking 0 or 3
+    // is not gonna make a difference
+
     // Return the sublist of gatherPatterns that suits the placed card
     // The goal is to minimize the set of patterns I'm going to check for in
     // Structure
     private List<Card> getSuitablePatt(Card placeThis, List<Card> patternList) throws IllegalCommandException {
+        // BUG: in the chair pattern there are two types of cards, here you remove a
+        // whole pattern if it doesn't have the right color of a single type, there
+        // could be a card with the right color of the other type and the pattern is not
+        // gonna be checked
+
         switch (placeThis.getSymbol()) {
             case "SHROOM":
                 for (Card card : patternList) {
