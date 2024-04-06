@@ -12,11 +12,12 @@ import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
 public class Structure {
     // TODO: delete regionmatches -> code hard to read
     // TODO: add message to IllegalCommandExceptions
-    private List<Card> timeStamp;
+    private List<Card> placedCards;
     private Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate; // <Card , <Coordinates, Side, Visited> >
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >
     private Map<String, Integer> visibleSymbols;
@@ -24,7 +25,7 @@ public class Structure {
     private String[][] skeletonStructure = new String[80][80];
 
     public Structure() {
-        this.timeStamp = new ArrayList<>();
+        this.placedCards = new ArrayList<>();
         this.cardToCoordinate = new HashMap<>();
         this.coordinateToCard = new HashMap<>();
         this.visibleSymbols = new HashMap<>(
@@ -47,7 +48,7 @@ public class Structure {
             coordinateToCard.put(destinationCoord, new Triplet<>(card, frontUp, false));
 
         }
-        timeStamp.add(card);
+        placedCards.add(card);
         addCardToVisual(card, frontUp);
         addCardToSkeleton(card);
         calcVisibleSymbols();
@@ -123,8 +124,8 @@ public class Structure {
         return visibleObjects;
     }
 
-    public List<Card> getTimestamp() {
-        return timeStamp;
+    public List<Card> getPlacedCards() {
+        return placedCards;
     }
 
     /*
@@ -568,11 +569,10 @@ public class Structure {
 
     public int getPointsFromCard(Card placed) throws IllegalCommandException {
         if (placed.getPoints() > 0) {
-            if (placed.getIdCard().regionMatches(0, "R", 0, 1)) {
+            if (placed instanceof ResourceCard) {
                 return 1;
-                // TODO: GoldCard also has points from objetcs -> INK, SCROLL, FEATHER
-            } else if (placed.getIdCard().regionMatches(0, "G", 0, 1)) {
-                if (placed.getPointsType().regionMatches(0, "NULL", 0, 3)) {
+            } else if (placed instanceof GoldCard) {
+                if (placed.getPointsType().equals("NULL")) {
                     return placed.getPoints();
                 } else if (!placed.getPointsType().equals("ANGLE")) {
                     return visibleSymbols.get(placed.getPointsType());

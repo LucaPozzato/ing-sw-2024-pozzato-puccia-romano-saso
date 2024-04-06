@@ -26,12 +26,22 @@ public class Board {
         this.visualBoard = new ArrayList<>();
     }
 
-    public Map<Player, Integer> getActualScores() {
-        return actualScores;
+    public String getActualScores() {
+        String actualScoreString = "";
+        for (Map.Entry<Player, Integer> entry : actualScores.entrySet()) {
+            actualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
+        }
+        actualScoreString = actualScoreString.substring(0, actualScoreString.length() - 3);
+        return actualScoreString;
     }
 
-    public Map<Player, Integer> getVirtualScores() {
-        return virtualScores;
+    public String getVirtualScores() {
+        String virtualScoreString = "";
+        for (Map.Entry<Player, Integer> entry : virtualScores.entrySet()) {
+            virtualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
+        }
+        virtualScoreString = virtualScoreString.substring(0, virtualScoreString.length() - 3);
+        return virtualScoreString;
     }
 
     public List<Card> getCommonObjectives() {
@@ -47,11 +57,17 @@ public class Board {
     }
 
     public void updateActualScore(Player player, Integer newPoints) {
-        actualScores.put(player, actualScores.get(player) + newPoints);
+        if (!actualScores.containsKey(player))
+            actualScores.put(player, 0);
+        else
+            actualScores.put(player, actualScores.get(player) + newPoints);
     }
 
     public void updateVirtualScore(Player player, Integer newPoints) {
-        virtualScores.put(player, virtualScores.get(player) + newPoints);
+        if (!virtualScores.containsKey(player))
+            virtualScores.put(player, 0);
+        else
+            virtualScores.put(player, virtualScores.get(player) + newPoints);
     }
 
     public void addUncoveredCard(Card card) throws IllegalCommandException {

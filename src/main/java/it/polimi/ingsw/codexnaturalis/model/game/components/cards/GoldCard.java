@@ -76,25 +76,28 @@ public class GoldCard extends Card {
         else
             topCornersLine = "│" + corners.get(0).charAt(0) + "│";
 
-        if (!pointsType.equals("NULL")) {
-            switch (pointsType) {
-                case "INK":
-                    topCornersLine += Integer.toString(points).charAt(0) + " І";
-                    break;
-                case "SCROLL":
-                    topCornersLine += Integer.toString(points).charAt(0) + " Ѕ";
-                    break;
-                case "FEATHER":
-                    topCornersLine += Integer.toString(points).charAt(0) + " Ϝ";
-                    break;
-                case "ANGLE":
-                    topCornersLine += Integer.toString(points).charAt(0) + " А";
-                    break;
-                default:
-                    break;
-            }
+        if (side) {
+            if (!pointsType.equals("NULL")) {
+                switch (pointsType) {
+                    case "INK":
+                        topCornersLine += Integer.toString(points).charAt(0) + " І";
+                        break;
+                    case "SCROLL":
+                        topCornersLine += Integer.toString(points).charAt(0) + " Ѕ";
+                        break;
+                    case "FEATHER":
+                        topCornersLine += Integer.toString(points).charAt(0) + " Ϝ";
+                        break;
+                    case "ANGLE":
+                        topCornersLine += Integer.toString(points).charAt(0) + " А";
+                        break;
+                    default:
+                        break;
+                }
+            } else
+                topCornersLine += " " + Integer.toString(points).charAt(0) + " ";
         } else
-            topCornersLine += " " + Integer.toString(points).charAt(0) + " ";
+            topCornersLine += "   ";
 
         if (corners.get(1).equals("INK") || corners.get(1).equals("SCROLL")
                 || corners.get(1).equals("FEATHER"))

@@ -3,6 +3,8 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.ingsw.codexnaturalis.model.game.Printer;
+
 public class InitialCard extends Card {
     private List<String> frontCorners;
     private List<String> frontCenterResources;
@@ -92,6 +94,21 @@ public class InitialCard extends Card {
         }
 
         return drawingBoard;
+    }
+
+    public List<String> drawFullCard() {
+        char drawingBoard[][] = new char[5][9];
+        drawingBoard = drawVisual(drawingBoard, 4, 2, true);
+        String cardFrontUp = "";
+        for (int i = 0; i < 5; i++) {
+            cardFrontUp += new String(drawingBoard[i]) + "\n";
+        }
+        drawingBoard = drawVisual(drawingBoard, 4, 2, false);
+        String cardBackUp = "";
+        for (int i = 0; i < 5; i++) {
+            cardBackUp += new String(drawingBoard[i]) + "\n";
+        }
+        return new Printer().printInitialCard(List.of(cardFrontUp, cardBackUp));
     }
 
     public String toString() {

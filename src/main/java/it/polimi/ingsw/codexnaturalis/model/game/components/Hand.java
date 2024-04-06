@@ -109,4 +109,9 @@ public class Hand {
     public String drawSecretObjective() throws IllegalCommandException {
         return secretObjective.drawDetailedVisual(true);
     }
+
+    public List<String> drawChooseBetweenObj() throws IllegalCommandException {
+        return new ArrayList<>(List.of(chooseBetweenObj.get(0).drawDetailedVisual(true),
+                chooseBetweenObj.get(1).drawDetailedVisual(true)));
+    }
 }

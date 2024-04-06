@@ -62,7 +62,7 @@ public class ResourceCard extends Card {
         else
             topCornersLine = "│" + corners.get(0).charAt(0) + "│";
 
-        if (points > 0) {
+        if (points > 0 && side) {
             topCornersLine += " " + Integer.toString(points).charAt(0) + " ";
         } else {
             topCornersLine += "   ";

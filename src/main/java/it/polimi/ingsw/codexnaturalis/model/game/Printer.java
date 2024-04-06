@@ -362,4 +362,64 @@ public class Printer {
         }
         return deckStringList;
     }
+
+    public List<String> printInitialCard(List<String> card) {
+        List<String> fullCard = new ArrayList<>();
+        String cardFace = "";
+        for (String face : card) {
+            for (String line : face.split("\n")) {
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) == 0)
+                        cardFace += " ";
+                    else
+                        switch (line.charAt(i)) {
+                            case 'A':
+                                cardFace += ANSI_BLUE + line.charAt(i) + ANSI_RESET;
+                                break;
+                            case 'V':
+                                cardFace += ANSI_GREEN + line.charAt(i) + ANSI_RESET;
+                                break;
+                            case 'I', 'І':
+                                if (Character.isDigit(line.charAt(i + 1))) {
+                                    cardFace += ANSI_BG_YELLOW + line.charAt(i);
+                                    cardFace += line.charAt(i + 1);
+                                    cardFace += line.charAt(i + 2) + ANSI_RESET;
+                                    i += 2;
+                                } else if (line.charAt(i) == 'I')
+                                    cardFace += ANSI_PURPLE + line.charAt(i) + ANSI_RESET;
+                                else {
+                                    cardFace += line.charAt(i);
+                                }
+                                break;
+                            case 'S':
+                                cardFace += ANSI_RED + line.charAt(i) + ANSI_RESET;
+                                break;
+                            case 's':
+                                cardFace += ANSI_YELLOW + Character.toUpperCase(line.charAt(i)) + ANSI_RESET;
+                                break;
+                            case 'i':
+                                cardFace += ANSI_YELLOW + Character.toUpperCase(line.charAt(i)) + ANSI_RESET;
+                                break;
+                            case 'f':
+                                cardFace += ANSI_YELLOW + Character.toUpperCase(line.charAt(i)) + ANSI_RESET;
+                                break;
+                            case 'N':
+                                cardFace += ANSI_BG_BRIGHT_RED + 'X' + ANSI_RESET;
+                                break;
+                            case 'E':
+                                cardFace += ANSI_DARK_GRAY + '░' + ANSI_RESET;
+                                break;
+                            default:
+                                cardFace += line.charAt(i);
+                                break;
+                        }
+                }
+                cardFace += "\n";
+            }
+            cardFace = cardFace.substring(0, cardFace.length() - 1);
+            fullCard.add(cardFace);
+            cardFace = "";
+        }
+        return fullCard;
+    }
 }
