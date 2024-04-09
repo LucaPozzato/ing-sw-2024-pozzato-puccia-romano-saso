@@ -156,6 +156,128 @@ public class StructureTest {
 
     @Test
     void testGetVisibleObjects() {
+
+        Structure structure = new Structure();
+        Structure secondStructure = new Structure();
+
+        InitialCard initialCardTest = new InitialParser().parse().get(0);
+        ResourceCard firstResCardTest = new ResourceParser().parse().get(0);
+        ResourceCard secondResCardTest = new ResourceParser().parse().get(1);
+        GoldCard firstGoldCardTest = new GoldParser().parse().get(1);
+        ResourceCard thirdResCardTest = new ResourceParser().parse().get(2);
+        ResourceCard forthResCardTest = new ResourceParser().parse().get(5);
+
+
+        String compareWith;
+
+        // test inital card (front)
+
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        compareWith = "FEATHER: 0\nINK: 0\nSCROLL: 0";
+        assertEquals(compareWith, structure.getVisibleObjects());
+
+        // test inital card (back)
+
+        try {
+            secondStructure.placeCard(null, initialCardTest, null, false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        compareWith = "FEATHER: 0\nINK: 0\nSCROLL: 0";
+        assertEquals(compareWith, secondStructure.getVisibleObjects());
+
+        // place the first resourcecard on structure (front), then the second (front) and test
+
+        try {
+            structure.placeCard(initialCardTest, firstResCardTest, "BL", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            structure.placeCard(firstResCardTest, secondResCardTest, "BL", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        compareWith = "FEATHER: 0\nINK: 0\nSCROLL: 0";
+        assertEquals(compareWith, structure.getVisibleObjects());
+
+        // place the first resourcecard on secondStructure(back), then the second (back) and test
+
+        try {
+            secondStructure.placeCard(initialCardTest, firstResCardTest, "BL", false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            secondStructure.placeCard(firstResCardTest, secondResCardTest, "BL", false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        compareWith = "FEATHER: 0\nINK: 0\nSCROLL: 0";
+        assertEquals(compareWith, secondStructure.getVisibleObjects());
+
+        // place the first goldcard on Structure(front) and test
+
+        try {
+            structure.placeCard(initialCardTest, firstGoldCardTest, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        compareWith = "FEATHER: 0\nINK: 1\nSCROLL: 0";
+        assertEquals(compareWith, structure.getVisibleObjects());
+
+        //more objects available
+        try {
+            structure.placeCard(firstGoldCardTest, forthResCardTest, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        compareWith = "FEATHER: 0\nINK: 2\nSCROLL: 0";
+        assertEquals(compareWith, structure.getVisibleObjects());
+
+        //coverage case
+        try {
+            structure.placeCard(firstGoldCardTest, thirdResCardTest, "TR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        compareWith = "FEATHER: 0\nINK: 1\nSCROLL: 0";
+        assertEquals(compareWith, structure.getVisibleObjects());
+
+        // place the first goldcard on Structure(back) and test
+        try {
+            secondStructure.placeCard(secondResCardTest, firstGoldCardTest, "BR", false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        compareWith = "FEATHER: 0\nINK: 0\nSCROLL: 0";
+        assertEquals(compareWith, secondStructure.getVisibleObjects());
+
+        // [X] Initial card front when no object available
+        // [X] Initial card back when no object available
+        // [X] Various resource cards front when no object available
+        // [X] Various resource cards back when no object available
+        // [X] Various resource cards front + goldcard front when ONE object available
+        // [X] Various resource cards front + goldcard front when TWO objects available
+        // [X] Various resource cards front + goldcard front when ONE object available is covered by a non-object card
+        // [X] Various resource cards back + goldcard back when no object available
+
+
     }
 
     @Test
@@ -167,97 +289,94 @@ public class StructureTest {
         InitialCard initialCardTest = new InitialParser().parse().get(0);
         ResourceCard firstResCardTest = new ResourceParser().parse().get(0);
         ResourceCard secondResCardTest = new ResourceParser().parse().get(1);
-        GoldCard firstGoldCardTest = new GoldParser().parse().get(0);
+        GoldCard firstGoldCardTest = new GoldParser().parse().get(1);
 
-        ////////////////////////////// test inital card (front)
+        String compareWith;
+
+        // test inital card (front)
 
         try {
             structure.placeCard(null, initialCardTest, null, true);
         } catch (Exception e) {
-            System.err.println("first catch");
+            System.err.println("catch 1");
         }
 
-        String firstCompareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 2\nSHROOM: 0";
-        assertEquals(firstCompareWith, structure.getVisibleResources());
+        compareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 2\nSHROOM: 0";
+        assertEquals(compareWith, structure.getVisibleResources());
 
-        ///////////////////////////// test inital card (back)
+        // test inital card (back)
 
         try {
             secondStructure.placeCard(null, initialCardTest, null, false);
         } catch (Exception e) {
-            System.err.println("second catch");
+            System.err.println("catch 2");
         }
 
-        String thenCompareWith = "VEGETABLE: 1\nANIMAL: 1\nINSECT: 1\nSHROOM: 1";
-        assertEquals(thenCompareWith, secondStructure.getVisibleResources());
+        compareWith = "VEGETABLE: 1\nANIMAL: 1\nINSECT: 1\nSHROOM: 1";
+        assertEquals(compareWith, secondStructure.getVisibleResources());
 
-        ///////////////////////////// place the first resourcecard on structure (front),
-        ///////////////////////////// then the second (front) and test
+        // place the first resourcecard on structure (front), then the second (front) and test
 
         try {
             structure.placeCard(initialCardTest, firstResCardTest, "BL", true);
         } catch (Exception e) {
-            System.err.println("Third catch");
+            System.err.println("catch 3");
         }
 
         try {
             structure.placeCard(firstResCardTest, secondResCardTest, "BL", true);
         } catch (Exception e) {
-            System.err.println("Forth catch");
+            System.err.println("catch 4");
         }
 
-        String secondCompareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 1\nSHROOM: 3";
-        assertEquals(secondCompareWith, structure.getVisibleResources());
+        compareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 1\nSHROOM: 3";
+        assertEquals(compareWith, structure.getVisibleResources());
 
-        ///////////////////////////// place the first resourcecard on
-        ///////////////////////////// secondStructure(back), then the second (back) and
-        ///////////////////////////// test
-
-        ResourceCard backFirstCardTest = new ResourceParser().parse().get(0);
-        try {
-            secondStructure.placeCard(initialCardTest, backFirstCardTest, "BL", false);
-        } catch (Exception e) {
-            System.err.println("2");
-        }
-
-        ResourceCard backSecondCardTest = new ResourceParser().parse().get(1);
-        try {
-            structure.placeCard(firstCardTest, backSecondCardTest, "BL", false);
-        } catch (Exception e) {
-            System.err.println("3");
-        }
-
-        secondCompareWith = "VEGETABLE: 1\nANIMAL: 1\nINSECT: 3\nSHROOM: 1";
-        assertEquals(secondCompareWith, structure.getVisibleResources());
-
-        ///////////////////////////// place the first goldcard on
-        ///////////////////////////// Structure(front) and test
-
-        GoldCard firstGoldTest = new GoldParser().parse().get(0);
+        // place the first resourcecard on secondStructure(back), then the second (back) and test
 
         try {
-            structure.placeCard(secondCard, firstCardTest, "BL", true);
+            secondStructure.placeCard(initialCardTest, firstResCardTest, "BL", false);
         } catch (Exception e) {
-            System.err.println("2");
+            System.err.println("catch 5");
         }
 
-        ResourceCard secondCardTest = new ResourceParser().parse().get(1);
         try {
-            structure.placeCard(firstCardTest, secondCardTest, "BL", true);
+            secondStructure.placeCard(firstResCardTest, secondResCardTest, "BL", false);
         } catch (Exception e) {
-            System.err.println("3");
+            System.err.println("catch 6");
         }
 
-        String secondCompareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 1\nSHROOM: 3";
-        assertEquals(secondCompareWith, structure.getVisibleResources());
+        compareWith = "VEGETABLE: 1\nANIMAL: 1\nINSECT: 0\nSHROOM: 3";
+        assertEquals(compareWith, secondStructure.getVisibleResources());
+
+        // place the first goldcard on Structure(front) and test
+
+        try {
+            structure.placeCard(secondResCardTest, firstGoldCardTest, "BR", true);
+        } catch (Exception e) {
+            System.err.println("catch 7");
+        }
+
+
+        compareWith = "VEGETABLE: 1\nANIMAL: 0\nINSECT: 1\nSHROOM: 3";
+        assertEquals(compareWith, structure.getVisibleResources());
+
+        // place the first goldcard on Structure(back) and test
+        try {
+            secondStructure.placeCard(secondResCardTest, firstGoldCardTest, "BR", false);
+        } catch (Exception e) {
+            System.err.println("catch 8");
+        }
+        compareWith = "VEGETABLE: 1\nANIMAL: 1\nINSECT: 0\nSHROOM: 4";
+        assertEquals(compareWith, secondStructure.getVisibleResources());
+
+        // [X] Initial card front
+        // [X] Initial card back
+        // [X] Various resource cards front
+        // [X] Various resource cards back
+        // [X] Various resource cards front + goldcard front
+        // [X] Various resource cards back + goldcard back
     }
-
-    // [X] Initial card front
-    // [X] Initial card back
-    // [X] Various resource cards front
-    // [X] Various resource cards back
-    // [] Various resource cards front + goldcard front
-    // [] Various resource cards back + goldcard back
 
     @Test
     void testPlaceCard() {

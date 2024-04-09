@@ -167,25 +167,25 @@ public class Structure {
         if (coordinateToCard.containsKey(coordinate - 99)) {
             if (coordinateToCard.get(coordinate - 99).getSide()) {
                 if (coordinateToCard.get(coordinate - 99).getFirst().getFrontCorners().get(3).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner");
+                    throw new IllegalCommandException("Card cannot be placed on null corner e");
             } else if (coordinateToCard.get(coordinate - 99).getFirst().getBackCorners().get(3).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner");
+                throw new IllegalCommandException("Card cannot be placed on null corner f");
         }
         // Checks if top right card exists and does not have null in BL corner
         if (coordinateToCard.containsKey(coordinate + 101)) {
             if (coordinateToCard.get(coordinate + 101).getSide()) {
                 if (coordinateToCard.get(coordinate + 101).getFirst().getFrontCorners().get(2).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner");
+                    throw new IllegalCommandException("Card cannot be placed on null corner aa");
             } else if (coordinateToCard.get(coordinate + 101).getFirst().getBackCorners().get(2).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner");
+                throw new IllegalCommandException("Card cannot be placed on null corner bb");
         }
         // Checks if bottom left card exists and does not have null in TR corner
         if (coordinateToCard.containsKey(coordinate - 101)) {
             if (coordinateToCard.get(coordinate - 101).getSide()) {
                 if (coordinateToCard.get(coordinate - 101).getFirst().getFrontCorners().get(1).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner");
+                    throw new IllegalCommandException("Card cannot be placed on null corner cc");
             } else if (coordinateToCard.get(coordinate - 101).getFirst().getBackCorners().get(1).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner");
+                throw new IllegalCommandException("Card cannot be placed on null corner dd");
         }
         // Checks if bottom right card exists and does not have null in TL corner
         if (coordinateToCard.containsKey(coordinate + 99)) {
