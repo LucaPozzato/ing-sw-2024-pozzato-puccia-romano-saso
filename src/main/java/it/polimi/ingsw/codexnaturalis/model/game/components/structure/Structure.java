@@ -568,6 +568,7 @@ public class Structure {
     }
 
     public int getPointsFromCard(Card placed) throws IllegalCommandException {
+        // BUG: points should be calculated only if side is true
         if (placed.getPoints() > 0) {
             if (placed instanceof ResourceCard) {
                 return 1;

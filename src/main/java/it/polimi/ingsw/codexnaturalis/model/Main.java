@@ -124,6 +124,7 @@ public class Main {
                 try {
                     if (command.get(i % command.size()).equals("place")) {
                         placeDecision = cli.print(command.get(i % command.size()));
+                        // BUG: drawnCard is same as before if not chosen from hand
                         for (Card card : hand.getCardsHand()) {
                             if (card.getIdCard().equals(placeDecision.get(0)))
                                 drawnCard = card;
@@ -169,6 +170,7 @@ public class Main {
 
                     if (command.get(i % command.size()).equals("place")) {
                         hand.removeCard(drawnCard);
+                        board.updateActualScore(luca, structure.getPointsFromCard(drawnCard));
                     } else if (command.get(i % command.size()).equals("draw")) {
                         hand.addCard(drawnCard);
                     }
@@ -180,13 +182,13 @@ public class Main {
                     cli.updateScoreBoard(board.getActualScores());
                     cli.updateResources(structure.getVisibleObjects().toString() + "\n"
                             + structure.getVisibleResources().toString());
-                    for (String scores : board.getVirtualScores().split(" | ")) {
+                    for (String scores : board.getVirtualScores().split(" \\| ")) {
                         if (scores.contains("Luca"))
                             cli.updateVirtualPoints(scores);
                     }
                 } catch (Exception e) {
                     cli.updateError("Error: " + e.getMessage());
-                    cli.print("Press enter to continue");
+                    cli.print("Error");
                 }
             }
         }

@@ -24,6 +24,7 @@ public class Cli {
     int midWidth = 0;
     int minX = 0;
     int maxX = 0;
+    int delta = 0;
     BufferedReader stdin;
 
     public Cli(BufferedReader stdin) {
@@ -87,30 +88,32 @@ public class Cli {
 
     public List<String> printInitial(List<String> initialCard, List<String> chooseObjectives)
             throws IllegalArgumentException {
+        // TODO: add error box for initial phase
+
         if (initialCard == null || chooseObjectives == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
         // TODO: throw all other exceptions for bad parameters
 
-        // clear console
-        System.out.println("\033c");
-
         // set console size
         System.out.print("\u001B[8;" + height + ";" + width + "t");
+
+        // clear console
+        System.out.println("\033c");
 
         midHeight = height / 2;
         midWidth = width / 2;
 
-        printInitialCard(midHeight - initialCard.get(0).split("\n").length - 4,
+        printInitialCard(midHeight - initialCard.get(0).split("\n").length - 6,
                 midWidth - initialCard.get(0).split("\n")[0].length(), initialCard);
 
-        printChooseObjectives(midHeight,
+        printChooseObjectives(midHeight - 2,
                 midWidth - chooseObjectives.get(0).split("\n")[0].length(), chooseObjectives);
 
         minX = midWidth - chooseObjectives.get(0).split("\n")[0].length() - 4;
         maxX = midWidth + chooseObjectives.get(0).split("\n")[0].length() + 6;
 
-        printBox(minX, midHeight + chooseObjectives.get(0).split("\n").length + 4, maxX - minX, 3, "Input");
+        printBox(minX, midHeight + chooseObjectives.get(0).split("\n").length + 2, maxX - minX, 3, "Input");
 
         List<String> messages = new ArrayList<>(
                 List.of("Side of initial car <F, B>: ", "Objective chosen <1, 2>: "));
@@ -118,7 +121,7 @@ public class Cli {
 
         for (String message : messages) {
             // moves cursor to the left of input box
-            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 5) + ";"
+            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";"
                     + (minX + 1) + "H\u001B[38;5;242m" + message + "\u001B[0m");
 
             // read input from user
@@ -135,7 +138,7 @@ public class Cli {
             }
 
             // clear input box
-            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 5) + ";"
+            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";"
                     + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
         }
         return outputString;
@@ -153,17 +156,24 @@ public class Cli {
                     List.of("ID of card to place: ", "ID of card to cover: ", "Position <TL, TR, BL, BR>: ",
                             "Front side up <TRUE, FALSE>: "));
             error = "";
+        } else if (command.equals("Error")) {
+            messages = new ArrayList<>(List.of("<Press enter to continue>: "));
+        } else {
+            error = "Command not recognized";
         }
-
-        // clear console
-        System.out.println("\033c");
 
         // set console size
         System.out.print("\u001B[8;" + height + ";" + width + "t");
 
-        // TODO: fix true center of game field
+        // clear console
+        System.out.println("\033c");
+
         midHeight = height / 2 - 3;
-        midWidth = width / 2;
+        delta = (maxX + minX) / 2 - width / 2;
+        if (delta > 0)
+            midWidth = (maxX + minX) / 2 - delta;
+        else
+            midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
         printStructure(midHeight - structure.split("\n").length / 2, midWidth - structure.split("\n")[0].length() / 2);
 
@@ -216,9 +226,14 @@ public class Cli {
 
             for (String message : messages) {
                 // writes message in input box and moves the cursor after the message
-                System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
-                        + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
-                        + "\u001B[0m");
+                if (command.equals("Error"))
+                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
+                            + ";" + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
+                            + message + "\u001B[0m");
+                else
+                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
+                            + ";" + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m"
+                            + message + "\u001B[0m");
 
                 // read input from user
                 try {
@@ -241,15 +256,20 @@ public class Cli {
             printError(midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
                     (maxX + minX - error.length()) / 2 - 1);
             printBox(minX, midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
-                    maxX - minX,
-                    3,
-                    "Input");
+                    maxX - minX, 3, "Input");
 
             for (String message : messages) {
                 // writes message in input box and moves the cursor after the message
-                System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
-                        + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
-                        + "\u001B[0m");
+                if (command.equals("Error"))
+                    System.out.print("\u001B["
+                            + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                            + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
+                            + message + "\u001B[0m");
+                else
+                    System.out.print("\u001B["
+                            + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                            + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
+                            + "\u001B[0m");
 
                 // read input from user
                 try {
@@ -265,7 +285,8 @@ public class Cli {
                 }
 
                 // clear input box
-                System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
+                System.out.print("\u001B["
+                        + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
                         + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
             }
         }
@@ -354,13 +375,14 @@ public class Cli {
     }
 
     private void printError(int y, int x) {
-        printBox(x, y, error.length() + 2, 3, "Error");
+        if (error.equals("")) {
+            x -= 4;
+            printBox(x, y, 9, 3, "Error");
+        } else
+            printBox(x, y, error.length() + 2, 3, "Error");
         x++;
         y++;
-        for (int i = 0; i < error.split("\n").length; i++) {
-            System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;124m" + error + "\u001B[0m");
-            y++;
-        }
+        System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;124m" + error + "\u001B[0m");
     }
 
     private void printScoreBoard(int y, int x) {
