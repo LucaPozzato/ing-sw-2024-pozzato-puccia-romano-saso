@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Cli {
     // Cursor starts from 1, 1 -> /u001B[y;xH
-    // TODO: draw scoreboard with players and points
     String structure;
     List<String> hand;
     List<String> board;

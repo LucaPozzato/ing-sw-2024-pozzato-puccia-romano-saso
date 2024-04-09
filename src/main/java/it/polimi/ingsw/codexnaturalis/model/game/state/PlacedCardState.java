@@ -45,7 +45,7 @@ public class PlacedCardState extends State {
         // with bonus points (these are actual points,
         // immediately assigned to the player who placed the card and which determines a
         // movement of his pawn on the board)
-        int fromBonusPoint = structure.getPointsFromCard(placeThis);
+        int fromBonusPoint = structure.getPointsFromCard(placeThis, frontUp);
         updateActualPoints(fromBonusPoint);
         updateVirtualPoints(fromPatternPoints + fromBonusPoint);
         super.game.setState(new DrawnCardState(super.game));
@@ -78,9 +78,6 @@ public class PlacedCardState extends State {
         }
     }
 
-    // FIXME: shouldn't this method be in the structure class?
-    // don't you think you could just check inside the structure method when
-    // calling countPattern?
     private List<Card> gatherPatterns() {
         // Declare a list that collects the secret objective associated with the
         // interested player and the common objectives
@@ -112,15 +109,11 @@ public class PlacedCardState extends State {
         return totPatterns;
     }
 
-    // FIXME: shouldn't this method be in the structure class?
-    // definitely not needed, checking a pattern take so little that checking 0 or 3
-    // is not gonna make a difference
-
     // Return the sublist of gatherPatterns that suits the placed card
     // The goal is to minimize the set of patterns I'm going to check for in
     // Structure
     private List<Card> getSuitablePatt(Card placeThis, List<Card> patternList) throws IllegalCommandException {
-        // BUG: in the chair pattern there are two types of cards, here you remove a
+        // [x]: in the chair pattern there are two types of cards, here you remove a
         // whole pattern if it doesn't have the right color of a single type, there
         // could be a card with the right color of the other type and the pattern is not
         // gonna be checked
@@ -128,28 +121,28 @@ public class PlacedCardState extends State {
         switch (placeThis.getSymbol()) {
             case "SHROOM":
                 for (Card card : patternList) {
-                    if (!card.getMustHave().equals("RED")) {
+                    if (!card.getMustHave().equals("RED") || !card.getMustHave().equals("BLUE")) {
                         patternList.remove(card);
                     }
                 }
                 return patternList;
             case "VEGETABLE":
                 for (Card card : patternList) {
-                    if (!card.getMustHave().equals("GREEN")) {
+                    if (!card.getMustHave().equals("GREEN") || !card.getMustHave().equals("RED")) {
                         patternList.remove(card);
                     }
                 }
                 return patternList;
             case "ANIMAL":
                 for (Card card : patternList) {
-                    if (!card.getMustHave().equals("BLUE")) {
+                    if (!card.getMustHave().equals("BLUE") || !card.getMustHave().equals("PURPLE")) {
                         patternList.remove(card);
                     }
                 }
                 return patternList;
             case "INSECT":
                 for (Card card : patternList) {
-                    if (!card.getMustHave().equals("PURPLE")) {
+                    if (!card.getMustHave().equals("PURPLE") || !card.getMustHave().equals("GREEN")) {
                         patternList.remove(card);
                     }
                 }

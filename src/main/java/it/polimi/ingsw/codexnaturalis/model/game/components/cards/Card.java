@@ -6,8 +6,6 @@ import java.util.Map;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
 public abstract class Card {
-    // TODO: UML change to string -> id is a string
-    // UML -> add isIstance
     protected String idCard;
 
     public Card(String idCard) {

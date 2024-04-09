@@ -170,7 +170,7 @@ public class Main {
 
                     if (command.get(i % command.size()).equals("place")) {
                         hand.removeCard(drawnCard);
-                        board.updateActualScore(luca, structure.getPointsFromCard(drawnCard));
+                        board.updateActualScore(luca, structure.getPointsFromCard(drawnCard, upFront));
                     } else if (command.get(i % command.size()).equals("draw")) {
                         hand.addCard(drawnCard);
                     }
