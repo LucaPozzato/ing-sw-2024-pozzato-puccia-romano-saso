@@ -45,7 +45,7 @@ public class PlacedCardState extends State {
         // with bonus points (these are actual points,
         // immediately assigned to the player who placed the card and which determines a
         // movement of his pawn on the board)
-        int fromBonusPoint = structure.getPointsFromCard(placeThis, frontUp);
+        int fromBonusPoint = structure.getPointsFromPlayableCard(placeThis, frontUp);
         updateActualPoints(fromBonusPoint);
         updateVirtualPoints(fromPatternPoints + fromBonusPoint);
         super.game.setState(new DrawnCardState(super.game));
@@ -63,7 +63,7 @@ public class PlacedCardState extends State {
         throw new IllegalCommandException("Match has not ended");
     }
 
-    private void removeFromHand(Card placeThis) {
+    private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
         // iterate over list of cards in the hand of the player to find the card with
@@ -153,11 +153,11 @@ public class PlacedCardState extends State {
         }
     }
 
-    private void updateActualPoints(int points) {
+    private void updateActualPoints(int points) throws IllegalCommandException {
         super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
     }
 
-    private void updateVirtualPoints(int points) {
+    private void updateVirtualPoints(int points) throws IllegalCommandException {
         super.game.getBoard().updateVirtualScore(super.game.getCurrentPlayer(), points);
     }
 }

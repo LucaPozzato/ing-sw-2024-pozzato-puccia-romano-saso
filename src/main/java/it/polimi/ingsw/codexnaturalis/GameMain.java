@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model;
+package it.polimi.ingsw.codexnaturalis;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,9 +21,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.view.Cli;
+import it.polimi.ingsw.codexnaturalis.view.GameCli;
 
-public class Main {
+public class GameMain {
 
     // Occorre prevedere di stanziare anche le carte starter nel momento in cui
     // inialize() viene invocata e il giocatore iniziale mi ha detto quanti
@@ -31,7 +31,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-        Cli cli = new Cli(stdin);
+        GameCli cli = new GameCli(stdin);
 
         ResourceParser resPars = new ResourceParser();
         Stack<ResourceCard> resourceDeck = resPars.parse();
@@ -52,6 +52,8 @@ public class Main {
         Collections.shuffle(objectiveCards);
 
         Structure structure = new Structure();
+        Structure structure2 = new Structure();
+        structure2.placeCard(null, (InitialCard) initialCards.get(1), null, true);
         Hand hand = new Hand();
         Board board = new Board();
         Player luca = new Player("Luca");
@@ -124,6 +126,14 @@ public class Main {
                 try {
                     if (command.get(i % command.size()).equals("place")) {
                         placeDecision = cli.print(command.get(i % command.size()));
+                        while (placeDecision.size() == 1) {
+                            if (placeDecision.get(0).equals("NEXT")) {
+                                cli.updateNextPlayerStructure(structure2.draw());
+                                placeDecision = cli.print("viewing: other player");
+                            } else if (placeDecision.get(0).equals("ESC")) {
+                                placeDecision = cli.print(command.get(i % command.size()));
+                            }
+                        }
                         // BUG: drawnCard is same as before if not chosen from hand
                         for (Card card : hand.getCardsHand()) {
                             if (card.getIdCard().equals(placeDecision.get(0)))
@@ -138,6 +148,15 @@ public class Main {
                         structure.placeCard(randomCard, drawnCard, position, upFront);
                     } else if (command.get(i % command.size()).equals("draw")) {
                         drawDecision = cli.print(command.get(i % command.size()));
+                        while (drawDecision.size() == 1) {
+                            if (drawDecision.get(0).equals("NEXT")) {
+                                cli.updateNextPlayerStructure(structure2.draw());
+                                drawDecision = cli.print("viewing: other player");
+                            } else if (drawDecision.get(0).equals("ESC")) {
+                                drawDecision = cli.print(command.get(i % command.size()));
+                            } else
+                                break;
+                        }
                         if (drawDecision.get(0).contains("R")) {
                             if (drawDecision.get(0).contains("XX"))
                                 drawnCard = deck.drawResourceCard();
@@ -170,7 +189,7 @@ public class Main {
 
                     if (command.get(i % command.size()).equals("place")) {
                         hand.removeCard(drawnCard);
-                        board.updateActualScore(luca, structure.getPointsFromCard(drawnCard, upFront));
+                        board.updateActualScore(luca, structure.getPointsFromPlayableCard(drawnCard, upFront));
                     } else if (command.get(i % command.size()).equals("draw")) {
                         hand.addCard(drawnCard);
                     }
@@ -187,8 +206,8 @@ public class Main {
                             cli.updateVirtualPoints(scores);
                     }
                 } catch (Exception e) {
-                    cli.updateError("Error: " + e.getMessage());
-                    cli.print("Error");
+                    cli.updateError("error: " + e.getMessage());
+                    cli.print("error");
                 }
             }
         }

@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
 public class Structure {
@@ -167,25 +168,25 @@ public class Structure {
         if (coordinateToCard.containsKey(coordinate - 99)) {
             if (coordinateToCard.get(coordinate - 99).getSide()) {
                 if (coordinateToCard.get(coordinate - 99).getFirst().getFrontCorners().get(3).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner e");
+                    throw new IllegalCommandException("Card cannot be placed on null corner");
             } else if (coordinateToCard.get(coordinate - 99).getFirst().getBackCorners().get(3).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner f");
+                throw new IllegalCommandException("Card cannot be placed on null corner");
         }
         // Checks if top right card exists and does not have null in BL corner
         if (coordinateToCard.containsKey(coordinate + 101)) {
             if (coordinateToCard.get(coordinate + 101).getSide()) {
                 if (coordinateToCard.get(coordinate + 101).getFirst().getFrontCorners().get(2).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner aa");
+                    throw new IllegalCommandException("Card cannot be placed on null corner");
             } else if (coordinateToCard.get(coordinate + 101).getFirst().getBackCorners().get(2).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner bb");
+                throw new IllegalCommandException("Card cannot be placed on null corner");
         }
         // Checks if bottom left card exists and does not have null in TR corner
         if (coordinateToCard.containsKey(coordinate - 101)) {
             if (coordinateToCard.get(coordinate - 101).getSide()) {
                 if (coordinateToCard.get(coordinate - 101).getFirst().getFrontCorners().get(1).equals("NULL"))
-                    throw new IllegalCommandException("Card cannot be placed on null corner cc");
+                    throw new IllegalCommandException("Card cannot be placed on null corner");
             } else if (coordinateToCard.get(coordinate - 101).getFirst().getBackCorners().get(1).equals("NULL"))
-                throw new IllegalCommandException("Card cannot be placed on null corner dd");
+                throw new IllegalCommandException("Card cannot be placed on null corner");
         }
         // Checks if bottom right card exists and does not have null in TL corner
         if (coordinateToCard.containsKey(coordinate + 99)) {
@@ -219,6 +220,9 @@ public class Structure {
     private Integer calcCoordinate(Card father, String position) throws IllegalArgumentException {
         if (father == null)
             return 4040;
+
+        if (!cardToCoordinate.containsKey(father))
+            throw new IllegalArgumentException("Bottom card is not placed");
 
         Integer fatherCoordinate = cardToCoordinate.get(father).getFirst();
 
@@ -573,11 +577,14 @@ public class Structure {
         }
     }
 
-    public int getPointsFromCard(Card placed, Boolean frontUp) throws IllegalCommandException {
+    public int getPointsFromPlayableCard(Card placed, Boolean frontUp) throws IllegalCommandException {
         if (frontUp == null)
             throw new IllegalArgumentException("FrontUp cannot be null");
         if (placed == null)
             throw new IllegalArgumentException("Card cannot be null");
+
+        if (placed instanceof InitialCard || placed instanceof ObjectiveCard)
+            throw new IllegalArgumentException("Passed neither gold nor resource card");
 
         if (frontUp && placed.getPoints() > 0) {
             if (placed instanceof ResourceCard) {
@@ -600,8 +607,37 @@ public class Structure {
                         coveredCorners++;
                     return coveredCorners * 2;
                 }
-            } else
-                throw new IllegalCommandException("Passed neither gold nor resource card");
+            }
+        }
+        return 0;
+    }
+
+    public Integer getPointsFromObjResCard(ObjectiveCard objective) throws IllegalCommandException {
+        if (objective.getShape() == "IDOL") {
+            switch (objective.getMustHave()) {
+                case "SHROOM":
+                    return visibleSymbols.get("SHROOM");
+                case "VEGETABLE":
+                    return visibleSymbols.get("VEGETABLE");
+                case "ANIMAL":
+                    return visibleSymbols.get("ANIMAL");
+                case "INSECT":
+                    return visibleSymbols.get("INSECT");
+            }
+        } else if (objective.getShape() == "WISEMAN") {
+            switch (objective.getMustHave()) {
+                case "SCROLL":
+                    return visibleSymbols.get("SCROLL");
+                case "INK":
+                    return visibleSymbols.get("INK");
+                case "FEATHER":
+                    return visibleSymbols.get("FEATHER");
+                case "FOLDEDHANDS":
+                    return (visibleSymbols.get("SCROLL") + visibleSymbols.get("INK") + visibleSymbols.get("FEATHER"));
+            }
+
+        } else {
+            throw new IllegalCommandException("Neither an Idol nor a Wiseman passed");
         }
         return 0;
     }

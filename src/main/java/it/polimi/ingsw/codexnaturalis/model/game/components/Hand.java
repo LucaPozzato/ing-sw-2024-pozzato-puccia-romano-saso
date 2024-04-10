@@ -15,7 +15,7 @@ public class Hand {
     private List<Pair<Card, Boolean>> cardsHand;
     private InitialCard initCard;
     private List<String> visualHand;
-    int emptyPlace = 0;
+    int emptyIndex = 0;
     Boolean full;
 
     // costruttore
@@ -59,13 +59,13 @@ public class Hand {
 
         switch (this.cardsHand.size()) {
             case 0, 1:
-                this.cardsHand.add(emptyPlace, pair);
-                this.visualHand.add(emptyPlace, card.drawDetailedVisual(true));
-                emptyPlace++;
+                this.cardsHand.add(emptyIndex, pair);
+                this.visualHand.add(emptyIndex, card.drawDetailedVisual(true));
+                emptyIndex++;
                 break;
             case 2:
-                this.cardsHand.add(emptyPlace, pair);
-                this.visualHand.add(emptyPlace, card.drawDetailedVisual(true));
+                this.cardsHand.add(emptyIndex, pair);
+                this.visualHand.add(emptyIndex, card.drawDetailedVisual(true));
                 break;
             case 3:
                 throw new IllegalCommandException("Hand is full");
@@ -74,31 +74,16 @@ public class Hand {
         }
     }
 
-    public void removeCard(Card card) {
+    public void removeCard(Card card) throws IllegalCommandException {
+        if (cardsHand.size() < 4)
+            throw new IllegalCommandException("Cannot remove more than one card");
         for (Pair<Card, Boolean> pair : cardsHand) {
             if (pair.getKey().equals(card)) {
-                emptyPlace = cardsHand.indexOf(pair);
-                this.visualHand.remove(emptyPlace);
+                emptyIndex = cardsHand.indexOf(pair);
+                this.visualHand.remove(emptyIndex);
                 this.cardsHand.remove(pair);
                 break;
             }
-        }
-    }
-
-    public void flipCard(Card card) throws IllegalCommandException {
-        int i = 0;
-        for (Pair<Card, Boolean> pair : cardsHand) {
-            if (pair.getKey().equals(card)) {
-                break;
-            }
-            i++;
-        }
-        visualHand.add(i, card.drawDetailedVisual(!cardsHand.get(i).getValue()));
-    }
-
-    public void flipAll() throws IllegalCommandException {
-        for (int i = 0; i < cardsHand.size(); i++) {
-            flipCard(cardsHand.get(i).getKey());
         }
     }
 

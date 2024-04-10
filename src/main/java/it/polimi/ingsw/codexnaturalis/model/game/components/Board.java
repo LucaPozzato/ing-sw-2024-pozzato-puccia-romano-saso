@@ -8,6 +8,8 @@ import java.util.Map;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class Board {
@@ -16,7 +18,7 @@ public class Board {
     private List<Card> commonObjectives;
     private List<Card> uncoveredCards;
     private List<String> visualBoard;
-    int emptyPlace = 0;
+    int emptyIndex = 0;
 
     public Board() {
         this.actualScores = new HashMap<>();
@@ -56,41 +58,55 @@ public class Board {
         this.commonObjectives = commonObjectives;
     }
 
-    public void updateActualScore(Player player, Integer newPoints) {
-        if (!actualScores.containsKey(player))
-            actualScores.put(player, 0);
-        else
+    public void updateActualScore(Player player, Integer newPoints) throws IllegalCommandException {
+        if (!actualScores.containsKey(player)) {
+            if (actualScores.size() < 4)
+                actualScores.put(player, 0);
+            else
+                throw new IllegalCommandException("Cannot have more than 4 players");
+        } else
             actualScores.put(player, actualScores.get(player) + newPoints);
     }
 
-    public void updateVirtualScore(Player player, Integer newPoints) {
-        if (!virtualScores.containsKey(player))
-            virtualScores.put(player, 0);
-        else
+    public void updateVirtualScore(Player player, Integer newPoints) throws IllegalCommandException {
+        if (!virtualScores.containsKey(player)) {
+            if (virtualScores.size() < 4)
+                virtualScores.put(player, 0);
+            else
+                throw new IllegalCommandException("Cannot have more than 4 players");
+        } else
             virtualScores.put(player, virtualScores.get(player) + newPoints);
     }
 
     public void addUncoveredCard(Card card) throws IllegalCommandException {
+        if (card instanceof InitialCard || card instanceof ObjectiveCard)
+            throw new IllegalCommandException("Cannot add card, wrong card type");
+
         switch (this.uncoveredCards.size()) {
             case 0, 1, 2:
-                this.uncoveredCards.add(emptyPlace, card);
-                this.visualBoard.add(emptyPlace, card.drawDetailedVisual(true));
-                emptyPlace++;
+                this.uncoveredCards.add(emptyIndex, card);
+                this.visualBoard.add(emptyIndex, card.drawDetailedVisual(true));
+                emptyIndex++;
                 break;
             case 3:
-                this.uncoveredCards.add(emptyPlace, card);
-                this.visualBoard.add(emptyPlace, card.drawDetailedVisual(true));
+                this.uncoveredCards.add(emptyIndex, card);
+                this.visualBoard.add(emptyIndex, card.drawDetailedVisual(true));
                 break;
             case 4:
-                throw new IllegalCommandException("You can't add more than 4 cards");
+                throw new IllegalCommandException("Cannot add more than 4 cards");
             default:
                 break;
         }
     }
 
-    public void removeUncoveredCard(Card card) {
-        emptyPlace = uncoveredCards.indexOf(card);
-        this.visualBoard.remove(emptyPlace);
+    public void removeUncoveredCard(Card card) throws IllegalCommandException {
+        if (uncoveredCards.size() < 4)
+            throw new IllegalCommandException("Cannot remove more than one card");
+        if (!uncoveredCards.contains(card))
+            throw new IllegalCommandException("Card is not in hand");
+
+        emptyIndex = uncoveredCards.indexOf(card);
+        this.visualBoard.remove(emptyIndex);
         this.uncoveredCards.remove(card);
     }
 

@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cli {
+public class GameCli {
     // Cursor starts from 1, 1 -> /u001B[y;xH
     String structure;
+    String nextPlayerStructure;
     List<String> hand;
     List<String> board;
     List<String> decks;
@@ -16,6 +17,7 @@ public class Cli {
     String virtualPoints;
     String error;
     String inputString;
+    String command;
     List<String> outputString;
     int width = 175;
     int height = 60;
@@ -26,7 +28,7 @@ public class Cli {
     int delta = 0;
     BufferedReader stdin;
 
-    public Cli(BufferedReader stdin) {
+    public GameCli(BufferedReader stdin) {
         this.structure = "";
         this.hand = new ArrayList<>(List.of(""));
         this.board = new ArrayList<>(List.of(""));
@@ -36,6 +38,7 @@ public class Cli {
         this.scoreBoard = "";
         this.error = "";
         this.inputString = "";
+        this.command = "";
         this.stdin = stdin;
     }
 
@@ -83,6 +86,11 @@ public class Cli {
     public void updateVirtualPoints(String virtualPoints) {
         if (virtualPoints != null)
             this.virtualPoints = virtualPoints;
+    }
+
+    public void updateNextPlayerStructure(String nextPlayerStructure) {
+        if (nextPlayerStructure != null)
+            this.nextPlayerStructure = nextPlayerStructure;
     }
 
     public List<String> printInitial(List<String> initialCard, List<String> chooseObjectives)
@@ -146,6 +154,7 @@ public class Cli {
     public List<String> print(String command) {
         List<String> messages = new ArrayList<>(List.of(""));
         outputString = new ArrayList<>();
+        this.command = command;
 
         if (command.equals("draw")) {
             messages = new ArrayList<>(List.of("ID of card: "));
@@ -155,8 +164,11 @@ public class Cli {
                     List.of("ID of card to place: ", "ID of card to cover: ", "Position <TL, TR, BL, BR>: ",
                             "Front side up <TRUE, FALSE>: "));
             error = "";
-        } else if (command.equals("Error")) {
+        } else if (command.equals("error")) {
             messages = new ArrayList<>(List.of("<Press enter to continue>: "));
+        } else if (command.contains("viewing")) {
+            messages = new ArrayList<>(
+                    List.of(" <Type ESC or NEXT>: "));
         } else {
             error = "Command not recognized";
         }
@@ -174,12 +186,19 @@ public class Cli {
         else
             midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
-        printStructure(midHeight - structure.split("\n").length / 2, midWidth - structure.split("\n")[0].length() / 2);
+        String tmpStructure = "";
+        if (command.contains("viewing"))
+            tmpStructure = this.nextPlayerStructure;
+        else
+            tmpStructure = this.structure;
 
-        printHand(midHeight + structure.split("\n").length / 2 + 3,
+        printStructure(midHeight - tmpStructure.split("\n").length / 2,
+                midWidth - tmpStructure.split("\n")[0].length() / 2, tmpStructure);
+
+        printHand(midHeight + tmpStructure.split("\n").length / 2 + 3,
                 midWidth - hand.get(0).split("\n")[0].length() * hand.size() / 2);
 
-        if (hand.get(0).split("\n")[0].length() * hand.size() > structure.split("\n")[0].length()) {
+        if (hand.get(0).split("\n")[0].length() * hand.size() > tmpStructure.split("\n")[0].length()) {
             printBoard(midHeight - board.get(0).split("\n").length * board.size() / 2,
                     midWidth + hand.get(0).split("\n")[0].length() * hand.size() / 2 + 5);
             printDeck(midHeight - board.get(0).split("\n").length * board.size() / 2,
@@ -187,26 +206,26 @@ public class Cli {
                             + board.get(0).split("\n")[0].length() + 3);
         } else {
             printBoard(midHeight - board.get(0).split("\n").length * board.size() / 2,
-                    midWidth + structure.split("\n")[0].length() / 2 + 5);
+                    midWidth + tmpStructure.split("\n")[0].length() / 2 + 5);
             printDeck(midHeight - board.get(0).split("\n").length * board.size() / 2,
-                    midWidth + structure.split("\n")[0].length() / 2 + 5
+                    midWidth + tmpStructure.split("\n")[0].length() / 2 + 5
                             + board.get(0).split("\n")[0].length() + 3);
         }
-        if (structure.split("\n").length < resources.split("\n").length)
-            printResources(midHeight + structure.split("\n").length / 2 - resources.split("\n").length + 1,
-                    midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
+        if (tmpStructure.split("\n").length < resources.split("\n").length)
+            printResources(midHeight + tmpStructure.split("\n").length / 2 - resources.split("\n").length + 1,
+                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
         else
             printResources(midHeight - resources.split("\n").length / 2,
-                    midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
+                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
 
         printObjectives(midHeight - objectives.get(0).split("\n").length * objectives.size() / 2,
-                midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length() - 4
+                midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length() - 4
                         - objectives.get(0).split("\n")[0].length());
 
-        if (board.get(0).split("\n").length * board.size() < structure.split("\n").length) {
-            printVirtualPoints(midHeight - structure.split("\n").length - 4,
+        if (board.get(0).split("\n").length * board.size() < tmpStructure.split("\n").length) {
+            printVirtualPoints(midHeight - tmpStructure.split("\n").length - 4,
                     (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2);
-            printScoreBoard(midHeight - structure.split("\n").length - 4,
+            printScoreBoard(midHeight - tmpStructure.split("\n").length - 4,
                     (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2 + virtualPoints.length()
                             + 3);
         } else {
@@ -217,7 +236,7 @@ public class Cli {
                             + 3);
         }
 
-        if (board.get(0).split("\n").length * board.size() / 2 > structure.split("\n").length / 2 + 2
+        if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
                 + hand.get(0).split("\n").length) {
             printError(midHeight + board.get(0).split("\n").length * board.size() / 2 + 6,
                     (maxX + minX - error.length()) / 2 - 1);
@@ -225,9 +244,13 @@ public class Cli {
 
             for (String message : messages) {
                 // writes message in input box and moves the cursor after the message
-                if (command.equals("Error"))
+                if (command.equals("error"))
                     System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
                             + ";" + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
+                            + message + "\u001B[0m");
+                else if (command.contains("viewing"))
+                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
+                            + ";" + (minX + 1) + "H" + "\u001B[48;5;94m" + command + "\u001B[0m -> \u001B[38;5;242m"
                             + message + "\u001B[0m");
                 else
                     System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
@@ -241,6 +264,11 @@ public class Cli {
                         inputString += Character.toString(c);
                         c = (char) stdin.read();
                     }
+                    if (inputString.equals("NEXT") || inputString.equals("ESC")) {
+                        outputString = new ArrayList<>(List.of(inputString));
+                        inputString = "";
+                        break;
+                    }
                     outputString.add(inputString);
                     inputString = "";
                 } catch (Exception e) {
@@ -252,21 +280,29 @@ public class Cli {
                         + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
             }
         } else {
-            printError(midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
+            printError(midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
                     (maxX + minX - error.length()) / 2 - 1);
-            printBox(minX, midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
+            printBox(minX, midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
                     maxX - minX, 3, "Input");
 
             for (String message : messages) {
                 // writes message in input box and moves the cursor after the message
-                if (command.equals("Error"))
+                if (command.equals("error"))
                     System.out.print("\u001B["
-                            + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
+                            + ";"
                             + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
                             + message + "\u001B[0m");
+                else if (command.contains("viewing"))
+                    System.out.print("\u001B["
+                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
+                            + ";"
+                            + (minX + 1) + "H" + "\u001B[48;5;94m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
+                            + "\u001B[0m");
                 else
                     System.out.print("\u001B["
-                            + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
+                            + ";"
                             + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
                             + "\u001B[0m");
 
@@ -276,6 +312,12 @@ public class Cli {
                     while (c != '\n') {
                         inputString += Character.toString(c);
                         c = (char) stdin.read();
+
+                    }
+                    if (inputString.equals("NEXT") || inputString.equals("ESC")) {
+                        outputString = new ArrayList<>(List.of(inputString));
+                        inputString = "";
+                        break;
                     }
                     outputString.add(inputString);
                     inputString = "";
@@ -285,19 +327,19 @@ public class Cli {
 
                 // clear input box
                 System.out.print("\u001B["
-                        + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                        + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
                         + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
             }
         }
         return outputString;
     }
 
-    private void printStructure(int y, int x) {
-        printBox(x, y, structure.split("\n")[0].length() + 2, structure.split("\n").length + 2, "Structure");
+    private void printStructure(int y, int x, String tmpStructure) {
+        printBox(x, y, tmpStructure.split("\n")[0].length() + 2, tmpStructure.split("\n").length + 2, "Structure");
         x++;
         y++;
-        for (int i = 0; i < structure.split("\n").length; i++) {
-            System.out.print("\u001B[" + y + ";" + x + "H" + structure.split("\n")[i]);
+        for (int i = 0; i < tmpStructure.split("\n").length; i++) {
+            System.out.print("\u001B[" + y + ";" + x + "H" + tmpStructure.split("\n")[i]);
             y++;
         }
     }
@@ -445,7 +487,11 @@ public class Cli {
 
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
         // function that prints a box with a title in the center
-        System.out.print("\u001B[38;5;242m"); // set color to gray
+        if (this.command.contains("viewing") && title.equals("Structure"))
+            System.out.print("\u001B[33m"); // set color to blue
+        else
+            System.out.print("\u001B[38;5;242m"); // set color to gray
+
         for (int i = 0; i < boxHeight; i++) {
             for (int j = 0; j < boxWidth; j++) {
                 if (i == 0 && j == 0)
