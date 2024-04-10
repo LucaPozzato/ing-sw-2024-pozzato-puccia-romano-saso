@@ -1,14 +1,10 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
@@ -20,6 +16,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StructureTest {
     @Test
@@ -259,6 +257,72 @@ public class StructureTest {
         try {
             structure.placeCard(GreenTest1, GreenTest2, "BR", true);
             structure.placeCard(GreenTest2, GreenTest3, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        result = 0;
+        try {
+            result = structure.getPointsFromPatterns(patternList, GreenTest3) + structure.getPointsFromPatterns(patternList, RedTest2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(0, result);
+
+        //////////////////////////////////
+
+        ResourceCard GreenTest4 = parser.parse().get(12); // R13
+
+        try {
+            structure.placeCard(GreenTest3, GreenTest4, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        result = 0;
+        try {
+            result = structure.getPointsFromPatterns(patternList, RedTest2) + structure.getPointsFromPatterns(patternList, GreenTest3);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        assertEquals(2, result);
+
+        //////////////////////////////////
+
+        Structure structure_II = new Structure();
+        ResourceParser parser_II = new ResourceParser();
+        InitialParser InitialParser_II = new InitialParser();
+        ObjectiveParser objPars_II = new ObjectiveParser();
+
+        InitialCard initialCardTest_II = InitialParser_II.parse().get(0);
+        ResourceCard RedTest1_II = parser_II.parse().get(0); // R01
+        ResourceCard RedTest2_II = parser_II.parse().get(1); // R02
+        ResourceCard BluTest1_II = parser_II.parse().get(22); // R23
+        ResourceCard BluTest2_II = parser_II.parse().get(26); // R27
+        ResourceCard BluTest3_II = parser_II.parse().get(21); // R22
+        ResourceCard GreenTest1_II = parser_II.parse().get(18); // R19
+        ResourceCard GreenTest2_II = parser_II.parse().get(16); // R17
+        ResourceCard GreenTest3_II = parser_II.parse().get(15); // R16
+        ResourceCard GreenTest4_II = parser_II.parse().get(12); // R13
+        ResourceCard PurpleTest1_II = parser_II.parse().get(32); // R33
+
+        List<Card> patternList_II = new ArrayList<Card>();
+        patternList_II.add(objPars_II.parse().get(1));
+        patternList_II.add(objPars_II.parse().get(4));
+
+        try {
+            structure_II.placeCard(null, initialCardTest_II, null, true);
+            structure_II.placeCard(initialCardTest_II, RedTest1_II, "BL", true);
+            structure_II.placeCard(initialCardTest_II, BluTest1_II, "BR", true);
+            structure_II.placeCard(BluTest1_II, BluTest2_II, "BR", true);
+            structure_II.placeCard(BluTest2_II, BluTest3_II, "BL", true);
+            structure_II.placeCard(BluTest3_II, GreenTest1_II, "BL", true);
+            structure_II.placeCard(GreenTest1_II, RedTest2_II, "TL", true);
+            structure_II.placeCard(GreenTest1_II, PurpleTest1_II, "BR", true);
+            structure_II.placeCard(PurpleTest1_II, GreenTest2_II, "BR", true);
+            structure_II.placeCard(GreenTest2_II, GreenTest3_II, "BR", true);
+            structure_II.placeCard(GreenTest3_II, GreenTest4_II, "BR", true);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -266,19 +330,122 @@ public class StructureTest {
 
         result = 0;
         try {
-            result = structure.getPointsFromPatterns(patternList, GreenTest3);
+            result = structure_II.getPointsFromPatterns(patternList_II, GreenTest4_II) + structure_II.getPointsFromPatterns(patternList_II, RedTest2_II);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(2, result);
 
-        // [x] chair pattern check
-        // [] mixed chair and stair pattern
-        // [] stair pattern check
-        // [] multistair pattern
-        // [] resource requirement check
-        // [] object requirement check
-        // [] mixed pattern and resObj ch
+        assertEquals(5, result);
+
+        //////////////////////////////////
+
+        ResourceCard GreenTest5_II = parser_II.parse().get(17); // R18
+        try {
+            structure_II.placeCard(GreenTest4_II, GreenTest5_II, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        try {
+            result =  structure_II.getPointsFromPatterns(patternList, GreenTest5_II);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        assertEquals(0, result);
+
+        //////////////////////////////////
+
+        ObjectiveCard shroomIdol = objPars_II.parse().get(8);
+        ObjectiveCard vegIdol = objPars_II.parse().get(9);
+        ObjectiveCard wolfIdol = objPars_II.parse().get(10);
+        ObjectiveCard mosquitoIdol = objPars_II.parse().get(11);
+
+        int pointsmade = 0;
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(shroomIdol);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(4, pointsmade);
+
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(vegIdol);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(2, pointsmade);
+
+
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(wolfIdol);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(2,pointsmade);
+
+        try {
+            pointsmade  = structure_II.getPointsFromObjResCard(mosquitoIdol);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(2, pointsmade);
+
+        //////////////////////////////////
+        ObjectiveCard foldedhandsWiseman = objPars_II.parse().get(12);
+        ObjectiveCard scrollWiseman = objPars_II.parse().get(13);
+        ObjectiveCard inkWiseman = objPars_II.parse().get(14);
+        ObjectiveCard featherWiseman = objPars_II.parse().get(15);
+
+        ResourceCard GreenTest6_II = parser_II.parse().get(14); // R15
+        ResourceCard PurpleTest2_II = parser_II.parse().get(36); // R37
+
+        try {
+            structure_II.placeCard(GreenTest5_II, GreenTest6_II, "BL", true);
+            structure_II.placeCard(GreenTest6_II, PurpleTest2_II, "BR", true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        pointsmade= 0;
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(foldedhandsWiseman);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(3, pointsmade);
+
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(scrollWiseman);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(0, pointsmade);
+
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(inkWiseman);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(0, pointsmade);
+
+        try {
+            pointsmade = structure_II.getPointsFromObjResCard(featherWiseman);
+        } catch (IllegalCommandException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(2, pointsmade);
+        
+
+        // [X] chair pattern check
+        // [X] mixed chair and stair pattern which fails due to share of a card among two patterns
+        // [X] stair pattern check
+        // [X] mixed chair and stair pattern which succeeds
+        // [X] multistair pattern
+        // [X] resource requirement check
+        // [X] object requirement check
+        // [X] foldedhandWiseman requirement check
     }
 
     @Test

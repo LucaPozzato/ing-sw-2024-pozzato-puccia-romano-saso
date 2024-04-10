@@ -34,6 +34,15 @@ public class Structure {
                         "FEATHER", 0, "EMPTY", 0, "NULL", 0));
     }
 
+    public Map<Card, Triplet<Integer, Boolean, Boolean>> getCardToCoordinate (){
+        return cardToCoordinate;
+        /*
+        TO PRINT:
+        for(Card card : structure.getCardToCoordinate().keySet()){
+            System.out.println( "id card: " + card.getIdCard() + "coordinate: " + structure.getCardToCoordinate().get(card).getFirst());
+        }*/
+    }
+
     // frontUp = true -> front of the card is visible
     // frontUp = false -> back of the card is visible
     public void placeCard(Card father, Card card, String position, Boolean frontUp) throws IllegalCommandException {
@@ -613,33 +622,40 @@ public class Structure {
     }
 
     public Integer getPointsFromObjResCard(ObjectiveCard objective) throws IllegalCommandException {
-        if (objective.getShape() == "IDOL") {
+        if (java.util.Objects.equals(objective.getShape(), "IDOL")) {
             switch (objective.getMustHave()) {
-                case "SHROOM":
-                    return visibleSymbols.get("SHROOM");
-                case "VEGETABLE":
-                    return visibleSymbols.get("VEGETABLE");
-                case "ANIMAL":
-                    return visibleSymbols.get("ANIMAL");
-                case "INSECT":
-                    return visibleSymbols.get("INSECT");
+                case "SHROOM":  //TODO: change the JSON in plural?
+                    return 2*(visibleSymbols.get("SHROOM")/3);
+                case "VEGETABLES":
+                    return 2*(visibleSymbols.get("VEGETABLE")/3);
+                case "ANIMALS":
+                    return 2*(visibleSymbols.get("ANIMAL")/3);
+                case "INSECTS":
+                    return 2*(visibleSymbols.get("INSECT")/3);
             }
-        } else if (objective.getShape() == "WISEMAN") {
+        } else if (java.util.Objects.equals(objective.getShape(), "WISEMAN")) {
             switch (objective.getMustHave()) {
                 case "SCROLL":
-                    return visibleSymbols.get("SCROLL");
+                    return 2*(visibleSymbols.get("SCROLL")/2);
                 case "INK":
-                    return visibleSymbols.get("INK");
+                    return 2*(visibleSymbols.get("INK")/2);
                 case "FEATHER":
-                    return visibleSymbols.get("FEATHER");
-                case "FOLDEDHANDS":
-                    return (visibleSymbols.get("SCROLL") + visibleSymbols.get("INK") + visibleSymbols.get("FEATHER"));
+                    return 2*(visibleSymbols.get("FEATHER")/2);
+                case "FOLDEDHANDS": //TODO: find a way
+                    return 3*(min(visibleSymbols.get("SCROLL"),visibleSymbols.get("INK"), visibleSymbols.get("FEATHER")));
             }
 
         } else {
             throw new IllegalCommandException("Neither an Idol nor a Wiseman passed");
         }
         return 0;
+    }
+
+    private int min(int x, int y, int z) throws IllegalCommandException{
+        if(x<=y && x<=z) return x;
+        else if (y<=x && y<=z) return y;
+        else if (z<=x && z<= y) return  z;
+        else throw new IllegalCommandException("Uncomparable numbers");
     }
 
     private void addCardToSkeleton(Card card) {
