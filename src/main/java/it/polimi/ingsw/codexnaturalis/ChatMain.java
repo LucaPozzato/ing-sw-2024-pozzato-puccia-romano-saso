@@ -18,25 +18,34 @@ public class ChatMain {
         List<Player> players = new ArrayList<Player>(
                 List.of(new Player("nick"), new Player("giacomo"), new Player("mario"), new Player("luca")));
         Random random = new Random();
-        Boolean randomReceiver;
         int randomIndexSender;
-        Player randomReceivers;
+        Player sender = null;
+        Player receiver = null;
+        List<String> cliDecision;
 
         for (int i = 0; i < 100; i++) {
-            randomReceiver = random.nextBoolean();
             randomIndexSender = random.nextInt(players.size());
-            if (randomReceiver)
-                randomReceivers = players.get(random.nextInt(players.size()));
+            if (random.nextBoolean())
+                receiver = players.get(random.nextInt(players.size()));
             else
-                randomReceivers = null;
+                receiver = null;
 
-            chat.addMessage(new ChatMessage(
-                    "message message message message message message message message message message " + i,
-                    players.get(randomIndexSender), randomReceivers,
+            // ChatMessage(String message, Player sender, Player receiver, long timeStamp)
+
+            chat.addMessage(new ChatMessage("message " + i, players.get(randomIndexSender), receiver,
                     System.currentTimeMillis()));
+            chatCli.updateChat(chat.draw("luca"));
+            cliDecision = chatCli.print();
+            for (Player player : players) {
+                if (player.getNickname().equals("luca"))
+                    sender = player;
+                if (cliDecision.get(0).equals(player.getNickname()))
+                    receiver = player;
+                else if (cliDecision.get(0).equals(""))
+                    receiver = null;
+            }
+            chat.addMessage(new ChatMessage(cliDecision.get(1), sender, receiver, System.currentTimeMillis()));
+            chatCli.updateChat(chat.draw("luca"));
         }
-
-        chatCli.updateChat(chat.draw("luca"));
-        chatCli.print();
     }
 }

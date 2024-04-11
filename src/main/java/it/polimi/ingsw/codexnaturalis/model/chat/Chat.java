@@ -40,7 +40,9 @@ public class Chat {
         String chat = "";
         String receivers = "";
         for (Pair<Integer, ChatMessage> pair : chatMessages) {
-            if (pair.getValue().getReceiver() == null || pair.getValue().getReceiver().getNickname().equals(player)) {
+            if (pair.getValue().getReceiver() == null
+                    || pair.getValue().getReceiver().getNickname().equals(player)
+                    || pair.getValue().getSender().getNickname().equals(player)) {
                 if (pair.getValue().getReceiver() == null)
                     receivers = "everyone";
                 else

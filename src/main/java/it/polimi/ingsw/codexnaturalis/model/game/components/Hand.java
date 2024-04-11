@@ -75,7 +75,7 @@ public class Hand {
     }
 
     public void removeCard(Card card) throws IllegalCommandException {
-        if (cardsHand.size() < 4)
+        if (cardsHand.size() < 3)
             throw new IllegalCommandException("Cannot remove more than one card");
         for (Pair<Card, Boolean> pair : cardsHand) {
             if (pair.getKey().equals(card)) {

@@ -263,7 +263,8 @@ public class StructureTest {
 
         result = 0;
         try {
-            result = structure.getPointsFromPatterns(patternList, GreenTest3) + structure.getPointsFromPatterns(patternList, RedTest2);
+            result = structure.getPointsFromPatterns(patternList, GreenTest3)
+                    + structure.getPointsFromPatterns(patternList, RedTest2);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -281,7 +282,8 @@ public class StructureTest {
 
         result = 0;
         try {
-            result = structure.getPointsFromPatterns(patternList, RedTest2) + structure.getPointsFromPatterns(patternList, GreenTest3);
+            result = structure.getPointsFromPatterns(patternList, RedTest2)
+                    + structure.getPointsFromPatterns(patternList, GreenTest3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -330,7 +332,8 @@ public class StructureTest {
 
         result = 0;
         try {
-            result = structure_II.getPointsFromPatterns(patternList_II, GreenTest4_II) + structure_II.getPointsFromPatterns(patternList_II, RedTest2_II);
+            result = structure_II.getPointsFromPatterns(patternList_II, GreenTest4_II)
+                    + structure_II.getPointsFromPatterns(patternList_II, RedTest2_II);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -346,9 +349,8 @@ public class StructureTest {
             System.out.println(e.getMessage());
         }
 
-
         try {
-            result =  structure_II.getPointsFromPatterns(patternList, GreenTest5_II);
+            result = structure_II.getPointsFromPatterns(patternList, GreenTest5_II);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -377,16 +379,15 @@ public class StructureTest {
         }
         assertEquals(2, pointsmade);
 
-
         try {
             pointsmade = structure_II.getPointsFromObjResCard(wolfIdol);
         } catch (IllegalCommandException e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(2,pointsmade);
+        assertEquals(2, pointsmade);
 
         try {
-            pointsmade  = structure_II.getPointsFromObjResCard(mosquitoIdol);
+            pointsmade = structure_II.getPointsFromObjResCard(mosquitoIdol);
         } catch (IllegalCommandException e) {
             System.out.println(e.getMessage());
         }
@@ -408,7 +409,7 @@ public class StructureTest {
             System.out.println(e.getMessage());
         }
 
-        pointsmade= 0;
+        pointsmade = 0;
         try {
             pointsmade = structure_II.getPointsFromObjResCard(foldedhandsWiseman);
         } catch (IllegalCommandException e) {
@@ -436,16 +437,16 @@ public class StructureTest {
             System.out.println(e.getMessage());
         }
         assertEquals(2, pointsmade);
-        
 
-        // [X] chair pattern check
-        // [X] mixed chair and stair pattern which fails due to share of a card among two patterns
-        // [X] stair pattern check
-        // [X] mixed chair and stair pattern which succeeds
-        // [X] multistair pattern
-        // [X] resource requirement check
-        // [X] object requirement check
-        // [X] foldedhandWiseman requirement check
+        // [x] chair pattern check
+        // [x] mixed chair and stair pattern which fails due to share of a card among
+        // two patterns
+        // [x] stair pattern check
+        // [x] mixed chair and stair pattern which succeeds
+        // [x] multistair pattern
+        // [x] resource requirement check
+        // [x] object requirement check
+        // [x] foldedhandWiseman requirement check
     }
 
     @Test

@@ -101,10 +101,15 @@ public class BoardTest {
     void testUpdateActualScore() {
 
         // [ ] adds the point
+        // [ ] adds the player with 0 points
+        // [ ] throws exception if more than 4 players
     }
 
     @Test
     void testUpdateVirtualScore() {
 
+        // [ ] adds the point
+        // [ ] adds the player with 0 points
+        // [ ] throws exception if more than 4 players
     }
 }

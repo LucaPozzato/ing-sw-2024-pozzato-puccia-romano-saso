@@ -8,14 +8,15 @@ public class ChatCli {
     String chat;
     BufferedReader stdin;
     String inputString = "";
-    List<String> outputString = new ArrayList<String>();
+    List<String> outputString;
     int width = 70;
     int height = 50;
-    List<String> messages = new ArrayList<String>(List.of("<nickname, everyone>: ", "message: "));
+    List<String> messages = new ArrayList<String>(List.of("<nickname or press enter to broadcast>: ", "message: "));
     List<String> command = new ArrayList<String>(List.of("To", "Send"));
 
     public ChatCli(BufferedReader stdin) {
         this.stdin = stdin;
+        this.outputString = new ArrayList<String>();
         this.chat = "";
     }
 
@@ -24,6 +25,8 @@ public class ChatCli {
     }
 
     public List<String> print() {
+        outputString = new ArrayList<String>();
+
         // set console size
         System.out.print("\u001B[8;" + height + ";" + width + "t");
 
