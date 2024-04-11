@@ -15,6 +15,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class BoardTest {
     @Test
@@ -51,7 +52,7 @@ public class BoardTest {
             board.addUncoveredCard(resourceDeck.get(4));
         } catch (Exception e) {
             assertFalse(board.getUncoveredCards().contains(resourceDeck.get(4)));
-            assertEquals("Cannot add more than 4 cards", e.getMessage());
+            assertEquals("Board is full", e.getMessage());
         }
 
         // [x] Adds card
@@ -75,7 +76,7 @@ public class BoardTest {
             assertFalse(board.getUncoveredCards().contains(resourceDeck.get(4)));
             board.removeUncoveredCard(resourceDeck.get(4));
         } catch (Exception e) {
-            assertEquals("Card is not in hand", e.getMessage());
+            assertEquals("Card is not in board", e.getMessage());
         }
 
         try {
@@ -93,23 +94,109 @@ public class BoardTest {
         }
 
         // [x] Removes card
-        // [x] Cannot remove more than 4 cards
+        // [x] Cannot remove more than 1 card
         // [x] Cannot remove card that is not present
     }
 
     @Test
     void testUpdateActualScore() {
+        Board board = new Board();
+        Player testPlayer = new Player("player1");
+        String[] actualScores;
 
-        // [ ] adds the point
-        // [ ] adds the player with 0 points
-        // [ ] throws exception if more than 4 players
+        // test that verifies player are added with 0 points
+        try {
+            board.updateActualScore(testPlayer, 0);
+            for (int i = 0; i < 3; i++) {
+                board.updateActualScore(new Player("player" + (i + 2)), i + 1);
+            }
+            actualScores = board.getActualScores().split(" \\| ");
+            for (String score : actualScores) {
+                for (int j = 0; j < 4; j++) {
+                    if (score.contains("player" + j)) {
+                        assertEquals("player" + j + ": 0", score);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        // test that verifies points are added correctly
+        try {
+            board.updateActualScore(testPlayer, 1);
+            actualScores = board.getActualScores().split(" \\| ");
+            for (String score : actualScores) {
+                if (score.contains("player1")) {
+                    assertEquals("player1: 1", score);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        // test that verifies exception is thrown if more than 4 players
+        try {
+            board.updateActualScore(new Player("player5"), 0);
+        } catch (Exception e) {
+            assertEquals("Cannot have more than 4 players", e.getMessage());
+        }
+
+        // [x] adds the point
+        // [x] adds the player with 0 points
+        // [x] throws exception if more than 4 players
     }
 
     @Test
     void testUpdateVirtualScore() {
+        Board board = new Board();
+        Player testPlayer = new Player("player1");
+        String[] virtualScores;
 
-        // [ ] adds the point
-        // [ ] adds the player with 0 points
-        // [ ] throws exception if more than 4 players
+        // test that verifies player are added with 0 points
+        try {
+            board.updateVirtualScore(testPlayer, 0);
+            for (int i = 0; i < 3; i++) {
+                board.updateVirtualScore(new Player("player" + (i + 2)), i + 1);
+            }
+            virtualScores = board.getVirtualScores().split(" \\| ");
+            for (String score : virtualScores) {
+                for (int j = 0; j < 4; j++) {
+                    if (score.contains("player" + j)) {
+                        assertEquals("player" + j + ": 0", score);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        // test that verifies points are added correctly
+        try {
+            board.updateVirtualScore(testPlayer, 1);
+            virtualScores = board.getVirtualScores().split(" \\| ");
+            for (String score : virtualScores) {
+                if (score.contains("player1")) {
+                    assertEquals("player1: 1", score);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        // test that verifies exception is thrown if more than 4 players
+        try {
+            board.updateVirtualScore(new Player("player5"), 0);
+        } catch (Exception e) {
+            assertEquals("Cannot have more than 4 players", e.getMessage());
+        }
+
+        // [x] adds the point
+        // [x] adds the player with 0 points
+        // [x] throws exception if more than 4 players
     }
 }

@@ -7,10 +7,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.model.game.state.InitState;
 import it.polimi.ingsw.codexnaturalis.model.game.state.State;
 import it.polimi.ingsw.codexnaturalis.view.View;
 
-public abstract class Game {
+public class Game {
 
     private int gameId;
     private State gameState;
@@ -27,6 +28,7 @@ public abstract class Game {
 
     public Game(int gameId) {
         this.gameId = gameId;
+        this.gameState = new InitState(this);
     }
 
     public void notifyAllObservers() {

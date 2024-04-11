@@ -2,6 +2,7 @@ module it.polimi.ingsw.codexnaturalis {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.gson;
+    requires java.rmi;
 
     opens it.polimi.ingsw.codexnaturalis to javafx.fxml;
 

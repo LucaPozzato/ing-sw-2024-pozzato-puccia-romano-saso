@@ -93,7 +93,7 @@ public class Board {
                 this.visualBoard.add(emptyIndex, card.drawDetailedVisual(true));
                 break;
             case 4:
-                throw new IllegalCommandException("Cannot add more than 4 cards");
+                throw new IllegalCommandException("Board is full");
             default:
                 break;
         }
@@ -103,7 +103,7 @@ public class Board {
         if (uncoveredCards.size() < 4)
             throw new IllegalCommandException("Cannot remove more than one card");
         if (!uncoveredCards.contains(card))
-            throw new IllegalCommandException("Card is not in hand");
+            throw new IllegalCommandException("Card is not in board");
 
         emptyIndex = uncoveredCards.indexOf(card);
         this.visualBoard.remove(emptyIndex);

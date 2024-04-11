@@ -58,11 +58,11 @@ public class GameMain {
         Board board = new Board();
         Player luca = new Player("Luca");
         board.updateActualScore(luca, 0);
-        board.updateActualScore(new Player("Giovanni"), 0);
+        board.updateActualScore(new Player("Ornella"), 0);
         board.updateActualScore(new Player("Andrea"), 0);
         board.updateActualScore(new Player("Davide"), 0);
         board.updateVirtualScore(luca, 0);
-        board.updateVirtualScore(new Player("Giovanni"), 0);
+        board.updateVirtualScore(new Player("Ornella"), 0);
         board.updateVirtualScore(new Player("Andrea"), 0);
         board.updateVirtualScore(new Player("Davide"), 0);
 
