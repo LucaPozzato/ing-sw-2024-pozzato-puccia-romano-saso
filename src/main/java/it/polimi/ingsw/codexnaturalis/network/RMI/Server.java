@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.network.RMI;
 
 import it.polimi.ingsw.codexnaturalis.controller.ServerController;
+import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -21,13 +22,19 @@ public class Server implements VirtualServer {
     // metodi controller
 
     public static void main(String[] args) throws RemoteException {
-        final String serverName = "Server";
+        try {
+            final String serverName = "Server";
 
-        VirtualServer server = new Server(new ServerController());
-        VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(server, 0); // Unicast: comunicazione uno
-                                                                                          // a uno con il componente
-        Registry registry = LocateRegistry.createRegistry(1234);
-        registry.rebind(serverName, stub); // rebind.. se esiste sovrascrive. Possiamo usare anche bind
+            VirtualServer server = new Server(new ServerController());
+            VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(server, 0);
+            Registry registry = LocateRegistry.createRegistry(1234);
+            registry.rebind(serverName, stub); // rebind.. se esiste sovrascrive. Possiamo usare anche bind
+            System.out.println("Server pronto...");
+        }
+        catch (Exception e){
+            System.err.println("Server exception: " + e.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,4 +43,10 @@ public class Server implements VirtualServer {
             this.clients.add(client);
         }
     }
+
+    @Override
+    public void joinGame(String nickname, Color color) throws RemoteException {
+
+    }
+
 }
