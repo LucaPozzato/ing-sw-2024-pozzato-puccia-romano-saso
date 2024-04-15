@@ -47,10 +47,6 @@ public class Game {
         players.add(player);
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     public Player getNextPlayer() {
         return nextPlayer;
     }
