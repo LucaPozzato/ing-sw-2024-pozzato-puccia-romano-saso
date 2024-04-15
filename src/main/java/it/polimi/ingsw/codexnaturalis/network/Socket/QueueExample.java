@@ -7,11 +7,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class QueueExample {
     private final BlockingQueue<Integer> updateQueue = new LinkedBlockingQueue<>();
-    private final List<VirtualView> exampleClientList = new ArrayList<>();
+    private final List<VirtualView> ClientList = new ArrayList<>();
 
     public void addClient(VirtualView client) {
-        synchronized (this.exampleClientList) {
-            this.exampleClientList.add(client);
+        synchronized (this.ClientList) {
+            this.ClientList.add(client);
         }
     }
 
@@ -27,8 +27,8 @@ public class QueueExample {
         while (true) {
             try {
                 Integer update = this.updateQueue.take();
-                synchronized (this.exampleClientList) {
-                    for (var client : this.exampleClientList) {
+                synchronized (this.ClientList) {
+                    for (var client : this.ClientList) {
                         client.showValue(update);
                     }
                 }

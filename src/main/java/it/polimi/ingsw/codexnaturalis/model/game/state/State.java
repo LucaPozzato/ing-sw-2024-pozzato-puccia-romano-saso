@@ -16,8 +16,7 @@ public abstract class State {
 
     public abstract void joinGame(String nickname, Color color) throws IllegalCommandException;
 
-    public abstract void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException;
+    public abstract void placedCard(Card father, Card placeThis, String position, Boolean frontUp) throws IllegalCommandException;
 
     public abstract void drawnCard(String type, String id) throws IllegalCommandException;
 

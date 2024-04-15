@@ -47,7 +47,7 @@ public class Game {
         players.add(player);
     }
 
-    public Player getCurrentPlater() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 

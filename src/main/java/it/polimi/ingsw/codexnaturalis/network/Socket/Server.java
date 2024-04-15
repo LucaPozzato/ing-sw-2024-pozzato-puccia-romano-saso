@@ -53,7 +53,10 @@ public class Server {
         int port = Integer.parseInt(args[1]);
 
         ServerSocket listenSocket = new ServerSocket(port);
-
+        //Perchè nel costruttore del server controller viene passato lo state?
+        //se viene creato ad inizio game e terminato alla fine basta inserire primo stato del gioco direttamente nella costruzione
+        //+ non credo che abbiamo informazione sullo stato da qui prima di creare il controller
+        //stesso problema in server RMI
         new Server(listenSocket, new ServerController());
     }
 }
