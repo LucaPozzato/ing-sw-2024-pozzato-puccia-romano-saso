@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.model.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
@@ -9,10 +10,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.state.InitState;
 import it.polimi.ingsw.codexnaturalis.model.game.state.State;
-import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.network.RMI.VirtualView;
 
 public class Game {
-
     private int gameId;
     private State gameState;
     private List<Player> players;
@@ -24,7 +24,7 @@ public class Game {
     private int numParticipants;
     private Player currentPlayer;
     private Player nextPlayer;
-    private List<View> observerList;
+    final List<VirtualView> clients = new ArrayList<>();
 
     public Game(int gameId) {
         this.gameId = gameId;
@@ -35,12 +35,12 @@ public class Game {
         // ...
     }
 
-    public void addObserver(View view) {
-        observerList.add(view);
+    public void addObserver(VirtualView client) {
+        clients.add(client);
     }
 
-    public void removeObserver(View view) {
-        observerList.remove(view);
+    public void removeObserver(VirtualView client) {
+        clients.remove(client);
     }
 
     public void addPlayer(Player player) {
@@ -133,6 +133,10 @@ public class Game {
 
     public void calcChairPattern() {
 
+    }
+
+    public void throwException(String message) {
+        // update client view with message
     }
 
 }

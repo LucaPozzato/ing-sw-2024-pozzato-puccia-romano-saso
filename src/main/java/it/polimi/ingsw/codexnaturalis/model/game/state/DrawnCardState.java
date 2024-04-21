@@ -6,7 +6,10 @@ import java.util.List;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.*;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class DrawnCardState extends State {
@@ -22,6 +25,11 @@ public class DrawnCardState extends State {
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
         throw new IllegalCommandException("Game already joined");
+    }
+
+    @Override
+    public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+        throw new IllegalCommandException("Game already set up");
     }
 
     @Override

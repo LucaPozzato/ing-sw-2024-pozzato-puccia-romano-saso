@@ -8,7 +8,9 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class PlacedCardState extends State {
     // TODO: remove regionMatches and use equals -> code more readable
@@ -24,6 +26,11 @@ public class PlacedCardState extends State {
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
         throw new IllegalCommandException("Game already joined");
+    }
+
+    @Override
+    public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+        throw new IllegalCommandException("Game already set up");
     }
 
     @Override

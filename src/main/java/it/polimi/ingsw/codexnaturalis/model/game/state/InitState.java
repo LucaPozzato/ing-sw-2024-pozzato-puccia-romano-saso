@@ -5,8 +5,10 @@ import java.util.Collections;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
-import it.polimi.ingsw.codexnaturalis.model.game.components.*;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
@@ -110,21 +112,26 @@ public class InitState extends State {
     }
 
     @Override
+    public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+        throw new IllegalCommandException("Game not set up yet");
+    }
+
+    @Override
     public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
-        throw new IllegalCommandException();
+        throw new IllegalCommandException("Can't place card yet");
     }
 
     @Override
     public void drawnCard(String type, String id) throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
-        throw new IllegalCommandException();
+        throw new IllegalCommandException("Can't draw card yet");
     }
 
     @Override
     public void matchEnded() throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
-        throw new IllegalCommandException();
+        throw new IllegalCommandException("Game not started yet");
     }
 }

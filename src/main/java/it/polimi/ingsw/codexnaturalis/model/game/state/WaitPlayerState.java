@@ -4,6 +4,8 @@ import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class WaitPlayerState extends State {
     public WaitPlayerState(Game game) {
@@ -21,6 +23,11 @@ public class WaitPlayerState extends State {
             throw new IllegalCommandException("Game already full");
         }
         createNewPlayers(nickname, color);
+    }
+
+    @Override
+    public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+        throw new IllegalCommandException("Game not set up yet");
     }
 
     private void createNewPlayers(String nickname, Color color) {
