@@ -3,6 +3,7 @@ package it.polimi.ingsw.codexnaturalis.model.game.state;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -14,13 +15,14 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class ChooseSetUpState extends State {
-    Map<Player, Boolean> playerSetUp;
+    Map<Player, Boolean> setUpMap;
 
     public ChooseSetUpState(Game game) {
         super(game);
-        playerSetUp = new HashMap<>();
-        // for()
-        // playerSetUp.put()
+        setUpMap = new HashMap<>();
+        for(Player player : super.game.getPlayers()){
+            setUpMap.put(player, false);    
+        }
     }
 
     @Override
@@ -50,8 +52,7 @@ public class ChooseSetUpState extends State {
     }
 
     public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-
-        if (!playerSetUp.get(player).equals(null)) {
+        if (setUpMap.get(player).equals(true)) {
             throw new IllegalCommandException("Player already made his choice");
         } else {
             Hand hand = super.game.getHandByPlayer(player);
@@ -63,7 +64,13 @@ public class ChooseSetUpState extends State {
             if (objList.contains(objCard))
                 hand.setSecretObjective(objCard);
             else
-                throw new IllegalCommandException("Objective card not contained");
+                throw new IllegalCommandException("Player is not choosing any of the selected cards");
+            setUpMap.put(player,true);
         }
+
+        if(setUpMap.containsValue(false))
+            super.game.setState(new ChooseSetUpState(super.game));
+        else
+            super.game.setState(new PlacedCardState(super.game));
     }
 }
