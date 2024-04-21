@@ -110,7 +110,7 @@ public class BoardTest {
             for (int i = 0; i < 3; i++) {
                 board.updateActualScore(new Player("player" + (i + 2)), i + 1);
             }
-            actualScores = board.getActualScores().split(" \\| ");
+            actualScores = board.drawActualScores().split(" \\| ");
             for (String score : actualScores) {
                 for (int j = 0; j < 4; j++) {
                     if (score.contains("player" + j)) {
@@ -126,7 +126,7 @@ public class BoardTest {
         // test that verifies points are added correctly
         try {
             board.updateActualScore(testPlayer, 1);
-            actualScores = board.getActualScores().split(" \\| ");
+            actualScores = board.drawActualScores().split(" \\| ");
             for (String score : actualScores) {
                 if (score.contains("player1")) {
                     assertEquals("player1: 1", score);
@@ -161,7 +161,7 @@ public class BoardTest {
             for (int i = 0; i < 3; i++) {
                 board.updateVirtualScore(new Player("player" + (i + 2)), i + 1);
             }
-            virtualScores = board.getVirtualScores().split(" \\| ");
+            virtualScores = board.drawVirtualScores().split(" \\| ");
             for (String score : virtualScores) {
                 for (int j = 0; j < 4; j++) {
                     if (score.contains("player" + j)) {
@@ -177,7 +177,7 @@ public class BoardTest {
         // test that verifies points are added correctly
         try {
             board.updateVirtualScore(testPlayer, 1);
-            virtualScores = board.getVirtualScores().split(" \\| ");
+            virtualScores = board.drawVirtualScores().split(" \\| ");
             for (String score : virtualScores) {
                 if (score.contains("player1")) {
                     assertEquals("player1: 1", score);

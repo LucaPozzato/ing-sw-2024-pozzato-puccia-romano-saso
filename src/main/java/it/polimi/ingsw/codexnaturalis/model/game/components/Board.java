@@ -28,7 +28,15 @@ public class Board {
         this.visualBoard = new ArrayList<>();
     }
 
-    public String getActualScores() {
+    public Integer getActualPoints(Player player) {
+        return actualScores.get(player);
+    }
+
+    public Integer getVirtualPoints(Player player) {
+        return virtualScores.get(player);
+    }
+
+    public String drawActualScores() {
         String actualScoreString = "";
         for (Map.Entry<Player, Integer> entry : actualScores.entrySet()) {
             actualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
@@ -37,7 +45,7 @@ public class Board {
         return actualScoreString;
     }
 
-    public String getVirtualScores() {
+    public String drawVirtualScores() {
         String virtualScoreString = "";
         for (Map.Entry<Player, Integer> entry : virtualScores.entrySet()) {
             virtualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";

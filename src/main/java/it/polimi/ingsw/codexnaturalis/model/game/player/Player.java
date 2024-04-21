@@ -7,18 +7,19 @@ public class Player {
     private String nickName;
     private Color colorPlayer;
 
-    public Player() {
+    public Player(String nickName) {
     }
 
-    public Player(String nickName) {
+    public Player(String nickName, Color color) {
         this.nickName = nickName;
+        this.colorPlayer = color;
     }
 
     public String getNickname() {
         return this.nickName;
     }
 
-    public Color getColorPlayer() {
+    public Color getColor() {
         return colorPlayer;
     }
 

@@ -643,13 +643,11 @@ public class Structure {
                     return 2 * (visibleSymbols.get("INK") / 2);
                 case "FEATHER":
                     return 2 * (visibleSymbols.get("FEATHER") / 2);
-                case "FOLDEDHANDS": // TODO: find a way
+                case "FOLDEDHANDS":
                     return 3 * (min(visibleSymbols.get("SCROLL"), visibleSymbols.get("INK"),
                             visibleSymbols.get("FEATHER")));
             }
 
-        } else {
-            throw new IllegalCommandException("Neither an Idol nor a Wiseman passed");
         }
         return 0;
     }

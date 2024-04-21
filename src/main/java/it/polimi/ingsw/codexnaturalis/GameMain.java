@@ -109,8 +109,8 @@ public class GameMain {
         cli.updateDecks(deck.draw());
         cli.updateResources(structure.getVisibleObjects().toString() + "\n"
                 + structure.getVisibleResources().toString());
-        cli.updateScoreBoard(board.getActualScores());
-        for (String scores : board.getVirtualScores().split(" \\| ")) {
+        cli.updateScoreBoard(board.drawActualScores());
+        for (String scores : board.drawVirtualScores().split(" \\| ")) {
             if (scores.contains("Luca"))
                 cli.updateVirtualPoints(scores);
         }
@@ -198,10 +198,10 @@ public class GameMain {
                     cli.updateHand(hand.drawCardsHand());
                     cli.updateBoard(board.drawUncoveredCards());
                     cli.updateDecks(deck.draw());
-                    cli.updateScoreBoard(board.getActualScores());
+                    cli.updateScoreBoard(board.drawActualScores());
                     cli.updateResources(structure.getVisibleObjects().toString() + "\n"
                             + structure.getVisibleResources().toString());
-                    for (String scores : board.getVirtualScores().split(" \\| ")) {
+                    for (String scores : board.drawVirtualScores().split(" \\| ")) {
                         if (scores.contains("Luca"))
                             cli.updateVirtualPoints(scores);
                     }

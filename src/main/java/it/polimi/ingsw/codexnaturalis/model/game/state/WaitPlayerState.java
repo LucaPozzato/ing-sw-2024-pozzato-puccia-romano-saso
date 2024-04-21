@@ -19,9 +19,19 @@ public class WaitPlayerState extends State {
 
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
+        for (Player p : super.game.getPlayers()) {
+            if (p.getColor().equals(color)) {
+                throw new IllegalCommandException("Color already taken");
+            }
+            if (p.getNickname().equals(nickname)) {
+                throw new IllegalCommandException("Nickname already taken");
+            }
+        }
+
         if (isFull()) {
             throw new IllegalCommandException("Game already full");
         }
+
         createNewPlayers(nickname, color);
     }
 
@@ -33,6 +43,7 @@ public class WaitPlayerState extends State {
     private void createNewPlayers(String nickname, Color color) {
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setNickname(nickname);
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setColor(color);
+
         if (isFull()) {
             super.game.setState(new WaitPlayerState(super.game));
         } else {
@@ -48,18 +59,13 @@ public class WaitPlayerState extends State {
     }
 
     @Override
-    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
+    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         throw new IllegalCommandException("Can't place card yet");
     }
 
     @Override
-    public void drawnCard(String type, String id) throws IllegalCommandException {
+    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
         throw new IllegalCommandException("Can't draw card yet");
-    }
-
-    @Override
-    public void matchEnded() throws IllegalCommandException {
-        throw new IllegalCommandException("Game not started yet");
     }
 }

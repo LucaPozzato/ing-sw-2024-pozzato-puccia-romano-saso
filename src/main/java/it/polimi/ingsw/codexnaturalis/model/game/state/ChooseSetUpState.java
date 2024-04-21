@@ -1,9 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.state;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -20,8 +18,8 @@ public class ChooseSetUpState extends State {
     public ChooseSetUpState(Game game) {
         super(game);
         setUpMap = new HashMap<>();
-        for(Player player : super.game.getPlayers()){
-            setUpMap.put(player, false);    
+        for (Player player : super.game.getPlayers()) {
+            setUpMap.put(player, false);
         }
     }
 
@@ -36,19 +34,14 @@ public class ChooseSetUpState extends State {
     }
 
     @Override
-    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
+    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         throw new IllegalCommandException("Can't place card yet");
     }
 
     @Override
-    public void drawnCard(String type, String id) throws IllegalCommandException {
+    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
         throw new IllegalCommandException("Can't draw card yet");
-    }
-
-    @Override
-    public void matchEnded() throws IllegalCommandException {
-        throw new IllegalCommandException("Game not ended yet");
     }
 
     public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
@@ -60,15 +53,11 @@ public class ChooseSetUpState extends State {
             super.game.getStructureByPlayer(player).placeCard(null, initCard, null, side);
             hand.removeCard(initCard);
 
-            List<Card> objList = hand.getChooseBetweenObj();
-            if (objList.contains(objCard))
-                hand.setSecretObjective(objCard);
-            else
-                throw new IllegalCommandException("Player is not choosing any of the selected cards");
-            setUpMap.put(player,true);
+            hand.setSecretObjective(objCard);
+            setUpMap.put(player, true);
         }
 
-        if(setUpMap.containsValue(false))
+        if (setUpMap.containsValue(false))
             super.game.setState(new ChooseSetUpState(super.game));
         else
             super.game.setState(new PlacedCardState(super.game));

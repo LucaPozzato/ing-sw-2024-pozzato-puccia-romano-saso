@@ -21,15 +21,8 @@ public abstract class State {
     public abstract void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard)
             throws IllegalCommandException;
 
-    // Commands:
-    // [ ] choose initial card side
-    // [ ] choose secret objective
-    // [ ] map player-action to set the next state
-
-    public abstract void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
+    public abstract void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException;
 
-    public abstract void drawnCard(String type, String id) throws IllegalCommandException;
-
-    public abstract void matchEnded() throws IllegalCommandException;
+    public abstract void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException;
 }

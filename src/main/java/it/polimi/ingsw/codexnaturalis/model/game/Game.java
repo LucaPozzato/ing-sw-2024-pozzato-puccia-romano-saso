@@ -24,6 +24,8 @@ public class Game {
     private int numParticipants;
     private Player currentPlayer;
     private Player nextPlayer;
+    private Boolean lastTurn = false;
+    private Integer turnCounter = 0;
     final List<VirtualView> clients = new ArrayList<>();
 
     public Game(int gameId) {
@@ -91,6 +93,23 @@ public class Game {
         return playerStructure.get(players.indexOf(player));
     }
 
+    public Boolean isLastTurn() {
+        return lastTurn;
+    }
+
+    public void removeTurn() {
+        this.turnCounter--;
+    }
+
+    public Integer getTurnCounter() {
+        return turnCounter;
+    }
+
+    public void setLastTurn() {
+        this.lastTurn = true;
+        this.turnCounter = players.size() + (players.size() - players.indexOf(currentPlayer) + 1);
+    }
+
     public void setState(State state) {
         this.gameState = state;
     }
@@ -137,6 +156,7 @@ public class Game {
 
     public void throwException(String message) {
         // update client view with message
+        // client.updateError(message);
     }
 
 }

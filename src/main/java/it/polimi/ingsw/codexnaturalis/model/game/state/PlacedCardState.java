@@ -34,8 +34,12 @@ public class PlacedCardState extends State {
     }
 
     @Override
-    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
+    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
+
+        if (!player.equals(game.getCurrentPlayer()))
+            throw new IllegalCommandException("Not your turn");
+
         Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
 
         removeFromHand(placeThis);
@@ -46,28 +50,27 @@ public class PlacedCardState extends State {
         // virtual points because even
         // if they're continuously computed they are points really assigned to the
         // player at the end of the game)
-        int fromPatternPoints = structure.getPointsFromPatterns(getSuitablePatt(placeThis, gatherPatterns()),
+        int pointsFromPattern = structure.getPointsFromPatterns(getSuitablePatt(placeThis, gatherPatterns()),
                 placeThis);
         // Points assigned because the placed card is a gold card or a resource card
         // with bonus points (these are actual points,
         // immediately assigned to the player who placed the card and which determines a
         // movement of his pawn on the board)
-        int fromBonusPoint = structure.getPointsFromPlayableCard(placeThis, frontUp);
-        updateActualPoints(fromBonusPoint);
-        updateVirtualPoints(fromPatternPoints + fromBonusPoint);
+        int pointFromCard = structure.getPointsFromPlayableCard(placeThis, frontUp);
+        updateActualPoints(pointFromCard);
+
+        if (game.getBoard().getActualPoints(player) >= 20)
+            game.setLastTurn();
+
+        updateVirtualPoints(pointsFromPattern + pointFromCard);
         super.game.setState(new DrawnCardState(super.game));
         // Points resulting from resources objective are computed at the end of the game
         // (END GAME STATE) since they could be covered anytime during the match
     }
 
     @Override
-    public void drawnCard(String type, String id) throws IllegalCommandException {
+    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
         throw new IllegalCommandException("Card already drawn in last turn");
-    }
-
-    @Override
-    public void matchEnded() throws IllegalCommandException {
-        throw new IllegalCommandException("Match has not ended");
     }
 
     private void removeFromHand(Card placeThis) throws IllegalCommandException {

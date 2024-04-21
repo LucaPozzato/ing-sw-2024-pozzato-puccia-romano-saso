@@ -40,14 +40,10 @@ public class InitState extends State {
         // TODO togliere dal costruttore di Players il nickname e il colore e istituire
         // dei setter specifici
 
-        // Creates the same number of player as specified by the first one
-        for (int i = 0; i < numPlayers; i++) {
-            super.game.addPlayer(new Player());
-        }
-        // Allows the first player to insert his parameters
-        super.game.getPlayers().get(0).setNickname(nick);
-        super.game.getPlayers().get(0).setColor(color);
+        super.game.getPlayers().add(new Player(nick, color));
+
         // Gives information about the match to Game class
+        // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
     }
@@ -96,13 +92,13 @@ public class InitState extends State {
 
     @Override
     public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
-        super.game.setState(new PlacedCardState(super.game));
         createDecks();
         createFirstPlayer(nick, color, numPlayers);
         dealHands(numPlayers);
         dealInitialCard();
         dealCommonObjective();
         dealSecretObjective();
+        super.game.setState(new WaitPlayerState(super.game));
     }
 
     @Override
@@ -117,21 +113,15 @@ public class InitState extends State {
     }
 
     @Override
-    public void placedCard(Card father, Card placeThis, String position, Boolean frontUp)
+    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
         throw new IllegalCommandException("Can't place card yet");
     }
 
     @Override
-    public void drawnCard(String type, String id) throws IllegalCommandException {
+    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
         super.game.setState(new InitState(super.game));
         throw new IllegalCommandException("Can't draw card yet");
-    }
-
-    @Override
-    public void matchEnded() throws IllegalCommandException {
-        super.game.setState(new InitState(super.game));
-        throw new IllegalCommandException("Game not started yet");
     }
 }
