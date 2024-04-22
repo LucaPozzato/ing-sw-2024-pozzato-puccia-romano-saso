@@ -1,45 +1,34 @@
 package it.polimi.ingsw.codexnaturalis.view;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameCli {
-    // Cursor starts from 1, 1 -> /u001B[y;xH
-    String structure;
-    String nextPlayerStructure;
-    List<String> hand;
-    List<String> board;
-    List<String> decks;
-    List<String> objectives;
-    String resources;
-    String scoreBoard;
-    String virtualPoints;
-    String error;
-    String inputString;
-    String command;
-    List<String> outputString;
-    int width = 175;
-    int height = 60;
-    int midHeight = 0;
-    int midWidth = 0;
-    int minX = 0;
-    int maxX = 0;
-    int delta = 0;
-    BufferedReader stdin;
+    // Cursor starts from 1, 1 -> \u001B[y;xH
+    List<String> hand, board, decks, objectives, initialCard, chooseObjectives;
+    String resources, scoreBoard, virtualPoints, error, structure, nextPlayerStructure;
+    int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0;
 
-    public GameCli(BufferedReader stdin) {
+    // [ ] Other structures and resources
+    // [ ] possible color coordinated boxes -> or just other color for other player
+    // [ ] if other player -> box with "viewing plyer's name"
+    // [ ] box with current player's name
+    // [ ] box with current "state"
+    // [ ] error box in initial phase
+
+    public GameCli() {
         this.structure = "";
+        this.nextPlayerStructure = "";
         this.hand = new ArrayList<>(List.of(""));
         this.board = new ArrayList<>(List.of(""));
         this.decks = new ArrayList<>(List.of("", ""));
         this.objectives = new ArrayList<>(List.of(""));
+        this.initialCard = new ArrayList<>(List.of(""));
+        this.chooseObjectives = new ArrayList<>(List.of(""));
         this.resources = "";
         this.scoreBoard = "";
+        this.virtualPoints = "";
         this.error = "";
-        this.inputString = "";
-        this.command = "";
-        this.stdin = stdin;
     }
 
     // TODO: define all other exceptions for bad parameters in update methods
@@ -93,7 +82,48 @@ public class GameCli {
             this.nextPlayerStructure = nextPlayerStructure;
     }
 
-    public List<String> printInitial(List<String> initialCard, List<String> chooseObjectives)
+    public void updateInitialCard(List<String> initialCard) {
+        if (initialCard != null)
+            this.initialCard = initialCard;
+    }
+
+    public void updateChooseObjectives(List<String> chooseObjectives) {
+        if (chooseObjectives != null)
+            this.chooseObjectives = chooseObjectives;
+    }
+
+    public void clearError() {
+        this.error = "";
+    }
+
+    public void clear() {
+        // set console size
+        System.out.print("\u001B[8;" + height + ";" + width + "t");
+
+        // clear console
+        System.out.println("\033c");
+    }
+
+    public void clearInput() {
+        String tmpStructure = "";
+        // TODO: when "NEXT" -> maybe get index and update the player's structure
+        // if (command.contains("viewing"))
+        // tmpStructure = this.nextPlayerStructure;
+        // else
+        tmpStructure = this.structure;
+
+        if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
+                + hand.get(0).split("\n").length)
+            System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
+                    + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
+        else
+            System.out.print("\u001B["
+                    + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                    + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
+
+    }
+
+    public void printInitial()
             throws IllegalArgumentException {
         // TODO: add error box for initial phase
 
@@ -101,12 +131,6 @@ public class GameCli {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
         // TODO: throw all other exceptions for bad parameters
-
-        // set console size
-        System.out.print("\u001B[8;" + height + ";" + width + "t");
-
-        // clear console
-        System.out.println("\033c");
 
         midHeight = height / 2;
         midWidth = width / 2;
@@ -121,64 +145,13 @@ public class GameCli {
         maxX = midWidth + chooseObjectives.get(0).split("\n")[0].length() + 6;
 
         printBox(minX, midHeight + chooseObjectives.get(0).split("\n").length + 2, maxX - minX, 3, "Input");
-
-        List<String> messages = new ArrayList<>(
-                List.of("Side of initial car <F, B>: ", "Objective chosen <1, 2>: "));
-        outputString = new ArrayList<>();
-
-        for (String message : messages) {
-            // moves cursor to the left of input box
-            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";"
-                    + (minX + 1) + "H\u001B[38;5;242m" + message + "\u001B[0m");
-
-            // read input from user
-            try {
-                char c = (char) stdin.read();
-                while (c != '\n') {
-                    inputString += Character.toString(c);
-                    c = (char) stdin.read();
-                }
-                outputString.add(inputString);
-                inputString = "";
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // clear input box
-            System.out.print("\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";"
-                    + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
-        }
-        return outputString;
+        System.out.print(
+                "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H");
     }
 
-    public List<String> print(String command) {
-        List<String> messages = new ArrayList<>(List.of(""));
-        outputString = new ArrayList<>();
-        this.command = command;
-
-        if (command.equals("draw")) {
-            messages = new ArrayList<>(List.of("ID of card: "));
-            error = "";
-        } else if (command.equals("place")) {
-            messages = new ArrayList<>(
-                    List.of("ID of card to place: ", "ID of card to cover: ", "Position <TL, TR, BL, BR>: ",
-                            "Front side up <TRUE, FALSE>: "));
-            error = "";
-        } else if (command.equals("error")) {
-            messages = new ArrayList<>(List.of("<Press enter to continue>: "));
-        } else if (command.contains("viewing")) {
-            messages = new ArrayList<>(
-                    List.of(" <Type ESC or NEXT>: "));
-        } else {
-            error = "Command not recognized";
-        }
-
-        // set console size
-        System.out.print("\u001B[8;" + height + ";" + width + "t");
-
-        // clear console
-        System.out.println("\033c");
-
+    // gets as input command and message -> need method that clears input box every
+    // time it's called
+    public void print() {
         midHeight = height / 2 - 3;
         delta = (maxX + minX) / 2 - width / 2;
         if (delta > 0)
@@ -187,10 +160,11 @@ public class GameCli {
             midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
         String tmpStructure = "";
-        if (command.contains("viewing"))
-            tmpStructure = this.nextPlayerStructure;
-        else
-            tmpStructure = this.structure;
+        // TODO: when "NEXT" -> maybe get index
+        // if (command.contains("viewing"))
+        // tmpStructure = this.nextPlayerStructure;
+        // else
+        tmpStructure = this.structure;
 
         printStructure(midHeight - tmpStructure.split("\n").length / 2,
                 midWidth - tmpStructure.split("\n")[0].length() / 2, tmpStructure);
@@ -241,97 +215,17 @@ public class GameCli {
             printError(midHeight + board.get(0).split("\n").length * board.size() / 2 + 6,
                     (maxX + minX - error.length()) / 2 - 1);
             printBox(minX, midHeight + board.get(0).split("\n").length * board.size() / 2 + 3, maxX - minX, 3, "Input");
-
-            for (String message : messages) {
-                // writes message in input box and moves the cursor after the message
-                if (command.equals("error"))
-                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
-                            + ";" + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
-                            + message + "\u001B[0m");
-                else if (command.contains("viewing"))
-                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
-                            + ";" + (minX + 1) + "H" + "\u001B[48;5;94m" + command + "\u001B[0m -> \u001B[38;5;242m"
-                            + message + "\u001B[0m");
-                else
-                    System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4)
-                            + ";" + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m"
-                            + message + "\u001B[0m");
-
-                // read input from user
-                try {
-                    char c = (char) stdin.read();
-                    while (c != '\n') {
-                        inputString += Character.toString(c);
-                        c = (char) stdin.read();
-                    }
-                    if (inputString.equals("NEXT") || inputString.equals("ESC")) {
-                        outputString = new ArrayList<>(List.of(inputString));
-                        inputString = "";
-                        break;
-                    }
-                    outputString.add(inputString);
-                    inputString = "";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // clear input box
-                System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
-                        + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
-            }
+            System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
+                    + (minX + 1) + "H");
         } else {
             printError(midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
                     (maxX + minX - error.length()) / 2 - 1);
             printBox(minX, midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
                     maxX - minX, 3, "Input");
-
-            for (String message : messages) {
-                // writes message in input box and moves the cursor after the message
-                if (command.equals("error"))
-                    System.out.print("\u001B["
-                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
-                            + ";"
-                            + (minX + 1) + "H" + "\u001B[48;5;124m" + command + "\u001B[0m -> \u001B[38;5;242m"
-                            + message + "\u001B[0m");
-                else if (command.contains("viewing"))
-                    System.out.print("\u001B["
-                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
-                            + ";"
-                            + (minX + 1) + "H" + "\u001B[48;5;94m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
-                            + "\u001B[0m");
-                else
-                    System.out.print("\u001B["
-                            + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
-                            + ";"
-                            + (minX + 1) + "H" + "\u001B[48;5;22m" + command + "\u001B[0m -> \u001B[38;5;242m" + message
-                            + "\u001B[0m");
-
-                // read input from user
-                try {
-                    char c = (char) stdin.read();
-                    while (c != '\n') {
-                        inputString += Character.toString(c);
-                        c = (char) stdin.read();
-
-                    }
-                    if (inputString.equals("NEXT") || inputString.equals("ESC")) {
-                        outputString = new ArrayList<>(List.of(inputString));
-                        inputString = "";
-                        break;
-                    }
-                    outputString.add(inputString);
-                    inputString = "";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // clear input box
-                System.out.print("\u001B["
-                        + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
-                        + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
-            }
+            System.out.print(
+                    "\u001B[" + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
+                            + ";" + (minX + 1) + "H");
         }
-        return outputString;
     }
 
     private void printStructure(int y, int x, String tmpStructure) {
@@ -487,10 +381,11 @@ public class GameCli {
 
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
         // function that prints a box with a title in the center
-        if (this.command.contains("viewing") && title.equals("Structure"))
-            System.out.print("\u001B[33m"); // set color to blue
-        else
-            System.out.print("\u001B[38;5;242m"); // set color to gray
+        // TODO: add color to box considering player
+        // if (this.command.contains("viewing") && title.equals("Structure"))
+        // System.out.print("\u001B[33m"); // set color to blue
+        // else
+        System.out.print("\u001B[38;5;242m"); // set color to gray
 
         for (int i = 0; i < boxHeight; i++) {
             for (int j = 0; j < boxWidth; j++) {

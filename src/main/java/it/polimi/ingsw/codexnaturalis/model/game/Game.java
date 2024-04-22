@@ -11,6 +11,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.state.InitState;
 import it.polimi.ingsw.codexnaturalis.model.game.state.State;
 import it.polimi.ingsw.codexnaturalis.network.RMI.VirtualView;
+// TODO: update view when model changes 
 
 public class Game {
     private int gameId;
@@ -31,6 +32,9 @@ public class Game {
     public Game(int gameId) {
         this.gameId = gameId;
         this.gameState = new InitState(this);
+        this.players = new ArrayList<>();
+        this.playerHand = new ArrayList<>();
+        this.playerStructure = new ArrayList<>();
     }
 
     public void notifyAllObservers() {
@@ -115,6 +119,10 @@ public class Game {
     }
 
     public void setNumPlayers(int numPlayers) {
+        // FIXME: do this in initState
+        for (int i = 0; i < numPlayers - 1; i++) {
+            this.players.add(new Player());
+        }
         this.numPlayers = numPlayers;
     }
 

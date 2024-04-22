@@ -5,6 +5,7 @@ import java.util.Collections;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
@@ -16,7 +17,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 /**
- * Initial game state. It sets up the environment when the first player joins the game and provides general information. Specifically it creates the decks and deals player's hands.
+ * Initial game state. It sets up the environment when the first player joins
+ * the game and provides general information. Specifically it creates the decks
+ * and deals player's hands.
  */
 public class InitState extends State {
     private ResourceParser resPar;
@@ -26,6 +29,7 @@ public class InitState extends State {
 
     /**
      * InitState's constructor
+     * 
      * @param game it's used to link the state with the game it has to model
      */
     public InitState(Game game) {
@@ -33,7 +37,8 @@ public class InitState extends State {
     }
 
     /**
-     * Parses the JSON file containing the cards in order to create the gold and the resource decks which are then shuffled.
+     * Parses the JSON file containing the cards in order to create the gold and the
+     * resource decks which are then shuffled.
      */
     private void createDecks() {
         // Creates instances of the needed parser
@@ -47,13 +52,16 @@ public class InitState extends State {
     }
 
     /**
-     * Allows to set first player's parameter and to let the game recognize the current player
-     * @param nick first player's nickname
-     * @param color first player's chosen color
+     * Allows to set first player's parameter and to let the game recognize the
+     * current player
+     * 
+     * @param nick       first player's nickname
+     * @param color      first player's chosen color
      * @param numPlayers first player's chosen number of competitors
      */
     private void createFirstPlayer(String nick, Color color, int numPlayers) {
-        // TODO togliere dal costruttore di Players il nickname e il colore e istituire dei setter specifici
+        // TODO togliere dal costruttore di Players il nickname e il colore e istituire
+        // dei setter specifici
 
         super.game.getPlayers().add(new Player(nick, color));
         // [ ] Decide who plays first
@@ -62,9 +70,14 @@ public class InitState extends State {
     }
 
     /**
-     * Builds a new hand for each player and fills each hand with the right number of cards drawn from the right deck. The hand is made of 2 resource card and a gold one randomly selected from the deck.
+     * Builds a new hand for each player and fills each hand with the right number
+     * of cards drawn from the right deck. The hand is made of 2 resource card and a
+     * gold one randomly selected from the deck.
+     * 
      * @param numPlayers it's needed to know how many hands deal
-     * @throws IllegalCommandException it propagates above the exceptions coming from either from the draw method or the add (??)
+     * @throws IllegalCommandException it propagates above the exceptions coming
+     *                                 from either from the draw method or the add
+     *                                 (??)
      */
     private void dealHands(int numPlayers) throws IllegalCommandException {
 
@@ -80,7 +93,8 @@ public class InitState extends State {
     }
 
     /**
-     * Parses and deals the initial card automatically taking it from the initial card shuffled deck and assigning it to each player
+     * Parses and deals the initial card automatically taking it from the initial
+     * card shuffled deck and assigning it to each player
      */
     private void dealInitialCard() {
         initPar = new InitialParser();
@@ -91,9 +105,11 @@ public class InitState extends State {
     }
 
     /**
-     * Randomly chooses two cards parsed from the objective card's JSON file and assigns them to the commonObjective game's attribute
+     * Randomly chooses two cards parsed from the objective card's JSON file and
+     * assigns them to the commonObjective game's attribute
      */
-    // TODO: Verify that the collection returned from the parse() method is already shuffled
+    // TODO: Verify that the collection returned from the parse() method is already
+    // shuffled
     private void dealCommonObjective() {
         objPar = new ObjectiveParser();
         for (int i = 0; i < 2; i++) {
@@ -102,9 +118,11 @@ public class InitState extends State {
     }
 
     /**
-     * Randomly chooses two cards parsed from the objective card's JSON file in order for the player to choose one between them as secret objective
+     * Randomly chooses two cards parsed from the objective card's JSON file in
+     * order for the player to choose one between them as secret objective
      */
-    // TODO: Verify that the collection returned from the parse() method is already shuffled
+    // TODO: Verify that the collection returned from the parse() method is already
+    // shuffled
 
     private void dealSecretObjective() {
         for (Player player : game.getPlayers()) {
@@ -115,11 +133,14 @@ public class InitState extends State {
     }
 
     /**
-     * Performs one after the other the sequence of actions needed for the game's set-up phase
-     * @param nick needed to identify the player
-     * @param color needed for GUI's purposes
+     * Performs one after the other the sequence of actions needed for the game's
+     * set-up phase
+     * 
+     * @param nick       needed to identify the player
+     * @param color      needed for GUI's purposes
      * @param numPlayers needed for dealing hands and cards issues
-     * @throws IllegalCommandException propagates above the possibly rising exceptions
+     * @throws IllegalCommandException propagates above the possibly rising
+     *                                 exceptions
      */
 
     @Override
@@ -128,16 +149,22 @@ public class InitState extends State {
         createFirstPlayer(nick, color, numPlayers);
         dealHands(numPlayers);
         dealInitialCard();
+        super.game.setBoard(new Board()); // FIXME: not amazing to do this here
         dealCommonObjective();
         dealSecretObjective();
         super.game.setState(new WaitPlayerState(super.game));
     }
 
     /**
-     * Methods inherited from State. When it's called in InitState an exception is thrown.
-     * @param nickname the state deputed to manage this method's invocation needs this parameter
-     * @param color the state deputed to manage this method's invocation needs this parameter
-     * @throws IllegalCommandException the exception thrown when this method is called in this state
+     * Methods inherited from State. When it's called in InitState an exception is
+     * thrown.
+     * 
+     * @param nickname the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param color    the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @throws IllegalCommandException the exception thrown when this method is
+     *                                 called in this state
      */
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
@@ -146,11 +173,17 @@ public class InitState extends State {
     }
 
     /**
-     * Methods inherited from State. When it's called in InitState an exception is thrown.
-     * @param nickName the state deputed to manage this method's invocation needs this parameter
-     * @param side the state deputed to manage this method's invocation needs this parameter
-     * @param objCard the state deputed to manage this method's invocation needs this parameter
-     * @throws IllegalCommandException the exception thrown when this method is called in this state
+     * Methods inherited from State. When it's called in InitState an exception is
+     * thrown.
+     * 
+     * @param nickName the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param side     the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param objCard  the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @throws IllegalCommandException the exception thrown when this method is
+     *                                 called in this state
      */
     @Override
     public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
@@ -158,13 +191,21 @@ public class InitState extends State {
     }
 
     /**
-     * Methods inherited from State. When it's called in InitState an exception is thrown.
-     * @param player the state deputed to manage this method's invocation needs this parameter
-     * @param father the state deputed to manage this method's invocation needs this parameter
-     * @param placeThis the state deputed to manage this method's invocation needs this parameter
-     * @param position the state deputed to manage this method's invocation needs this parameter
-     * @param frontUp the state deputed to manage this method's invocation needs this parameter
-     * @throws IllegalCommandException the exception thrown when this method is called in this state
+     * Methods inherited from State. When it's called in InitState an exception is
+     * thrown.
+     * 
+     * @param player    the state deputed to manage this method's invocation needs
+     *                  this parameter
+     * @param father    the state deputed to manage this method's invocation needs
+     *                  this parameter
+     * @param placeThis the state deputed to manage this method's invocation needs
+     *                  this parameter
+     * @param position  the state deputed to manage this method's invocation needs
+     *                  this parameter
+     * @param frontUp   the state deputed to manage this method's invocation needs
+     *                  this parameter
+     * @throws IllegalCommandException the exception thrown when this method is
+     *                                 called in this state
      */
     @Override
     public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
@@ -174,19 +215,31 @@ public class InitState extends State {
     }
 
     /**
-     * Methods inherited from State. When it's called in InitState an exception is thrown.
-     * @param player the state deputed to manage this method's invocation needs this parameter
-     * @param card the state deputed to manage this method's invocation needs this parameter
-     * @param fromDeck the state deputed to manage this method's invocation needs this parameter
-     * @throws IllegalCommandException the exception thrown when this method is called in this state
+     * Methods inherited from State. When it's called in InitState an exception is
+     * thrown.
+     * 
+     * @param player   the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param card     the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param fromDeck the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @throws IllegalCommandException the exception thrown when this method is
+     *                                 called in this state
      */
 
     /**
-     * Methods inherited from State. When it's called in InitState an exception is thrown.
-     * @param player the state deputed to manage this method's invocation needs this parameter
-     * @param card the state deputed to manage this method's invocation needs this parameter
-     * @param fromDeck the state deputed to manage this method's invocation needs this parameter
-     * @throws IllegalCommandException the exception thrown when this method is called in this state
+     * Methods inherited from State. When it's called in InitState an exception is
+     * thrown.
+     * 
+     * @param player   the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param card     the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @param fromDeck the state deputed to manage this method's invocation needs
+     *                 this parameter
+     * @throws IllegalCommandException the exception thrown when this method is
+     *                                 called in this state
      */
     @Override
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {

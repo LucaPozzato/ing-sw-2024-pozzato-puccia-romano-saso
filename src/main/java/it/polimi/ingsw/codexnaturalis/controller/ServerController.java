@@ -17,6 +17,11 @@ public class ServerController {
         this.game = new Game(0);
     }
 
+    // FIXME: delete after testing
+    public Game getGame() {
+        return game;
+    }
+
     public void move(String nickName, String command) {
         Player player = null;
         for (Player p : game.getPlayers()) {

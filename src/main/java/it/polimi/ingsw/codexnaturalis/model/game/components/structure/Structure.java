@@ -23,7 +23,7 @@ public class Structure {
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >
     private Map<String, Integer> visibleSymbols;
     private char[][] visualStructure = new char[174][506];
-    private String[][] skeletonStructure = new String[80][80];
+    private Card[][] cardMatrix = new Card[80][80];
 
     public Structure() {
         this.placedCards = new ArrayList<>();
@@ -58,7 +58,7 @@ public class Structure {
 
         placedCards.add(card);
         addCardToVisual(card, frontUp);
-        addCardToSkeleton(card);
+        addToCardMatrix(card);
         calcVisibleSymbols();
     }
 
@@ -647,7 +647,6 @@ public class Structure {
                     return 3 * (min(visibleSymbols.get("SCROLL"), visibleSymbols.get("INK"),
                             visibleSymbols.get("FEATHER")));
             }
-
         }
         return 0;
     }
@@ -663,14 +662,14 @@ public class Structure {
             throw new IllegalCommandException("Uncomparable numbers");
     }
 
-    private void addCardToSkeleton(Card card) {
+    private void addToCardMatrix(Card card) {
         int x = cardToCoordinate.get(card).getFirst() / 100;
         // Inverting y coordinate to match the matrix structure
         int y = 40 - (cardToCoordinate.get(card).getFirst() % 100 - 40);
-        skeletonStructure[y][x] = card.getIdCard();
+        cardMatrix[y][x] = card;
     }
 
-    public void printSkeleton() {
+    public void printCardMatrix() throws IllegalCommandException {
         int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> i / 100).min().getAsInt();
         int minY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 40 - (i % 100 - 40)).min()
                 .getAsInt();
@@ -681,10 +680,10 @@ public class Structure {
         System.out.println();
         for (int i = minY; i <= maxY; i++) {
             for (int j = minX; j <= maxX; j++) {
-                if (skeletonStructure[i][j] == null)
+                if (cardMatrix[i][j] == null)
                     System.out.print("   ");
                 else
-                    System.out.print(skeletonStructure[i][j]);
+                    System.out.print(cardMatrix[i][j].getSymbol());
             }
             System.out.print("\n");
         }

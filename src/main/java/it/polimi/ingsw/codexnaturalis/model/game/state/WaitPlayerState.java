@@ -19,11 +19,15 @@ public class WaitPlayerState extends State {
 
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
+        if (nickname.equals("")) {
+            throw new IllegalCommandException("Nickname can't be empty");
+        }
+
         for (Player p : super.game.getPlayers()) {
-            if (p.getColor().equals(color)) {
+            if (p.getColor() != null && p.getColor().equals(color)) {
                 throw new IllegalCommandException("Color already taken");
             }
-            if (p.getNickname().equals(nickname)) {
+            if (p.getNickname() != null && p.getNickname().equals(nickname)) {
                 throw new IllegalCommandException("Nickname already taken");
             }
         }
@@ -44,11 +48,10 @@ public class WaitPlayerState extends State {
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setNickname(nickname);
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setColor(color);
 
-        if (isFull()) {
+        if (isFull())
+            super.game.setState(new ChooseSetUpState(super.game));
+        else
             super.game.setState(new WaitPlayerState(super.game));
-        } else {
-            super.game.setState(new PlacedCardState(super.game));
-        }
     }
 
     private boolean isFull() {

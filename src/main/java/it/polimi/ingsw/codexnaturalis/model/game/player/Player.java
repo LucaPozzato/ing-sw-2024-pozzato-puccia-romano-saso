@@ -7,6 +7,9 @@ public class Player {
     private String nickName;
     private Color colorPlayer;
 
+    public Player() {
+    }
+
     public Player(String nickName) {
     }
 
