@@ -15,15 +15,18 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
+import static java.lang.Math.abs;
+
 public class Structure {
     // TODO: delete regionmatches -> code hard to read
     // TODO: add message to IllegalCommandExceptions
     private List<Card> placedCards;
     private Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate; // <Card , <Coordinates, Side, Visited> >
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >
-    private Map<String, Integer> visibleSymbols;
     private char[][] visualStructure = new char[174][506];
+    private Map<String, Integer> visibleSymbols;
     private Card[][] cardMatrix = new Card[80][80];
+    private int satisfiedPatterns;
 
     public Structure() {
         this.placedCards = new ArrayList<>();
@@ -32,6 +35,7 @@ public class Structure {
         this.visibleSymbols = new HashMap<>(
                 Map.of("VEGETABLE", 0, "ANIMAL", 0, "INSECT", 0, "SHROOM", 0, "INK", 0, "SCROLL", 0,
                         "FEATHER", 0, "EMPTY", 0, "NULL", 0));
+        this.satisfiedPatterns = 0;
     }
 
     public Map<Card, Triplet<Integer, Boolean, Boolean>> getCardToCoordinate() {
@@ -45,74 +49,12 @@ public class Structure {
          */
     }
 
-    // frontUp = true -> front of the card is visible
-    // frontUp = false -> back of the card is visible
-    public void placeCard(Card father, Card card, String position, Boolean frontUp) throws IllegalCommandException {
-        // Calculates coordinates of new card
-        Integer destinationCoord = calcCoordinate(father, position);
-        // Checks if the card can be placed and places it
-        isPlaceable(father, card, destinationCoord, position, frontUp);
-
-        cardToCoordinate.put(card, new Triplet<>(destinationCoord, frontUp, false));
-        coordinateToCard.put(destinationCoord, new Triplet<>(card, frontUp, false));
-
-        placedCards.add(card);
-        addCardToVisual(card, frontUp);
-        addToCardMatrix(card);
-        calcVisibleSymbols();
+    public Map<Integer, Triplet<Card, Boolean, Boolean>> getCoordinateToCard() {
+        return coordinateToCard;
     }
 
-    private void calcVisibleSymbols() {
-        int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
-                .min().getAsInt();
-        int minY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
-                .min().getAsInt();
-        int maxX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
-                .max().getAsInt();
-        int maxY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
-                .max().getAsInt();
-
-        // Resets visible symbols
-        for (String symbol : visibleSymbols.keySet()) {
-            visibleSymbols.put(symbol, 0);
-        }
-
-        // Updates visible symbols
-        for (int i = minY - 2; i <= maxY + 2; i++) {
-            for (int j = minX - 4; j <= maxX + 4; j++) {
-                switch (visualStructure[i][j]) {
-                    case 'A':
-                        visibleSymbols.put("ANIMAL", visibleSymbols.get("ANIMAL") + 1);
-                        break;
-                    case 'V':
-                        visibleSymbols.put("VEGETABLE", visibleSymbols.get("VEGETABLE") + 1);
-                        break;
-                    case 'I':
-                        visibleSymbols.put("INSECT", visibleSymbols.get("INSECT") + 1);
-                        break;
-                    case 'S':
-                        visibleSymbols.put("SHROOM", visibleSymbols.get("SHROOM") + 1);
-                        break;
-                    case 's':
-                        visibleSymbols.put("SCROLL", visibleSymbols.get("SCROLL") + 1);
-                        break;
-                    case 'i':
-                        visibleSymbols.put("INK", visibleSymbols.get("INK") + 1);
-                        break;
-                    case 'f':
-                        visibleSymbols.put("FEATHER", visibleSymbols.get("FEATHER") + 1);
-                        break;
-                    case 'N':
-                        visibleSymbols.put("NULL", visibleSymbols.get("NULL") + 1);
-                        break;
-                    case 'E':
-                        visibleSymbols.put("EMPTY", visibleSymbols.get("EMPTY") + 1);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+    public Card[][] getCardMatrix() {
+        return cardMatrix;
     }
 
     public String getVisibleResources() {
@@ -134,21 +76,56 @@ public class Structure {
         return visibleObjects;
     }
 
+    public Map<String, Integer> getvisibleSymbols(){
+        return visibleSymbols;
+    }
+
     public List<Card> getPlacedCards() {
         return placedCards;
     }
 
-    /*
-     * Verifies if the card can be placed in the structure
-     *
-     * @param father the father card
-     *
-     * @param coordinate the coordinate of the new card
-     *
-     * @param position the position of the new card
-     *
-     * @return true if the card can be placed, false otherwise
-     */
+    public int getPointsFromPlayableCard(Card placed, Boolean frontUp) throws IllegalCommandException {
+        if (frontUp == null)
+            throw new IllegalArgumentException("FrontUp cannot be null");
+        if (placed == null)
+            throw new IllegalArgumentException("Card cannot be null");
+
+        if (placed instanceof InitialCard || placed instanceof ObjectiveCard)
+            throw new IllegalArgumentException("Passed neither gold nor resource card");
+
+        if (frontUp && placed.getPoints() > 0) {
+            if (placed instanceof ResourceCard) {
+                return 1;
+            } else if (placed instanceof GoldCard) {
+                if (placed.getPointsType().equals("NULL")) {
+                    return placed.getPoints();
+                } else if (!placed.getPointsType().equals("ANGLE")) {
+                    return visibleSymbols.get(placed.getPointsType());
+                } else if (placed.getPointsType().equals("ANGLE")) {
+                    int coveredCorners = 0;
+                    int placedCoord = cardToCoordinate.get(placed).getFirst();
+                    if (coordinateToCard.get(placedCoord + 99) != null)
+                        coveredCorners++;
+                    if (coordinateToCard.get(placedCoord - 99) != null)
+                        coveredCorners++;
+                    if (coordinateToCard.get(placedCoord + 101) != null)
+                        coveredCorners++;
+                    if (coordinateToCard.get(placedCoord - 101) != null)
+                        coveredCorners++;
+                    return coveredCorners * 2;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void increaseSatisfiedPatterns(){
+        this.satisfiedPatterns++;
+    }
+    public int getSatisfiedPatterns(){
+        return satisfiedPatterns;
+    }
+
     private Boolean isPlaceable(Card father, Card card, Integer coordinate, String position, Boolean frontUp)
             throws IllegalCommandException {
         // checks if initial card is placeable
@@ -219,15 +196,21 @@ public class Structure {
         return true;
     }
 
-    /*
-     * Calculates the coordinate of the new card
-     *
-     * @param father the father card
-     *
-     * @param position the position of the new card
-     *
-     * @return the coordinate of the new card
-     */
+    public void placeCard(Card father, Card card, String position, Boolean frontUp) throws IllegalCommandException {
+        // Calculates coordinates of new card
+        Integer destinationCoord = calcCoordinate(father, position);
+        // Checks if the card can be placed and places it
+        isPlaceable(father, card, destinationCoord, position, frontUp);
+
+        cardToCoordinate.put(card, new Triplet<>(destinationCoord, frontUp, false));
+        coordinateToCard.put(destinationCoord, new Triplet<>(card, frontUp, false));
+
+        placedCards.add(card);
+        addCardToVisual(card, frontUp);
+        addToCardMatrix(card);
+        calcVisibleSymbols();
+    }
+
     private Integer calcCoordinate(Card father, String position) throws IllegalArgumentException {
         if (father == null)
             return 4040;
@@ -257,437 +240,100 @@ public class Structure {
         }
     }
 
-    public int getPointsFromPatterns(List<Card> patternList, Card placed) throws IllegalCommandException {
-        int pointsFromPatterns = 0;
+    private void calcVisibleSymbols() {
+        int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
+                .min().getAsInt();
+        int minY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
+                .min().getAsInt();
+        int maxX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
+                .max().getAsInt();
+        int maxY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
+                .max().getAsInt();
 
-        if (patternList.isEmpty()) {
-            return 0;
-        } else {
-            for (Card pattern : patternList) {
-                if (pattern.getShape().equals("STAIRS")) {
-                    if (searchStairPattern(pattern, placed)) {
-                        pointsFromPatterns += 2;
-                    }
-                } else if (pattern.getShape().equals("CHAIR")) {
-                    if (searchChairPattern(pattern, placed)) {
-                        pointsFromPatterns += 3;
-                    }
-                } else
-                    throw new IllegalCommandException("Unrecognized pattern");
-            }
-            return pointsFromPatterns;
+        // Resets visible symbols
+        for (String symbol : visibleSymbols.keySet()) {
+            visibleSymbols.put(symbol, 0);
         }
-    }
 
-    private boolean searchStairPattern(Card specificPattern, Card placed) throws IllegalCommandException {
-        int placedCoordinate = cardToCoordinate.get(placed).getFirst();
-        switch (specificPattern.getIdCard()) {
-            case "OP1":
-                if ((coordinateToCard.get(placedCoordinate + 101) != null
-                        && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                        coordinateToCard.get(placedCoordinate + 202) != null
-                        && coordinateToCard.get(placedCoordinate + 202).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate + 202).getVisited())) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 202).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate + 101) != null
-                        && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                        coordinateToCard.get(placedCoordinate - 101) != null
-                        && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate - 101).getVisited())) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate - 101) != null
-                        && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate - 101).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate - 202) != null
-                        && coordinateToCard.get(placedCoordinate - 202).getFirst().getSymbol().equals("SHROOM")
-                        && !coordinateToCard.get(placedCoordinate - 202).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 202).setVisited(true);
-                    return true;
-                } else
-                    return false;
-            case "OP2":
-                if ((coordinateToCard.get(placedCoordinate - 198) != null
-                        && coordinateToCard.get(placedCoordinate - 198).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate - 198).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate - 99) != null
-                        && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate - 99).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 198).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate - 99) != null
-                        && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate - 99).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate + 99) != null
-                        && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate + 99).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate + 99) != null
-                        && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate + 99).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate + 198) != null
-                        && coordinateToCard.get(placedCoordinate + 198).getFirst().getSymbol().equals("VEGETABLE")
-                        && !coordinateToCard.get(placedCoordinate + 198).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 198).setVisited(true);
-                    return true;
-                } else
-                    return false;
-
-            case "OP3":
-                if ((coordinateToCard.get(placedCoordinate + 101) != null
-                        && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                        coordinateToCard.get(placedCoordinate + 202) != null
-                        && coordinateToCard.get(placedCoordinate + 202).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate + 202).getVisited())) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 202).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate + 101) != null
-                        && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                        coordinateToCard.get(placedCoordinate - 101) != null
-                        && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate - 101).getVisited())) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate - 101) != null
-                        && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate - 101).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate - 202) != null
-                        && coordinateToCard.get(placedCoordinate - 202).getFirst().getSymbol().equals("ANIMAL")
-                        && !coordinateToCard.get(placedCoordinate - 202).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 202).setVisited(true);
-                    return true;
-                } else
-                    return false;
-
-            case "OP4":
-                if ((coordinateToCard.get(placedCoordinate - 198) != null
-                        && coordinateToCard.get(placedCoordinate - 198).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate - 198).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate - 99) != null
-                        && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate - 99).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 198).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate - 99) != null
-                        && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate - 99).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate + 99) != null
-                        && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate + 99).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                    return true;
-                } else if ((coordinateToCard.get(placedCoordinate + 99) != null
-                        && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate + 99).getVisited()) &&
-                        coordinateToCard.get(placedCoordinate + 198) != null
-                        && coordinateToCard.get(placedCoordinate + 198).getFirst().getSymbol().equals("INSECT")
-                        && !coordinateToCard.get(placedCoordinate + 198).getVisited()) {
-                    coordinateToCard.get(placedCoordinate).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                    coordinateToCard.get(placedCoordinate + 198).setVisited(true);
-                    return true;
-                } else
-                    return false;
-
-            default:
-                throw new IllegalCommandException("Illegal pattern recognized");
-        }
-    }
-
-    private Boolean searchChairPattern(Card specificPattern, Card placed) throws IllegalCommandException {
-        int placedCoordinate = cardToCoordinate.get(placed).getFirst();
-        switch (specificPattern.getIdCard()) {
-            case "OP5":
-                if (placed.getSymbol().equals("VEGETABLES")) {
-                    if (coordinateToCard.get(placedCoordinate - 99) != null
-                            && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("SHROOM")
-                            && !coordinateToCard.get(placedCoordinate - 99).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 97) != null
-                            && coordinateToCard.get(placedCoordinate - 97).getFirst().getSymbol().equals("SHROOM")
-                            && !coordinateToCard.get(placedCoordinate - 97).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 97).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-                if (placed.getSymbol().equals("SHROOM")) {
-                    if (coordinateToCard.get(placedCoordinate - 2) != null
-                            && coordinateToCard.get(placedCoordinate - 2).getFirst().getSymbol().equals("SHROOM")
-                            && !coordinateToCard.get(placedCoordinate - 2).getVisited() &&
-                            coordinateToCard.get(placedCoordinate + 97) != null
-                            && coordinateToCard.get(placedCoordinate + 97).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate + 97).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 2).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 97).setVisited(true);
-                        return true;
-                    } else if (coordinateToCard.get(placedCoordinate + 2) != null
-                            && coordinateToCard.get(placedCoordinate + 2).getFirst().getSymbol().equals("SHROOM")
-                                    & !coordinateToCard.get(placedCoordinate + 2).getVisited()
-                            &&
-                            coordinateToCard.get(placedCoordinate + 99) != null
-                            && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate + 99).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 2).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-
-            case "OP6":
-                if (placed.getSymbol().equals("INSECT")) {
-                    if (coordinateToCard.get(placedCoordinate + 101) != null
-                            && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                            coordinateToCard.get(placedCoordinate + 103) != null
-                            && coordinateToCard.get(placedCoordinate + 103).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate + 103).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 103).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-                if (placed.getSymbol().equals("VEGETABLE")) {
-                    if (coordinateToCard.get(placedCoordinate - 2) != null
-                            && coordinateToCard.get(placedCoordinate - 2).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate - 2).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 103) != null
-                            && coordinateToCard.get(placedCoordinate - 103).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate - 103).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 2).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 103).setVisited(true);
-                        return true;
-                    } else if (coordinateToCard.get(placedCoordinate + 2) != null
-                            && coordinateToCard.get(placedCoordinate + 2).getFirst().getSymbol().equals("VEGETABLE")
-                            && !coordinateToCard.get(placedCoordinate + 2).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 101) != null
-                            && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate - 101).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 2).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-            case "OP7":
-                if (placed.getSymbol().equals("SHROOM")) {
-                    if (coordinateToCard.get(placedCoordinate - 101) != null
-                            && coordinateToCard.get(placedCoordinate - 101).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate - 101).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 103) != null
-                            && coordinateToCard.get(placedCoordinate - 103).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate - 103).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 101).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 103).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-                if (placed.getSymbol().equals("ANIMAL")) {
-                    if (coordinateToCard.get(placedCoordinate + 101) != null
-                            && coordinateToCard.get(placedCoordinate + 101).getFirst().getSymbol().equals("SHROOM")
-                            && !coordinateToCard.get(placedCoordinate + 101).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 2) != null
-                            && coordinateToCard.get(placedCoordinate - 2).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate - 2).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 101).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 2).setVisited(true);
-                        return true;
-                    } else if (coordinateToCard.get(placedCoordinate + 2) != null
-                            && coordinateToCard.get(placedCoordinate + 2).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate + 2).getVisited() &&
-                            coordinateToCard.get(placedCoordinate + 103) != null
-                            && coordinateToCard.get(placedCoordinate + 103).getFirst().getSymbol().equals("SHROOM")
-                            && !coordinateToCard.get(placedCoordinate + 103).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 2).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 103).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-            case "OP8":
-                if (placed.getSymbol().equals("ANIMAL")) {
-                    if (coordinateToCard.get(placedCoordinate + 99) != null
-                            && coordinateToCard.get(placedCoordinate + 99).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate + 99).getVisited() &&
-                            coordinateToCard.get(placedCoordinate + 97) != null
-                            && coordinateToCard.get(placedCoordinate + 97).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate + 97).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 99).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 97).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-                if (placed.getSymbol().equals("INSECT")) {
-                    if (coordinateToCard.get(placedCoordinate - 99) != null
-                            && coordinateToCard.get(placedCoordinate - 99).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate - 99).getVisited() &&
-                            coordinateToCard.get(placedCoordinate - 2) != null
-                            && coordinateToCard.get(placedCoordinate - 2).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate - 2).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 99).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 2).setVisited(true);
-                        return true;
-                    } else if (coordinateToCard.get(placedCoordinate - 97) != null
-                            && coordinateToCard.get(placedCoordinate - 97).getFirst().getSymbol().equals("INSECT")
-                            && !coordinateToCard.get(placedCoordinate - 97).getVisited() &&
-                            coordinateToCard.get(placedCoordinate + 2) != null
-                            && coordinateToCard.get(placedCoordinate + 2).getFirst().getSymbol().equals("ANIMAL")
-                            && !coordinateToCard.get(placedCoordinate + 2).getVisited()) {
-                        coordinateToCard.get(placedCoordinate).setVisited(true);
-                        coordinateToCard.get(placedCoordinate - 97).setVisited(true);
-                        coordinateToCard.get(placedCoordinate + 2).setVisited(true);
-                        return true;
-                    } else
-                        return false;
-                }
-            default:
-                throw new IllegalCommandException("Illegal pattern recognized");
-        }
-    }
-
-    public int getPointsFromPlayableCard(Card placed, Boolean frontUp) throws IllegalCommandException {
-        if (frontUp == null)
-            throw new IllegalArgumentException("FrontUp cannot be null");
-        if (placed == null)
-            throw new IllegalArgumentException("Card cannot be null");
-
-        if (placed instanceof InitialCard || placed instanceof ObjectiveCard)
-            throw new IllegalArgumentException("Passed neither gold nor resource card");
-
-        if (frontUp && placed.getPoints() > 0) {
-            if (placed instanceof ResourceCard) {
-                return 1;
-            } else if (placed instanceof GoldCard) {
-                if (placed.getPointsType().equals("NULL")) {
-                    return placed.getPoints();
-                } else if (!placed.getPointsType().equals("ANGLE")) {
-                    return visibleSymbols.get(placed.getPointsType());
-                } else if (placed.getPointsType().equals("ANGLE")) {
-                    int coveredCorners = 0;
-                    int placedCoord = cardToCoordinate.get(placed).getFirst();
-                    if (coordinateToCard.get(placedCoord + 99) != null)
-                        coveredCorners++;
-                    if (coordinateToCard.get(placedCoord - 99) != null)
-                        coveredCorners++;
-                    if (coordinateToCard.get(placedCoord + 101) != null)
-                        coveredCorners++;
-                    if (coordinateToCard.get(placedCoord - 101) != null)
-                        coveredCorners++;
-                    return coveredCorners * 2;
+        // Updates visible symbols
+        for (int i = minY - 2; i <= maxY + 2; i++) {
+            for (int j = minX - 4; j <= maxX + 4; j++) {
+                switch (visualStructure[i][j]) {
+                    case 'A':
+                        visibleSymbols.put("ANIMAL", visibleSymbols.get("ANIMAL") + 1);
+                        break;
+                    case 'V':
+                        visibleSymbols.put("VEGETABLE", visibleSymbols.get("VEGETABLE") + 1);
+                        break;
+                    case 'I':
+                        visibleSymbols.put("INSECT", visibleSymbols.get("INSECT") + 1);
+                        break;
+                    case 'S':
+                        visibleSymbols.put("SHROOM", visibleSymbols.get("SHROOM") + 1);
+                        break;
+                    case 's':
+                        visibleSymbols.put("SCROLL", visibleSymbols.get("SCROLL") + 1);
+                        break;
+                    case 'i':
+                        visibleSymbols.put("INK", visibleSymbols.get("INK") + 1);
+                        break;
+                    case 'f':
+                        visibleSymbols.put("FEATHER", visibleSymbols.get("FEATHER") + 1);
+                        break;
+                    case 'N':
+                        visibleSymbols.put("NULL", visibleSymbols.get("NULL") + 1);
+                        break;
+                    case 'E':
+                        visibleSymbols.put("EMPTY", visibleSymbols.get("EMPTY") + 1);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        return 0;
-    }
-
-    public Integer getPointsFromObjResCard(ObjectiveCard objective) throws IllegalCommandException {
-        if (java.util.Objects.equals(objective.getShape(), "IDOL")) {
-            switch (objective.getMustHave()) {
-                case "SHROOM": // TODO: change the JSON in plural?
-                    return 2 * (visibleSymbols.get("SHROOM") / 3);
-                case "VEGETABLES":
-                    return 2 * (visibleSymbols.get("VEGETABLE") / 3);
-                case "ANIMALS":
-                    return 2 * (visibleSymbols.get("ANIMAL") / 3);
-                case "INSECTS":
-                    return 2 * (visibleSymbols.get("INSECT") / 3);
-            }
-        } else if (java.util.Objects.equals(objective.getShape(), "WISEMAN")) {
-            switch (objective.getMustHave()) {
-                case "SCROLL":
-                    return 2 * (visibleSymbols.get("SCROLL") / 2);
-                case "INK":
-                    return 2 * (visibleSymbols.get("INK") / 2);
-                case "FEATHER":
-                    return 2 * (visibleSymbols.get("FEATHER") / 2);
-                case "FOLDEDHANDS":
-                    return 3 * (min(visibleSymbols.get("SCROLL"), visibleSymbols.get("INK"),
-                            visibleSymbols.get("FEATHER")));
-            }
-        }
-        return 0;
-    }
-
-    private int min(int x, int y, int z) throws IllegalCommandException {
-        if (x <= y && x <= z)
-            return x;
-        else if (y <= x && y <= z)
-            return y;
-        else if (z <= x && z <= y)
-            return z;
-        else
-            throw new IllegalCommandException("Uncomparable numbers");
     }
 
     private void addToCardMatrix(Card card) {
         int x = cardToCoordinate.get(card).getFirst() / 100;
-        // Inverting y coordinate to match the matrix structure
-        int y = 40 - (cardToCoordinate.get(card).getFirst() % 100 - 40);
-        cardMatrix[y][x] = card;
+        int y = 40 + (cardToCoordinate.get(card).getFirst() % 100 - 40);
+        cardMatrix[x][y] = card;
     }
 
-    public void printCardMatrix() throws IllegalCommandException {
-        int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> i / 100).min().getAsInt();
-        int minY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 40 - (i % 100 - 40)).min()
-                .getAsInt();
-        int maxX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> i / 100).max().getAsInt();
-        int maxY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 40 - (i % 100 - 40)).max()
-                .getAsInt();
+    /**
+     * This method's aim is to provide a simplified search space for SearchXPattern's methods.
+     * @param coordinateToCard to extract the coordinate of the placed card
+     * @return max distance from the centre of the matrux
+     * @throws IllegalCommandException ex
+     */
+    public int getRadius(Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard) throws IllegalCommandException{
+        int radius = 0;
+        for(Integer key : coordinateToCard.keySet()){
+            int x = key/100;
+            int y = key%100;
+            int x_distance = abs(x - 40);
+            int y_distance = abs(y - 40);
+            if(x_distance >= radius) radius = x_distance;
+            else if (y_distance >= radius) radius = y_distance;
+        }
+        return radius;
+    }
 
-        System.out.println();
-        for (int i = minY; i <= maxY; i++) {
-            for (int j = minX; j <= maxX; j++) {
-                if (cardMatrix[i][j] == null)
-                    System.out.print("   ");
-                else
-                    System.out.print(cardMatrix[i][j].getSymbol());
+    /**
+     * This method is used to test purposes after filling the structure with some values. It will print a [2*radius][2*radius] matrix
+     * @param fullMatrix the full [80][80] matrix
+     * @param radius radius computed in getRadius
+     */
+    public void printReducedMatrix(Card[][] fullMatrix, Integer radius){
+        for (int i = 40 + radius ; i >= 40 - radius; i--) {
+            for (int j = 40 - radius ; j <= 40 + radius; j++) {
+                if (fullMatrix[j][i] == null) {
+                    System.out.print("[---]");
+                } else {
+                    System.out.print("[" + fullMatrix[j][i].getIdCard() + "]");
+                }
             }
             System.out.print("\n");
         }
-        System.out.println();
     }
 
     private void addCardToVisual(Card card, Boolean frontUp) throws IllegalCommandException {
@@ -703,7 +349,6 @@ public class Structure {
         visualStructure = card.drawVisual(visualStructure, x, y, frontUp);
     }
 
-    // structure is a matrix of 249x85
     public String draw() throws IllegalCommandException {
         return new Printer().printStructure(visualStructure, coordinateToCard);
     }

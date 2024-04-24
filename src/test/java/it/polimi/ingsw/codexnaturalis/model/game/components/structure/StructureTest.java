@@ -270,7 +270,7 @@ public class StructureTest {
         }
         assertEquals(0, result);
 
-        //////////////////////////////////
+        ////////////////////////////////// <- mixed chair and stair pattern which fails due to share of a card among
 
         ResourceCard GreenTest4 = parser.parse().get(12); // R13
 
@@ -793,5 +793,37 @@ public class StructureTest {
         // [x] Any card that is already twice
         // [x] Any card when father is not placed
         // [x] Any card placed not placed indirectly on null
+    }
+
+    @Test
+    void testgetRadiusAndPrintReducedMatrix() throws IllegalCommandException {
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().get(0);
+        ResourceCard RedTest1 = parser.parse().get(0); // R01
+        ResourceCard RedTest2 = parser.parse().get(1); // R02
+        ResourceCard BluTest1 = parser.parse().get(22); // R23
+        ResourceCard BluTest2 = parser.parse().get(26); // R27
+        ResourceCard BluTest3 = parser.parse().get(21); // R22
+        ResourceCard GreenTest1 = parser.parse().get(18); // R19
+
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, RedTest1, "BL", true);
+            structure.placeCard(initialCardTest, BluTest1, "BR", true);
+            structure.placeCard(BluTest1, BluTest2, "BR", true);
+            structure.placeCard(BluTest2, BluTest3, "BL", true);
+            structure.placeCard(BluTest3, GreenTest1, "BL", true);
+            structure.placeCard(GreenTest1, RedTest2, "TL", true);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
+        assertEquals(4, structure.getRadius(structure.getCoordinateToCard()));
     }
 }
