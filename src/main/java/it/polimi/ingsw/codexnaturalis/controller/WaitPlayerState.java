@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -7,7 +7,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class WaitPlayerState extends State {
+public class WaitPlayerState extends ControllerState {
     public WaitPlayerState(Game game) {
         super(game);
     }
@@ -47,15 +47,16 @@ public class WaitPlayerState extends State {
     private void createNewPlayers(String nickname, Color color) {
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setNickname(nickname);
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setColor(color);
+        super.game.addParticipant();
 
         if (isFull())
-            super.game.setState(new ChooseSetUpState(super.game));
+            super.game.setState(new ChooseSetUpState(super.game, null));
         else
             super.game.setState(new WaitPlayerState(super.game));
     }
 
     private boolean isFull() {
-        if (super.game.getPlayers().size() == super.game.getNumPlayers()) {
+        if (super.game.getPlayers().size() == super.game.getNumParticipants()) {
             return true;
         }
         return false;

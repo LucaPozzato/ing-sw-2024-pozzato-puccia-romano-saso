@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -7,10 +7,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public abstract class State {
+public abstract class ControllerState {
     protected Game game;
 
-    public State(Game game) {
+    public ControllerState(Game game) {
         this.game = game;
     }
 

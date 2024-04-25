@@ -1,4 +1,8 @@
 package it.polimi.ingsw.codexnaturalis.view;
 
-public class View {
+public interface View {
+    // minimodel
+
+    // public void run
+    // ...
 }

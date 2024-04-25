@@ -1,7 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.network.Socket;
 
-import it.polimi.ingsw.codexnaturalis.controller.ServerController;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,12 +8,14 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import it.polimi.ingsw.codexnaturalis.view.CliVerifier;
+
 public class Server {
     final ServerSocket listenSocket;
-    final ServerController controller;
+    final CliVerifier controller;
     final List<ClientHandler> clients = new ArrayList<>();
 
-    public Server(ServerSocket listenSocket, ServerController controller) {
+    public Server(ServerSocket listenSocket, CliVerifier controller) {
         this.listenSocket = listenSocket;
         this.controller = controller;
     }
@@ -53,10 +53,12 @@ public class Server {
         int port = Integer.parseInt(args[1]);
 
         ServerSocket listenSocket = new ServerSocket(port);
-        //Perchè nel costruttore del server controller viene passato lo state?
-        //se viene creato ad inizio game e terminato alla fine basta inserire primo stato del gioco direttamente nella costruzione
-        //+ non credo che abbiamo informazione sullo stato da qui prima di creare il controller
-        //stesso problema in server RMI
-        new Server(listenSocket, new ServerController());
+        // Perchè nel costruttore del server controller viene passato lo state?
+        // se viene creato ad inizio game e terminato alla fine basta inserire primo
+        // stato del gioco direttamente nella costruzione
+        // + non credo che abbiamo informazione sullo stato da qui prima di creare il
+        // controller
+        // stesso problema in server RMI
+        new Server(listenSocket, new CliVerifier());
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,15 +12,13 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class ChooseSetUpState extends State {
-    Map<Player, Boolean> setUpMap;
+public class ChooseSetUpState extends ControllerState {
+    Map<Player, Boolean> setUpMap = new HashMap<>();
 
-    public ChooseSetUpState(Game game) {
+    public ChooseSetUpState(Game game, Map<Player, Boolean> setUpMap) {
         super(game);
-        setUpMap = new HashMap<>();
-        for (Player player : super.game.getPlayers()) {
-            setUpMap.put(player, false);
-        }
+        if (setUpMap != null)
+            this.setUpMap = setUpMap;
     }
 
     @Override
@@ -45,21 +43,20 @@ public class ChooseSetUpState extends State {
     }
 
     public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        if (setUpMap.get(player).equals(true)) {
+        if (setUpMap.keySet().size() > 0 && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
             throw new IllegalCommandException("Player already made his choice");
         } else {
             Hand hand = super.game.getHandByPlayer(player);
             InitialCard initCard = hand.getInitCard();
             super.game.getStructureByPlayer(player).placeCard(null, initCard, null, side);
-            hand.removeCard(initCard);
 
             hand.setSecretObjective(objCard);
             setUpMap.put(player, true);
         }
 
-        if (setUpMap.containsValue(false))
-            super.game.setState(new ChooseSetUpState(super.game));
-        else
+        if (setUpMap.keySet().size() == super.game.getNumPlayers())
             super.game.setState(new PlacedCardState(super.game));
+        else
+            super.game.setState(new ChooseSetUpState(super.game, setUpMap));
     }
 }

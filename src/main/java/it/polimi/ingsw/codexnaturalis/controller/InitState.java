@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import java.util.Collections;
 
@@ -10,6 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
@@ -21,7 +22,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
  * the game and provides general information. Specifically it creates the decks
  * and deals player's hands.
  */
-public class InitState extends State {
+public class InitState extends ControllerState {
     private ResourceParser resPar;
     private GoldParser goldPar;
     private InitialParser initPar;
@@ -67,6 +68,7 @@ public class InitState extends State {
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
+        super.game.addParticipant();
     }
 
     /**
@@ -89,6 +91,7 @@ public class InitState extends State {
             }
             super.game.getHandByPlayer(super.game.getPlayers().get(i))
                     .addCard(super.game.getDeck().drawGoldCard());
+            super.game.setPlayerStructure(super.game.getPlayers().get(i), new Structure());
         }
     }
 
@@ -149,7 +152,13 @@ public class InitState extends State {
         createFirstPlayer(nick, color, numPlayers);
         dealHands(numPlayers);
         dealInitialCard();
+
         super.game.setBoard(new Board()); // FIXME: not amazing to do this here
+        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawResourceCard()); // FIXME
+        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawResourceCard()); // FIXME
+        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawGoldCard()); // FIXME
+        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawGoldCard()); // FIXME
+
         dealCommonObjective();
         dealSecretObjective();
         super.game.setState(new WaitPlayerState(super.game));

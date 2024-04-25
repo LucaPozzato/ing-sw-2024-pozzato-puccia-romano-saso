@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import java.util.EmptyStackException;
 import java.util.List;
@@ -12,7 +12,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class DrawnCardState extends State {
+public class DrawnCardState extends ControllerState {
     public DrawnCardState(Game game) {
         super(game);
     }

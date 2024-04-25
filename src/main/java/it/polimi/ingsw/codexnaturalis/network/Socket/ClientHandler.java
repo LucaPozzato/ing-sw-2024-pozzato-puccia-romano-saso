@@ -1,18 +1,18 @@
 package it.polimi.ingsw.codexnaturalis.network.Socket;
 
-import it.polimi.ingsw.codexnaturalis.controller.ServerController;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
+import it.polimi.ingsw.codexnaturalis.view.CliVerifier;
+
 public class ClientHandler implements VirtualView {
-    final ServerController controller;
+    final CliVerifier controller;
     final Server server;
     final BufferedReader input;
     final VirtualView view;
 
-    public ClientHandler(ServerController controller, Server server, BufferedReader input, BufferedWriter output) {
+    public ClientHandler(CliVerifier controller, Server server, BufferedReader input, BufferedWriter output) {
         this.controller = controller;
         this.server = server;
         this.input = input;

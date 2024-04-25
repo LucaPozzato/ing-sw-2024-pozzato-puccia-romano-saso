@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.controller;
+package it.polimi.ingsw.codexnaturalis.view;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,10 +10,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class ServerController {
+public class CliVerifier {
     private final Game game;
 
-    public ServerController() {
+    public CliVerifier() {
         this.game = new Game(0);
     }
 
@@ -22,11 +22,14 @@ public class ServerController {
         return game;
     }
 
+    // TODΟ: method to add clients/observers to game
+
     public void move(String nickName, String command) {
         Player player = null;
         for (Player p : game.getPlayers()) {
             if (p.getNickname().equals(nickName)) {
                 player = p;
+                break;
             }
         }
         String[] commandArray = command.split(": ");
@@ -78,11 +81,13 @@ public class ServerController {
                 // Format check and replace
                 for (int i = 0; i < 2; i++) {
                     if (parameters[i].startsWith("r"))
-                        parameters[i].replace("r", "R");
+                        parameters[i] = parameters[i].replace("r", "R");
                     if (parameters[i].startsWith("g"))
-                        parameters[i].replace("g", "G");
+                        parameters[i] = parameters[i].replace("g", "G");
+                    if (parameters[i].startsWith("i"))
+                        parameters[i] = parameters[i].replace("i", "I");
                 }
-                parameters[2].toUpperCase();
+                parameters[2] = parameters[2].toUpperCase();
 
                 // checks if the placed card is in player's hand
                 for (Card cards : game.getHandByPlayer(player).getCardsHand()) {
@@ -123,7 +128,7 @@ public class ServerController {
                 // executes the translation and passes it to the model
 
                 try {
-                    game.getState().placedCard(null, father, placeThis, parameters[2],
+                    game.getState().placedCard(player, father, placeThis, parameters[2],
                             Boolean.parseBoolean(parameters[3]));
                 } catch (IllegalCommandException e) {
                     game.throwException(e.getMessage());

@@ -5,36 +5,39 @@ import java.util.List;
 
 public class GameCli {
     // Cursor starts from 1, 1 -> \u001B[y;xH
-    List<String> hand, board, decks, objectives, initialCard, chooseObjectives;
-    String resources, scoreBoard, virtualPoints, error, structure, nextPlayerStructure;
-    int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0;
+    List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resources, players;
+    String scoreBoard, alert, nextPlayerStructure, currentPlayer, currentState;
+    int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0;
 
-    // [ ] Other structures and resources
-    // [ ] possible color coordinated boxes -> or just other color for other player
-    // [ ] if other player -> box with "viewing plyer's name"
-    // [ ] box with current player's name
-    // [ ] box with current "state"
-    // [ ] error box in initial phase
+    // [x] Other structures and resources
+    // [ ] FUTURE -> possible color coordinated boxes -> or just other color for
+    // other player
+    // [ ] FUTURE -> see other player's hand
+    // [x] if other player -> box with "viewing plyer's name"
+    // [x] box with current player's name
+    // [x] box with current "state"
+    // [x] alert box in initial phase
 
     public GameCli() {
-        this.structure = "";
+        this.structures = new ArrayList<>();
         this.nextPlayerStructure = "";
+        this.currentPlayer = "";
+        this.currentState = "";
         this.hand = new ArrayList<>(List.of(""));
         this.board = new ArrayList<>(List.of(""));
         this.decks = new ArrayList<>(List.of("", ""));
         this.objectives = new ArrayList<>(List.of(""));
         this.initialCard = new ArrayList<>(List.of(""));
         this.chooseObjectives = new ArrayList<>(List.of(""));
-        this.resources = "";
+        this.resources = new ArrayList<>(List.of(""));
         this.scoreBoard = "";
-        this.virtualPoints = "";
-        this.error = "";
+        this.alert = "";
     }
 
     // TODO: define all other exceptions for bad parameters in update methods
-    public void updateStructure(String structure) {
+    public void updateStructure(List<String> structure) {
         if (structure != null)
-            this.structure = structure;
+            this.structures = structure;
     }
 
     public void updateHand(List<String> hand) {
@@ -57,24 +60,19 @@ public class GameCli {
             this.objectives = objectives;
     }
 
-    public void updateResources(String resources) {
+    public void updateResources(List<String> resources) {
         if (resources != null)
             this.resources = resources;
     }
 
-    public void updateError(String error) {
-        if (error != null)
-            this.error = error;
+    public void updateAlert(String alert) {
+        if (alert != null)
+            this.alert = alert;
     }
 
     public void updateScoreBoard(String scoreBoard) {
         if (scoreBoard != null)
             this.scoreBoard = scoreBoard;
-    }
-
-    public void updateVirtualPoints(String virtualPoints) {
-        if (virtualPoints != null)
-            this.virtualPoints = virtualPoints;
     }
 
     public void updateNextPlayerStructure(String nextPlayerStructure) {
@@ -92,8 +90,23 @@ public class GameCli {
             this.chooseObjectives = chooseObjectives;
     }
 
-    public void clearError() {
-        this.error = "";
+    public void updatePlayers(List<String> players) {
+        if (players != null)
+            this.players = players;
+    }
+
+    public void updateCurrentPlayer(String currentPlayer) {
+        if (currentPlayer != null)
+            this.currentPlayer = currentPlayer;
+    }
+
+    public void updateCurrentState(String currentState) {
+        if (currentState != null)
+            this.currentState = currentState;
+    }
+
+    public void clearAlert() {
+        this.alert = "";
     }
 
     public void clear() {
@@ -105,12 +118,7 @@ public class GameCli {
     }
 
     public void clearInput() {
-        String tmpStructure = "";
-        // TODO: when "NEXT" -> maybe get index and update the player's structure
-        // if (command.contains("viewing"))
-        // tmpStructure = this.nextPlayerStructure;
-        // else
-        tmpStructure = this.structure;
+        String tmpStructure = structures.get(indexPlayer);
 
         if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
                 + hand.get(0).split("\n").length)
@@ -123,15 +131,7 @@ public class GameCli {
 
     }
 
-    public void printInitial()
-            throws IllegalArgumentException {
-        // TODO: add error box for initial phase
-
-        if (initialCard == null || chooseObjectives == null) {
-            throw new IllegalArgumentException("Parameters cannot be null");
-        }
-        // TODO: throw all other exceptions for bad parameters
-
+    public void printInitial() {
         midHeight = height / 2;
         midWidth = width / 2;
 
@@ -144,13 +144,22 @@ public class GameCli {
         minX = midWidth - chooseObjectives.get(0).split("\n")[0].length() - 4;
         maxX = midWidth + chooseObjectives.get(0).split("\n")[0].length() + 6;
 
+        printAlert(midHeight + chooseObjectives.get(0).split("\n").length + 5,
+                (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
+
         printBox(minX, midHeight + chooseObjectives.get(0).split("\n").length + 2, maxX - minX, 3, "Input");
         System.out.print(
                 "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H");
     }
 
-    // gets as input command and message -> need method that clears input box every
-    // time it's called
+    public void printNext() {
+        indexPlayer++;
+    }
+
+    public void resetView() {
+        indexPlayer = 0;
+    }
+
     public void print() {
         midHeight = height / 2 - 3;
         delta = (maxX + minX) / 2 - width / 2;
@@ -159,12 +168,8 @@ public class GameCli {
         else
             midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
-        String tmpStructure = "";
-        // TODO: when "NEXT" -> maybe get index
-        // if (command.contains("viewing"))
-        // tmpStructure = this.nextPlayerStructure;
-        // else
-        tmpStructure = this.structure;
+        String tmpStructure = structures.get(indexPlayer);
+        String tmpResource = resources.get(indexPlayer);
 
         printStructure(midHeight - tmpStructure.split("\n").length / 2,
                 midWidth - tmpStructure.split("\n")[0].length() / 2, tmpStructure);
@@ -185,41 +190,67 @@ public class GameCli {
                     midWidth + tmpStructure.split("\n")[0].length() / 2 + 5
                             + board.get(0).split("\n")[0].length() + 3);
         }
-        if (tmpStructure.split("\n").length < resources.split("\n").length)
-            printResources(midHeight + tmpStructure.split("\n").length / 2 - resources.split("\n").length + 1,
-                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
+        if (tmpStructure.split("\n").length < tmpResource.split("\n").length)
+            printResources(midHeight + tmpStructure.split("\n").length / 2 - tmpResource.split("\n").length + 1,
+                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length(),
+                    tmpResource);
         else
-            printResources(midHeight - resources.split("\n").length / 2,
-                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
+            printResources(midHeight - tmpResource.split("\n").length / 2,
+                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length(),
+                    tmpResource);
 
         printObjectives(midHeight - objectives.get(0).split("\n").length * objectives.size() / 2,
-                midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length() - 4
+                midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length() - 4
                         - objectives.get(0).split("\n")[0].length());
 
         if (board.get(0).split("\n").length * board.size() < tmpStructure.split("\n").length) {
-            printVirtualPoints(midHeight - tmpStructure.split("\n").length - 4,
-                    (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2);
+            printCurrentPlayer(midHeight - tmpStructure.split("\n").length - 4,
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentState.length()) + 6) / 2);
             printScoreBoard(midHeight - tmpStructure.split("\n").length - 4,
-                    (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2 + virtualPoints.length()
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentPlayer.length()) + 6)
+                                    / 2
+                            + Math.max("Current Player".length(), currentPlayer.length()) + 3);
+            printCurrentState(midHeight - tmpStructure.split("\n").length - 4,
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentState.length()) + 6) / 2
+                            + Math.max("Current Player".length(), currentPlayer.length()) + 3 + scoreBoard.length()
                             + 3);
+
         } else {
-            printVirtualPoints(midHeight - board.get(0).split("\n").length * 2 - 4,
-                    (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2);
+            printCurrentPlayer(midHeight - board.get(0).split("\n").length * 2 - 4,
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentState.length()) + 6)
+                                    / 2);
             printScoreBoard(midHeight - board.get(0).split("\n").length * 2 - 4,
-                    (maxX + minX) / 2 - (virtualPoints.length() + scoreBoard.length() + 4) / 2 + virtualPoints.length()
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentPlayer.length()) + 6)
+                                    / 2
+                            + Math.max("Current Player".length(), currentPlayer.length()) + 3);
+            printCurrentState(midHeight - board.get(0).split("\n").length * 2 - 4,
+                    (maxX + minX) / 2
+                            - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
+                                    + Math.max("State".length(), currentState.length()) + 6) / 2
+                            + Math.max("Current Player".length(), currentPlayer.length()) + 3 + scoreBoard.length()
                             + 3);
         }
 
         if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
                 + hand.get(0).split("\n").length) {
-            printError(midHeight + board.get(0).split("\n").length * board.size() / 2 + 6,
-                    (maxX + minX - error.length()) / 2 - 1);
+            printAlert(midHeight + board.get(0).split("\n").length * board.size() / 2 + 6,
+                    (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
             printBox(minX, midHeight + board.get(0).split("\n").length * board.size() / 2 + 3, maxX - minX, 3, "Input");
             System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
                     + (minX + 1) + "H");
         } else {
-            printError(midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
-                    (maxX + minX - error.length()) / 2 - 1);
+            printAlert(midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
+                    (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
             printBox(minX, midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
                     maxX - minX, 3, "Input");
             System.out.print(
@@ -293,31 +324,30 @@ public class GameCli {
         }
     }
 
-    private void printResources(int y, int x) {
+    private void printResources(int y, int x, String tmpResource) {
         int maxWidth = 0;
-        for (int i = 0; i < resources.split("\n").length; i++) {
-            if (resources.split("\n")[i].length() > maxWidth)
-                maxWidth = resources.split("\n")[i].length();
+        for (int i = 0; i < tmpResource.split("\n").length; i++) {
+            if (tmpResource.split("\n")[i].length() > maxWidth)
+                maxWidth = tmpResource.split("\n")[i].length();
         }
 
-        printBox(x, y, maxWidth + 2, resources.split("\n").length + 2, "Resource");
+        printBox(x, y, maxWidth + 2, tmpResource.split("\n").length + 2, "Resource");
         x++;
         y++;
-        for (int i = 0; i < resources.split("\n").length; i++) {
-            System.out.print("\u001B[" + y + ";" + x + "H" + resources.split("\n")[i]);
+        for (int i = 0; i < tmpResource.split("\n").length; i++) {
+            System.out.print("\u001B[" + y + ";" + x + "H" + tmpResource.split("\n")[i]);
             y++;
         }
     }
 
-    private void printError(int y, int x) {
-        if (error.equals("")) {
-            x -= 4;
-            printBox(x, y, 9, 3, "Error");
-        } else
-            printBox(x, y, error.length() + 2, 3, "Error");
+    private void printAlert(int y, int x) {
+        printBox(x, y, Math.max("Alert".length(), alert.length()) + 2, 3, "Alert");
         x++;
         y++;
-        System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;124m" + error + "\u001B[0m");
+        if (alert.contains("Warning"))
+            System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;94m" + alert + "\u001B[0m");
+        else
+            System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;124m" + alert + "\u001B[0m");
     }
 
     private void printScoreBoard(int y, int x) {
@@ -327,11 +357,18 @@ public class GameCli {
         System.out.print("\u001B[" + y + ";" + x + "H" + scoreBoard);
     }
 
-    private void printVirtualPoints(int y, int x) {
-        printBox(x, y, virtualPoints.length() + 2, 3, "Tot");
+    private void printCurrentPlayer(int y, int x) {
+        printBox(x, y, Math.max("Current Player".length(), currentPlayer.length()) + 2, 3, "Current Player");
         x++;
         y++;
-        System.out.print("\u001B[" + y + ";" + x + "H" + virtualPoints);
+        System.out.print("\u001B[" + y + ";" + x + "H" + currentPlayer);
+    }
+
+    private void printCurrentState(int y, int x) {
+        printBox(x, y, Math.max("State".length(), currentState.length()) + 2, 3, "State");
+        x++;
+        y++;
+        System.out.print("\u001B[" + y + ";" + x + "H" + currentState);
     }
 
     private void printInitialCard(int y, int x, List<String> initialCard) {
@@ -382,10 +419,10 @@ public class GameCli {
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
         // function that prints a box with a title in the center
         // TODO: add color to box considering player
-        // if (this.command.contains("viewing") && title.equals("Structure"))
-        // System.out.print("\u001B[33m"); // set color to blue
-        // else
-        System.out.print("\u001B[38;5;242m"); // set color to gray
+        if (indexPlayer != 0 && (title.equals("Structure") || title.equals("Resource")))
+            System.out.print("\u001B[33m"); // set color to yellow
+        else
+            System.out.print("\u001B[38;5;242m"); // set color to gray
 
         for (int i = 0; i < boxHeight; i++) {
             for (int j = 0; j < boxWidth; j++) {

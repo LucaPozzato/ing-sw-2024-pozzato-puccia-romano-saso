@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.state;
+package it.polimi.ingsw.codexnaturalis.controller;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -9,7 +9,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class PlacedCardState extends State {
+public class PlacedCardState extends ControllerState {
     // TODO: remove regionMatches and use equals -> code more readable
     public PlacedCardState(Game game) {
         super(game);
@@ -78,7 +78,6 @@ public class PlacedCardState extends State {
             }
         }
     }
-
 
     private void updateActualPoints(int points) throws IllegalCommandException {
         super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
