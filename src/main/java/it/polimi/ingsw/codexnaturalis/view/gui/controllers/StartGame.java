@@ -3,10 +3,7 @@ package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -22,7 +19,11 @@ public class StartGame implements Initializable{
     @FXML
     private ChoiceBox<String> ChooseColor;
 
+    @FXML
+    private ChoiceBox<String> ChoosePlayers;
+
     private String[] colors = {"Blue", "Red", "Green", "Yellow"};
+    private String[] playersNum = {"2", "3", "4"};
 
     @FXML
     private Button CreateGame;
@@ -34,13 +35,21 @@ public class StartGame implements Initializable{
     private TextField EnterPassword;
 
     @FXML
+    ToggleGroup toggleGroup = new ToggleGroup();
+
+    @FXML
     private RadioButton RMI;
 
     @FXML
     private RadioButton SOCKET;
 
+
+
+
+
     @FXML
     void CreateGameFunct(MouseEvent event) {
+
         Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
         viewFactory.showGame();
@@ -55,7 +64,15 @@ public class StartGame implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        RMI.setSelected(true);
+        RMI.setToggleGroup(toggleGroup);
+        SOCKET.setToggleGroup(toggleGroup);
+
         ChooseColor.setValue("Blue");
         ChooseColor.getItems().addAll(colors);
+
+        ChoosePlayers.setValue("2");
+        ChoosePlayers.getItems().addAll(playersNum);
+
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.view.gui;
 
+import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
+import it.polimi.ingsw.codexnaturalis.view.gui.controllers.StartGame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -48,6 +50,7 @@ public class ViewFactory {
     public void showGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
         createStage(loader);
+
     }
 
     private void createStage(FXMLLoader loader) {

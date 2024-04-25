@@ -1,11 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game">
+<AnchorPane prefHeight="671.0" prefWidth="1200.0" style="-fx-background-color: #C0C0C0;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game">
    <children>
-      <Label layoutX="586.0" layoutY="327.0" text=" Questa e' una prova" />
+      <ImageView fx:id="Tabellone" fitHeight="451.0" fitWidth="317.0" layoutX="33.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/plateau_score.jpg" />
+         </image>
+      </ImageView>
+      <HBox layoutX="428.0" layoutY="555.0" prefHeight="79.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <ImageView fx:id="card1" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../FrontCards/R27f.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="card2" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../FrontCards/R27f.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="card3" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../FrontCards/R27f.jpg" />
+               </image>
+            </ImageView>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <VBox alignment="CENTER" layoutX="964.0" layoutY="217.0" prefHeight="179.0" prefWidth="242.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+               <children>
+                  <ImageView fx:id="RD1" fitHeight="67.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="RD2" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+               <children>
+                  <ImageView fx:id="GD1" fitHeight="67.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="GD2" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="964.0" layoutY="431.0" prefHeight="216.0" prefWidth="252.0">
+         <children>
+            <Label text="Common Objective">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </Label>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+               <children>
+                  <ImageView fx:id="CO1" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="CO2" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <Label text="Secrete Objective">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </Label>
+            <HBox prefHeight="79.0" prefWidth="231.0" spacing="12.0">
+               <children>
+                  <ImageView fx:id="SO1" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="SO2" fitHeight="79.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/R27f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </VBox>
+      <Text fx:id="nickname2" layoutX="1059.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="993.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/fungo.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="340.0" layoutX="1043.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/foglia.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="1093.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/lupo.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="1143.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/farfalla.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="993.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/penna.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="1043.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/pergamena.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="34.0" layoutX="1093.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SymbolsPng/pozione.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="mushroomPoints" layoutX="1018.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="leafPoints" layoutX="1067.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="wolfPoints" layoutX="1117.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="butterflyPoints" layoutX="1169.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="featherPoints" layoutX="1018.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="manuscriptPoints" layoutX="1067.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="potionPoints" layoutX="1117.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
    </children>
 </AnchorPane>
