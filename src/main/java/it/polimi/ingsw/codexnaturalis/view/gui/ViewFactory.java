@@ -1,7 +1,8 @@
 package it.polimi.ingsw.codexnaturalis.view.gui;
 
+import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
-import it.polimi.ingsw.codexnaturalis.view.gui.controllers.StartGame;
+import it.polimi.ingsw.codexnaturalis.view.gui.controllers.GameInizializer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -9,7 +10,6 @@ import javafx.stage.Stage;
 
 public class ViewFactory {
 
-    //User view
     private AnchorPane gameView;
 
     public ViewFactory(){};
@@ -36,6 +36,23 @@ public class ViewFactory {
         createStage(loader);
     }
 
+    public void showGameInizializer(String username){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gameInizializer.fxml"));
+        createStage(loader);
+        //Passo il nick a gameInizializer
+        GameInizializer gameInizializer = loader.getController();
+        gameInizializer.displayName(username);
+    }
+
+    public void showGame(String username, String colorSelected, String objSelected, String initialCard, String res1, String res2, String gold, Deck deck){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
+        createStage(loader);
+        Game game = loader.getController();
+        game.setUp(username, colorSelected, objSelected, initialCard, res1, res2, gold, deck);
+
+    }
+
+
     public void showJoinGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("joinGame.fxml"));
         createStage(loader);
@@ -47,11 +64,6 @@ public class ViewFactory {
     }
 
 
-    public void showGame(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
-        createStage(loader);
-
-    }
 
     private void createStage(FXMLLoader loader) {
         Scene scene = null;

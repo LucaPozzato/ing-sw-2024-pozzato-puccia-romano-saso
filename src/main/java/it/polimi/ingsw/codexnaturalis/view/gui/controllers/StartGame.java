@@ -4,9 +4,14 @@ import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,13 +21,10 @@ public class StartGame implements Initializable{
     private Button goBack;
     ViewFactory viewFactory = new ViewFactory();
 
-    @FXML
-    private ChoiceBox<String> ChooseColor;
 
     @FXML
     private ChoiceBox<String> ChoosePlayers;
 
-    private String[] colors = {"Blue", "Red", "Green", "Yellow"};
     private String[] playersNum = {"2", "3", "4"};
 
     @FXML
@@ -43,6 +45,9 @@ public class StartGame implements Initializable{
     @FXML
     private RadioButton SOCKET;
 
+    @FXML
+    private ImageView passwordVisibility;
+    int cambiamentoTestoPassword = 0;
 
 
 
@@ -52,7 +57,7 @@ public class StartGame implements Initializable{
 
         Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showGame();
+        viewFactory.showGameInizializer(EnterNickname.getText()); //EnterNickname.getText()
     }
 
     @FXML
@@ -64,15 +69,40 @@ public class StartGame implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         RMI.setSelected(true);
         RMI.setToggleGroup(toggleGroup);
         SOCKET.setToggleGroup(toggleGroup);
 
-        ChooseColor.setValue("Blue");
-        ChooseColor.getItems().addAll(colors);
-
         ChoosePlayers.setValue("2");
         ChoosePlayers.getItems().addAll(playersNum);
 
+        GaussianBlur blur = new GaussianBlur();
+        blur.setRadius(6.5);
+        EnterPassword.setEffect(blur);
+
+
+
     }
+
+    @FXML
+    void changePasswordText(MouseEvent event) {
+        if (cambiamentoTestoPassword %2 == 0){
+            EnterPassword.setEffect(null);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+        }
+        else{
+            GaussianBlur blur = new GaussianBlur();
+            blur.setRadius(6.5);
+            EnterPassword.setEffect(blur);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+
+        }
+        cambiamentoTestoPassword++;
+    }
+
 }
