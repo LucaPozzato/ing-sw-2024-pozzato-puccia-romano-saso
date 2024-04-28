@@ -4,11 +4,17 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -86,6 +92,35 @@ public class Game implements Initializable {
     String cartaDeckGold1;
     String cartaDeckGold2;
 
+    @FXML
+    private HBox card1Box;
+
+    DraggableMaker draggableMaker = new DraggableMaker();
+
+    //For testing
+
+    @FXML
+    private Pane panino;
+
+    @FXML
+    void addCard(MouseEvent event) {
+        String imagePath =  "/it/polimi/ingsw/codexnaturalis/FrontCards/G18f.jpg";
+        InputStream imageStream = getClass().getResourceAsStream(imagePath);
+        assert imageStream != null;
+        Image image = new Image(imageStream);
+
+        ImageView imageView = new ImageView(image);
+        panino.getChildren().add(imageView);
+
+        imageView.setFitWidth(84);
+        imageView.setFitHeight(58);
+        imageView.setLayoutX(318);
+        imageView.setLayoutY(265);
+
+
+
+    }
+
 
 
     public void setUp(String username, String colorSelected, String objSelected, String cartaIniziale, String res1, String res2, String gold, Deck deck1){
@@ -141,6 +176,35 @@ public class Game implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/codexnaturalis/view/gui/provaInGame.fxml"));
+        try {
+            panino.getChildren().add(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        initialCard.setLayoutX(253);
+        initialCard.setLayoutY(300);
+
+        color.setLayoutX(285);
+        color.setLayoutY(348);
+
+        panino.getChildren().addAll(initialCard, color);
+
+        draggableMaker.makeDraggable(card1Box, card1);
 
     }
+
+    public void spostaStruttura(){
+
+        for (int i=1; i < panino.getChildren().size(); i++){
+            Node elemento = panino.getChildren().get(i);
+            String element = elemento.toString();
+            element = element.substring(13, element.indexOf(","));
+
+            System.out.println(element + "\n");
+        }
+
+    }
+
 }

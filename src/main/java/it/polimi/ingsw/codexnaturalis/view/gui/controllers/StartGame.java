@@ -78,7 +78,7 @@ public class StartGame implements Initializable{
         ChoosePlayers.getItems().addAll(playersNum);
 
         GaussianBlur blur = new GaussianBlur();
-        blur.setRadius(6.5);
+        blur.setRadius(7.5);
         EnterPassword.setEffect(blur);
 
 
@@ -95,7 +95,7 @@ public class StartGame implements Initializable{
         }
         else{
             GaussianBlur blur = new GaussianBlur();
-            blur.setRadius(6.5);
+            blur.setRadius(7.5);
             EnterPassword.setEffect(blur);
             InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
             Image image = new Image(imageStream);

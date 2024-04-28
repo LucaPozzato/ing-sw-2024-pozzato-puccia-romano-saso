@@ -74,6 +74,7 @@ public class ViewFactory {
         }
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.setTitle("Codex naturalis");
         stage.show();
     }
