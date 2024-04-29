@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game;
+package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,8 @@ import java.util.Map;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Triplet;
-import javafx.util.Pair;
 
-public class Printer {
+public class Renderer {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[38;5;196m";
     private static final String ANSI_GREEN = "\u001B[32m";
@@ -24,7 +23,7 @@ public class Printer {
     private static final String ANSI_BG_BLUE = "\u001B[48;5;19m";
     private static final String ANSI_BG_PURPLE = "\u001B[48;5;55m";
 
-    public List<String> printHand(List<String> hand, List<Pair<Card, Boolean>> cardsHand)
+    public List<String> printHand(List<String> hand, List<Card> cardsHand)
             throws IllegalCommandException {
         List<String> handStringList = new ArrayList<>();
         String[] cardLines;
@@ -63,7 +62,7 @@ public class Printer {
                             break;
                         case 'R', 'G':
                             // Calculates the coordinates given the index of the matrix
-                            switch (cardsHand.get(k).getKey().getSymbol()) {
+                            switch (cardsHand.get(k).getSymbol()) {
                                 case "SHROOM":
                                     handStringList.set(pos,
                                             handStringList.get(pos) + ANSI_BG_RED + cardLine.charAt(i));
@@ -236,6 +235,9 @@ public class Printer {
     public String printStructure(char[][] board, Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard)
             throws IllegalCommandException {
         String structureString = "";
+
+        if (coordinateToCard.isEmpty())
+            return structureString;
 
         int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
                 .min().getAsInt();

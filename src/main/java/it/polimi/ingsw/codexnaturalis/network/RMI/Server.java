@@ -9,19 +9,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.controller.InitState;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
+import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 
 public class Server implements VirtualServer {
     final ControllerState controller;
     final List<VirtualClient> clients = new ArrayList<>(); // qui dentro ci sono gli stub dei clients
-    private final Queue<Event> eventQueue;
+    private final Queue<Command> commandQueue;
 
     public Server(ControllerState controller) {
         this.controller = controller;
-        this.eventQueue = new LinkedList<Event>();
+        this.commandQueue = new LinkedList<Command>();
     }
 
     public static void main(String[] args) throws RemoteException {
@@ -47,23 +49,24 @@ public class Server implements VirtualServer {
         }
     }
 
-    public void queueUpdate(Event event) throws IllegalStateException {
-        eventQueue.add(event);
+    @Override
+    public void queueUpdate(Command command) throws IllegalStateException {
+        commandQueue.add(command);
         // notify del thread;
         // gestione exception?
     }
 
-    public void processEventThread() {
-        new Thread(this::processEvent).start();
+    public void processCommandThread() {
+        new Thread(this::processCommand).start();
     }
 
-    public void processEvent() {
+    public void processCommand() {
         // TODO: gestione eccezioni
         while (true) {
             try {
-                Event event = this.eventQueue.poll();
+                Command command = this.commandQueue.poll();
                 synchronized (this.controller) {
-                    event.run(controller);
+                    command.execute(controller);
                 }
             } catch (Exception e) {
                 // System.err.println("");

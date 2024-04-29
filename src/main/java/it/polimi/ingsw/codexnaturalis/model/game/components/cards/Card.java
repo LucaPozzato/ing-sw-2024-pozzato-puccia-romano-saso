@@ -24,6 +24,14 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have a musthave");
     }
 
+    public Integer getDivideBy() throws IllegalCommandException {
+        throw new IllegalCommandException("This card does not have a divideBy");
+    }
+
+    public Integer[] getWhole3x3() throws IllegalCommandException {
+        throw new IllegalCommandException("This card is not a pattern one");
+    }
+
     public String getShape() throws IllegalCommandException {
         throw new IllegalCommandException("This card does not have a shape");
     }
@@ -54,15 +62,6 @@ public abstract class Card {
 
     public void print() {
         System.out.println("Card: " + idCard);
-    }
-
-    public char[][] drawVisual(char[][] drawingBoard, int x, int y, Boolean side) throws IllegalCommandException {
-        throw new IllegalCommandException("This card does not have a visual representation");
-    }
-
-    public String drawDetailedVisual(Boolean side)
-            throws IllegalCommandException {
-        throw new IllegalCommandException("This card does not have a detailed visual representation");
     }
 
     @Override

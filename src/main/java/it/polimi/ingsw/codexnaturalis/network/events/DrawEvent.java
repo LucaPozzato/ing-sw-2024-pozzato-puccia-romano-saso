@@ -1,24 +1,24 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
-import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
+import java.util.List;
+
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
-import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.MiniModel;
 
-//extends Serializable? 
 public class DrawEvent extends Event {
-    Player player;
-    Card card;
-    String fromDeck;
+    private List<Card> uncoveredCards;
+    private Integer turnCounter;
 
-    public DrawEvent(Player player, Card card, String fromDeck) {
-        this.player = player;
-        this.card = card;
-        this.fromDeck = fromDeck;
+    public DrawEvent(Hand hand, List<Card> uncoveredCards, Integer turnCounter) {
+        this.uncoveredCards = uncoveredCards;
+        this.turnCounter = turnCounter;
     }
 
-    public void run(ControllerState controller) throws IllegalCommandException {
-        controller.drawnCard(player, card, fromDeck);
+    public void doJob(MiniModel miniModel) throws IllegalCommandException {
+        miniModel.setUncoveredCards(uncoveredCards);
+        miniModel.setTurnCounter(turnCounter);
     }
 
 }

@@ -3,48 +3,70 @@
         "id": "OP1",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "RED"
+        "mustHave": "SHROOM",
+        "divideBy" : "0",
+        "whole3x3": "2,4,6"
     },
     {
         "id": "OP2",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "GREEN"
+        "mustHave": "VEGETABLES",
+        "divideBy" : "0",
+        "whole3x3": "0,4,8"
+
     },
     {
         "id": "OP3",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "BLUE"
+        "mustHave": "ANIMALS",
+        "divideBy" : "0",
+        "whole3x3": "2,4,6"
+
     },
     {
         "id": "OP4",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "PURPLE"
+        "mustHave": "INSECTS",
+        "divideBy" : "0",
+        "whole3x3": "0,4,8"
+
     },
     {
         "id": "OP5",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "RED"
+        "mustHave": "SHROOM",
+        "divideBy" : "0",
+        "whole3x3": "1,4,8"
+
     },
     {
         "id": "OP6",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "GREEN"
+        "mustHave": "VEGETABLES",
+        "divideBy" : "0",
+        "whole3x3": "1,4,6"
+
     },
     {
         "id": "OP7",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "BLUE"
+        "mustHave": "ANIMALS",
+        "divideBy" : "0",
+        "whole3x3": "2,4,7"
+
     },
     {
         "id": "OP8",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "PURPLE"
+        "mustHave": "INSECTS",
+        "divideBy" : "0",
+        "whole3x3": "0,4,7"
     }
 ]

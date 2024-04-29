@@ -3,23 +3,15 @@ package it.polimi.ingsw.codexnaturalis.model.game.parser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
-
-//Nel metodo della classe InitState "dealSecretObjective" occorre chiamare il parser che ritorna la collection.
-//Della lista (che è già randomica) dobbiamo assegnare due carte alla hand di ogni player facendole contemporaneamente scomparire da collection
-//Bisogna implementare un metodo setter di chooseBetweenObject (attributo di hand)
-//SE VOGLIAMO LAVORARE SU COLLECTION OCCORRE CHE PARSE() TORNI UNA LISTA DI OBJECTIVE CARDS
-
-//Nel metodo della classe InitState "dealCommonObjective" occorre conservare ciò che rimane della collecion dopo che il player ha scelto la sua carta obiettivo segreto.
-//Considerare di chiamare il metodo in uno stato successivo all'iniziale?
-//In ogni caso andranno selezionate randomicamente due carte tra quelle che collection contiene e posizionate sulla board come common Objective
-//Va cambiato il tipo di commonObjective nell'UML
 
 public class ObjectiveParser {
     private List<ObjectiveCard> collection;
@@ -43,8 +35,20 @@ public class ObjectiveParser {
             int points = cardsObject.get("points").getAsInt();
             String shape = cardsObject.get("shape").getAsString();
             String mustHave = cardsObject.get("mustHave").getAsString();
+            Integer divideBy = cardsObject.get("divideBy").getAsInt();
+            String numStringCheck = cardsObject.get("whole3x3").getAsString();
+            Integer[] whole3x3 = new Integer[numStringCheck.length()];
 
-            ObjectiveCard objCard = new ObjectiveCard(idCard, points, shape, mustHave);
+            if (numStringCheck.equals("null")) {
+                whole3x3 = null;
+            } else {
+                String[] numString = numStringCheck.split(",");
+                for (int i = 0; i < 3; i++) {
+                    whole3x3[i] = Integer.parseInt(numString[i]);
+                }
+            }
+
+            ObjectiveCard objCard = new ObjectiveCard(idCard, points, shape, mustHave, divideBy, whole3x3);
             collection.add(objCard);
         }
 
@@ -63,11 +67,23 @@ public class ObjectiveParser {
             int points = cardsObject.get("points").getAsInt();
             String shape = cardsObject.get("shape").getAsString();
             String mustHave = cardsObject.get("mustHave").getAsString();
+            Integer divideBy = cardsObject.get("divideBy").getAsInt();
+            String numStringCheck = cardsObject.get("whole3x3").getAsString();
+            Integer[] whole3x3 = new Integer[numStringCheck.length()];
 
-            ObjectiveCard objCard = new ObjectiveCard(idCard, points, shape, mustHave);
+            if (numStringCheck.equals("null")) {
+                whole3x3 = null;
+            } else {
+                String[] numString = numStringCheck.split(",");
+                for (int i = 0; i < 3; i++) {
+                    whole3x3[i] = Integer.parseInt(numString[i]);
+                }
+            }
+
+            ObjectiveCard objCard = new ObjectiveCard(idCard, points, shape, mustHave, divideBy, whole3x3);
             collection.add(objCard);
         }
-        // Collections.shuffle(collection);
+
         return collection;
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.view;
+package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;

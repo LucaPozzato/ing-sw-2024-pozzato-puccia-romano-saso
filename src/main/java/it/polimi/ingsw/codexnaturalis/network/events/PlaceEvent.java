@@ -1,27 +1,19 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
-import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
+import java.util.List;
+
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
-import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
+import it.polimi.ingsw.codexnaturalis.network.MiniModel;
 
-//extends Serializable? 
 public class PlaceEvent extends Event {
-    Player player;
-    Card father;
-    Card placeThis;
-    String position;
-    Boolean frontUp;
+    List<Structure> playerStructure;
 
-    public PlaceEvent(Player player, Card father, Card placeThis, String position, Boolean frontUp) {
-        this.player = player;
-        this.father = father;
-        this.placeThis = placeThis;
-        this.position = position;
-        this.frontUp = frontUp;
+    public PlaceEvent(List<Structure> playerStructure) {
+        this.playerStructure = playerStructure;
     }
 
-    public void run(ControllerState controller) throws IllegalCommandException {
-        controller.placedCard(player, father, placeThis, position, frontUp);
+    public void doJob(MiniModel miniModel) throws IllegalCommandException {
+        miniModel.setPlayerStructure(playerStructure);
     }
 }

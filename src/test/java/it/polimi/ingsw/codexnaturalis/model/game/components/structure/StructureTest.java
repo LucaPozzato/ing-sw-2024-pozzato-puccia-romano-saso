@@ -1,12 +1,18 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
-import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
@@ -16,8 +22,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
-
-import static org.junit.jupiter.api.Assertions.*;
+import javafx.util.Pair;
 
 public class StructureTest {
     @Test
@@ -681,6 +686,7 @@ public class StructureTest {
         InitialCard initialCard = new InitialParser().parse().get(5);
         Stack<GoldCard> goldDeck = new GoldParser().parse();
         Stack<ResourceCard> resourceDeck = new ResourceParser().parse();
+        List<Card> placedCards = new ArrayList<>();
         Card testCard;
 
         // test that that gold card is placed correctly when meeting requirements
@@ -690,7 +696,8 @@ public class StructureTest {
             structure.placeCard(null, initialCard, null, true);
             structure.placeCard(initialCard, resourceDeck.get(0), "TR", true);
             structure.placeCard(resourceDeck.get(0), testCard, "TL", true);
-            assertTrue(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertTrue(placedCards.contains(testCard));
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -701,7 +708,8 @@ public class StructureTest {
             structure = new Structure();
             structure.placeCard(null, initialCard, null, true);
             structure.placeCard(initialCard, testCard, "TL", false);
-            assertTrue(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertTrue(placedCards.contains(testCard));
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -713,7 +721,8 @@ public class StructureTest {
             structure.placeCard(initialCard, testCard, "TL", true);
         } catch (Exception e) {
             assertEquals("Gold card requirements not met", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertFalse(placedCards.contains(testCard));
         }
 
         // test that verifies that card cannot be placed on TR null
@@ -723,7 +732,8 @@ public class StructureTest {
             structure.placeCard(initialCard, testCard, "BL", true);
         } catch (Exception e) {
             assertEquals("Card cannot be placed on null corner", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertFalse(placedCards.contains(testCard));
         }
 
         // test that verifies that bottom card cannot be null
@@ -733,7 +743,8 @@ public class StructureTest {
             structure.placeCard(null, testCard, "TR", true);
         } catch (Exception e) {
             assertEquals("Bottom card cannot be null", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertFalse(placedCards.contains(testCard));
         }
 
         // test that verifies that card cannot be placed if spot is already taken
@@ -744,7 +755,8 @@ public class StructureTest {
             structure.placeCard(initialCard, testCard, "TR", true);
         } catch (Exception e) {
             assertEquals("Another card is already placed in that position", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertFalse(placedCards.contains(testCard));
         }
 
         // test that verifies that card cannot be placed twice
@@ -756,8 +768,8 @@ public class StructureTest {
         } catch (Exception e) {
             assertEquals("Card is already placed", e.getMessage());
             int i = 0;
-            for (Card card : structure.getPlacedCards()) {
-                if (card.equals(resourceDeck.get(0)))
+            for (Pair<Card, Boolean> card : structure.getPlacedCards()) {
+                if (card.getKey().equals(resourceDeck.get(0)))
                     i++;
             }
             assertEquals(1, i);
@@ -768,11 +780,13 @@ public class StructureTest {
             structure = new Structure();
             structure.placeCard(null, initialCard, null, true);
             structure.placeCard(resourceDeck.get(1), resourceDeck.get(0), "TR", true);
-            assertTrue(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertTrue(placedCards.contains(testCard));
         } catch (Exception e) {
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
             assertEquals("Bottom card is not placed", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(resourceDeck.get(0)));
-            assertFalse(structure.getPlacedCards().contains(resourceDeck.get(1)));
+            assertFalse(placedCards.contains(resourceDeck.get(0)));
+            assertFalse(placedCards.contains(resourceDeck.get(1)));
         }
 
         // test that verifies that a card cannot be placed indirectly on null
@@ -784,7 +798,8 @@ public class StructureTest {
             structure.placeCard(resourceDeck.get(0), testCard, "TR", false);
         } catch (Exception e) {
             assertEquals("Bottom card is not placed", e.getMessage());
-            assertFalse(structure.getPlacedCards().contains(testCard));
+            placedCards = structure.getPlacedCards().stream().map(Pair::getKey).collect(Collectors.toList());
+            assertFalse(placedCards.contains(testCard));
         }
 
         // [x] Gold card meets requirements

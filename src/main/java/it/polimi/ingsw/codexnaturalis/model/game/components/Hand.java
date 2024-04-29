@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
-import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
@@ -15,14 +14,12 @@ public class Hand {
     private Card secretObjective;
     private List<Pair<Card, Boolean>> cardsHand;
     private InitialCard initCard;
-    private List<String> visualHand;
-    int emptyIndex = 0;
-    Boolean full;
+    private int emptyIndex = 0;
+    private Boolean full;
 
     // costruttore
     public Hand() {
         cardsHand = new ArrayList<>();
-        visualHand = new ArrayList<>();
         chooseBetweenObj = new ArrayList<>();
     }
 
@@ -30,13 +27,13 @@ public class Hand {
         this.secretObjective = secretObjective;
     }
 
-    public void setInitCard(InitialCard initCard) {
-        this.initCard = initCard;
-    }
-
     // getter
     public Card getSecretObjective() {
         return this.secretObjective;
+    }
+
+    public void setChooseBetweenObj(List<Card> chooseBetweenObj) {
+        this.chooseBetweenObj = chooseBetweenObj;
     }
 
     public List<Card> getChooseBetweenObj() {
@@ -49,6 +46,10 @@ public class Hand {
             tempList.add(pair.getKey());
         }
         return tempList;
+    }
+
+    public void setInitCard(InitialCard initCard) {
+        this.initCard = initCard;
     }
 
     public InitialCard getInitCard() {
@@ -64,12 +65,10 @@ public class Hand {
         switch (this.cardsHand.size()) {
             case 0, 1:
                 this.cardsHand.add(emptyIndex, pair);
-                this.visualHand.add(emptyIndex, card.drawDetailedVisual(true));
                 emptyIndex++;
                 break;
             case 2:
                 this.cardsHand.add(emptyIndex, pair);
-                this.visualHand.add(emptyIndex, card.drawDetailedVisual(true));
                 break;
             case 3:
                 throw new IllegalCommandException("Hand is full");
@@ -96,23 +95,9 @@ public class Hand {
         for (Pair<Card, Boolean> pair : cardsHand) {
             if (pair.getKey().equals(card)) {
                 emptyIndex = cardsHand.indexOf(pair);
-                this.visualHand.remove(emptyIndex);
                 this.cardsHand.remove(pair);
                 break;
             }
         }
-    }
-
-    public List<String> drawCardsHand() throws IllegalCommandException {
-        return new Printer().printHand(visualHand, cardsHand);
-    }
-
-    public String drawSecretObjective() throws IllegalCommandException {
-        return secretObjective.drawDetailedVisual(true);
-    }
-
-    public List<String> drawChooseBetweenObj() throws IllegalCommandException {
-        return new ArrayList<>(List.of(chooseBetweenObj.get(0).drawDetailedVisual(true),
-                chooseBetweenObj.get(1).drawDetailedVisual(true)));
     }
 }

@@ -9,29 +9,18 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP1;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP2;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP3;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP4;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP5;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP6;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP7;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP8;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR1;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR2;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR3;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR4;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR5;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR6;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR7;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR8;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
+import javafx.util.Pair;
 
 public class EndGameState extends ControllerState {
 
     public EndGameState(Game game) {
         super(game);
+        // TODO: togli i commenti
         matchEnded();
-        declareWinner();
+        // declareWinner();
     }
 
     @Override
@@ -93,11 +82,11 @@ public class EndGameState extends ControllerState {
     }
 
     /**
-     * This method's aim is to gather in a single data structure the totem objective
-     * that a certain player could aspire to verify
+     * This method's aim is to gather in a single data structure the totem
+     * objective that a certain player could aspire to verify
      * 
      * @param player the player I'm interested in
-     * @return the list of totem objective cards available on the board and in the
+     * @return the list of totem pattern cards available on the board and in the
      *         specific player's hand
      */
     private List<Card> gatherTotem(Player player) {
@@ -124,60 +113,31 @@ public class EndGameState extends ControllerState {
         return totPatterns;
     }
 
-    // Fin'ora da endGameState viene chiamato il metodo di structure
-    // getpointsfromobjrescard.
-    // Noi vogliamo astrarci spostando getpointsfromobjrescard in game ovvero
-    // ponendo la strategia per risolvere
-    // il calcolo dei punti in una strategia concreta.
-
     /**
-     * Builds a list containing at first the patterns and then the totem cards.
-     * For each of them the method is going to add a node in the game's strategyMap
-     * so that game could perform the computation being agnostic regarding the
-     * specific type of strategy to implement.
-     * 
-     * @param player this map filling operation is made one player at a time so a
-     *               single line of the table is actually updated.
+     * This method gathers togheter all the objective cards (common and secret) in a
+     * proper data structure.
+     * Then it fills the strategyMap game's attribute whit the proper pair
+     * <strategy, objective card>.
+     * This map will be passed to the game method which computes the total amount of
+     * virtual points for each player
      */
-    private void setStrategies(Player player) {
-        super.game.getStrategyMap().get(player).clear();
+
+    // TODO: change public in private, just for test purpouse
+    public void setStrategies(Player player) throws IllegalCommandException {
+        // if (super.game.getStrategyMap().get(player) != null) {
+        // super.game.getStrategyMap().get(player).clear();
+        // }
+
         List<Card> gatheredObj = gatherPatterns(player);
         gatheredObj.addAll(gatherTotem(player));
 
         for (Card card : gatheredObj) {
-            switch (card.getIdCard()) {
-                case "OP1":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP1());
-                case "OP2":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP2());
-                case "OP3":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP3());
-                case "OP4":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP4());
-                case "OP5":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP5());
-                case "OP6":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP6());
-                case "OP7":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP7());
-                case "OP8":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOP8());
-                case "OR1":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR1());
-                case "OR2":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR2());
-                case "OR3":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR3());
-                case "OR4":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR4());
-                case "OR5":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR5());
-                case "OR6":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR6());
-                case "OR7":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR7());
-                case "OR8":
-                    super.game.getStrategyMap().get(player).add(new ConcreteOR8());
+            if (card.getIdCard().startsWith("OR")) {
+                super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteOR(), card));
+            } else if (card.getIdCard().startsWith("OP")) {
+                super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteOP(), card));
+            } else {
+                throw new IllegalCommandException("Neither a resourceObject nor a pattern card passed");
             }
         }
     }
@@ -187,16 +147,24 @@ public class EndGameState extends ControllerState {
      * with concrete strategies and update his
      * virtual points by calling the getPatternsTotemPoints game's method. This
      * method is going to perform the search in the
-     * reduced matrix. Then the virtual points are summed to the virtual ones.
+     * reduced matrix. Then the virtual points are summed to the actual ones.
      */
     private void matchEnded() {
         try {
             int virtualPoints = 0;
             for (Player player : super.game.getPlayers()) {
-                // fill player's strategy map
+                // fill player's strategy map with the pair <Strategy, ObjectiveCard>.
+                // Structure of the map: <Player,List<Pair<Strategy, ObjectiveCard>>
                 setStrategies(player);
+
+                for (Pair<Strategy, Card> pair : game.getStrategyMap().get(player)) {
+                    System.out.println(pair.getKey());
+                    System.out.println(pair.getValue());
+                }
+
                 // for each player compute the points made from patterns and from totems
                 virtualPoints += super.game.getPatternsTotemPoints(player, super.game.getStrategyMap());
+                System.out.println(virtualPoints);
                 // virtual points becomes actual
                 super.game.getBoard().updateActualScore(player, virtualPoints);
                 virtualPoints = 0;
@@ -207,8 +175,7 @@ public class EndGameState extends ControllerState {
     }
 
     /**
-     * This class updates the actual score from each player with the virtual points
-     * computed in MatchEnded and declare the winner,
+     * This class looks at each player's actual score and declare the winner,
      * if there is a tie, the winner is the one with the most objective cards. If
      * the tie remains there are multiple winners.
      *

@@ -11,6 +11,7 @@ public class Player {
     }
 
     public Player(String nickName) {
+        this.nickName = nickName;
     }
 
     public Player(String nickName, Color color) {

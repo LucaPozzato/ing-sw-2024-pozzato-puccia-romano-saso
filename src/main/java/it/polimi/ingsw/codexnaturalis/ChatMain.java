@@ -8,7 +8,7 @@ import java.util.Random;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.view.ChatCli;
+import it.polimi.ingsw.codexnaturalis.view.tui.ChatCli;
 
 public class ChatMain {
     public static void main(String[] args) {

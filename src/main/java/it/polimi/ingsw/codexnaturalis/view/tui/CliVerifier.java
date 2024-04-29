@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.view;
+package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.util.List;
 import java.util.stream.Collectors;

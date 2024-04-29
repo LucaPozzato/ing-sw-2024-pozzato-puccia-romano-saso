@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
-import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
@@ -17,15 +16,13 @@ public class Board {
     private Map<Player, Integer> virtualScores;
     private List<Card> commonObjectives;
     private List<Card> uncoveredCards;
-    private List<String> visualBoard;
-    int emptyIndex = 0;
+    private int emptyIndex = 0;
 
     public Board() {
         this.actualScores = new HashMap<>();
         this.virtualScores = new HashMap<>();
         this.commonObjectives = new ArrayList<>();
         this.uncoveredCards = new ArrayList<>();
-        this.visualBoard = new ArrayList<>();
     }
 
     public Integer getActualPoints(Player player) {
@@ -36,22 +33,12 @@ public class Board {
         return virtualScores.get(player);
     }
 
-    public String drawActualScores() {
-        String actualScoreString = "";
-        for (Map.Entry<Player, Integer> entry : actualScores.entrySet()) {
-            actualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
-        }
-        actualScoreString = actualScoreString.substring(0, actualScoreString.length() - 3);
-        return actualScoreString;
+    public Map<Player, Integer> getActualScores() {
+        return actualScores;
     }
 
-    public String drawVirtualScores() {
-        String virtualScoreString = "";
-        for (Map.Entry<Player, Integer> entry : virtualScores.entrySet()) {
-            virtualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
-        }
-        virtualScoreString = virtualScoreString.substring(0, virtualScoreString.length() - 3);
-        return virtualScoreString;
+    public Map<Player, Integer> getVirtualScores() {
+        return virtualScores;
     }
 
     public List<Card> getCommonObjectives() {
@@ -93,12 +80,10 @@ public class Board {
         switch (this.uncoveredCards.size()) {
             case 0, 1, 2:
                 this.uncoveredCards.add(emptyIndex, card);
-                this.visualBoard.add(emptyIndex, card.drawDetailedVisual(true));
                 emptyIndex++;
                 break;
             case 3:
                 this.uncoveredCards.add(emptyIndex, card);
-                this.visualBoard.add(emptyIndex, card.drawDetailedVisual(true));
                 break;
             case 4:
                 throw new IllegalCommandException("Board is full");
@@ -114,17 +99,7 @@ public class Board {
             throw new IllegalCommandException("Card is not in board");
 
         emptyIndex = uncoveredCards.indexOf(card);
-        this.visualBoard.remove(emptyIndex);
         this.uncoveredCards.remove(card);
-    }
-
-    public List<String> drawUncoveredCards() throws IllegalCommandException {
-        return new Printer().printBoard(visualBoard, uncoveredCards);
-    }
-
-    public List<String> drawCommonObjectives() throws IllegalCommandException {
-        return new ArrayList<>(List.of(commonObjectives.get(0).drawDetailedVisual(true),
-                commonObjectives.get(1).drawDetailedVisual(true)));
     }
 
     public boolean isLastTurn() {

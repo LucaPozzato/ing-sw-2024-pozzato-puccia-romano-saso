@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.Map;
 import java.util.Stack;
 
 import org.junit.jupiter.api.Test;
@@ -102,7 +103,7 @@ public class BoardTest {
     void testUpdateActualScore() {
         Board board = new Board();
         Player testPlayer = new Player("player1");
-        String[] actualScores;
+        Map<Player, Integer> actualScores;
 
         // test that verifies player are added with 0 points
         try {
@@ -110,11 +111,11 @@ public class BoardTest {
             for (int i = 0; i < 3; i++) {
                 board.updateActualScore(new Player("player" + (i + 2)), i + 1);
             }
-            actualScores = board.drawActualScores().split(" \\| ");
-            for (String score : actualScores) {
+            actualScores = board.getActualScores();
+            for (Map.Entry<Player, Integer> score : actualScores.entrySet()) {
                 for (int j = 0; j < 4; j++) {
-                    if (score.contains("player" + j)) {
-                        assertEquals("player" + j + ": 0", score);
+                    if (score.getKey().getNickname().equals("player" + j)) {
+                        assertEquals(0, score.getValue());
                         break;
                     }
                 }
@@ -126,10 +127,10 @@ public class BoardTest {
         // test that verifies points are added correctly
         try {
             board.updateActualScore(testPlayer, 1);
-            actualScores = board.drawActualScores().split(" \\| ");
-            for (String score : actualScores) {
-                if (score.contains("player1")) {
-                    assertEquals("player1: 1", score);
+            actualScores = board.getActualScores();
+            for (Map.Entry<Player, Integer> score : actualScores.entrySet()) {
+                if (score.getKey().getNickname().contains("player1")) {
+                    assertEquals(1, score.getValue());
                     break;
                 }
             }
@@ -153,7 +154,7 @@ public class BoardTest {
     void testUpdateVirtualScore() {
         Board board = new Board();
         Player testPlayer = new Player("player1");
-        String[] virtualScores;
+        Map<Player, Integer> virtualScores;
 
         // test that verifies player are added with 0 points
         try {
@@ -161,11 +162,11 @@ public class BoardTest {
             for (int i = 0; i < 3; i++) {
                 board.updateVirtualScore(new Player("player" + (i + 2)), i + 1);
             }
-            virtualScores = board.drawVirtualScores().split(" \\| ");
-            for (String score : virtualScores) {
+            virtualScores = board.getVirtualScores();
+            for (Map.Entry<Player, Integer> score : virtualScores.entrySet()) {
                 for (int j = 0; j < 4; j++) {
-                    if (score.contains("player" + j)) {
-                        assertEquals("player" + j + ": 0", score);
+                    if (score.getKey().getNickname().equals("player" + j)) {
+                        assertEquals(0, score.getValue());
                         break;
                     }
                 }
@@ -177,10 +178,10 @@ public class BoardTest {
         // test that verifies points are added correctly
         try {
             board.updateVirtualScore(testPlayer, 1);
-            virtualScores = board.drawVirtualScores().split(" \\| ");
-            for (String score : virtualScores) {
-                if (score.contains("player1")) {
-                    assertEquals("player1: 1", score);
+            virtualScores = board.getVirtualScores();
+            for (Map.Entry<Player, Integer> score : virtualScores.entrySet()) {
+                if (score.getKey().getNickname().contains("player1")) {
+                    assertEquals(1, score.getValue());
                     break;
                 }
             }

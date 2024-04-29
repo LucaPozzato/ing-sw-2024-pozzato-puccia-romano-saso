@@ -1,9 +1,9 @@
-package it.polimi.ingsw.codexnaturalis.view;
+package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameCli {
+public class Printer {
     // Cursor starts from 1, 1 -> \u001B[y;xH
     List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resources, players;
     String scoreBoard, alert, nextPlayerStructure, currentPlayer, currentState;
@@ -18,7 +18,7 @@ public class GameCli {
     // [x] box with current "state"
     // [x] alert box in initial phase
 
-    public GameCli() {
+    public Printer() {
         this.structures = new ArrayList<>();
         this.nextPlayerStructure = "";
         this.currentPlayer = "";
@@ -26,7 +26,7 @@ public class GameCli {
         this.hand = new ArrayList<>(List.of(""));
         this.board = new ArrayList<>(List.of(""));
         this.decks = new ArrayList<>(List.of("", ""));
-        this.objectives = new ArrayList<>(List.of(""));
+        this.objectives = new ArrayList<>(List.of("", "", ""));
         this.initialCard = new ArrayList<>(List.of(""));
         this.chooseObjectives = new ArrayList<>(List.of(""));
         this.resources = new ArrayList<>(List.of(""));
@@ -55,9 +55,16 @@ public class GameCli {
             this.decks = decks;
     }
 
-    public void updateObjectives(List<String> objectives) {
-        if (objectives != null)
-            this.objectives = objectives;
+    public void updateSecretObjective(String secretObjective) {
+        if (secretObjective != null)
+            this.objectives.set(0, secretObjective);
+    }
+
+    public void updateCommonObjectives(List<String> objectives) {
+        if (objectives != null) {
+            this.objectives.set(1, objectives.get(0));
+            this.objectives.set(2, objectives.get(1));
+        }
     }
 
     public void updateResources(List<String> resources) {

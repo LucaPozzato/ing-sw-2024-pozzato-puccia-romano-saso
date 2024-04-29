@@ -15,7 +15,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
-import it.polimi.ingsw.codexnaturalis.network.Socket.VirtualView;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import javafx.util.Pair;
 
 public class Game {
     private int gameId;
@@ -31,8 +32,8 @@ public class Game {
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
-    final List<VirtualView> clients = new ArrayList<>();
-    private final Map<Player, List<Strategy>> strategyMap;
+    final List<VirtualClient> clients = new ArrayList<>();
+    private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
 
     public Game(int gameId) {
         this.gameId = gameId;
@@ -47,11 +48,11 @@ public class Game {
         // ...
     }
 
-    public void addObserver(VirtualView client) {
+    public void addObserver(VirtualClient client) {
         clients.add(client);
     }
 
-    public void removeObserver(VirtualView client) {
+    public void removeObserver(VirtualClient client) {
         clients.remove(client);
     }
 
@@ -115,7 +116,7 @@ public class Game {
         return turnCounter;
     }
 
-    public Map<Player, List<Strategy>> getStrategyMap() {
+    public Map<Player, List<Pair<Strategy, Card>>> getStrategyMap() {
         return strategyMap;
     }
 
@@ -168,17 +169,21 @@ public class Game {
         this.numParticipants++;
     }
 
-    public int getPatternsTotemPoints(Player player, Map<Player, List<Strategy>> strategyMap)
+    public int getPatternsTotemPoints(Player player, Map<Player, List<Pair<Strategy, Card>>> strategyMap)
             throws IllegalCommandException {
         int points = 0;
-        for (Strategy strategy : strategyMap.get(player)) {
+
+        for (Pair<Strategy, Card> pair : strategyMap.get(player)) {
             // Computes the number of objective satisfied by a player
-            if (strategy.compute(getStructureByPlayer(player)) > 0) {
+            if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0) {
+                System.out.println("ciao");
                 getStructureByPlayer(player).increaseSatisfiedPatterns();
             }
+            System.out.println("ciao");
             // Points will contain the times an objective is satisfied * the number of
             // points linked to that objective
-            points += strategy.compute(getStructureByPlayer(player));
+            points += pair.getKey().compute(getStructureByPlayer(player), pair.getValue());
+            System.out.println(points);
             // Clears the set visited attribute in the map and prepares from another search
             for (Card card : getStructureByPlayer(player).getCardToCoordinate().keySet()) {
                 getStructureByPlayer(player).getCardToCoordinate().get(card).setVisited(false);
@@ -192,3 +197,9 @@ public class Game {
         // client.updateError(message);
     }
 }
+
+/*
+ * TODO: la minimatrice è troppo piccola per le carte patter chair
+ * TODO: considerarere un altro modo per fare il parsing delle sedie, il must
+ * have con il simbolo dominante non va bene
+ */

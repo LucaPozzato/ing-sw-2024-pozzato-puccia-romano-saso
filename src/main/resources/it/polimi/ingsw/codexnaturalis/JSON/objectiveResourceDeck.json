@@ -3,49 +3,65 @@
         "id": "OR1",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "SHROOM"
+        "mustHave": "SHROOM",
+        "divideBy" : "3",
+        "whole3x3": "null"
     },
     {
         "id": "OR2",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "VEGETABLES"
+        "mustHave": "VEGETABLES",
+        "divideBy" : "3",
+        "whole3x3": "null"
     },
     {
         "id": "OR3",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "ANIMALS"
+        "mustHave": "ANIMALS",
+        "divideBy" : "3",
+        "whole3x3": "null"
     },
     {
         "id": "OR4",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "INSECTS"
+        "mustHave": "INSECTS",
+        "divideBy" : "3",
+        "whole3x3": "null"
     },
     {
         "id": "OR5",
         "points": "2",
         "shape": "WISEMAN",
-        "mustHave": "FOLDEDHANDS"
+        "mustHave": "FOLDEDHANDS",
+        "divideBy" : "0",
+        "whole3x3": "null"
     },
     {
         "id": "OR6",
         "points": "2",
         "shape": "WISEMAN",
-        "mustHave": "SCROLL"
+        "mustHave": "SCROLL",
+        "divideBy" : "2",
+        "whole3x3": "null"
     },
     {
         "id": "OR7",
         "points": "2",
         "shape": "WISEMAN",
-        "mustHave": "INK"
+        "mustHave": "INK",
+        "divideBy" : "2",
+        "whole3x3": "null"
     },
     {
         "id": "OR8",
         "points": "2",
         "shape": "WISEMAN",
-        "mustHave": "FEATHER"
+        "mustHave": "FEATHER",
+        "divideBy" : "2",
+        "whole3x3": "null"
     }
 
 ]

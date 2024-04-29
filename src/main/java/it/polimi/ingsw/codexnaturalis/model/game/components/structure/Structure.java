@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,22 +10,17 @@ import java.util.Map;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Objects;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Resource;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
-import it.polimi.ingsw.codexnaturalis.model.game.Printer;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
-
-import static java.lang.Math.abs;
+import javafx.util.Pair;
 
 public class Structure {
-    // TODO: delete regionmatches -> code hard to read
-    // TODO: add message to IllegalCommandExceptions
-    private List<Card> placedCards;
+    private List<Pair<Card, Boolean>> placedCards;
     private Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate; // <Card , <Coordinates, Side, Visited> >
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >
-    private char[][] visualStructure = new char[174][506];
     private Map<String, Integer> visibleSymbols;
     private Card[][] cardMatrix = new Card[80][80];
     private int satisfiedPatterns;
@@ -57,6 +54,10 @@ public class Structure {
         return cardMatrix;
     }
 
+    public Map<String, Integer> getVisibleSymbols() {
+        return visibleSymbols;
+    }
+
     public String getVisibleResources() {
         String visibleResources = "";
         for (Resource resource : Resource.values()) {
@@ -76,11 +77,11 @@ public class Structure {
         return visibleObjects;
     }
 
-    public Map<String, Integer> getvisibleSymbols(){
+    public Map<String, Integer> getvisibleSymbols() {
         return visibleSymbols;
     }
 
-    public List<Card> getPlacedCards() {
+    public List<Pair<Card, Boolean>> getPlacedCards() {
         return placedCards;
     }
 
@@ -119,10 +120,11 @@ public class Structure {
         return 0;
     }
 
-    public void increaseSatisfiedPatterns(){
+    public void increaseSatisfiedPatterns() {
         this.satisfiedPatterns++;
     }
-    public int getSatisfiedPatterns(){
+
+    public int getSatisfiedPatterns() {
         return satisfiedPatterns;
     }
 
@@ -205,8 +207,7 @@ public class Structure {
         cardToCoordinate.put(card, new Triplet<>(destinationCoord, frontUp, false));
         coordinateToCard.put(destinationCoord, new Triplet<>(card, frontUp, false));
 
-        placedCards.add(card);
-        addCardToVisual(card, frontUp);
+        placedCards.add(new Pair<Card, Boolean>(card, frontUp));
         addToCardMatrix(card);
         calcVisibleSymbols();
     }
@@ -240,56 +241,68 @@ public class Structure {
         }
     }
 
-    private void calcVisibleSymbols() {
-        int minX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
-                .min().getAsInt();
-        int minY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
-                .min().getAsInt();
-        int maxX = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 253 + (i / 100 - 40) * 6)
-                .max().getAsInt();
-        int maxY = coordinateToCard.keySet().stream().mapToInt(Integer::intValue).map(i -> 87 - (i % 100 - 40) * 2)
-                .max().getAsInt();
+    private void calcVisibleSymbols() throws IllegalCommandException {
+        Card card = placedCards.getLast().getKey();
+        Boolean frontSideUp = placedCards.getLast().getValue();
+        Integer coordinate = cardToCoordinate.get(card).getFirst();
+        String symbol = "";
 
-        // Resets visible symbols
-        for (String symbol : visibleSymbols.keySet()) {
-            visibleSymbols.put(symbol, 0);
-        }
-
-        // Updates visible symbols
-        for (int i = minY - 2; i <= maxY + 2; i++) {
-            for (int j = minX - 4; j <= maxX + 4; j++) {
-                switch (visualStructure[i][j]) {
-                    case 'A':
-                        visibleSymbols.put("ANIMAL", visibleSymbols.get("ANIMAL") + 1);
-                        break;
-                    case 'V':
-                        visibleSymbols.put("VEGETABLE", visibleSymbols.get("VEGETABLE") + 1);
-                        break;
-                    case 'I':
-                        visibleSymbols.put("INSECT", visibleSymbols.get("INSECT") + 1);
-                        break;
-                    case 'S':
-                        visibleSymbols.put("SHROOM", visibleSymbols.get("SHROOM") + 1);
-                        break;
-                    case 's':
-                        visibleSymbols.put("SCROLL", visibleSymbols.get("SCROLL") + 1);
-                        break;
-                    case 'i':
-                        visibleSymbols.put("INK", visibleSymbols.get("INK") + 1);
-                        break;
-                    case 'f':
-                        visibleSymbols.put("FEATHER", visibleSymbols.get("FEATHER") + 1);
-                        break;
-                    case 'N':
-                        visibleSymbols.put("NULL", visibleSymbols.get("NULL") + 1);
-                        break;
-                    case 'E':
-                        visibleSymbols.put("EMPTY", visibleSymbols.get("EMPTY") + 1);
-                        break;
-                    default:
-                        break;
+        if (frontSideUp) {
+            if (card instanceof InitialCard) {
+                for (String s : card.getFrontCenterResources()) {
+                    visibleSymbols.put(s, visibleSymbols.get(s) + 1);
                 }
             }
+            for (String s : card.getFrontCorners()) {
+                visibleSymbols.put(s, visibleSymbols.get(s) + 1);
+            }
+        } else {
+            if (!(card instanceof InitialCard))
+                visibleSymbols.put(card.getSymbol(), visibleSymbols.get(card.getSymbol()) + 1);
+            for (String s : card.getBackCorners()) {
+                visibleSymbols.put(s, visibleSymbols.get(s) + 1);
+            }
+        }
+
+        // Checks if top left card exists and if so, removes symbol in BR corner
+        if (coordinateToCard.containsKey(coordinate - 99)) {
+            if (coordinateToCard.get(coordinate - 99).getSide())
+                symbol = coordinateToCard.get(coordinate - 99).getFirst().getFrontCorners().get(3);
+            else
+                symbol = coordinateToCard.get(coordinate - 99).getFirst().getBackCorners().get(3);
+
+            visibleSymbols.put(symbol, visibleSymbols.get(symbol) - 1);
+            symbol = "";
+        }
+        // Checks if top right card exists and if so, removes symbol in BL corner
+        if (coordinateToCard.containsKey(coordinate + 101)) {
+            if (coordinateToCard.get(coordinate + 101).getSide())
+                symbol = coordinateToCard.get(coordinate + 101).getFirst().getFrontCorners().get(2);
+            else
+                symbol = coordinateToCard.get(coordinate + 101).getFirst().getBackCorners().get(2);
+
+            visibleSymbols.put(symbol, visibleSymbols.get(symbol) - 1);
+            symbol = "";
+        }
+        // Checks if bottom left card exists and if so, removes symbol in TR corner
+        if (coordinateToCard.containsKey(coordinate - 101)) {
+            if (coordinateToCard.get(coordinate - 101).getSide())
+                symbol = coordinateToCard.get(coordinate - 101).getFirst().getFrontCorners().get(1);
+            else
+                symbol = coordinateToCard.get(coordinate - 101).getFirst().getBackCorners().get(1);
+
+            visibleSymbols.put(symbol, visibleSymbols.get(symbol) - 1);
+            symbol = "";
+        }
+        // Checks if bottom right card exists and if so, removes symbol in TL corner
+        if (coordinateToCard.containsKey(coordinate + 99)) {
+            if (coordinateToCard.get(coordinate + 99).getSide())
+                symbol = coordinateToCard.get(coordinate + 99).getFirst().getFrontCorners().get(0);
+            else
+                symbol = coordinateToCard.get(coordinate + 99).getFirst().getBackCorners().get(0);
+
+            visibleSymbols.put(symbol, visibleSymbols.get(symbol) - 1);
+            symbol = "";
         }
     }
 
@@ -300,32 +313,39 @@ public class Structure {
     }
 
     /**
-     * This method's aim is to provide a simplified search space for SearchXPattern's methods.
+     * This method's aim is to provide a simplified search space for
+     * SearchXPattern's methods.
+     * 
      * @param coordinateToCard to extract the coordinate of the placed card
      * @return max distance from the centre of the matrux
      * @throws IllegalCommandException ex
      */
-    public int getRadius(Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard) throws IllegalCommandException{
+    public int getRadius(Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard)
+            throws IllegalCommandException {
         int radius = 0;
-        for(Integer key : coordinateToCard.keySet()){
-            int x = key/100;
-            int y = key%100;
+        for (Integer key : coordinateToCard.keySet()) {
+            int x = key / 100;
+            int y = key % 100;
             int x_distance = abs(x - 40);
             int y_distance = abs(y - 40);
-            if(x_distance >= radius) radius = x_distance;
-            else if (y_distance >= radius) radius = y_distance;
+            if (x_distance >= radius)
+                radius = x_distance;
+            else if (y_distance >= radius)
+                radius = y_distance;
         }
         return radius;
     }
 
     /**
-     * This method is used to test purposes after filling the structure with some values. It will print a [2*radius][2*radius] matrix
+     * This method is used to test purposes after filling the structure with some
+     * values. It will print a [2*radius][2*radius] matrix
+     * 
      * @param fullMatrix the full [80][80] matrix
-     * @param radius radius computed in getRadius
+     * @param radius     radius computed in getRadius
      */
-    public void printReducedMatrix(Card[][] fullMatrix, Integer radius){
-        for (int i = 40 + radius ; i >= 40 - radius; i--) {
-            for (int j = 40 - radius ; j <= 40 + radius; j++) {
+    public void printReducedMatrix(Card[][] fullMatrix, Integer radius) {
+        for (int i = 40 + radius; i >= 40 - radius; i--) {
+            for (int j = 40 - radius; j <= 40 + radius; j++) {
                 if (fullMatrix[j][i] == null) {
                     System.out.print("[---]");
                 } else {
@@ -334,22 +354,5 @@ public class Structure {
             }
             System.out.print("\n");
         }
-    }
-
-    private void addCardToVisual(Card card, Boolean frontUp) throws IllegalCommandException {
-        int x = cardToCoordinate.get(card).getFirst() / 100;
-        int y = cardToCoordinate.get(card).getFirst() % 100;
-
-        // Center of the matrix + x offset (6 pixels per card)
-        x = 253 + ((x - 40) * 6);
-        // Inverting y coordinate to match the matrix structure, center of the matrix +
-        // y offset (2 pixels per card)
-        y = 87 - ((y - 40) * 2);
-
-        visualStructure = card.drawVisual(visualStructure, x, y, frontUp);
-    }
-
-    public String draw() throws IllegalCommandException {
-        return new Printer().printStructure(visualStructure, coordinateToCard);
     }
 }

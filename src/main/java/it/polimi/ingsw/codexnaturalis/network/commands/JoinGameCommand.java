@@ -1,15 +1,15 @@
-package it.polimi.ingsw.codexnaturalis.network.events;
+package it.polimi.ingsw.codexnaturalis.network.commands;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
 //extends Serializable? 
-public class JoinGameEvent extends Event {
+public class JoinGameCommand extends Command {
     String nickName;
     Color color;
 
-    public JoinGameEvent(String nickName, Color color) {
+    public JoinGameCommand(String nickName, Color color) {
         this.nickName = nickName;
         this.color = color;
     }
