@@ -85,6 +85,18 @@ public class Structure {
         return placedCards;
     }
 
+    /**
+     * This method is used to calculate the points that a card placed on the
+     * structure will give. It checks if the card is front up or down and if it is
+     * a gold or resource card. If the card is front up, it will check the points
+     * type and return the points accordingly.
+     * 
+     * @param placed  the card to be placed
+     * @param frontUp the side of the card that will be visible (front side up ->
+     *                true, front side down -> false)
+     * @return the points that the card will give
+     * @throws IllegalCommandException if the card is not a gold or resource card
+     */
     public int getPointsFromPlayableCard(Card placed, Boolean frontUp) throws IllegalCommandException {
         if (frontUp == null)
             throw new IllegalArgumentException("FrontUp cannot be null");
@@ -198,6 +210,18 @@ public class Structure {
         return true;
     }
 
+    /**
+     * This method is used to place a card on the structure. It checks if the card
+     * can be placed and then places it.
+     * 
+     * @param father   the card on which the new card will be placed
+     * @param card     the card to be placed
+     * @param position the position of the new card relative to the father card (TL,
+     *                 TR, BL, BR)
+     * @param frontUp  the side of the card that will be visible (front side up ->
+     *                 true, front side down -> false)
+     * @throws IllegalCommandException if the card cannot be placed
+     */
     public void placeCard(Card father, Card card, String position, Boolean frontUp) throws IllegalCommandException {
         // Calculates coordinates of new card
         Integer destinationCoord = calcCoordinate(father, position);

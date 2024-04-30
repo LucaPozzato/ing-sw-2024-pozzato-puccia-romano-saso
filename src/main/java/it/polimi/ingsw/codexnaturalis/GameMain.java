@@ -38,19 +38,26 @@ public class GameMain {
 
         GameTui gameTui = new GameTui();
         Hand hand = new Hand();
+        Hand secondHand = new Hand();
         Board board = new Board();
         Structure structure = new Structure();
+        Structure secondStructure = new Structure();
         Deck deck = new Deck(goldDeck, resourceDeck);
         Player luca = new Player("Luca");
         Player nick = new Player("Nick");
-
-        gameTui.getPrinter().updatePlayers(List.of("luca", "nick"));
+        gameTui.updatePlayers(List.of(luca, nick));
+        gameTui.updateMyPlayer(luca);
+        gameTui.updateCurrentPlayer(luca);
 
         hand.setChooseBetweenObj(List.of(objectiveCards.get(0), objectiveCards.get(1)));
         hand.setInitCard(initialCards.get(0));
         hand.addCard(resourceDeck.pop());
         hand.addCard(resourceDeck.pop());
         hand.addCard(goldDeck.pop());
+        secondHand.addCard(resourceDeck.pop());
+        secondHand.addCard(resourceDeck.pop());
+        secondHand.addCard(goldDeck.pop());
+        secondStructure.placeCard(null, initialCards.get(1), null, true);
         board.addUncoveredCard(resourceDeck.pop());
         board.addUncoveredCard(resourceDeck.pop());
         board.addUncoveredCard(goldDeck.pop());
@@ -58,15 +65,15 @@ public class GameMain {
         board.setCommonObjectives(List.of(objectiveCards.get(2), objectiveCards.get(3)));
         board.updateActualScore(luca, 0);
         board.updateActualScore(nick, 0);
-        gameTui.updateStructure(structure);
-        gameTui.updateHand(hand);
-        gameTui.updateBoard(board);
+        gameTui.updateStructure(List.of(structure, secondStructure));
         gameTui.updateDeck(deck);
+        gameTui.updateBoard(board);
+        gameTui.updateHand(List.of(hand, secondHand));
+        gameTui.setInitialStage(true);
 
-        gameTui.clear();
-        gameTui.printInitial();
-
-        ReadThread readThread = gameMain.new ReadThread(controller, gameTui, hand, structure, deck, board);
+        ReadThread readThread = gameMain.new ReadThread(controller, gameTui, hand, structure, deck, board,
+                secondStructure,
+                secondHand);
         readThread.start();
     }
 
@@ -74,11 +81,14 @@ public class GameMain {
         CliVerifier controller;
         GameTui gameTui;
         Hand hand;
+        Hand secondHand;
         Structure structure;
+        Structure secondStructure;
         Deck deck;
         Board board;
 
-        ReadThread(CliVerifier controller, GameTui printer, Hand hand, Structure structure, Deck deck, Board board) {
+        ReadThread(CliVerifier controller, GameTui printer, Hand hand, Structure structure, Deck deck, Board board,
+                Structure secondStructure, Hand secondHand) {
             super();
             this.controller = controller;
             this.gameTui = printer;
@@ -86,6 +96,8 @@ public class GameMain {
             this.structure = structure;
             this.deck = deck;
             this.board = board;
+            this.secondStructure = secondStructure;
+            this.secondHand = secondHand;
         }
 
         public void run() {
@@ -101,7 +113,11 @@ public class GameMain {
 
         private void sendMove(String move) throws IllegalCommandException {
             String[] commandArray = move.split(": ");
-            String[] parameters = commandArray[1].split(", ");
+            String[] parameters;
+            if (commandArray.length > 1)
+                parameters = commandArray[1].split(", ");
+            else
+                parameters = commandArray;
 
             switch (commandArray[0]) {
                 case "choose", "Choose", "CHOOSE":
@@ -126,8 +142,10 @@ public class GameMain {
                         hand.setSecretObjective(hand.getChooseBetweenObj().get(objIndex));
                         structure.placeCard(null, hand.getInitCard(), null, side);
 
-                        gameTui.updateHand(hand);
-                        gameTui.updateStructure(structure);
+                        gameTui.setInitialStage(false);
+                        gameTui.updateHand(List.of(hand, secondHand));
+                        gameTui.updateStructure(List.of(structure, secondStructure));
+                        gameTui.updateState("Place");
                     } catch (IllegalCommandException e) {
                         System.out.println(e.getMessage());
                     }
@@ -166,8 +184,9 @@ public class GameMain {
                         hand.removeCard(placeThis);
                         structure.placeCard(father, placeThis, parameters[2], Boolean.parseBoolean(parameters[3]));
 
-                        gameTui.updateHand(hand);
-                        gameTui.updateStructure(structure);
+                        gameTui.updateHand(List.of(hand, secondHand));
+                        gameTui.updateStructure(List.of(structure, secondStructure));
+                        gameTui.updateState("Draw");
                     } catch (IllegalCommandException e) {
                         System.out.println(e.getMessage());
                     }
@@ -213,12 +232,24 @@ public class GameMain {
                                 board.addUncoveredCard(deck.drawGoldCard());
                         }
 
-                        gameTui.updateHand(hand);
+                        gameTui.updateHand(List.of(hand, secondHand));
                         gameTui.updateBoard(board);
                         gameTui.updateDeck(deck);
+                        gameTui.updateState("Place");
                     } catch (IllegalCommandException e) {
                         System.out.println(e.getMessage());
                     }
+                    break;
+
+                case "exit", "Exit", "EXIT":
+                    System.exit(0);
+                    break;
+                case "next", "Next", "NEXT":
+                    gameTui.printNextPlayerView();
+                    break;
+
+                case "reset", "Reset", "RESET":
+                    gameTui.resetView();
                     break;
 
                 default:

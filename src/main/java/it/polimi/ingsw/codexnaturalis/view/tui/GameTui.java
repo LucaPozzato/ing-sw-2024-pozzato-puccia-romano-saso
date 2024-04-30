@@ -20,12 +20,19 @@ import javafx.util.Pair;
 public class GameTui implements View {
     Printer printer = new Printer();
     Renderer renderer = new Renderer();
+    List<Player> players = new ArrayList<>();
+    Player myPlayer = new Player();
+    Boolean initialStage = true;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[38;5;196m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_BLUE = "\u001B[34m";
     private static final String ANSI_PURPLE = "\u001B[35m";
+
+    public void setInitialStage(Boolean initialStage) {
+        this.initialStage = initialStage;
+    }
 
     public char[][] insertCardInMatrix(char[][] matrix, Card card, int x, int y, Boolean side)
             throws IllegalCommandException {
@@ -241,7 +248,7 @@ public class GameTui implements View {
         else
             topCornersLine = "│" + corners.get(0).charAt(0) + "│ ";
 
-        if (card.getPoints() == 0)
+        if (!side || card.getPoints() == 0)
             topCornersLine += "     ";
         else
             topCornersLine += "  " + Integer.toString(card.getPoints()).charAt(0) + "  ";
@@ -253,22 +260,16 @@ public class GameTui implements View {
             topCornersLine += " │" + corners.get(1).charAt(0) + "│";
 
         // top middle line
-        if (side)
-            topMiddleLine = "├─╯       ╰─┤";
-        else
-            topMiddleLine = "├─╯  ╭─╮  ╰─┤";
+        topMiddleLine = "├─╯       ╰─┤";
 
         // center line
         if (side)
             centerLine = "│    " + card.getIdCard() + "    │";
         else
-            centerLine = "│    │" + card.getSymbol().charAt(0) + "│    │";
+            centerLine = "│    " + card.getIdCard().charAt(0) + "XX    │";
 
         // bottom middle line
-        if (side)
-            bottomMiddleLine = "├─╮       ╭─┤";
-        else
-            bottomMiddleLine = "├─╮  ╰─╯  ╭─┤";
+        bottomMiddleLine = "├─╮       ╭─┤";
 
         // bottom corners line
         if (corners.get(2).equals("INK") || corners.get(2).equals("SCROLL") || corners.get(2).equals("FEATHER"))
@@ -276,10 +277,7 @@ public class GameTui implements View {
         else
             bottomCornersLine = "│" + corners.get(2).charAt(0) + "│ ";
 
-        if (side)
-            bottomCornersLine += "     ";
-        else
-            bottomCornersLine += " " + card.getIdCard() + " ";
+        bottomCornersLine += "     ";
 
         if (corners.get(3).equals("INK") || corners.get(3).equals("SCROLL") || corners.get(3).equals("FEATHER"))
             bottomCornersLine += " │" + Character.toLowerCase(corners.get(3).charAt(0)) + "│";
@@ -321,7 +319,7 @@ public class GameTui implements View {
         else
             topCornersLine = "│" + corners.get(0).charAt(0) + "│ ";
 
-        if (!card.getPointsType().equals("NULL")) {
+        if (!card.getPointsType().equals("NULL") && side) {
             switch (card.getPointsType()) {
                 case "INK":
                     topCornersLine += Integer.toString(card.getPoints()).charAt(0) + "   І";
@@ -338,8 +336,10 @@ public class GameTui implements View {
                 default:
                     break;
             }
-        } else
+        } else if (side)
             topCornersLine += "  " + Integer.toString(card.getPoints()).charAt(0) + "  ";
+        else
+            topCornersLine += "     ";
 
         if (corners.get(1).equals("INK") || corners.get(1).equals("SCROLL")
                 || corners.get(1).equals("FEATHER"))
@@ -348,22 +348,19 @@ public class GameTui implements View {
             topCornersLine += " │" + corners.get(1).charAt(0) + "│";
 
         // top middle line
-        if (side)
-            topMiddleLine = "├─╯       ╰─┤";
-        else
-            topMiddleLine = "├─╯  ╭─╮  ╰─┤";
+        topMiddleLine = "├─╯       ╰─┤";
 
         // center line
         if (side)
             centerLine = "│    " + card.getIdCard() + "    │";
         else
-            centerLine = "│    │" + card.getSymbol().charAt(0) + "│    │";
+            centerLine = "│    " + card.getIdCard().charAt(0) + "XX    │";
 
         // bottom middle line
         if (side)
             bottomMiddleLine = "├─╮╭─────╮╭─┤";
         else
-            bottomMiddleLine = "├─╮  ╰─╯  ╭─┤";
+            bottomMiddleLine = "├─╮       ╭─┤";
 
         // bottom corners line
         if (corners.get(2).equals("INK") || corners.get(2).equals("SCROLL") || corners.get(2).equals("FEATHER"))
@@ -395,7 +392,7 @@ public class GameTui implements View {
                     break;
             }
         } else
-            bottomCornersLine += "  " + card.getIdCard() + "  ";
+            bottomCornersLine += "       ";
 
         if (corners.get(3).equals("INK") || corners.get(3).equals("SCROLL") || corners.get(3).equals("FEATHER"))
             bottomCornersLine += "│" + Character.toLowerCase(corners.get(3).charAt(0)) + "│";
@@ -426,21 +423,21 @@ public class GameTui implements View {
                                 + "      │\n│  " + ANSI_RED + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_RED + "╰─╭─╮"
                                 + ANSI_RESET + "  │\n│      " + ANSI_RED + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
                         break;
-                    case "ANIMALS":
+                    case "ANIMAL":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│  " + ANSI_BLUE + "╭─╮"
                                 + ANSI_RESET
                                 + "      │\n│  " + ANSI_BLUE + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_BLUE
                                 + "╰─╭─╮"
                                 + ANSI_RESET + "  │\n│      " + ANSI_BLUE + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
                         break;
-                    case "VEGETABLES":
+                    case "VEGETABLE":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_GREEN + "╭─╮"
                                 + ANSI_RESET
                                 + "  │\n│    " + ANSI_GREEN + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_GREEN + "╭─╮─╯"
                                 + ANSI_RESET + "    │\n│  " + ANSI_GREEN + "╰─╯" + ANSI_RESET
                                 + "      │\n╰───────────╯";
                         break;
-                    case "INSECTS":
+                    case "INSECT":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_PURPLE + "╭─╮"
                                 + ANSI_RESET
                                 + "  │\n│    " + ANSI_PURPLE + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_PURPLE + "╭─╮─╯"
@@ -452,7 +449,8 @@ public class GameTui implements View {
                 }
                 break;
             case "CHAIR":
-                switch (card.getMustHave()) {
+                String cardMustHave = card.getMustHave().split(", ")[0];
+                switch (cardMustHave) {
                     case "SHROOM":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   3  │\n│   " + ANSI_RED + "╭─╮"
                                 + ANSI_RESET
@@ -460,7 +458,7 @@ public class GameTui implements View {
                                 + ANSI_GREEN + "─╮" + ANSI_RESET + "   │\n│     " + ANSI_GREEN + "╰─╯" + ANSI_RESET
                                 + "   │\n╰───────────╯";
                         break;
-                    case "VEGETABLES":
+                    case "VEGETABLE":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   3  │\n│     " + ANSI_GREEN + "╭─╮"
                                 + ANSI_RESET
                                 + "   │\n│     " + ANSI_GREEN + "╭─╮" + ANSI_RESET + "   │\n│   " + ANSI_PURPLE + "╭─"
@@ -468,7 +466,7 @@ public class GameTui implements View {
                                 + ANSI_RESET + "   │\n│   " + ANSI_PURPLE + "╰─╯" + ANSI_RESET
                                 + "     │\n╰───────────╯";
                         break;
-                    case "ANIMALS":
+                    case "ANIMAL":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   3  │\n│     " + ANSI_RED + "╭─╮"
                                 + ANSI_RESET
                                 + "   │\n│   " + ANSI_BLUE + "╭─╮" + ANSI_RED + "─╯" + ANSI_RESET + "   │\n│   "
@@ -476,7 +474,7 @@ public class GameTui implements View {
                                 + ANSI_RESET + "     │\n│   " + ANSI_BLUE + "╰─╯" + ANSI_RESET
                                 + "     │\n╰───────────╯";
                         break;
-                    case "INSECTS":
+                    case "INSECT":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   3  │\n│   " + ANSI_BLUE + "╭─╮"
                                 + ANSI_RESET
                                 + "     │\n│   " + ANSI_BLUE + "╰─" + ANSI_PURPLE + "╭─╮" + ANSI_RESET + "   │\n│     "
@@ -496,19 +494,19 @@ public class GameTui implements View {
                                 + "   │\n│   " + ANSI_RED + "│ S │" + ANSI_RESET + "   │\n│   " + ANSI_RED + "│S S│"
                                 + ANSI_RESET + "   │\n│   " + ANSI_RED + "╰───╯" + ANSI_RESET + "   │\n╰───────────╯";
                         break;
-                    case "VEGETABLES":
+                    case "VEGETABLE":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│   " + ANSI_GREEN + "╭───╮"
                                 + ANSI_RESET
                                 + "   │\n│   " + ANSI_GREEN + "│ V │" + ANSI_RESET + "   │\n│   " + ANSI_GREEN + "│V V│"
                                 + ANSI_RESET + "   │\n│   " + ANSI_GREEN + "╰───╯" + ANSI_RESET + "   │\n╰───────────╯";
                         break;
-                    case "ANIMALS":
+                    case "ANIMAL":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│   " + ANSI_BLUE + "╭───╮"
                                 + ANSI_RESET
                                 + "   │\n│   " + ANSI_BLUE + "│ A │" + ANSI_RESET + "   │\n│   " + ANSI_BLUE + "│A A│"
                                 + ANSI_RESET + "   │\n│   " + ANSI_BLUE + "╰───╯" + ANSI_RESET + "   │\n╰───────────╯";
                         break;
-                    case "INSECTS":
+                    case "INSECT":
                         cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│   " + ANSI_PURPLE + "╭───╮"
                                 + ANSI_RESET
                                 + "   │\n│   " + ANSI_PURPLE + "│ I │" + ANSI_RESET + "   │\n│   " + ANSI_PURPLE
@@ -559,7 +557,7 @@ public class GameTui implements View {
         return cardString;
     }
 
-    private String drawVisibleSymbold(Map<String, Integer> visibleSymbols) {
+    private String drawVisibleSymbols(Map<String, Integer> visibleSymbols) {
         String visibleResources = "";
         for (Map.Entry<String, Integer> entry : visibleSymbols.entrySet()) {
             if (!(entry.getKey().equals("EMPTY")) && !(entry.getKey().equals("NULL")))
@@ -579,60 +577,134 @@ public class GameTui implements View {
     }
 
     @Override
-    public void updateStructure(Structure structure) throws IllegalCommandException {
-        char[][] visualStructure = new char[174][506];
-        int x = 0;
-        int y = 0;
-        for (Pair<Card, Boolean> cardPair : structure.getPlacedCards()) {
-            x = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() / 100;
-            y = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() % 100;
-
-            // Center of the matrix + x offset (6 pixels per card)
-            x = 253 + ((x - 40) * 6);
-            // Inverting y coordinate to match the matrix structure, center of the matrix +
-            // y offset (2 pixels per card)
-            y = 87 - ((y - 40) * 2);
-
-            visualStructure = insertCardInMatrix(visualStructure, cardPair.getKey(), x, y, cardPair.getValue());
-        }
-
-        // FIXME: multiple structures
-        printer.updateStructure(List.of(renderer.printStructure(visualStructure,
-                structure.getCoordinateToCard())));
-
-        // FIXME: multiple resources
-        printer.updateResources(List.of(drawVisibleSymbold(structure.getvisibleSymbols())));
-
+    public void updateState(String state) {
+        printer.updateCurrentState(state);
         printer.clear();
-        printer.print();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
     }
 
     @Override
-    public void updateHand(Hand hand) throws IllegalCommandException {
+    public void updateMyPlayer(Player player) {
+        myPlayer = player;
+        printer.updateMyPlayer(players.indexOf(player));
+        printer.clear();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
+    }
+
+    @Override
+    public void updateCurrentPlayer(Player player) {
+        printer.updateCurrentPlayer(player.getNickname());
+        printer.clear();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
+    }
+
+    @Override
+    public void updatePlayers(List<Player> players) {
+        this.players = players;
+        List<String> playersString = new ArrayList<>();
+        for (Player player : players) {
+            playersString.add(player.getNickname());
+        }
+        printer.updatePlayers(playersString);
+        printer.clear();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
+    }
+
+    @Override
+    public void updateStructure(List<Structure> structures) throws IllegalCommandException {
+        List<String> structureStrings = new ArrayList<>();
+        List<String> resources = new ArrayList<>();
+
+        for (Structure structure : structures) {
+            char[][] visualStructure = new char[174][506];
+            int x = 0;
+            int y = 0;
+            for (Pair<Card, Boolean> cardPair : structure.getPlacedCards()) {
+                x = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() / 100;
+                y = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() % 100;
+
+                // Center of the matrix + x offset (6 pixels per card)
+                x = 253 + ((x - 40) * 6);
+                // Inverting y coordinate to match the matrix structure, center of the matrix +
+                // y offset (2 pixels per card)
+                y = 87 - ((y - 40) * 2);
+
+                visualStructure = insertCardInMatrix(visualStructure, cardPair.getKey(), x, y, cardPair.getValue());
+            }
+            structureStrings.add(renderer.printStructure(visualStructure, structure.getCoordinateToCard()));
+            resources.add(drawVisibleSymbols(structure.getvisibleSymbols()));
+        }
+
+        // FIXME: multiple structures
+        printer.updateStructure(structureStrings);
+
+        // FIXME: multiple resources
+        printer.updateResources(resources);
+
+        printer.clear();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
+    }
+
+    @Override
+    public void updateHand(List<Hand> hands) throws IllegalCommandException {
         List<String> visualHand = new ArrayList<>();
         List<String> initialCard = new ArrayList<>();
         List<String> chooseBetweenObj = new ArrayList<>();
+        List<List<String>> handsString = new ArrayList<>();
         String secretObjective = "";
-        for (Card card : hand.getCardsHand()) {
-            if (card instanceof GoldCard)
-                visualHand.add(drawGoldCard(card, true));
-            else if (card instanceof ResourceCard)
-                visualHand.add(drawResourceCard(card, true));
+
+        for (Hand hand : hands) {
+            visualHand.clear();
+            if (hands.indexOf(hand) == players.indexOf(myPlayer)) {
+                for (Card card : hand.getCardsHand()) {
+                    if (card instanceof GoldCard)
+                        visualHand.add(drawGoldCard(card, true));
+                    else if (card instanceof ResourceCard)
+                        visualHand.add(drawResourceCard(card, true));
+                }
+                initialCard = drawFullInitialCard(hand.getInitCard());
+                chooseBetweenObj = List.of(drawObjectiveCard(hand.getChooseBetweenObj().get(0)),
+                        drawObjectiveCard(hand.getChooseBetweenObj().get(1)));
+
+                if (hand.getSecretObjective() != null)
+                    secretObjective = drawObjectiveCard(hand.getSecretObjective());
+            } else {
+                visualHand.clear();
+                for (Card card : hand.getCardsHand()) {
+                    if (card instanceof GoldCard)
+                        visualHand.add(drawGoldCard(card, false));
+                    else if (card instanceof ResourceCard)
+                        visualHand.add(drawResourceCard(card, false));
+                }
+            }
+            handsString.add(renderer.printHand(visualHand, hand.getCardsHand()));
         }
-        initialCard = drawFullInitialCard(hand.getInitCard());
-        chooseBetweenObj = List.of(drawObjectiveCard(hand.getChooseBetweenObj().get(0)),
-                drawObjectiveCard(hand.getChooseBetweenObj().get(1)));
 
-        if (hand.getSecretObjective() != null)
-            secretObjective = drawObjectiveCard(hand.getSecretObjective());
-
-        printer.updateHand(renderer.printHand(visualHand, hand.getCardsHand()));
+        printer.updateHands(handsString);
         printer.updateInitialCard(renderer.printInitialCard(initialCard));
         printer.updateChooseObjectives(chooseBetweenObj);
         printer.updateSecretObjective(secretObjective);
 
         printer.clear();
-        printer.print();
+        if (initialStage) {
+            printer.printInitial();
+        } else
+            printer.print();
     }
 
     @Override
@@ -656,33 +728,35 @@ public class GameTui implements View {
         printer.updateScoreBoard(scores);
 
         printer.clear();
-        printer.print();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
     }
 
     @Override
     public void updateDeck(Deck deck) throws IllegalCommandException {
         List<String> cards = new ArrayList<>();
-        cards = renderer.printDeck(List.of(deck.getGoldDeck().peek(), deck.getResourceDeck().peek()));
+        cards = renderer.printDeck(List.of(deck.getResourceDeck().peek(), deck.getGoldDeck().peek()));
 
         printer.updateDecks(cards);
 
         printer.clear();
-        printer.print();
+        if (initialStage)
+            printer.printInitial();
+        else
+            printer.print();
     }
 
-    public void printInitial() {
-        printer.printInitial();
-    }
-
-    public void print() {
-        printer.print();
-    }
-
-    public void clear() {
+    public void printNextPlayerView() {
         printer.clear();
+        printer.printNext();
+        printer.print();
     }
 
-    public Printer getPrinter() {
-        return printer;
+    public void resetView() {
+        printer.clear();
+        printer.resetView();
+        printer.print();
     }
 }

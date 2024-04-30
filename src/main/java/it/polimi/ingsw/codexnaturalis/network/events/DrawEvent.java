@@ -1,23 +1,21 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
-import java.util.List;
-
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.network.MiniModel;
 
 public class DrawEvent extends Event {
-    private List<Card> uncoveredCards;
     private Integer turnCounter;
+    private Board board;
 
-    public DrawEvent(Hand hand, List<Card> uncoveredCards, Integer turnCounter) {
-        this.uncoveredCards = uncoveredCards;
+    public DrawEvent(Hand hand, Board board, Integer turnCounter) {
+        this.board = board;
         this.turnCounter = turnCounter;
     }
 
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
-        miniModel.setUncoveredCards(uncoveredCards);
+        miniModel.setBoard(board);
         miniModel.setTurnCounter(turnCounter);
     }
 

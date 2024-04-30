@@ -15,7 +15,6 @@ public class Hand {
     private List<Pair<Card, Boolean>> cardsHand;
     private InitialCard initCard;
     private int emptyIndex = 0;
-    private Boolean full;
 
     // costruttore
     public Hand() {
@@ -23,23 +22,47 @@ public class Hand {
         chooseBetweenObj = new ArrayList<>();
     }
 
+    /**
+     * Sets the secret objective card
+     * 
+     * @param secretObjective the secret objective card
+     */
     public void setSecretObjective(Card secretObjective) {
         this.secretObjective = secretObjective;
     }
 
-    // getter
+    /**
+     * Returns the secret objective card
+     * 
+     * @return the secret objective card
+     */
     public Card getSecretObjective() {
         return this.secretObjective;
     }
 
+    /**
+     * Sets the objective cards to choose from
+     * 
+     * @param chooseBetweenObj the objective cards to choose from
+     */
     public void setChooseBetweenObj(List<Card> chooseBetweenObj) {
         this.chooseBetweenObj = chooseBetweenObj;
     }
 
+    /**
+     * Returns the objective cards to choose from
+     * 
+     * @return the objective cards to choose from
+     */
     public List<Card> getChooseBetweenObj() {
         return this.chooseBetweenObj;
     }
 
+    /**
+     * Returns the cards in the hand
+     * 
+     * @return the cards in the hand
+     */
     public List<Card> getCardsHand() {
         List<Card> tempList = new ArrayList<>();
         for (Pair<Card, Boolean> pair : cardsHand) {
@@ -48,14 +71,31 @@ public class Hand {
         return tempList;
     }
 
+    /**
+     * Sets the initial card
+     * 
+     * @param initCard the initial card
+     */
     public void setInitCard(InitialCard initCard) {
         this.initCard = initCard;
     }
 
+    /**
+     * Returns the initial card
+     * 
+     * @return the initial card
+     */
     public InitialCard getInitCard() {
         return this.initCard;
     }
 
+    /**
+     * Adds a card to the hand
+     * 
+     * @param card the card to add
+     * @throws IllegalCommandException if the card is not of the right type or the
+     *                                 hand is full
+     */
     public void addCard(Card card) throws IllegalCommandException {
         Pair<Card, Boolean> pair = new Pair<>(card, true);
 
@@ -77,6 +117,12 @@ public class Hand {
         }
     }
 
+    /**
+     * Removes a card from the hand
+     * 
+     * @param card the card to remove
+     * @throws IllegalCommandException if the card is not in the hand
+     */
     public void removeCard(Card card) throws IllegalCommandException {
         if (cardsHand.size() < 3)
             throw new IllegalCommandException("Cannot remove more than one card");

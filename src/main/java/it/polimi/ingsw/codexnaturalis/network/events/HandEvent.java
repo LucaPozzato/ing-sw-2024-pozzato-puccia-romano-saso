@@ -1,17 +1,19 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
+import java.util.List;
+
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.network.MiniModel;
 
 public class HandEvent extends Event {
-    Hand hand;
+    List<Hand> hands;
 
-    public HandEvent(Hand hand) {
-        this.hand = hand;
+    public HandEvent(List<Hand> hands) {
+        this.hands = hands;
     }
 
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
-        miniModel.setHand(hand);
+        miniModel.setHands(hands);
     }
 }

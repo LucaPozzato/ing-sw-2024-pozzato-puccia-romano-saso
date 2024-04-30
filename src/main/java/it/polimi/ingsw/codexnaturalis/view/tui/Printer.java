@@ -5,9 +5,12 @@ import java.util.List;
 
 public class Printer {
     // Cursor starts from 1, 1 -> \u001B[y;xH
-    List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resources, players;
-    String scoreBoard, alert, nextPlayerStructure, currentPlayer, currentState;
-    int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0;
+    private List<List<String>> hands;
+    private List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resourcesList,
+            players;
+    private String scoreBoard, alert, currentPlayer, currentState, structure, resources;
+    private int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0,
+            indexMyPlayer = 0;
 
     // [x] Other structures and resources
     // [ ] FUTURE -> possible color coordinated boxes -> or just other color for
@@ -20,16 +23,18 @@ public class Printer {
 
     public Printer() {
         this.structures = new ArrayList<>();
-        this.nextPlayerStructure = "";
+        this.players = new ArrayList<>();
         this.currentPlayer = "";
         this.currentState = "";
-        this.hand = new ArrayList<>(List.of(""));
+        this.hands = new ArrayList<>(List.of(List.of("")));
         this.board = new ArrayList<>(List.of(""));
         this.decks = new ArrayList<>(List.of("", ""));
         this.objectives = new ArrayList<>(List.of("", "", ""));
         this.initialCard = new ArrayList<>(List.of(""));
         this.chooseObjectives = new ArrayList<>(List.of(""));
-        this.resources = new ArrayList<>(List.of(""));
+        this.resourcesList = new ArrayList<>(List.of(""));
+        this.structure = "";
+        this.resources = "";
         this.scoreBoard = "";
         this.alert = "";
     }
@@ -40,9 +45,9 @@ public class Printer {
             this.structures = structure;
     }
 
-    public void updateHand(List<String> hand) {
-        if (hand != null)
-            this.hand = hand;
+    public void updateHands(List<List<String>> hands) {
+        if (hands != null)
+            this.hands = hands;
     }
 
     public void updateBoard(List<String> board) {
@@ -69,7 +74,7 @@ public class Printer {
 
     public void updateResources(List<String> resources) {
         if (resources != null)
-            this.resources = resources;
+            this.resourcesList = resources;
     }
 
     public void updateAlert(String alert) {
@@ -80,11 +85,6 @@ public class Printer {
     public void updateScoreBoard(String scoreBoard) {
         if (scoreBoard != null)
             this.scoreBoard = scoreBoard;
-    }
-
-    public void updateNextPlayerStructure(String nextPlayerStructure) {
-        if (nextPlayerStructure != null)
-            this.nextPlayerStructure = nextPlayerStructure;
     }
 
     public void updateInitialCard(List<String> initialCard) {
@@ -125,15 +125,13 @@ public class Printer {
     }
 
     public void clearInput() {
-        String tmpStructure = structures.get(indexPlayer);
-
-        if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
+        if (board.get(0).split("\n").length * board.size() / 2 > structure.split("\n").length / 2 + 2
                 + hand.get(0).split("\n").length)
             System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
                     + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
         else
             System.out.print("\u001B["
-                    + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
+                    + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
                     + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
 
     }
@@ -159,12 +157,27 @@ public class Printer {
                 "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H");
     }
 
+    public void updateMyPlayer(Integer index) {
+        indexMyPlayer = index;
+    }
+
     public void printNext() {
-        indexPlayer++;
+        indexPlayer = (indexPlayer + 1) % players.size();
+        if (indexPlayer != indexMyPlayer)
+            alert = "Warning: viewing " + players.get(indexPlayer) + "'s game details";
+        else
+            alert = "";
+        structure = structures.get(indexPlayer);
+        hand = hands.get(indexPlayer);
+        resources = resourcesList.get(indexPlayer);
     }
 
     public void resetView() {
-        indexPlayer = 0;
+        alert = "";
+        indexPlayer = indexMyPlayer;
+        structure = structures.get(indexPlayer);
+        hand = hands.get(indexPlayer);
+        resources = resourcesList.get(indexPlayer);
     }
 
     public void print() {
@@ -175,16 +188,20 @@ public class Printer {
         else
             midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
-        String tmpStructure = structures.get(indexPlayer);
-        String tmpResource = resources.get(indexPlayer);
+        if (structure.equals("") || hand == null || resources.equals("")) {
+            indexPlayer = indexMyPlayer;
+            structure = structures.get(indexMyPlayer);
+            hand = hands.get(indexMyPlayer);
+            resources = resourcesList.get(indexMyPlayer);
+        }
 
-        printStructure(midHeight - tmpStructure.split("\n").length / 2,
-                midWidth - tmpStructure.split("\n")[0].length() / 2, tmpStructure);
+        printStructure(midHeight - structure.split("\n").length / 2,
+                midWidth - structure.split("\n")[0].length() / 2);
 
-        printHand(midHeight + tmpStructure.split("\n").length / 2 + 3,
+        printHand(midHeight + structure.split("\n").length / 2 + 3,
                 midWidth - hand.get(0).split("\n")[0].length() * hand.size() / 2);
 
-        if (hand.get(0).split("\n")[0].length() * hand.size() > tmpStructure.split("\n")[0].length()) {
+        if (hand.get(0).split("\n")[0].length() * hand.size() > structure.split("\n")[0].length()) {
             printBoard(midHeight - board.get(0).split("\n").length * board.size() / 2,
                     midWidth + hand.get(0).split("\n")[0].length() * hand.size() / 2 + 5);
             printDeck(midHeight - board.get(0).split("\n").length * board.size() / 2,
@@ -192,36 +209,34 @@ public class Printer {
                             + board.get(0).split("\n")[0].length() + 3);
         } else {
             printBoard(midHeight - board.get(0).split("\n").length * board.size() / 2,
-                    midWidth + tmpStructure.split("\n")[0].length() / 2 + 5);
+                    midWidth + structure.split("\n")[0].length() / 2 + 5);
             printDeck(midHeight - board.get(0).split("\n").length * board.size() / 2,
-                    midWidth + tmpStructure.split("\n")[0].length() / 2 + 5
+                    midWidth + structure.split("\n")[0].length() / 2 + 5
                             + board.get(0).split("\n")[0].length() + 3);
         }
-        if (tmpStructure.split("\n").length < tmpResource.split("\n").length)
-            printResources(midHeight + tmpStructure.split("\n").length / 2 - tmpResource.split("\n").length + 1,
-                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length(),
-                    tmpResource);
+        if (structure.split("\n").length < resources.split("\n").length)
+            printResources(midHeight + structure.split("\n").length / 2 - resources.split("\n").length + 1,
+                    midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
         else
-            printResources(midHeight - tmpResource.split("\n").length / 2,
-                    midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length(),
-                    tmpResource);
+            printResources(midHeight - resources.split("\n").length / 2,
+                    midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length());
 
         printObjectives(midHeight - objectives.get(0).split("\n").length * objectives.size() / 2,
-                midWidth - tmpStructure.split("\n")[0].length() / 2 - 6 - tmpResource.split("\n")[0].length() - 4
+                midWidth - structure.split("\n")[0].length() / 2 - 6 - resources.split("\n")[0].length() - 4
                         - objectives.get(0).split("\n")[0].length());
 
-        if (board.get(0).split("\n").length * board.size() < tmpStructure.split("\n").length) {
-            printCurrentPlayer(midHeight - tmpStructure.split("\n").length - 4,
+        if (board.get(0).split("\n").length * board.size() < structure.split("\n").length) {
+            printCurrentPlayer(midHeight - structure.split("\n").length - 4,
                     (maxX + minX) / 2
                             - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
                                     + Math.max("State".length(), currentState.length()) + 6) / 2);
-            printScoreBoard(midHeight - tmpStructure.split("\n").length - 4,
+            printScoreBoard(midHeight - structure.split("\n").length - 4,
                     (maxX + minX) / 2
                             - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
-                                    + Math.max("State".length(), currentPlayer.length()) + 6)
+                                    + Math.max("State".length(), currentState.length()) + 6)
                                     / 2
                             + Math.max("Current Player".length(), currentPlayer.length()) + 3);
-            printCurrentState(midHeight - tmpStructure.split("\n").length - 4,
+            printCurrentState(midHeight - structure.split("\n").length - 4,
                     (maxX + minX) / 2
                             - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
                                     + Math.max("State".length(), currentState.length()) + 6) / 2
@@ -237,7 +252,7 @@ public class Printer {
             printScoreBoard(midHeight - board.get(0).split("\n").length * 2 - 4,
                     (maxX + minX) / 2
                             - (Math.max("Current Player".length(), currentPlayer.length()) + scoreBoard.length()
-                                    + Math.max("State".length(), currentPlayer.length()) + 6)
+                                    + Math.max("State".length(), currentState.length()) + 6)
                                     / 2
                             + Math.max("Current Player".length(), currentPlayer.length()) + 3);
             printCurrentState(midHeight - board.get(0).split("\n").length * 2 - 4,
@@ -248,7 +263,7 @@ public class Printer {
                             + 3);
         }
 
-        if (board.get(0).split("\n").length * board.size() / 2 > tmpStructure.split("\n").length / 2 + 2
+        if (board.get(0).split("\n").length * board.size() / 2 > structure.split("\n").length / 2 + 2
                 + hand.get(0).split("\n").length) {
             printAlert(midHeight + board.get(0).split("\n").length * board.size() / 2 + 6,
                     (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
@@ -256,22 +271,22 @@ public class Printer {
             System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
                     + (minX + 1) + "H");
         } else {
-            printAlert(midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
+            printAlert(midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
                     (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
-            printBox(minX, midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
+            printBox(minX, midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 6,
                     maxX - minX, 3, "Input");
             System.out.print(
-                    "\u001B[" + (midHeight + tmpStructure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
+                    "\u001B[" + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
                             + ";" + (minX + 1) + "H");
         }
     }
 
-    private void printStructure(int y, int x, String tmpStructure) {
-        printBox(x, y, tmpStructure.split("\n")[0].length() + 2, tmpStructure.split("\n").length + 2, "Structure");
+    private void printStructure(int y, int x) {
+        printBox(x, y, structure.split("\n")[0].length() + 2, structure.split("\n").length + 2, "Structure");
         x++;
         y++;
-        for (int i = 0; i < tmpStructure.split("\n").length; i++) {
-            System.out.print("\u001B[" + y + ";" + x + "H" + tmpStructure.split("\n")[i]);
+        for (int i = 0; i < structure.split("\n").length; i++) {
+            System.out.print("\u001B[" + y + ";" + x + "H" + structure.split("\n")[i]);
             y++;
         }
     }
@@ -331,18 +346,18 @@ public class Printer {
         }
     }
 
-    private void printResources(int y, int x, String tmpResource) {
+    private void printResources(int y, int x) {
         int maxWidth = 0;
-        for (int i = 0; i < tmpResource.split("\n").length; i++) {
-            if (tmpResource.split("\n")[i].length() > maxWidth)
-                maxWidth = tmpResource.split("\n")[i].length();
+        for (int i = 0; i < resources.split("\n").length; i++) {
+            if (resources.split("\n")[i].length() > maxWidth)
+                maxWidth = resources.split("\n")[i].length();
         }
 
-        printBox(x, y, maxWidth + 2, tmpResource.split("\n").length + 2, "Resource");
+        printBox(x, y, maxWidth + 2, resources.split("\n").length + 2, "Resource");
         x++;
         y++;
-        for (int i = 0; i < tmpResource.split("\n").length; i++) {
-            System.out.print("\u001B[" + y + ";" + x + "H" + tmpResource.split("\n")[i]);
+        for (int i = 0; i < resources.split("\n").length; i++) {
+            System.out.print("\u001B[" + y + ";" + x + "H" + resources.split("\n")[i]);
             y++;
         }
     }
@@ -368,7 +383,13 @@ public class Printer {
         printBox(x, y, Math.max("Current Player".length(), currentPlayer.length()) + 2, 3, "Current Player");
         x++;
         y++;
-        System.out.print("\u001B[" + y + ";" + x + "H" + currentPlayer);
+        if (currentPlayer.length() > "Current Player".length())
+            System.out.print("\u001B[" + y + ";" + x + "H" + currentPlayer);
+        else
+            System.out.print(
+                    "\u001B[" + y + ";" + x + "H"
+                            + " ".repeat("Current Player".length() / 2 - currentPlayer.length() / 2)
+                            + currentPlayer);
     }
 
     private void printCurrentState(int y, int x) {
@@ -426,7 +447,8 @@ public class Printer {
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
         // function that prints a box with a title in the center
         // TODO: add color to box considering player
-        if (indexPlayer != 0 && (title.equals("Structure") || title.equals("Resource")))
+        if (indexPlayer != indexMyPlayer
+                && (title.equals("Structure") || title.equals("Resource") || title.equals("Hand")))
             System.out.print("\u001B[33m"); // set color to yellow
         else
             System.out.print("\u001B[38;5;242m"); // set color to gray

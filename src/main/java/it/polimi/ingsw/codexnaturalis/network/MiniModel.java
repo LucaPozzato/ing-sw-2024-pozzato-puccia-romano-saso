@@ -2,10 +2,10 @@ package it.polimi.ingsw.codexnaturalis.network;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
@@ -17,12 +17,15 @@ public class MiniModel {
     private int gameId;
     private Player myPlayer;
     private List<Player> players;
-    private Hand playerHand;
-    private List<Structure> playerStructure;
-    private List<Card> uncoveredCards;
-    private List<Card> commonObjectives;
-    private Map<Player, Integer> actualScores;
+    private List<Hand> playerHands;
+    // private List<Hand> playerHands; //BUG: if I pass playerHands to the client, a
+    // "bad" client could see the cards and cheat
+    private List<Structure> playerStructures;
+    private Board board;
     private Player currentPlayer;
+    private Deck deck;
+    // Deck deck -> //BUG: if I pass deck to the client, a "bad" client could see
+    // all the cards and cheat
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
@@ -32,8 +35,8 @@ public class MiniModel {
         this.gameId = gameId;
         this.myPlayer = player;
         this.players = new ArrayList<>();
-        this.playerHand = new Hand();
-        this.playerStructure = new ArrayList<>();
+        this.playerHands = new ArrayList<>();
+        this.playerStructures = new ArrayList<>();
     }
 
     // might be handy for the interface
@@ -51,31 +54,31 @@ public class MiniModel {
     }
 
     public Structure getMyPlayerStructure() {
-        return this.playerStructure.get(players.indexOf(myPlayer));
+        return this.playerStructures.get(players.indexOf(myPlayer));
     }
 
     public List<Player> getPlayers() {
         return this.players;
     }
 
-    public Hand getPlayerHand() {
-        return this.playerHand;
+    public Hand getMyPlayerHand() {
+        return this.playerHands.get(players.indexOf(myPlayer));
     }
 
-    public List<Structure> getPlayerStructure() {
-        return this.playerStructure;
+    public List<Structure> getPlayerStructures() {
+        return this.playerStructures;
     }
 
-    public List<Card> getUncoveredCards() {
-        return this.uncoveredCards;
+    public List<Hand> getPlayerHands() {
+        return this.playerHands;
     }
 
-    public List<Card> getCommonObjectives() {
-        return this.commonObjectives;
+    public Board getBoard() {
+        return this.board;
     }
 
-    public Map<Player, Integer> getActualScores() {
-        return this.actualScores;
+    public Deck getDeck() {
+        return this.deck;
     }
 
     public Player getCurrentPlayer() {
@@ -104,24 +107,20 @@ public class MiniModel {
         this.players = players;
     }
 
-    public void setPlayerStructure(List<Structure> playerStructure) {
-        this.playerStructure = playerStructure;
+    public void setPlayerStructure(List<Structure> playerStructures) {
+        this.playerStructures = playerStructures;
     }
 
-    public void setHand(Hand hand) {
-        this.playerHand = hand;
+    public void setHands(List<Hand> hands) {
+        this.playerHands = hands;
     }
 
-    public void setUncoveredCards(List<Card> uncoveredCards) {
-        this.uncoveredCards = uncoveredCards;
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
-    public void setCommonObjectives(List<Card> commonObjectives) {
-        this.commonObjectives = commonObjectives;
-    }
-
-    public void setActualScore(Map<Player, Integer> actualScores) {
-        this.actualScores = actualScores;
+    public void setDeck(Deck deck) {
+        this.deck = deck;
     }
 
     public void setCurrentPlayer(Player player) {
