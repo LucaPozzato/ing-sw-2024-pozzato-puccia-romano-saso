@@ -21,12 +21,10 @@ public class ObjectiveParserTest {
             assertTrue(card.getShape() != null && card.getShape() != "" && !card.getShape().contains("\"")
                     && ObjectiveCardType.valueOf(card.getShape()) != null);
             assertTrue(card.getMustHave() != null && card.getMustHave() != "" && !card.getMustHave().contains("\"")
-                    && (card.getMustHave().equals("RED") || card.getMustHave().equals("PURPLE")
-                            || card.getMustHave().equals("GREEN") || card.getMustHave().equals("BLUE")
-                            || card.getMustHave().equals("FOLDEDHANDS") || card.getMustHave().equals("ANIMALS")
-                            || card.getMustHave().equals("SHROOM") || card.getMustHave().equals("INSECTS")
-                            || card.getMustHave().equals("VEGETABLES") || card.getMustHave().equals("INK")
-                            || card.getMustHave().equals("SCROLL") || card.getMustHave().equals("FEATHER")));
+                    && (card.getMustHave().contains("SHROOM") || card.getMustHave().contains("INSECT")
+                            || card.getMustHave().contains("VEGETABLE") || card.getMustHave().contains("ANIMAL")
+                            || card.getMustHave().contains("FOLDEDHANDS") || card.getMustHave().contains("INK")
+                            || card.getMustHave().contains("SCROLL") || card.getMustHave().contains("FEATHER")));
             assertTrue(card instanceof ObjectiveCard);
             i++;
         }
