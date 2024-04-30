@@ -7,4 +7,6 @@ import java.rmi.RemoteException;
 
 public interface VirtualClientHandler extends Remote {
     public void queueUpdate(Command command) throws RemoteException;
+
+    void updateQueue(Command command);
 }

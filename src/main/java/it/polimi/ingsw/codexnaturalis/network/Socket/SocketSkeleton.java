@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClientHandler;
+import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
 public class SocketSkeleton implements VirtualClient, Runnable {
@@ -15,7 +17,7 @@ public class SocketSkeleton implements VirtualClient, Runnable {
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
-    public SocketSkeleton (Socket socket){
+    public SocketSkeleton (Socket socket) throws IOException {
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());
     }
