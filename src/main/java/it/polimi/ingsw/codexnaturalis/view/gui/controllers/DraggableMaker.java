@@ -31,8 +31,8 @@ public class DraggableMaker {
         });
 
         node.setOnMouseDragged(mouseEvent -> {
-            node1.setFitHeight(58);
-            node1.setFitWidth(84);
+            node1.setFitWidth(144);
+            node1.setFitHeight(98);
             node.setLayoutX(mouseEvent.getSceneX() - mouseX);
             node.setLayoutY(mouseEvent.getSceneY() - mouseY);
         });

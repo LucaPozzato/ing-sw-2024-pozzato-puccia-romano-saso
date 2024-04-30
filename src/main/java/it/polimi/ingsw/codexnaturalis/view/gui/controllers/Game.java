@@ -112,10 +112,36 @@ public class Game implements Initializable {
         ImageView imageView = new ImageView(image);
         panino.getChildren().add(imageView);
 
-        imageView.setFitWidth(84);
-        imageView.setFitHeight(58);
-        imageView.setLayoutX(318);
-        imageView.setLayoutY(265);
+        imageView.setFitWidth(144);
+        imageView.setFitHeight(98);
+        imageView.setLayoutX(279);
+        imageView.setLayoutY(442);
+
+        String imagePath1 =  "/it/polimi/ingsw/codexnaturalis/FrontCards/G19f.jpg";
+        InputStream imageStream1 = getClass().getResourceAsStream(imagePath1);
+        assert imageStream1 != null;
+        Image image1 = new Image(imageStream1);
+
+        ImageView imageView1 = new ImageView(image1);
+        panino.getChildren().add(imageView1);
+
+        imageView1.setFitWidth(144);
+        imageView1.setFitHeight(98);
+        imageView1.setLayoutX(497);
+        imageView1.setLayoutY(442);
+
+        String imagePath2 =  "/it/polimi/ingsw/codexnaturalis/FrontCards/G36f.jpg";
+        InputStream imageStream2 = getClass().getResourceAsStream(imagePath2);
+        assert imageStream2 != null;
+        Image image2 = new Image(imageStream2);
+
+        ImageView imageView2 = new ImageView(image2);
+        panino.getChildren().add(imageView2);
+
+        imageView2.setFitWidth(144);
+        imageView2.setFitHeight(98);
+        imageView2.setLayoutX(497);
+        imageView2.setLayoutY(558);
 
 
 
@@ -183,11 +209,11 @@ public class Game implements Initializable {
             throw new RuntimeException(e);
         }
 
-        initialCard.setLayoutX(253);
-        initialCard.setLayoutY(300);
+        initialCard.setLayoutX(388);
+        initialCard.setLayoutY(500);
 
-        color.setLayoutX(285);
-        color.setLayoutY(348);
+        color.setLayoutX(445);
+        color.setLayoutY(583);
 
         panino.getChildren().addAll(initialCard, color);
 

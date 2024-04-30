@@ -3,11 +3,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="590.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.ProvaInGame">
+<AnchorPane prefHeight="752.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.ProvaInGame">
    <children>
-      <Label layoutX="275.0" layoutY="242.0" text="centro" />
-      <Label text="angolo" />
-      <Label layoutX="546.0" text="angolo" />
-      <Label layoutX="546.0" layoutY="483.0" text="angolo" />
+      <Label layoutX="443.0" layoutY="368.0" text="centro" />
+      <Label layoutX="882.0" layoutY="734.0" text="angolo" />
+      <Label layoutX="882.0" layoutY="6.0" text="angolo" />
+      <Label layoutX="8.0" layoutY="739.0" text="angolo" />
+      <Label layoutX="8.0" layoutY="6.0" text="angolo" />
    </children>
 </AnchorPane>
