@@ -174,21 +174,21 @@ public class Game {
         int points = 0;
 
         for (Pair<Strategy, Card> pair : strategyMap.get(player)) {
-            // Computes the number of objective satisfied by a player
-            if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0) {
-                System.out.println("ciao");
-                getStructureByPlayer(player).increaseSatisfiedPatterns();
-            }
-            System.out.println("ciao");
+            // TODO: find a better way than compute twice the test also fails if I delete the comment
+            //Computes the number of objective satisfied by a player
+//            if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0) {
+//                getStructureByPlayer(player).increaseSatisfiedPatterns();
+//            }
+
             // Points will contain the times an objective is satisfied * the number of
             // points linked to that objective
             points += pair.getKey().compute(getStructureByPlayer(player), pair.getValue());
-            System.out.println(points);
             // Clears the set visited attribute in the map and prepares from another search
             for (Card card : getStructureByPlayer(player).getCardToCoordinate().keySet()) {
                 getStructureByPlayer(player).getCardToCoordinate().get(card).setVisited(false);
             }
         }
+        System.out.println(points);
         return points;
     }
 
@@ -197,9 +197,3 @@ public class Game {
         // client.updateError(message);
     }
 }
-
-/*
- * TODO: la minimatrice è troppo piccola per le carte patter chair
- * TODO: considerarere un altro modo per fare il parsing delle sedie, il must
- * have con il simbolo dominante non va bene
- */

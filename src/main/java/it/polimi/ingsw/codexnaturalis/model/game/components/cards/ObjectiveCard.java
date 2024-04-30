@@ -7,19 +7,16 @@ public class ObjectiveCard extends Card {
     private String shape;
     private String mustHave;
     private Integer divideBy;
-    private Integer[] whole3x3;
-
-    // TODO: join the divideBy attribute with the parser class, it's not setted
-    // right now
+    private int[] wholeCells;
 
     public ObjectiveCard(String idCard, int points, String shape, String mustHave, Integer divideBy,
-            Integer[] whole3x3) {
+            int[] wholeCells) {
         super(idCard);
         this.points = points;
         this.shape = shape;
         this.mustHave = mustHave;
         this.divideBy = divideBy;
-        this.whole3x3 = whole3x3;
+        this.wholeCells = wholeCells;
     }
 
     @Override
@@ -38,16 +35,16 @@ public class ObjectiveCard extends Card {
     }
 
     @Override
-    public Integer getDivideBy() throws IllegalCommandException {
+    public Integer getDivideBy_seatColor() throws IllegalCommandException {
         return divideBy;
     }
 
     @Override
-    public Integer[] getWhole3x3() throws IllegalCommandException {
-        return whole3x3;
+    public int[] getWholeCells() throws IllegalCommandException {
+        return wholeCells;
     }
 
-    // TOFIX:
+    // TOFIX: add new attributes
     @Override
     public String toString() {
         return "ObjectiveCard{" +

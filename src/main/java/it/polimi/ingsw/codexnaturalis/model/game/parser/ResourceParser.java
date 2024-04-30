@@ -20,6 +20,15 @@ public class ResourceParser {
         ResourceDeck = new Stack<>();
     }
 
+    /**
+     * When this method is called resourceDeck is generated extracting the information needed from the JSON file.
+     * Note that it extracts :
+     * #) the card's id at "id"
+     * #) the information about the type of symbol linked to the card at "symbol"<br>
+     * #) the points made when the objective is satisfied at "points" <br>
+     * #) an array of 4 strings which represent the occupation of every corner of the card starting from the TL and going clockwise
+     * @return a unique stack of resource card
+     */
     public Stack<ResourceCard> parse() {
         File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json");
         JsonElement fileElement = null;

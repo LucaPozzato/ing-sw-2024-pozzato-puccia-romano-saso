@@ -9,7 +9,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOP;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteChair;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
 import javafx.util.Pair;
@@ -18,9 +19,8 @@ public class EndGameState extends ControllerState {
 
     public EndGameState(Game game) {
         super(game);
-        // TODO: togli i commenti
         matchEnded();
-        // declareWinner();
+//        declareWinner();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EndGameState extends ControllerState {
 
     /**
      * This method's aim is to gather in a single data structure the pattern
-     * objective that a certain player could aspire to verify
+     * objective that a certain player aspire to verify
      * 
      * @param player the player I'm interested in
      * @return the list of pattern objective cards available on the board and in the
@@ -83,7 +83,7 @@ public class EndGameState extends ControllerState {
 
     /**
      * This method's aim is to gather in a single data structure the totem
-     * objective that a certain player could aspire to verify
+     * objective that a certain player aspire to verify
      * 
      * @param player the player I'm interested in
      * @return the list of totem pattern cards available on the board and in the
@@ -116,17 +116,16 @@ public class EndGameState extends ControllerState {
     /**
      * This method gathers togheter all the objective cards (common and secret) in a
      * proper data structure.
-     * Then it fills the strategyMap game's attribute whit the proper pair
-     * <strategy, objective card>.
+     * Then it fills the strategyMap game's attribute with the proper pair (strategy, objective card).
      * This map will be passed to the game method which computes the total amount of
-     * virtual points for each player
+     * virtual points for each player. Note that only 3 possible concrete strategy could be key of the pair:
+     * ObjectiveResource strategy, ObjectiveChairPattern, ObjectiveStairPattern.
      */
 
-    // TODO: change public in private, just for test purpouse
-    public void setStrategies(Player player) throws IllegalCommandException {
-        // if (super.game.getStrategyMap().get(player) != null) {
-        // super.game.getStrategyMap().get(player).clear();
-        // }
+    private void setStrategies(Player player) throws IllegalCommandException {
+         if (super.game.getStrategyMap().get(player) != null) {
+         super.game.getStrategyMap().get(player).clear();
+         }
 
         List<Card> gatheredObj = gatherPatterns(player);
         gatheredObj.addAll(gatherTotem(player));
@@ -135,7 +134,9 @@ public class EndGameState extends ControllerState {
             if (card.getIdCard().startsWith("OR")) {
                 super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteOR(), card));
             } else if (card.getIdCard().startsWith("OP")) {
-                super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteOP(), card));
+                if(card.getShape().equals("STAIRS")) super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteStair(), card));
+                else if(card.getShape().equals("CHAIR")) super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteChair(), card));
+                else throw new IllegalCommandException("Neither a chair nor a stair card passed, but yet recognized as pattern");
             } else {
                 throw new IllegalCommandException("Neither a resourceObject nor a pattern card passed");
             }
@@ -143,11 +144,10 @@ public class EndGameState extends ControllerState {
     }
 
     /**
-     * This method iterates on players and for each of them fills the strategy map
+     * This method iterates on players and for each of them calls the method which fills the strategy map
      * with concrete strategies and update his
-     * virtual points by calling the getPatternsTotemPoints game's method. This
-     * method is going to perform the search in the
-     * reduced matrix. Then the virtual points are summed to the actual ones.
+     * virtual points by calling the getPatternsTotemPoints game's method which is going to perform the search in the
+     * reduced matrix. Then the virtual points returned from the game are summed to the actual ones.
      */
     private void matchEnded() {
         try {
@@ -157,16 +157,11 @@ public class EndGameState extends ControllerState {
                 // Structure of the map: <Player,List<Pair<Strategy, ObjectiveCard>>
                 setStrategies(player);
 
-                for (Pair<Strategy, Card> pair : game.getStrategyMap().get(player)) {
-                    System.out.println(pair.getKey());
-                    System.out.println(pair.getValue());
-                }
-
                 // for each player compute the points made from patterns and from totems
                 virtualPoints += super.game.getPatternsTotemPoints(player, super.game.getStrategyMap());
-                System.out.println(virtualPoints);
                 // virtual points becomes actual
                 super.game.getBoard().updateActualScore(player, virtualPoints);
+
                 virtualPoints = 0;
             }
         } catch (Exception e) {

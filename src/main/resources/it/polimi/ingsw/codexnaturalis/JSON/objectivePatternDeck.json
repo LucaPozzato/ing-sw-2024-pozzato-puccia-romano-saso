@@ -4,69 +4,69 @@
         "points": "2",
         "shape": "STAIRS",
         "mustHave": "SHROOM",
-        "divideBy" : "0",
-        "whole3x3": "2,4,6"
+        "divideBy_seatColor": "0",
+        "wholeCells": "2,4,6"
     },
     {
         "id": "OP2",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "VEGETABLES",
-        "divideBy" : "0",
-        "whole3x3": "0,4,8"
+        "mustHave": "VEGETABLE",
+        "divideBy_seatColor": "0",
+        "wholeCells": "0,4,8"
 
     },
     {
         "id": "OP3",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "ANIMALS",
-        "divideBy" : "0",
-        "whole3x3": "2,4,6"
+        "mustHave": "ANIMAL",
+        "divideBy_seatColor": "0",
+        "wholeCells": "2,4,6"
 
     },
     {
         "id": "OP4",
         "points": "2",
         "shape": "STAIRS",
-        "mustHave": "INSECTS",
-        "divideBy" : "0",
-        "whole3x3": "0,4,8"
+        "mustHave": "INSECT",
+        "divideBy_seatColor": "0",
+        "wholeCells": "0,4,8"
 
     },
     {
         "id": "OP5",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "SHROOM",
-        "divideBy" : "0",
-        "whole3x3": "1,4,8"
+        "mustHave": "SHROOM, VEGETABLE",
+        "divideBy_seatColor": "2",
+        "wholeCells": "0,0,1"
 
     },
     {
         "id": "OP6",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "VEGETABLES",
-        "divideBy" : "0",
-        "whole3x3": "1,4,6"
+        "mustHave": "VEGETABLE, INSECT",
+        "divideBy_seatColor": "2",
+        "wholeCells": "1,1,0"
 
     },
     {
         "id": "OP7",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "ANIMALS",
-        "divideBy" : "0",
-        "whole3x3": "2,4,7"
+        "mustHave": "ANIMAL, SHROOM",
+        "divideBy_seatColor": "0",
+        "wholeCells": "1,0,0"
 
     },
     {
         "id": "OP8",
         "points": "3",
         "shape": "CHAIR",
-        "mustHave": "INSECTS",
-        "divideBy" : "0",
-        "whole3x3": "0,4,7"
+        "mustHave": "INSECT, ANIMAL",
+        "divideBy_seatColor": "0",
+        "wholeCells": "0,0,1"
     }
 ]

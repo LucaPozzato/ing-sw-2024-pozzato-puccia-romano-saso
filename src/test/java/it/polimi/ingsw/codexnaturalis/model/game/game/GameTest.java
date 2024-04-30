@@ -22,6 +22,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
 import javafx.util.Pair;
 
+import javax.security.auth.login.CredentialNotFoundException;
+
 public class GameTest {
     @Test
     void getPatternsTotemPointsTest() {
@@ -32,7 +34,7 @@ public class GameTest {
         ResourceParser parser = new ResourceParser();
         ObjectiveParser objPars = new ObjectiveParser();
 
-        InitialCard initialCardTest = new InitialParser().parse().get(0);
+        InitialCard initialCardTest = new InitialParser().parse().get(0); //IC1
         ResourceCard RedTest1 = parser.parse().get(0); // R01
         ResourceCard RedTest2 = parser.parse().get(1); // R02
         ResourceCard BluTest1 = parser.parse().get(22); // R23
@@ -45,14 +47,14 @@ public class GameTest {
         game.addPlayer(player);
         game.setPlayerHand(player, hand);
         hand = game.getHandByPlayer(player);
-        hand.setSecretObjective(objPars.parse().get(8));
+        hand.setSecretObjective(objPars.parse().get(8)); //OR1
 
         game.setPlayerStructure(player, structure);
 
         // Setto gli obiettivi comuni
         List<Card> commonObjective = new ArrayList<>();
-        commonObjective.add(objPars.parse().get(4));
-        commonObjective.add(objPars.parse().get(5));
+        commonObjective.add(objPars.parse().get(4)); //OP5
+        commonObjective.add(objPars.parse().get(5)); //OP6
 
         Board board = new Board();
         game.setBoard(board);
@@ -77,6 +79,9 @@ public class GameTest {
             game.getStrategyMap().put(player, new ArrayList<Pair<Strategy, Card>>());
             // endState.setStrategies(player);
             EndGameState endState = new EndGameState(game);
+
+            //TODO: determine why this call gives the wrong result
+//            System.out.println(game.getBoard().getActualPoints(player));
         } catch (Exception e) {
             fail(e.getMessage());
         }

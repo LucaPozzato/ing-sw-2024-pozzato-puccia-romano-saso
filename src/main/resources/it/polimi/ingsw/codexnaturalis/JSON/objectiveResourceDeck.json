@@ -4,64 +4,64 @@
         "points": "2",
         "shape": "IDOL",
         "mustHave": "SHROOM",
-        "divideBy" : "3",
-        "whole3x3": "null"
+        "divideBy_seatColor": "3",
+        "wholeCells": "x"
     },
     {
         "id": "OR2",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "VEGETABLES",
-        "divideBy" : "3",
-        "whole3x3": "null"
+        "mustHave": "VEGETABLE",
+        "divideBy_seatColor": "3",
+        "wholeCells": "x"
     },
     {
         "id": "OR3",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "ANIMALS",
-        "divideBy" : "3",
-        "whole3x3": "null"
+        "mustHave": "ANIMAL",
+        "divideBy_seatColor": "3",
+        "wholeCells": "x"
     },
     {
         "id": "OR4",
         "points": "2",
         "shape": "IDOL",
-        "mustHave": "INSECTS",
-        "divideBy" : "3",
-        "whole3x3": "null"
+        "mustHave": "INSECT",
+        "divideBy_seatColor": "3",
+        "wholeCells": "x"
     },
     {
         "id": "OR5",
         "points": "2",
         "shape": "WISEMAN",
         "mustHave": "FOLDEDHANDS",
-        "divideBy" : "0",
-        "whole3x3": "null"
+        "divideBy_seatColor": "0",
+        "wholeCells": "x"
     },
     {
         "id": "OR6",
         "points": "2",
         "shape": "WISEMAN",
         "mustHave": "SCROLL",
-        "divideBy" : "2",
-        "whole3x3": "null"
+        "divideBy_seatColor": "2",
+        "wholeCells": "x"
     },
     {
         "id": "OR7",
         "points": "2",
         "shape": "WISEMAN",
         "mustHave": "INK",
-        "divideBy" : "2",
-        "whole3x3": "null"
+        "divideBy_seatColor": "2",
+        "wholeCells": "x"
     },
     {
         "id": "OR8",
         "points": "2",
         "shape": "WISEMAN",
         "mustHave": "FEATHER",
-        "divideBy" : "2",
-        "whole3x3": "null"
+        "divideBy_seatColor": "2",
+        "wholeCells": "x"
     }
 
 ]

@@ -24,11 +24,11 @@ public abstract class Card {
         throw new IllegalCommandException("This card does not have a musthave");
     }
 
-    public Integer getDivideBy() throws IllegalCommandException {
+    public Integer getDivideBy_seatColor() throws IllegalCommandException {
         throw new IllegalCommandException("This card does not have a divideBy");
     }
 
-    public Integer[] getWhole3x3() throws IllegalCommandException {
+    public int[] getWholeCells() throws IllegalCommandException {
         throw new IllegalCommandException("This card is not a pattern one");
     }
 
