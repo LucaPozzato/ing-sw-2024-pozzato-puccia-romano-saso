@@ -34,7 +34,7 @@ public class EndGameState extends ControllerState {
     }
 
     @Override
-    public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+    public void chooseSetUp(Player nickname, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
         throw new IllegalCommandException("Match has ended");
     }
 

@@ -4,23 +4,23 @@ import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 
 public class Player {
 
-    private String nickName;
+    private String nickname;
     private Color colorPlayer;
 
     public Player() {
     }
 
-    public Player(String nickName) {
-        this.nickName = nickName;
+    public Player(String nickname) {
+        this.nickname = nickname;
     }
 
-    public Player(String nickName, Color color) {
-        this.nickName = nickName;
+    public Player(String nickname, Color color) {
+        this.nickname = nickname;
         this.colorPlayer = color;
     }
 
     public String getNickname() {
-        return this.nickName;
+        return this.nickname;
     }
 
     public Color getColor() {
@@ -28,7 +28,7 @@ public class Player {
     }
 
     public void setNickname(String nickname) {
-        this.nickName = nickname;
+        this.nickname = nickname;
     }
 
     public void setColor(Color colorPlayer) {

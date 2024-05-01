@@ -195,7 +195,7 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void chooseSetUp(Player nickName, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
+    public void chooseSetUp(Player nickname, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
         throw new IllegalCommandException("Game not set up yet");
     }
 

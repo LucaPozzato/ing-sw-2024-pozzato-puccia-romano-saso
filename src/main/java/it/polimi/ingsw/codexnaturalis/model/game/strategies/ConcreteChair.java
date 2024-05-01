@@ -15,22 +15,22 @@ public class ConcreteChair implements Strategy {
      * The method uses the cardMatrix and the wholeCells card attribute in order to identify the 3 cards which compose the chair pattern in a 2x4 matrix. <b>
      * Than the reduced matrix computed using radius is visited by letting scroll the 2x4 matrix with the highlighted cells on it and counting the matches in patternFound.
      * @param structure the player structure to get the cardmatrix and the cardToCoordinates
-     * @param objcard the chair objective we want to look for on the player structure
+     * @param objCard the chair objective we want to look for on the player structure
      * @return the number of points made due to objective satisfaction
      * @throws IllegalCommandException
      */
     @Override
-    public int compute(Structure structure, Card objcard) throws IllegalCommandException {
+    public int compute(Structure structure, Card objCard) throws IllegalCommandException {
         Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate = structure.getCardToCoordinate();
         Card[][] matrix = structure.getCardMatrix();
         int radius = structure.getRadius(structure.getCoordinateToCard());
-        int[] wholecells = objcard.getWholeCells();
+        int[] wholecells = objCard.getWholeCells();
 
 
-        String[] decomposedMustHave = objcard.getMustHave().split(", ");
+        String[] decomposedMustHave = objCard.getMustHave().split(", ");
         String[] properColor = new String[3];
         for (int i = 0; i < 3; i++) {
-            if(i!=objcard.getDivideBy_seatColor()){
+            if(i!=objCard.getDivideBy_seatColor()){
                 properColor[i] = decomposedMustHave[0];
             }else{
                 properColor[i] = decomposedMustHave[1];
@@ -72,6 +72,6 @@ public class ConcreteChair implements Strategy {
             }
         }
 
-        return objcard.getPoints() * patternsFound;
+        return objCard.getPoints() * patternsFound;
     }
 }
