@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
 
+import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +31,7 @@ import java.util.Stack;
 public class GameInizializer implements Initializable {
 
 
+    //UI components FXML
     @FXML
     private Label Errore;
 
@@ -65,13 +68,18 @@ public class GameInizializer implements Initializable {
     @FXML
     private Button startGame;
 
+    //Utils
+
     String nickname;
-    String colorSelected;
     String objectiveSelected;
     String cartaIniziale;
     String resourceElement1;
     String resourceElement2;
     String goldElement;
+
+    //Inizializzazioni
+    Color color;
+    Player player;
     GoldParser goldParser = new GoldParser();
     ResourceParser resourceParser  = new ResourceParser();
     Deck deck = new Deck(goldParser.parse(),resourceParser.parse());
@@ -80,7 +88,6 @@ public class GameInizializer implements Initializable {
     public void displayName(String username) {
         nickname = username;
     }
-
 
     @FXML
     void OB1Selected(MouseEvent event) {
@@ -100,54 +107,54 @@ public class GameInizializer implements Initializable {
 
     @FXML
     void blueSelected(MouseEvent event) {
-        colorSelected = "pedinaBlu";
+        color = Color.BLUE;
         blue.setOpacity(1);
         red.setOpacity(0.3);
         yellow.setOpacity(0.3);
         green.setOpacity(0.3);
-        System.out.println(colorSelected + "\n");
+        System.out.println("pedina Blu" + "\n");
     }
 
     @FXML
     void greenSelected(MouseEvent event) {
-        colorSelected = "pedinaVerde";
+        color = Color.GREEN;
         green.setOpacity(1);
         red.setOpacity(0.3);
         yellow.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println(colorSelected + "\n");
+        System.out.println("pedinaVerde" + "\n");
 
     }
 
     @FXML
     void redSelected(MouseEvent event) {
-        colorSelected = "pedinaRossa";
+        color = Color.RED;
         red.setOpacity(1);
         green.setOpacity(0.3);
         yellow.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println(colorSelected + "\n");
+        System.out.println("pedinaRossa" + "\n");
     }
 
     @FXML
     void yellowSelected(MouseEvent event) {
-        colorSelected = "pedinaGialla";
+        color = Color.YELLOW;
         yellow.setOpacity(1);
         red.setOpacity(0.3);
         green.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println(colorSelected + "\n");
+        System.out.println("pedinaGialla" + "\n");
     }
 
     @FXML
     void goToGame(MouseEvent event) {
 
         //Manca la scelta delle objective... le seleziona a caso..
-        if (objectiveSelected == null && colorSelected == null) {
+        if (objectiveSelected == null && color == null) {
             System.out.println("Seleziona una carta Objective e un colore");
             Errore.setText("Choose a color and an objective card");
             Errore.setVisible(true);
-        } else if (colorSelected == null) {
+        } else if (color == null) {
             System.out.println("Seleziona un colore");
             Errore.setText("Choose a color");
             Errore.setVisible(true);
@@ -160,8 +167,9 @@ public class GameInizializer implements Initializable {
             Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
             viewFactory.closeStage(stage);
 
+            player = new Player(nickname,color);
             //No "OP1f" ma fai funzione per carte obiettivo..
-            viewFactory.showGame(nickname, colorSelected, "OP1", cartaIniziale, resourceElement1, resourceElement2, goldElement, deck);
+            viewFactory.showGame(nickname, color, "OP1", cartaIniziale, resourceElement1, resourceElement2, goldElement, deck);
         }
 
     }
