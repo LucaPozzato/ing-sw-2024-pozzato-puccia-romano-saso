@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.view.gui;
 
+import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.GameInizializer;
@@ -44,11 +45,9 @@ public class ViewFactory {
         gameInizializer.displayName(username);
     }
 
-    public void showGame(String username, String colorSelected, String objSelected, String initialCard, String res1, String res2, String gold, Deck deck){
+    public void showGame(String username, Color colorSelected, String objSelected, String initialCard, String res1, String res2, String gold, Deck deck){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
         createStage(loader);
-        Game game = loader.getController();
-        game.setUp(username, colorSelected, objSelected, initialCard, res1, res2, gold, deck);
 
     }
 

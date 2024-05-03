@@ -35,10 +35,6 @@ public class Game implements Initializable, View {
 
     }
 
-    public void setUp(String username, Color colorSelected, String objSelected, String cartaIniziale, String res1, String res2, String gold, Deck deck1){
-
-
-    }
 
 
     @Override
