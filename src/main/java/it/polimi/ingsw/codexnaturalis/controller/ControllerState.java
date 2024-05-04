@@ -7,7 +7,13 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public abstract class ControllerState {
+import java.io.Serial;
+import java.io.Serializable;
+
+public abstract class ControllerState implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 709863251847392L;
+
     protected Game game;
 
     public ControllerState(Game game) {

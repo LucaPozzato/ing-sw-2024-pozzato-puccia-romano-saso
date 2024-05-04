@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import javafx.util.Pair;
 
-public class Game {
+public class Game implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 621094738562930L;
     private int gameId;
     private ControllerState gameState;
     private List<Player> players;

@@ -4,8 +4,12 @@ import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
+import java.io.Serial;
+
 //extends Serializable? 
 public class JoinGameCommand extends Command {
+    @Serial
+    private static final long serialVersionUID = 681029347560138L;
     String nickName;
     Color color;
 
@@ -14,7 +18,8 @@ public class JoinGameCommand extends Command {
         this.color = color;
     }
 
-    public void run(ControllerState controller) throws IllegalCommandException {
+    @Override
+    public void execute(ControllerState controller) throws IllegalCommandException {
         controller.joinGame(nickName, color);
     }
 }

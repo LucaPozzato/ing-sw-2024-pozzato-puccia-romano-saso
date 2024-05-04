@@ -1,11 +1,16 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
-public abstract class Card {
+public abstract class Card implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 817463925078346L;
+
     protected String idCard;
 
     public Card(String idCard) {

@@ -1,10 +1,13 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class GoldCard extends Card {
+    @Serial
+    private static final long serialVersionUID = 284719356018473L;
     private String symbol;
     private int points;
     private String pointsType;

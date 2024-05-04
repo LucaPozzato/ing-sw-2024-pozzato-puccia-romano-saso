@@ -2,7 +2,13 @@ package it.polimi.ingsw.codexnaturalis.model.game.player;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 
-public class Player {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 784093625109283L;
+
 
     private String nickname;
     private Color colorPlayer;

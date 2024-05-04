@@ -5,7 +5,11 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
+import java.io.Serial;
+
 public class PlaceCommand extends Command {
+    @Serial
+    private static final long serialVersionUID = 293847506109283L;
     Player player;
     Card father;
     Card placeThis;
@@ -20,6 +24,7 @@ public class PlaceCommand extends Command {
         this.frontUp = frontUp;
     }
 
+    @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
         controller.placedCard(player, father, placeThis, position, frontUp);
     }

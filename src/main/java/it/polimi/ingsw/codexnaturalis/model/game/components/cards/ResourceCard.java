@@ -1,9 +1,13 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceCard extends Card {
+    @Serial
+    private static final long serialVersionUID = 629038475109384L;
+
     private String symbol;
     private int points;
     private List<String> frontCorners;

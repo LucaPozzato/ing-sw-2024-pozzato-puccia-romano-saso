@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.network;
+package it.polimi.ingsw.codexnaturalis.network.client;
 
 import java.util.ArrayList;
 import java.util.List;

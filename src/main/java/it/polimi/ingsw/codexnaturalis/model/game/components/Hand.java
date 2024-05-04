@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import javafx.util.Pair;
 
-public class Hand {
+public class Hand implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 503921874926310L;
+
     private List<Card> chooseBetweenObj;
     private Card secretObjective;
     private List<Pair<Card, Boolean>> cardsHand;

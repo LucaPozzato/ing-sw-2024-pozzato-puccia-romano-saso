@@ -5,7 +5,11 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
+import java.io.Serial;
+
 public class DrawCommand extends Command {
+    @Serial
+    private static final long serialVersionUID = 572903618492730L;
     Player player;
     Card card;
     String fromDeck;
@@ -16,6 +20,7 @@ public class DrawCommand extends Command {
         this.fromDeck = fromDeck;
     }
 
+    @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
         controller.drawnCard(player, card, fromDeck);
     }

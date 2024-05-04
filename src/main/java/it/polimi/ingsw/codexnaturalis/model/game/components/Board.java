@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class Board {
+public class Board implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 709863251847392L;
     private Map<Player, Integer> actualScores;
     private Map<Player, Integer> virtualScores;
     private List<Card> commonObjectives;

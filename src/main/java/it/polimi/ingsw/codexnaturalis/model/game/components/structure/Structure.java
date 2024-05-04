@@ -2,6 +2,8 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
 import static java.lang.Math.abs;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import javafx.util.Pair;
 
-public class Structure {
+public class Structure implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 109283746501928L;
     private List<Pair<Card, Boolean>> placedCards;
     private Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate; // <Card , <Coordinates, Side, Visited> >
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >

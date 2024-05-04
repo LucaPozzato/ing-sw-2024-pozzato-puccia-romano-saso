@@ -2,7 +2,12 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
+import java.io.Serial;
+
 public class ObjectiveCard extends Card {
+    @Serial
+    private static final long serialVersionUID = 302948176492837L;
+
     private int points;
     private String shape;
     private String mustHave;

@@ -1,8 +1,12 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.cards;
 
+import java.io.Serial;
 import java.util.List;
 
 public class InitialCard extends Card {
+    @Serial
+    private static final long serialVersionUID = 156729384019284L;
+
     private List<String> frontCorners;
     private List<String> frontCenterResources;
     private List<String> backCorners;
