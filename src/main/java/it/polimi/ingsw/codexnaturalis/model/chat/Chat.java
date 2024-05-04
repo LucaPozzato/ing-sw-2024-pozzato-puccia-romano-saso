@@ -35,26 +35,4 @@ public class Chat {
             }
         }
     }
-
-    public String draw(String player) {
-        String chat = "";
-        String receivers = "";
-        String color = "";
-        for (Pair<Integer, ChatMessage> pair : chatMessages) {
-            if (pair.getValue().getReceiver() == null
-                    || pair.getValue().getReceiver().getNickname().equals(player)
-                    || pair.getValue().getSender().getNickname().equals(player)) {
-                if (pair.getValue().getReceiver() == null) {
-                    receivers = "everyone";
-                    color = "\u001B[38;5;28m";
-                } else {
-                    receivers = pair.getValue().getReceiver().getNickname();
-                    color = "\u001B[38;5;27m";
-                }
-                chat += color + "<from: " + pair.getValue().getSender().getNickname() + "> <to: " + receivers
-                        + ">\u001B[0m " + pair.getValue().getMessage() + "\n";
-            }
-        }
-        return chat;
-    }
 }

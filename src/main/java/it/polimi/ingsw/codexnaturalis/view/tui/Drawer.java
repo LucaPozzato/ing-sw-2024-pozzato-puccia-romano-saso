@@ -4,25 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
+import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.view.View;
-import javafx.util.Pair;
 
-public class GameTui implements View {
-    Printer printer = new Printer();
-    Renderer renderer = new Renderer();
-    List<Player> players = new ArrayList<>();
-    Player myPlayer = new Player();
-    Boolean initialStage = true;
+public class Drawer {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[38;5;196m";
     private static final String ANSI_GREEN = "\u001B[32m";
@@ -30,13 +19,8 @@ public class GameTui implements View {
     private static final String ANSI_BLUE = "\u001B[34m";
     private static final String ANSI_PURPLE = "\u001B[35m";
 
-    public void setInitialStage(Boolean initialStage) {
-        this.initialStage = initialStage;
-    }
-
     public char[][] insertCardInMatrix(char[][] matrix, Card card, int x, int y, Boolean side)
             throws IllegalCommandException {
-        // TODO: update error when handling exeptions
 
         List<String> corners;
         List<String> cardString = new ArrayList<>();
@@ -209,7 +193,7 @@ public class GameTui implements View {
         return matrix;
     }
 
-    private List<String> drawFullInitialCard(Card card) throws IllegalCommandException {
+    public List<String> drawFullInitialCard(Card card) throws IllegalCommandException {
         char drawingBoard[][] = new char[5][9];
         drawingBoard = insertCardInMatrix(drawingBoard, card, 4, 2, true);
         String cardFrontUp = "";
@@ -221,10 +205,10 @@ public class GameTui implements View {
         for (int i = 0; i < 5; i++) {
             cardBackUp += new String(drawingBoard[i]) + "\n";
         }
-        return new Renderer().printInitialCard(List.of(cardFrontUp, cardBackUp));
+        return new Painter().paintInitialCard(List.of(cardFrontUp, cardBackUp));
     }
 
-    private String drawResourceCard(Card card, Boolean side) throws IllegalCommandException {
+    public String drawResourceCard(Card card, Boolean side) throws IllegalCommandException {
         List<String> corners;
         String cardString;
 
@@ -294,7 +278,7 @@ public class GameTui implements View {
         return cardString;
     }
 
-    private String drawGoldCard(Card card, Boolean side) throws IllegalCommandException {
+    public String drawGoldCard(Card card, Boolean side) throws IllegalCommandException {
         List<String> corners;
         String cardString;
         String cardRequirements = "";
@@ -412,7 +396,7 @@ public class GameTui implements View {
         return cardString;
     }
 
-    private String drawObjectiveCard(Card card) throws IllegalCommandException {
+    public String drawObjectiveCard(Card card) throws IllegalCommandException {
         String cardString = "";
         switch (card.getShape()) {
             case "STAIRS":
@@ -557,7 +541,7 @@ public class GameTui implements View {
         return cardString;
     }
 
-    private String drawVisibleSymbols(Map<String, Integer> visibleSymbols) {
+    public String drawVisibleSymbols(Map<String, Integer> visibleSymbols) {
         String visibleResources = "";
         for (Map.Entry<String, Integer> entry : visibleSymbols.entrySet()) {
             if (!(entry.getKey().equals("EMPTY")) && !(entry.getKey().equals("NULL")))
@@ -567,7 +551,7 @@ public class GameTui implements View {
         return visibleResources;
     }
 
-    private String drawActualScores(Map<Player, Integer> actualScores) {
+    public String drawActualScores(Map<Player, Integer> actualScores) {
         String actualScoreString = "";
         for (Map.Entry<Player, Integer> entry : actualScores.entrySet()) {
             actualScoreString += entry.getKey().getNickname() + ": " + entry.getValue() + " | ";
@@ -576,187 +560,25 @@ public class GameTui implements View {
         return actualScoreString;
     }
 
-    @Override
-    public void updateState(String state) {
-        printer.updateCurrentState(state);
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updateMyPlayer(Player player) {
-        myPlayer = player;
-        printer.updateMyPlayer(players.indexOf(player));
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updateCurrentPlayer(Player player) {
-        printer.updateCurrentPlayer(player.getNickname());
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updatePlayers(List<Player> players) {
-        this.players = players;
-        List<String> playersString = new ArrayList<>();
-        for (Player player : players) {
-            playersString.add(player.getNickname());
-        }
-        printer.updatePlayers(playersString);
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updateStructure(List<Structure> structures) throws IllegalCommandException {
-        List<String> structureStrings = new ArrayList<>();
-        List<String> resources = new ArrayList<>();
-
-        for (Structure structure : structures) {
-            char[][] visualStructure = new char[174][506];
-            int x = 0;
-            int y = 0;
-            for (Pair<Card, Boolean> cardPair : structure.getPlacedCards()) {
-                x = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() / 100;
-                y = structure.getCardToCoordinate().get(cardPair.getKey()).getFirst() % 100;
-
-                // Center of the matrix + x offset (6 pixels per card)
-                x = 253 + ((x - 40) * 6);
-                // Inverting y coordinate to match the matrix structure, center of the matrix +
-                // y offset (2 pixels per card)
-                y = 87 - ((y - 40) * 2);
-
-                visualStructure = insertCardInMatrix(visualStructure, cardPair.getKey(), x, y, cardPair.getValue());
-            }
-            structureStrings.add(renderer.printStructure(visualStructure, structure.getCoordinateToCard()));
-            resources.add(drawVisibleSymbols(structure.getvisibleSymbols()));
-        }
-
-        // FIXME: multiple structures
-        printer.updateStructure(structureStrings);
-
-        // FIXME: multiple resources
-        printer.updateResources(resources);
-
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updateHand(List<Hand> hands) throws IllegalCommandException {
-        List<String> visualHand = new ArrayList<>();
-        List<String> initialCard = new ArrayList<>();
-        List<String> chooseBetweenObj = new ArrayList<>();
-        List<List<String>> handsString = new ArrayList<>();
-        String secretObjective = "";
-
-        for (Hand hand : hands) {
-            visualHand.clear();
-            if (hands.indexOf(hand) == players.indexOf(myPlayer)) {
-                for (Card card : hand.getCardsHand()) {
-                    if (card instanceof GoldCard)
-                        visualHand.add(drawGoldCard(card, true));
-                    else if (card instanceof ResourceCard)
-                        visualHand.add(drawResourceCard(card, true));
+    public String drawChat(Chat chat, Player player) {
+        String chatString = "";
+        String receivers = "";
+        String color = "";
+        for (ChatMessage message : chat.getChatMessages()) {
+            if (message.getReceiver() == null
+                    || message.getReceiver().getNickname().equals(player.getNickname())
+                    || message.getSender().getNickname().equals(player.getNickname())) {
+                if (message.getReceiver() == null) {
+                    receivers = "everyone";
+                    color = "\u001B[38;5;28m";
+                } else {
+                    receivers = message.getReceiver().getNickname();
+                    color = "\u001B[38;5;27m";
                 }
-                initialCard = drawFullInitialCard(hand.getInitCard());
-                chooseBetweenObj = List.of(drawObjectiveCard(hand.getChooseBetweenObj().get(0)),
-                        drawObjectiveCard(hand.getChooseBetweenObj().get(1)));
-
-                if (hand.getSecretObjective() != null)
-                    secretObjective = drawObjectiveCard(hand.getSecretObjective());
-            } else {
-                visualHand.clear();
-                for (Card card : hand.getCardsHand()) {
-                    if (card instanceof GoldCard)
-                        visualHand.add(drawGoldCard(card, false));
-                    else if (card instanceof ResourceCard)
-                        visualHand.add(drawResourceCard(card, false));
-                }
+                chatString += color + "<from: " + message.getSender().getNickname() + "> <to: " + receivers
+                        + ">\u001B[0m " + message.getMessage() + "\n";
             }
-            handsString.add(renderer.printHand(visualHand, hand.getCardsHand()));
         }
-
-        printer.updateHands(handsString);
-        printer.updateInitialCard(renderer.printInitialCard(initialCard));
-        printer.updateChooseObjectives(chooseBetweenObj);
-        printer.updateSecretObjective(secretObjective);
-
-        printer.clear();
-        if (initialStage) {
-            printer.printInitial();
-        } else
-            printer.print();
-    }
-
-    @Override
-    public void updateBoard(Board board) throws IllegalCommandException {
-        List<String> cards = new ArrayList<>();
-        List<String> commonObjectives = new ArrayList<>();
-        String scores = "";
-        for (Card card : board.getUncoveredCards()) {
-            if (card instanceof GoldCard)
-                cards.add(drawGoldCard(card, true));
-            else if (card instanceof ResourceCard)
-                cards.add(drawResourceCard(card, true));
-        }
-        for (Card card : board.getCommonObjectives()) {
-            commonObjectives.add(drawObjectiveCard(card));
-        }
-        scores = drawActualScores(board.getActualScores());
-
-        printer.updateBoard(renderer.printBoard(cards, board.getUncoveredCards()));
-        printer.updateCommonObjectives(commonObjectives);
-        printer.updateScoreBoard(scores);
-
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    @Override
-    public void updateDeck(Deck deck) throws IllegalCommandException {
-        List<String> cards = new ArrayList<>();
-        cards = renderer.printDeck(List.of(deck.getResourceDeck().peek(), deck.getGoldDeck().peek()));
-
-        printer.updateDecks(cards);
-
-        printer.clear();
-        if (initialStage)
-            printer.printInitial();
-        else
-            printer.print();
-    }
-
-    public void printNextPlayerView() {
-        printer.clear();
-        printer.printNext();
-        printer.print();
-    }
-
-    public void resetView() {
-        printer.clear();
-        printer.resetView();
-        printer.print();
+        return chatString;
     }
 }

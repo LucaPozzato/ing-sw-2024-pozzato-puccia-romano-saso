@@ -3,12 +3,12 @@ package it.polimi.ingsw.codexnaturalis.view.tui;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Printer {
+public class TerminalPrinter {
     // Cursor starts from 1, 1 -> \u001B[y;xH
     private List<List<String>> hands;
     private List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resourcesList,
             players;
-    private String scoreBoard, alert, currentPlayer, currentState, structure, resources;
+    private String scoreBoard, alert, currentPlayer, currentState, structure, resources, chat;
     private int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0,
             indexMyPlayer = 0;
 
@@ -19,9 +19,10 @@ public class Printer {
     // [x] if other player -> box with "viewing plyer's name"
     // [x] box with current player's name
     // [x] box with current "state"
-    // [x] alert box in initial phase
+    // [x] alert box in choose phase
+    // [ ] initial phase
 
-    public Printer() {
+    public TerminalPrinter() {
         this.structures = new ArrayList<>();
         this.players = new ArrayList<>();
         this.currentPlayer = "";
@@ -37,17 +38,24 @@ public class Printer {
         this.resources = "";
         this.scoreBoard = "";
         this.alert = "";
+        this.chat = "";
+    }
+
+    public void updateChat(String chat) {
+        this.chat = chat;
     }
 
     // TODO: define all other exceptions for bad parameters in update methods
-    public void updateStructure(List<String> structure) {
+    public void updateStructures(List<String> structures) {
         if (structure != null)
-            this.structures = structure;
+            this.structures = structures;
+        indexPlayer = indexMyPlayer;
     }
 
     public void updateHands(List<List<String>> hands) {
         if (hands != null)
             this.hands = hands;
+        indexPlayer = indexMyPlayer;
     }
 
     public void updateBoard(List<String> board) {
@@ -75,6 +83,7 @@ public class Printer {
     public void updateResources(List<String> resources) {
         if (resources != null)
             this.resourcesList = resources;
+        indexPlayer = indexMyPlayer;
     }
 
     public void updateAlert(String alert) {
@@ -120,8 +129,10 @@ public class Printer {
         // set console size
         System.out.print("\u001B[8;" + height + ";" + width + "t");
 
+        System.out.println("\033[?7h");
+
         // clear console
-        System.out.println("\033c");
+        System.out.println("\033[2J");
     }
 
     public void clearInput() {
@@ -136,7 +147,62 @@ public class Printer {
 
     }
 
-    public void printInitial() {
+    public void printChat() {
+        // function that prints the chat
+        int x = 2;
+        int y = 2;
+        int boxWidth;
+        int boxHeight;
+        String title = "Chat";
+
+        boxWidth = width - 2;
+        boxHeight = height - 5;
+
+        printBox(x, y, boxWidth, boxHeight, title);
+
+        // get chat to fit in the box
+        String[] chatLines = chat.split("\n");
+        // if line is bigger than box width, split in the line and create new chat
+        // string with the \n at the right place
+        chat = "";
+        for (int i = 0; i < chatLines.length; i++) {
+            if (chatLines[i].length() > boxWidth - 2) {
+                String[] splitLine = chatLines[i].split("(?<=\\G.{" + (boxWidth - 2) + "})");
+                for (int j = 0; j < splitLine.length; j++) {
+                    chat += splitLine[j] + "\n";
+                }
+            } else
+                chat += chatLines[i] + "\n";
+        }
+
+        // print only the last boxHeight lines of the chat
+        chatLines = chat.split("\n");
+        int start = chatLines.length - boxHeight + 2;
+        if (start < 0)
+            start = 0;
+        for (int i = start; i < chatLines.length; i++) {
+            System.out.print("\u001B[" + (y + i - start + 1) + ";" + (x + 1) + "H" + chatLines[i]);
+        }
+
+        // print input box
+        printBox(x, y + boxHeight, boxWidth, 3, "Input");
+
+        System.out.print("\u001B[" + (y + boxHeight + 1) + ";" + (x + 1) + "H");
+    }
+
+    public void printInitialStage() {
+        // print input box and error box
+
+        midHeight = height / 2;
+        midWidth = width / 2;
+
+        printAlert(midHeight - 2, midWidth - Math.max("Alert".length(), alert.length()) / 2 - 1);
+
+        printBox(midWidth - 21, midHeight + 2, 43, 3, "Input");
+        System.out.print("\u001B[" + (midHeight + 3) + ";" + (midWidth - 20) + "H");
+    }
+
+    public void printChoosePhase() {
         midHeight = height / 2;
         midWidth = width / 2;
 
@@ -188,12 +254,9 @@ public class Printer {
         else
             midWidth = (maxX + minX) / 2 + Math.abs(delta);
 
-        if (structure.equals("") || hand == null || resources.equals("")) {
-            indexPlayer = indexMyPlayer;
-            structure = structures.get(indexMyPlayer);
-            hand = hands.get(indexMyPlayer);
-            resources = resourcesList.get(indexMyPlayer);
-        }
+        structure = structures.get(indexPlayer);
+        hand = hands.get(indexPlayer);
+        resources = resourcesList.get(indexPlayer);
 
         printStructure(midHeight - structure.split("\n").length / 2,
                 midWidth - structure.split("\n")[0].length() / 2);
@@ -447,31 +510,44 @@ public class Printer {
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
         // function that prints a box with a title in the center
         // TODO: add color to box considering player
+        String boxString = "";
+
         if (indexPlayer != indexMyPlayer
                 && (title.equals("Structure") || title.equals("Resource") || title.equals("Hand")))
-            System.out.print("\u001B[33m"); // set color to yellow
+            boxString += "\u001B[33m"; // set color to yellow
         else
-            System.out.print("\u001B[38;5;242m"); // set color to gray
+            boxString += "\u001B[38;5;242m"; // set color to gray
 
         for (int i = 0; i < boxHeight; i++) {
             for (int j = 0; j < boxWidth; j++) {
                 if (i == 0 && j == 0)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H╭");
+                    boxString += "╭";
                 else if (i == 0 && j == boxWidth - 1)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H╮");
+                    boxString += "╮\n";
                 else if (i == boxHeight - 1 && j == 0)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H╰");
+                    boxString += "╰";
                 else if (i == boxHeight - 1 && j == boxWidth - 1)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H╯");
+                    boxString += "╯";
                 else if (i == 0 && j == (boxWidth - title.length()) / 2) {
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j - 1) + "H " + title);
-                    j = j + title.length();
+                    boxString += title;
+                    j += title.length() - 1;
                 } else if (i == 0 || i == boxHeight - 1)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H─");
-                else if (j == 0 || j == boxWidth - 1)
-                    System.out.print("\u001B[" + (y + i) + ";" + (x + j) + "H│");
+                    boxString += "─";
+                else if (j == 0 || j == boxWidth - 1) {
+                    boxString += "│";
+                    if (j == boxWidth - 1)
+                        boxString += "\n";
+                } else
+                    boxString += " ";
             }
         }
+
+        String[] lines = boxString.split("\n");
+
+        for (int i = 0; i < lines.length; i++) {
+            System.out.print("\u001B[" + (y + i) + ";" + x + "H" + lines[i]);
+        }
+
         System.out.print("\u001B[0m"); // reset color
     }
 }

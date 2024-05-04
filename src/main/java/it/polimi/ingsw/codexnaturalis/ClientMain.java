@@ -15,7 +15,7 @@ import java.rmi.registry.Registry;
 
 public class ClientMain {
 
-    public static void main (String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         boolean isRmi = false;
@@ -64,26 +64,28 @@ public class ClientMain {
         }
 
         // TODO: I believe we can force the serverip and port as default values.
-        //  In the case we want to take it as an input from the client,
-        //  the code below has to be implemented with a switch that resolves the null choice,
-        //  which will insert the default values
-//        System.out.print("Please insert the server ip address [recommended ...]:   ");
-//        try {
-//            String inputString = input.readLine();
-//            serverIpAddress = Integer.parseInt(inputString);
-//            System.out.println("Serve Ip Address: " + serverIpAddress);
-//        } catch (IOException e) {
-//            System.err.println("Something went wrong while reading the input: " + e.getMessage());
-//        } catch (NumberFormatException e) {
-//            System.err.println("Invalid input. Please be sure to insert a number.");
-//        }
+        // In the case we want to take it as an input from the client,
+        // the code below has to be implemented with a switch that resolves the null
+        // choice,
+        // which will insert the default values
+        // System.out.print("Please insert the server ip address [recommended ...]: ");
+        // try {
+        // String inputString = input.readLine();
+        // serverIpAddress = Integer.parseInt(inputString);
+        // System.out.println("Serve Ip Address: " + serverIpAddress);
+        // } catch (IOException e) {
+        // System.err.println("Something went wrong while reading the input: " +
+        // e.getMessage());
+        // } catch (NumberFormatException e) {
+        // System.err.println("Invalid input. Please be sure to insert a number.");
+        // }
 
         try {
             input.close();
         } catch (IOException e) {
             System.err.println("Something went wrong while closing the input: " + e.getMessage());
         }
-
+        // BUG: non chiudere input altrimenti la tui non puo' piu' leggere da stdin
 
         if (isRmi) {
             VirtualServer server = null;

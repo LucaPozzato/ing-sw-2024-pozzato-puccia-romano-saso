@@ -8,7 +8,7 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Triplet;
 
-public class Renderer {
+public class Painter {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[38;5;196m";
     private static final String ANSI_GREEN = "\u001B[32m";
@@ -23,7 +23,7 @@ public class Renderer {
     private static final String ANSI_BG_BLUE = "\u001B[48;5;19m";
     private static final String ANSI_BG_PURPLE = "\u001B[48;5;55m";
 
-    public List<String> printHand(List<String> hand, List<Card> cardsHand)
+    public List<String> paintHand(List<String> hand, List<Card> cardsHand)
             throws IllegalCommandException {
         List<String> handStringList = new ArrayList<>();
         String[] cardLines;
@@ -128,7 +128,7 @@ public class Renderer {
         return handStringList;
     }
 
-    public List<String> printBoard(List<String> board, List<Card> uncoveredCards) throws IllegalCommandException {
+    public List<String> paintBoard(List<String> board, List<Card> uncoveredCards) throws IllegalCommandException {
         List<String> boardStringList = new ArrayList<>();
         String[] cardLines;
         String card;
@@ -232,7 +232,7 @@ public class Renderer {
         return boardStringList;
     }
 
-    public String printStructure(char[][] board, Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard)
+    public String paintStructure(char[][] board, Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard)
             throws IllegalCommandException {
         String structureString = "";
 
@@ -326,7 +326,7 @@ public class Renderer {
         return structureString;
     }
 
-    public List<String> printDeck(List<Card> decks) throws IllegalCommandException {
+    public List<String> paintDeck(List<Card> decks) throws IllegalCommandException {
         List<String> deckStringList = new ArrayList<>();
         for (int i = 0; i < decks.size(); i++) {
             deckStringList.add(
@@ -365,7 +365,7 @@ public class Renderer {
         return deckStringList;
     }
 
-    public List<String> printInitialCard(List<String> card) {
+    public List<String> paintInitialCard(List<String> card) {
         List<String> fullCard = new ArrayList<>();
         String cardFace = "";
         for (String face : card) {

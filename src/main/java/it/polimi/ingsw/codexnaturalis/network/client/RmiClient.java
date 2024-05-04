@@ -5,6 +5,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -21,10 +22,10 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private View view;
     private MiniModel miniModel;
 
-
     public RmiClient(VirtualServer server, boolean isCli) throws RemoteException {
         this.server = server;
         this.isCli = isCli;
+        this.miniModel = new MiniModel();
         this.eventEntryQueue = new LinkedList<Event>();
         this.commandExitQueue = new LinkedList<Command>();
     }
@@ -91,7 +92,9 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     private void runCli() throws RemoteException {
-        // this.view = new GameCli();
+        this.view = new Tui(miniModel, this);
+        miniModel.setView(view);
+        view.run();
         // [...]
     }
 

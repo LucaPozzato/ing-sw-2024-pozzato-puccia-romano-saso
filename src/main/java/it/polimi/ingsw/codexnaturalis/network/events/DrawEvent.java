@@ -6,22 +6,23 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 
 import java.io.Serial;
+import java.util.List;
 
 public class DrawEvent extends Event {
     @Serial
     private static final long serialVersionUID = 402918736529103L;
-    private Integer turnCounter;
     private Board board;
+    private List<Hand> hands;
 
-    public DrawEvent(Hand hand, Board board, Integer turnCounter) {
+    public DrawEvent(List<Hand> hands, Board board, Integer turnCounter) {
         this.board = board;
-        this.turnCounter = turnCounter;
+        this.hands = hands;
     }
 
     @Override
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
         miniModel.setBoard(board);
-        miniModel.setTurnCounter(turnCounter);
+        miniModel.setHands(hands);
     }
 
 }

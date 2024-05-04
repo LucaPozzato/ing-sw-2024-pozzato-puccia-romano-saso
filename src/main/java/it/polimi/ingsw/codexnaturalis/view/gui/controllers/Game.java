@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
+import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
@@ -28,69 +29,78 @@ import java.util.ResourceBundle;
 import java.util.Stack;
 
 public class Game implements Initializable, View {
+    @Override
+    public void run() {
 
+    }
+
+    @Override
+    public void updateError(String error) {
+
+    }
+
+    @Override
+    public void updateChat(Chat chat) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 
-
-
     @Override
-    public void updateState(String state) throws IllegalCommandException {
+    public void updateState(String state) {
 
     }
 
     @Override
-    public void updateMyPlayer(Player player) throws IllegalCommandException {
+    public void updateMyPlayer(Player player) {
 
     }
 
     @Override
-    public void updateCurrentPlayer(Player player) throws IllegalCommandException {
+    public void updateCurrentPlayer(Player player) {
 
     }
 
     @Override
-    public void updatePlayers(List<Player> players) throws IllegalCommandException {
+    public void updatePlayers(List<Player> players) {
 
     }
 
     @Override
-    public void updateStructure(List<Structure> structures) throws IllegalCommandException {
+    public void updateStructures(List<Structure> structures) {
 
     }
 
     @Override
-    public void updateHand(List<Hand> hands) throws IllegalCommandException {
-
-
-    }
-
-    @Override
-    public void updateBoard(Board board) throws IllegalCommandException {
+    public void updateHand(List<Hand> hands) {
 
     }
 
     @Override
-    public void updateDeck(Deck deck) throws IllegalCommandException {
+    public void updateBoard(Board board) {
 
     }
 
+    @Override
+    public void updateDeck(Deck deck) {
 
-    public Image path(String oggetto){
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
+    }
+
+    public Image path(String oggetto) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
-        //System.out.println("\nOggetto: " + oggetto + "\n");
+        // System.out.println("\nOggetto: " + oggetto + "\n");
         assert imageStream != null;
         return new Image(imageStream);
     }
 
-    public Image symbolPath(String oggetto){
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
+    public Image symbolPath(String oggetto) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
-        //System.out.println("\nOggetto: " + oggetto + "\n");
+        // System.out.println("\nOggetto: " + oggetto + "\n");
         assert imageStream != null;
         return new Image(imageStream);
     }

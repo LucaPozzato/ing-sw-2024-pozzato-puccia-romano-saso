@@ -3,11 +3,13 @@ package it.polimi.ingsw.codexnaturalis.network.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.view.View;
 
 public class MiniModel {
 
@@ -30,10 +32,12 @@ public class MiniModel {
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
     private Player winner;
+    private Chat chat;
+    private String error;
+    private String state;
+    private View view;
 
-    public MiniModel(int gameId, Player player) {
-        this.gameId = gameId;
-        this.myPlayer = player;
+    public MiniModel() {
         this.players = new ArrayList<>();
         this.playerHands = new ArrayList<>();
         this.playerStructures = new ArrayList<>();
@@ -101,30 +105,76 @@ public class MiniModel {
         return this.winner;
     }
 
+    public String getError() {
+        return this.error;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public Chat getChat() {
+        return this.chat;
+    }
+
     // setter
+
+    public void setView(View view) {
+        this.view = view;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+        view.updateState(state);
+    }
+
+    public void setError(String error) {
+        this.error = error;
+        view.updateError(error);
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+        view.updateChat(chat);
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
+        view.updateMyPlayer(myPlayer);
+    }
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+        view.updatePlayers(players);
     }
 
     public void setPlayerStructure(List<Structure> playerStructures) {
         this.playerStructures = playerStructures;
+        view.updateStructures(playerStructures);
     }
 
     public void setHands(List<Hand> hands) {
         this.playerHands = hands;
+        view.updateHand(hands);
     }
 
     public void setBoard(Board board) {
         this.board = board;
+        view.updateBoard(board);
     }
 
     public void setDeck(Deck deck) {
         this.deck = deck;
+        view.updateDeck(deck);
     }
 
     public void setCurrentPlayer(Player player) {
         this.currentPlayer = player;
+        view.updateCurrentPlayer(player);
     }
 
     public void setNextPlayer(Player player) {
