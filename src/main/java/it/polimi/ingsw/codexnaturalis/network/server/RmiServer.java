@@ -33,7 +33,7 @@ public class RmiServer implements VirtualServer, Serializable {
     @Override
     public void receiveCommand (Command command) throws IllegalStateException {
         commandEntryQueue.add(command);
-        // notify del thread;
+        notifyAll();;
         // gestione exception?
     }
 
@@ -60,7 +60,7 @@ public class RmiServer implements VirtualServer, Serializable {
     @Override
     public void sendEvent (Event event) throws IllegalStateException {
         eventExitQueue.add(event);
-        // notify del thread;
+        notifyAll();
         // gestione exception?
     }
 

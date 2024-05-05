@@ -95,7 +95,6 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         this.view = new Tui(miniModel, this);
         miniModel.setView(view);
         view.run();
-        // [...]
     }
 
     private void runGui() throws RemoteException {
