@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -46,21 +45,6 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label text="Connection type:">
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-            </Label>
-            <RadioButton fx:id="RMI" mnemonicParsing="false" text="RMI">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </RadioButton>
-            <RadioButton fx:id="SOCKET" mnemonicParsing="false" text="SOCKET">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-            </RadioButton>
             <Label text="How many players">
                <VBox.margin>
                   <Insets top="30.0" />

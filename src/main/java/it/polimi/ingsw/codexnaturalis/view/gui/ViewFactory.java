@@ -45,7 +45,7 @@ public class ViewFactory {
         gameInizializer.displayName(username);
     }
 
-    public void showGame(String username, Color colorSelected, String objSelected, String initialCard, String res1, String res2, String gold, Deck deck){
+    public void showGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
         createStage(loader);
 

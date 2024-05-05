@@ -169,7 +169,7 @@ public class GameInizializer implements Initializable {
 
             player = new Player(nickname,color);
             //No "OP1f" ma fai funzione per carte obiettivo..
-            viewFactory.showGame(nickname, color, "OP1", cartaIniziale, resourceElement1, resourceElement2, goldElement, deck);
+            viewFactory.showGame();
         }
 
     }

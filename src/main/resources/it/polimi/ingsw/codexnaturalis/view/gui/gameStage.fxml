@@ -4,75 +4,90 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game">
    <bottom>
-      <HBox alignment="CENTER" prefHeight="143.0" prefWidth="1200.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="131.0" prefWidth="1200.0" spacing="10.0" style="-fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </ImageView>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-               <HBox.margin>
-                  <Insets right="50.0" />
-               </HBox.margin>
-            </ImageView>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="108.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
+            <HBox alignment="CENTER" prefHeight="143.0" prefWidth="435.0" style="-fx-background-color: #A9A9A9;">
+               <children>
+                  <ImageView fx:id="secreteObjective" fitHeight="101.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="143.0" prefWidth="435.0" spacing="10.0" style="-fx-background-color: #A9A9A9;">
+               <children>
+                  <ImageView fx:id="handCard1" fitHeight="116.0" fitWidth="170.0" onKeyPressed="#showBack" onMouseClicked="#handCard1Clicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="handCard2" fitHeight="116.0" fitWidth="170.0" onMouseClicked="#handCard2Clicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="handCard3" fitHeight="116.0" fitWidth="170.0" onMouseClicked="#handCard3Clicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="143.0" prefWidth="435.0" spacing="10.0" style="-fx-background-color: #A9A9A9;">
+               <children>
+                  <ImageView fx:id="publicObjective1" fitHeight="101.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="publicObjective2" fitHeight="101.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../FrontCards/G11f.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
          </children>
       </HBox>
    </bottom>
    <right>
-      <VBox alignment="CENTER" prefHeight="443.0" prefWidth="201.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="483.0" prefWidth="160.0" spacing="10.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="93.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deck:" />
+            <ImageView fx:id="resourceCard1" fitHeight="93.0" fitWidth="145.0" onMouseClicked="#resourceCard1Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="88.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resourceCard2" fitHeight="88.0" fitWidth="128.0" onMouseClicked="#resourceCard2Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="goldCard1" fitHeight="93.0" fitWidth="145.0" onMouseClicked="#goldCard1Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="88.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="goldCard2" fitHeight="88.0" fitWidth="128.0" onMouseClicked="#goldCard2Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
@@ -81,145 +96,183 @@
       </VBox>
    </right>
    <top>
-      <HBox alignment="CENTER" prefHeight="81.0" prefWidth="1200.0" spacing="5.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="57.0" prefWidth="1200.0" spacing="5.0" style="-fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Codex naturalis">
-               <HBox.margin>
-                  <Insets left="470.0" right="300.0" />
-               </HBox.margin>
-            </Text>
-            <VBox prefHeight="81.0" prefWidth="318.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0" spacing="10.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="42.0" prefWidth="100.0" spacing="10.0">
+                  <Text fx:id="nickname1" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname">
+                     <HBox.margin>
+                        <Insets left="20.0" right="40.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connection type:" />
+                  <Text fx:id="connectionType" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;type&quot;" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Codex naturalis">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="85.0" prefWidth="397.0">
+               <children>
+                  <GridPane prefHeight="25.0" prefWidth="205.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../SymbolsPng/fungo.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="6.0" />
-                           </HBox.margin>
-                        </Text>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="mushroomsPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="1" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                            <image>
                               <Image url="@../../SymbolsPng/foglia.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="6.0" />
-                           </HBox.margin>
-                        </Text>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="leafPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="3" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
                            <image>
                               <Image url="@../../SymbolsPng/lupo.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="6.0" />
-                           </HBox.margin>
-                        </Text>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="wolfPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="5" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
                            <image>
                               <Image url="@../../SymbolsPng/farfalla.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="6.0" />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="42.0" prefWidth="100.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="butterflyPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="7" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                            <image>
                               <Image url="@../../SymbolsPng/penna.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="featherPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <image>
                               <Image url="@../../SymbolsPng/pergamena.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <Text fx:id="manuscriptPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <image>
                               <Image url="@../../SymbolsPng/pozione.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
+                        <Text fx:id="potionPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                      </children>
-                  </HBox>
+                  </GridPane>
                </children>
-               <HBox.margin>
-                  <Insets top="5.0" />
-               </HBox.margin>
-            </VBox>
+            </HBox>
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </HBox>
    </top>
    <left>
-      <VBox prefHeight="447.0" prefWidth="124.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="459.0" prefWidth="116.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="38.0" prefWidth="118.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View:" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Board">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fitHeight="24.0" fitWidth="124.0" onMouseClicked="#boardVisibility" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/visibility.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
+               <children>
+                  <Text fx:id="nickname2" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname2">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname2VisibilityFunct" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/visibility.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
+               <children>
+                  <Text fx:id="nickname3" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname3" visible="false">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fx:id="nickname3Visibility" fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname3VisibilityFunct" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../SymbolsPng/visibility.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
+               <children>
+                  <Text fx:id="nickname4" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname4" visible="false">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fx:id="nickname4Visibility" fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname4VisibilityFunct" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../SymbolsPng/visibility.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+         </children></VBox>
    </left>
    <center>
-      <Pane prefHeight="447.0" prefWidth="859.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="483.0" prefWidth="934.0" style="-fx-border-color: #1111; -fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="93.0" fitWidth="145.0" layoutX="427.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="145.0" layoutX="308.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="145.0" layoutX="518.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="145.0" layoutX="618.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="145.0" layoutX="725.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="initialCard" fitHeight="74.0" fitWidth="111.0" layoutX="408.0" layoutY="256.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>

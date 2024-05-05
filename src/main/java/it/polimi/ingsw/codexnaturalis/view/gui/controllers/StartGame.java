@@ -39,11 +39,7 @@ public class StartGame implements Initializable{
     @FXML
     ToggleGroup toggleGroup = new ToggleGroup();
 
-    @FXML
-    private RadioButton RMI;
 
-    @FXML
-    private RadioButton SOCKET;
 
     @FXML
     private ImageView passwordVisibility;
@@ -70,9 +66,6 @@ public class StartGame implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        RMI.setSelected(true);
-        RMI.setToggleGroup(toggleGroup);
-        SOCKET.setToggleGroup(toggleGroup);
 
         ChoosePlayers.setValue("2");
         ChoosePlayers.getItems().addAll(playersNum);

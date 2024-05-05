@@ -8,13 +8,13 @@ import java.io.IOException;
 public class GuiApp extends Application {
 
 
-    public static void main(String[] args) {
+    public void run(){
         launch();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
         ViewFactory viewFactory = new ViewFactory();
-        viewFactory.showInitialStage();
+        viewFactory.showGame();
     }
 }
