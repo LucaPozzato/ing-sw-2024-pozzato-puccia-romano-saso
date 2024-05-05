@@ -14,6 +14,7 @@ import java.rmi.registry.Registry;
 public class ServerMain {
 
     public static void main(String[] args) {
+        System.out.println("\033[2J\033[1;1H");
 
         ControllerState controller = new InitState(new Game(0));
 

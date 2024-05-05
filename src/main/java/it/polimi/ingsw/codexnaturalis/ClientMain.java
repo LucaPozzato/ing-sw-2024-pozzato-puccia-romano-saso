@@ -15,6 +15,7 @@ import java.rmi.registry.Registry;
 
 public class ClientMain {
     public static void main(String[] args) {
+        System.out.println("\033[2J\033[1;1H");
 
         try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
 
@@ -28,7 +29,6 @@ public class ClientMain {
         }
     }
 
-
     private static boolean chooseUserInterface(BufferedReader input) throws IOException {
 
         System.out.print("Please insert the type of user interface you would like to play with [cli/gui]:   ");
@@ -41,7 +41,7 @@ public class ClientMain {
                 case "gui":
                     return false;
                 default:
-                    //si potrebbe aggiungere un numero limite di tentativi
+                    // si potrebbe aggiungere un numero limite di tentativi
                     System.err.println("We didn't quite catch that, please try again:");
                     line = input.readLine();
             }
@@ -60,7 +60,7 @@ public class ClientMain {
                 case "socket":
                     return false;
                 default:
-                    //si potrebbe aggiungere un numero limite di tentativi
+                    // si potrebbe aggiungere un numero limite di tentativi
                     System.err.println("We didn't quite catch that, please try again:");
                     line = input.readLine();
             }
@@ -83,7 +83,8 @@ public class ClientMain {
             server = (RmiServer) registry.lookup(DefaultValue.servername_RMI);
             RmiClient client = new RmiClient(server, isCli);
             client.run();
-            System.out.println("Client started successfully via RMI connection and " + (isCli ? "CLI" : "GUI") + " interface.");
+            System.out.println(
+                    "Client started successfully via RMI connection and " + (isCli ? "CLI" : "GUI") + " interface.");
         } catch (RemoteException | NotBoundException e) {
             System.err.println("Error while starting RMI client: " + e.getMessage());
         }
@@ -95,7 +96,8 @@ public class ClientMain {
             socket = new Socket(DefaultValue.serverIp, DefaultValue.port_Socket);
             SocketClient client = new SocketClient(socket, isCli);
             new Thread(client).start();
-            System.out.println("Client started successfully via socket connection and " + (isCli ? "CLI" : "GUI") + " interface.");
+            System.out.println(
+                    "Client started successfully via socket connection and " + (isCli ? "CLI" : "GUI") + " interface.");
         } catch (IOException e) {
             System.err.println("Error while starting socket client: " + e.getMessage());
             if (socket != null) {
@@ -109,24 +111,26 @@ public class ClientMain {
     }
 }
 
-
-//        // TODO: I believe we can force the serverip and port as default values.
-//       //  In the case we want to take it as an input from the client,
-//        //  the code below has to be implemented with a switch that resolves the null choice,
-//        //  which will insert the default values
-//        System.out.print("Please insert the server ip address [recommended ...]:   ");
-//        try {
-//            String inputString = input.readLine();
-//            serverIpAddress = Integer.parseInt(inputString);
-//            System.out.println("Serve Ip Address: " + serverIpAddress);
-//        } catch (IOException e) {
-//            System.err.println("Something went wrong while reading the input: " + e.getMessage());
-//        } catch (NumberFormatException e) {
-//            System.err.println("Invalid input. Please be sure to insert a number.");
-//        }
+// // TODO: I believe we can force the serverip and port as default values.
+// // In the case we want to take it as an input from the client,
+// // the code below has to be implemented with a switch that resolves the null
+// choice,
+// // which will insert the default values
+// System.out.print("Please insert the server ip address [recommended ...]: ");
+// try {
+// String inputString = input.readLine();
+// serverIpAddress = Integer.parseInt(inputString);
+// System.out.println("Serve Ip Address: " + serverIpAddress);
+// } catch (IOException e) {
+// System.err.println("Something went wrong while reading the input: " +
+// e.getMessage());
+// } catch (NumberFormatException e) {
+// System.err.println("Invalid input. Please be sure to insert a number.");
+// }
 //
-//        try {
-//            input.close();
-//        } catch (IOException e) {
-//            System.err.println("Something went wrong while closing the input: " + e.getMessage());
-//        }
+// try {
+// input.close();
+// } catch (IOException e) {
+// System.err.println("Something went wrong while closing the input: " +
+// e.getMessage());
+// }
