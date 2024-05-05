@@ -41,8 +41,7 @@ public class SocketServer implements VirtualServer, Runnable {
     @Override
     public void receiveCommand (Command command) throws IllegalStateException {
         commandEntryQueue.add(command);
-        // notify del thread;
-        // gestione exception?
+        notifyAll();
     }
 
     public void processCommandThread() {
@@ -68,7 +67,7 @@ public class SocketServer implements VirtualServer, Runnable {
     @Override
     public void sendEvent (Event event) throws IllegalStateException {
         eventExitQueue.add(event);
-        // notify del thread;
+        notifyAll();
         // gestione exception?
     }
 
@@ -100,6 +99,16 @@ public class SocketServer implements VirtualServer, Runnable {
         }
     }
 
+    public void disconnectClient(VirtualClient client) {
+        synchronized (clients) {
+            if (clients.remove(client)) {
+                if (client instanceof SocketSkeleton) {
+                    ((SocketSkeleton) client).stop();
+                }
+            }
+        }
+    }
+
     public void run() {
         try {
             Socket socket = null;
@@ -107,7 +116,7 @@ public class SocketServer implements VirtualServer, Runnable {
                 socket = serverSocket.accept();
                 SocketSkeleton client = new SocketSkeleton(this, socket);
                 clients.add(client);
-                client.run();
+                new Thread(client).start();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

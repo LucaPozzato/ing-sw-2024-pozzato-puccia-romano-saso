@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.utils;
-
-public interface Observer {
-}
+//package it.polimi.ingsw.codexnaturalis.utils;
+//
+//public interface Observer {
+//}

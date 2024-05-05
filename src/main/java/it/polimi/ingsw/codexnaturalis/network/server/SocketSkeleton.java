@@ -38,21 +38,34 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         this.server.receiveCommand(command);
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                Command command = (Command) input.readObject();
-                sendCommand(command);
-
-            } catch (IOException | ClassNotFoundException e) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+    public void stop() {
+        Thread.currentThread().interrupt();
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    @Override
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                Command command = (Command) input.readObject();
+                if (command != null) {
+                    sendCommand(command);
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                input.close();
+                output.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }

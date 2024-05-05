@@ -32,40 +32,87 @@ public class SocketClient implements VirtualClient, Runnable {
         this.commandExitQueue = new LinkedList<Command>();
     }
 
+//    @Override
+//    public void run() {
+//
+//        try {
+//            this.input = new ObjectInputStream(socket.getInputStream());
+//            this.output = new ObjectOutputStream(socket.getOutputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (isCli) {
+//            try {
+//                runCli();
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        } else {
+//            try {
+//                runGui();
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//
+//        while (true) {
+//            try {
+//                Event event = (Event) input.readObject();
+//                receiveEvent(event);
+//            } catch (IOException | ClassNotFoundException e) {
+//                try {
+//                    input.close();
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+//            }
+//        }
+//    }
+
+
+
+
+
     @Override
     public void run() {
-
         try {
             this.input = new ObjectInputStream(socket.getInputStream());
             this.output = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        if (isCli) {
-            try {
-                runCli();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                runGui();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        while (true) {
-            try {
-                Event event = (Event) input.readObject();
-                receiveEvent(event);
-            } catch (IOException | ClassNotFoundException e) {
+            if (isCli) {
                 try {
-                    input.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    runCli();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
                 }
+            } else {
+                try {
+                    runGui();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            while (true) {
+                try {
+                    Event event = (Event) input.readObject();
+                    receiveEvent(event);
+                } catch (IOException e) {
+                    System.err.println("Error while reading event from socket: " + e.getMessage());
+                    break;
+                }
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error while running socket client: " + e.getMessage());
+        } finally {
+            try {
+                input.close();
+                output.close();
+                socket.close();
+            } catch (IOException e) {
+                System.err.println("Error while closing resources: " + e.getMessage());
             }
         }
     }
@@ -73,7 +120,7 @@ public class SocketClient implements VirtualClient, Runnable {
     @Override
     public void receiveEvent(Event event) throws IllegalStateException {
         eventEntryQueue.add(event);
-        // notify del thread;
+        notifyAll();;
         // manage exception?
     }
 
@@ -99,7 +146,7 @@ public class SocketClient implements VirtualClient, Runnable {
 
     public void sendCommand (Command command) throws IllegalStateException {
         commandExitQueue.add(command);
-        // notify del thread;
+        notifyAll();
         // gestione exception?
     }
 

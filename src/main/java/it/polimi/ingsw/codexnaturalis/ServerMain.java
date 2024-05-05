@@ -27,9 +27,11 @@ public class ServerMain {
             new Thread(socketServer).start();
 
         } catch (RemoteException e) {
-            e.printStackTrace();
+            System.err.println("Error starting server");
+            System.err.println("Exception details:");
+            e.printStackTrace(System.err);
         }
 
-        System.err.println("Server started");
+        System.out.println("Server started");
     }
 }

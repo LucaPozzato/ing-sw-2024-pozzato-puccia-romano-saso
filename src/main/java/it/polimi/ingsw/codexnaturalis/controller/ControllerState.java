@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public abstract class ControllerState implements Serializable {
     @Serial
-    private static final long serialVersionUID = 709863251847392L;
+    private static final long serialVersionUID = 70986322227392L;
 
     protected Game game;
 

@@ -42,7 +42,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public void receiveEvent(Event event) throws RemoteException {
         eventEntryQueue.add(event);
-        // notify del thread;
+        notifyAll();
         // manage exception?
     }
 
@@ -67,7 +67,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
     public void sendCommand(Command command) throws RemoteException {
         commandExitQueue.add(command);
-        // notify del thread;
+        notifyAll();;
         // gestione exception?
     }
 
