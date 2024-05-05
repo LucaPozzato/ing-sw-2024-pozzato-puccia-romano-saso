@@ -3,6 +3,7 @@ package it.polimi.ingsw.codexnaturalis;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 import java.io.*;
@@ -21,6 +22,7 @@ public class ClientMain {
             boolean isRmi = chooseConnectionType(input);
 
             startClient(isCli, isRmi);
+
         } catch (IOException e) {
             System.err.println("An error occurred while reading input: " + e.getMessage());
         }
@@ -78,7 +80,7 @@ public class ClientMain {
             VirtualServer server = null;
             Registry registry;
             registry = LocateRegistry.getRegistry(DefaultValue.Remote_ip, DefaultValue.port_RMI);
-            server = (VirtualServer) registry.lookup(DefaultValue.servername_RMI);
+            server = (RmiServer) registry.lookup(DefaultValue.servername_RMI);
             RmiClient client = new RmiClient(server, isCli);
             client.run();
             System.out.println("Client started successfully via RMI connection and " + (isCli ? "CLI" : "GUI") + " interface.");
@@ -88,13 +90,21 @@ public class ClientMain {
     }
 
     private static void startSocketClient(boolean isCli) {
+        Socket socket = null;
         try {
-            Socket socket = new Socket(DefaultValue.serverIp, DefaultValue.port_Socket);
+            socket = new Socket(DefaultValue.serverIp, DefaultValue.port_Socket);
             SocketClient client = new SocketClient(socket, isCli);
             new Thread(client).start();
             System.out.println("Client started successfully via socket connection and " + (isCli ? "CLI" : "GUI") + " interface.");
         } catch (IOException e) {
             System.err.println("Error while starting socket client: " + e.getMessage());
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    System.err.println("Error while closing socket: " + ex.getMessage());
+                }
+            }
         }
     }
 }
