@@ -13,14 +13,16 @@ import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteChair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
 
 public class EndGameState extends ControllerState {
 
-    public EndGameState(Game game) {
-        super(game);
+    public EndGameState(Game game, RmiServer rmiServer, SocketServer socketServer) {
+        super(game, rmiServer, socketServer);
         matchEnded();
-//        declareWinner();
+        // declareWinner();
     }
 
     @Override
@@ -116,16 +118,18 @@ public class EndGameState extends ControllerState {
     /**
      * This method gathers togheter all the objective cards (common and secret) in a
      * proper data structure.
-     * Then it fills the strategyMap game's attribute with the proper pair (strategy, objective card).
+     * Then it fills the strategyMap game's attribute with the proper pair
+     * (strategy, objective card).
      * This map will be passed to the game method which computes the total amount of
-     * virtual points for each player. Note that only 3 possible concrete strategy could be key of the pair:
+     * virtual points for each player. Note that only 3 possible concrete strategy
+     * could be key of the pair:
      * ObjectiveResource strategy, ObjectiveChairPattern, ObjectiveStairPattern.
      */
 
     private void setStrategies(Player player) throws IllegalCommandException {
-         if (super.game.getStrategyMap().get(player) != null) {
-         super.game.getStrategyMap().get(player).clear();
-         }
+        if (super.game.getStrategyMap().get(player) != null) {
+            super.game.getStrategyMap().get(player).clear();
+        }
 
         List<Card> gatheredObj = gatherPatterns(player);
         gatheredObj.addAll(gatherTotem(player));
@@ -134,9 +138,13 @@ public class EndGameState extends ControllerState {
             if (card.getIdCard().startsWith("OR")) {
                 super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteOR(), card));
             } else if (card.getIdCard().startsWith("OP")) {
-                if(card.getShape().equals("STAIRS")) super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteStair(), card));
-                else if(card.getShape().equals("CHAIR")) super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteChair(), card));
-                else throw new IllegalCommandException("Neither a chair nor a stair card passed, but yet recognized as pattern");
+                if (card.getShape().equals("STAIRS"))
+                    super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteStair(), card));
+                else if (card.getShape().equals("CHAIR"))
+                    super.game.getStrategyMap().get(player).add(new Pair<>(new ConcreteChair(), card));
+                else
+                    throw new IllegalCommandException(
+                            "Neither a chair nor a stair card passed, but yet recognized as pattern");
             } else {
                 throw new IllegalCommandException("Neither a resourceObject nor a pattern card passed");
             }
@@ -144,10 +152,13 @@ public class EndGameState extends ControllerState {
     }
 
     /**
-     * This method iterates on players and for each of them calls the method which fills the strategy map
+     * This method iterates on players and for each of them calls the method which
+     * fills the strategy map
      * with concrete strategies and update his
-     * virtual points by calling the getPatternsTotemPoints game's method which is going to perform the search in the
-     * reduced matrix. Then the virtual points returned from the game are summed to the actual ones.
+     * virtual points by calling the getPatternsTotemPoints game's method which is
+     * going to perform the search in the
+     * reduced matrix. Then the virtual points returned from the game are summed to
+     * the actual ones.
      */
     private void matchEnded() {
         try {

@@ -6,13 +6,12 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
 import java.io.Serial;
 
-//extends Serializable? 
 public class JoinGameCommand extends Command {
     @Serial
     private static final long serialVersionUID = 681029347560138L;
-    String nickName;
-    Color color;
-    Integer gameId;
+    private String nickName;
+    private Color color;
+    private Integer gameId;
 
     public JoinGameCommand(Integer gameId, String nickName, Color color) {
         this.nickName = nickName;

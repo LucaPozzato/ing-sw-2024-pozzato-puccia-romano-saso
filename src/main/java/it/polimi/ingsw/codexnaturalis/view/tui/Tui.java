@@ -65,10 +65,18 @@ public class Tui implements View {
     public void updateState(String state) {
         terminalPrinter.updateCurrentState(state);
         state = state.toUpperCase();
-        if (state.equals("CHOOSE"))
+        if (state.equals("Wait")) {
+            terminalPrinter.updateAlert("Waiting for other players...");
+            initialStage = true;
+            print();
+            terminalPrinter.clearAlert();
+        } else if (state.equals("Choose")) {
             initialStage = false;
-        else if (state.equals("PLACE"))
+            chooseStage = true;
+        } else {
+            initialStage = false;
             chooseStage = false;
+        }
         print();
     }
 
@@ -262,11 +270,11 @@ public class Tui implements View {
     }
 
     class ReadThread extends Thread {
-
         public void run() {
-            final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
             try {
                 while (true) {
+                    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
                     String move = input.readLine();
                     move = move.toUpperCase();
                     switch (move) {
@@ -292,10 +300,12 @@ public class Tui implements View {
                         default:
                             try {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
+                                // print();
                             } catch (Exception e) {
-                                terminalPrinter.updateAlert(e.getMessage());
-                                print();
-                                terminalPrinter.clearAlert();
+                                e.printStackTrace();
+                                // terminalPrinter.updateAlert(e.getMessage());
+                                // print();
+                                // terminalPrinter.clearAlert();
                             }
                             break;
                     }

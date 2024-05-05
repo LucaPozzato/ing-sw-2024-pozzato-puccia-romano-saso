@@ -16,8 +16,9 @@ import java.rmi.registry.Registry;
 public class ClientMain {
     public static void main(String[] args) {
         System.out.println("\033[2J\033[1;1H");
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(System.in))) {
+        try {
 
             boolean isCli = chooseUserInterface(input);
             boolean isRmi = chooseConnectionType(input);
@@ -80,13 +81,13 @@ public class ClientMain {
             VirtualServer server = null;
             Registry registry;
             registry = LocateRegistry.getRegistry(DefaultValue.Remote_ip, DefaultValue.port_RMI);
-            server = (RmiServer) registry.lookup(DefaultValue.servername_RMI);
+            server = (VirtualServer) registry.lookup(DefaultValue.servername_RMI);
             RmiClient client = new RmiClient(server, isCli);
-            client.run();
             System.out.println(
                     "Client started successfully via RMI connection and " + (isCli ? "CLI" : "GUI") + " interface.");
+            client.run();
         } catch (RemoteException | NotBoundException e) {
-            System.err.println("Error while starting RMI client: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -96,6 +97,7 @@ public class ClientMain {
             socket = new Socket(DefaultValue.serverIp, DefaultValue.port_Socket);
             SocketClient client = new SocketClient(socket, isCli);
             new Thread(client).start();
+
             System.out.println(
                     "Client started successfully via socket connection and " + (isCli ? "CLI" : "GUI") + " interface.");
         } catch (IOException e) {

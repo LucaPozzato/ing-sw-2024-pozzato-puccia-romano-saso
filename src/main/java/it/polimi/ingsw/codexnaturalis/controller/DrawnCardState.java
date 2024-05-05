@@ -11,10 +11,12 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class DrawnCardState extends ControllerState {
-    public DrawnCardState(Game game) {
-        super(game);
+    public DrawnCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
+        super(game, rmiServer, socketServer);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class DrawnCardState extends ControllerState {
 
         updateDeck(card, fromDeck);
         nextTurn();
-        super.game.setState(new PlacedCardState(super.game));
+        super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }
 
     private void updateDeck(Card card, String fromDeck) throws IllegalCommandException {
@@ -99,7 +101,7 @@ public class DrawnCardState extends ControllerState {
                 // [ ] test the >= 0
                 super.game.removeTurn();
             else
-                super.game.setState(new EndGameState(super.game));
+                super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
         }
         List<Player> players = super.game.getPlayers();
         super.game.setNextPlayer(players.get((players.indexOf(super.game.getCurrentPlayer()) + 1) % players.size()));

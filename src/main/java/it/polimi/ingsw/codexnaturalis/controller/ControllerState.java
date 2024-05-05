@@ -6,18 +6,19 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
-import java.io.Serial;
-import java.io.Serializable;
-
-public abstract class ControllerState implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 70986322227392L;
+public abstract class ControllerState {
 
     protected Game game;
+    protected RmiServer rmiServer;
+    protected SocketServer socketServer;
 
-    public ControllerState(Game game) {
+    public ControllerState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         this.game = game;
+        this.rmiServer = rmiServer;
+        this.socketServer = socketServer;
     }
 
     public abstract void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException;

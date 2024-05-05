@@ -23,7 +23,7 @@ public class CreateGameCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        // controller.createGame
+        controller.initialized(nickName, color, numOfPlayers);
         // FIXME: gameID should be used in case of multiple games
     }
 }

@@ -16,6 +16,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 /**
  * Initial game state. It sets up the environment when the first player joins
@@ -33,8 +37,8 @@ public class InitState extends ControllerState {
      * 
      * @param game it's used to link the state with the game it has to model
      */
-    public InitState(Game game) {
-        super(game);
+    public InitState(Game game, RmiServer rmiServer, SocketServer socketServer) {
+        super(game, rmiServer, socketServer);
     }
 
     /**
@@ -161,7 +165,16 @@ public class InitState extends ControllerState {
 
         dealCommonObjective();
         dealSecretObjective();
-        super.game.setState(new WaitPlayerState(super.game));
+
+        Event event = new StartGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+                game.getBoard(), game.getCurrentPlayer(), null);
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
     }
 
     /**
@@ -177,7 +190,7 @@ public class InitState extends ControllerState {
      */
     @Override
     public void joinGame(String nickname, Color color) throws IllegalCommandException {
-        super.game.setState(new InitState(super.game));
+        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
         throw new IllegalCommandException();
     }
 
@@ -219,7 +232,7 @@ public class InitState extends ControllerState {
     @Override
     public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
-        super.game.setState(new InitState(super.game));
+        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
         throw new IllegalCommandException("Can't place card yet");
     }
 
@@ -252,7 +265,7 @@ public class InitState extends ControllerState {
      */
     @Override
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        super.game.setState(new InitState(super.game));
+        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
         throw new IllegalCommandException("Can't draw card yet");
     }
 }

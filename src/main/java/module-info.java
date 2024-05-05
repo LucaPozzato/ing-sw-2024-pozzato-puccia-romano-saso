@@ -7,7 +7,7 @@ module it.polimi.ingsw.codexnaturalis {
     requires javafx.base;
     // requires org.junit.jupiter.api;
 
-    exports it.polimi.ingsw.codexnaturalis.model.game.components;
+    exports it.polimi.ingsw.codexnaturalis;
 
     opens it.polimi.ingsw.codexnaturalis to javafx.fxml;
 

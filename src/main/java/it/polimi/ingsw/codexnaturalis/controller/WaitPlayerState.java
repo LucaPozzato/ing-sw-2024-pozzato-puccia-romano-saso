@@ -6,10 +6,12 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class WaitPlayerState extends ControllerState {
-    public WaitPlayerState(Game game) {
-        super(game);
+    public WaitPlayerState(Game game, RmiServer rmiServer, SocketServer socketServer) {
+        super(game, rmiServer, socketServer);
     }
 
     @Override
@@ -50,9 +52,9 @@ public class WaitPlayerState extends ControllerState {
         super.game.addParticipant();
 
         if (isFull())
-            super.game.setState(new ChooseSetUpState(super.game, null));
+            super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
         else
-            super.game.setState(new WaitPlayerState(super.game));
+            super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
     }
 
     private boolean isFull() {

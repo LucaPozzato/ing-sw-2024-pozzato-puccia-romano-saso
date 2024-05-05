@@ -196,10 +196,10 @@ public class TerminalPrinter {
         midHeight = height / 2;
         midWidth = width / 2;
 
-        printAlert(midHeight - 2, midWidth - Math.max("Alert".length(), alert.length()) / 2 - 1);
+        printAlert(midHeight + 2, midWidth - Math.max("Alert".length(), alert.length()) / 2 - 1);
 
-        printBox(midWidth - 21, midHeight + 2, 43, 3, "Input");
-        System.out.print("\u001B[" + (midHeight + 3) + ";" + (midWidth - 20) + "H");
+        printBox(midWidth - 21, midHeight - 2, 43, 3, "Input");
+        System.out.print("\u001B[" + (midHeight - 1) + ";" + (midWidth - 20) + "H");
     }
 
     public void printChoosePhase() {

@@ -18,6 +18,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
 
 public class Game implements Serializable {
@@ -39,9 +41,9 @@ public class Game implements Serializable {
     final List<VirtualClient> clients = new ArrayList<>();
     private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
 
-    public Game(int gameId) {
+    public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
-        this.gameState = new InitState(this);
+        this.gameState = new InitState(this, rmiServer, socketServer);
         this.players = new ArrayList<>();
         this.playerHand = new ArrayList<>();
         this.playerStructure = new ArrayList<>();
@@ -102,6 +104,14 @@ public class Game implements Serializable {
 
     public Hand getHandByPlayer(Player player) {
         return playerHand.get(players.indexOf(player));
+    }
+
+    public List<Structure> getStructures() {
+        return playerStructure;
+    }
+
+    public List<Hand> getHands() {
+        return playerHand;
     }
 
     public Structure getStructureByPlayer(Player player) {
@@ -178,11 +188,13 @@ public class Game implements Serializable {
         int points = 0;
 
         for (Pair<Strategy, Card> pair : strategyMap.get(player)) {
-            // TODO: find a better way than compute twice the test also fails if I delete the comment
-            //Computes the number of objective satisfied by a player
-//            if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0) {
-//                getStructureByPlayer(player).increaseSatisfiedPatterns();
-//            }
+            // TODO: find a better way than compute twice the test also fails if I delete
+            // the comment
+            // Computes the number of objective satisfied by a player
+            // if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0)
+            // {
+            // getStructureByPlayer(player).increaseSatisfiedPatterns();
+            // }
 
             // Points will contain the times an objective is satisfied * the number of
             // points linked to that objective

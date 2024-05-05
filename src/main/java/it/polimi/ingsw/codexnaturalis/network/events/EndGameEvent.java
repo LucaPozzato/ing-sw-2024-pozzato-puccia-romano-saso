@@ -10,17 +10,21 @@ import java.io.Serial;
 public class EndGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 819362547038261L;
+    private String state;
     private Board board;
     private Player winner;
 
-    public EndGameEvent(Board board, Player winner) {
+    public EndGameEvent(String state, Board board, Player winner) {
+        this.state = state;
         this.board = board;
         this.winner = winner;
+        this.state = state;
     }
 
     @Override
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
         miniModel.setBoard(board);
         miniModel.setWinner(winner);
+        miniModel.setState(state);
     }
 }

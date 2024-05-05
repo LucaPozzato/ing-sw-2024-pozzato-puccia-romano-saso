@@ -3,8 +3,8 @@ package it.polimi.ingsw.codexnaturalis.network.client;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,61 +24,20 @@ public class SocketClient implements VirtualClient, Runnable {
     private View view;
     private MiniModel miniModel;
 
-
-    public SocketClient( Socket socket, boolean isCli) throws RemoteException {
+    public SocketClient(Socket socket, boolean isCli) throws RemoteException {
         this.socket = socket;
         this.isCli = isCli;
+        this.miniModel = new MiniModel();
         this.eventEntryQueue = new LinkedList<Event>();
         this.commandExitQueue = new LinkedList<Command>();
     }
 
-//    @Override
-//    public void run() {
-//
-//        try {
-//            this.input = new ObjectInputStream(socket.getInputStream());
-//            this.output = new ObjectOutputStream(socket.getOutputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (isCli) {
-//            try {
-//                runCli();
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        } else {
-//            try {
-//                runGui();
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//        while (true) {
-//            try {
-//                Event event = (Event) input.readObject();
-//                receiveEvent(event);
-//            } catch (IOException | ClassNotFoundException e) {
-//                try {
-//                    input.close();
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-//            }
-//        }
-//    }
-
-
-
-
-
     @Override
     public void run() {
+        System.out.println("Socket client started");
         try {
-            this.input = new ObjectInputStream(socket.getInputStream());
             this.output = new ObjectOutputStream(socket.getOutputStream());
+            this.input = new ObjectInputStream(socket.getInputStream());
 
             if (isCli) {
                 try {
@@ -118,10 +77,9 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     @Override
-    public void receiveEvent(Event event) throws IllegalStateException {
+    public synchronized void receiveEvent(Event event) throws IllegalStateException {
         eventEntryQueue.add(event);
-        notifyAll();;
-        // manage exception?
+        notifyAll();
     }
 
     public void processEventThread() {
@@ -129,25 +87,29 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     public void processEvent() {
-        // TODO: gestione eccezioni
         while (true) {
             try {
-                Event event = this.eventEntryQueue.poll();
+                Event event = null;
+                synchronized (this) {
+                    while (this.eventEntryQueue.isEmpty()) {
+                        this.wait();
+                    }
+                    event = this.eventEntryQueue.poll();
+                }
                 synchronized (this.miniModel) {
                     event.doJob(miniModel);
                 }
+
             } catch (Exception e) {
-                // System.err.println("");
+                e.printStackTrace();
                 break;
             }
         }
     }
 
-
-    public void sendCommand (Command command) throws IllegalStateException {
+    public synchronized void sendCommand(Command command) throws IllegalStateException {
         commandExitQueue.add(command);
         notifyAll();
-        // gestione exception?
     }
 
     public void processCommandThread() {
@@ -155,10 +117,16 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     public void processCommand() {
-        // TODO: gestione eccezioni
         while (true) {
             try {
-                Command command = this.commandExitQueue.poll();
+                Command command = null;
+                System.out.println("client thread queue: " + System.identityHashCode(this.commandExitQueue));
+                synchronized (this) {
+                    while (this.commandExitQueue.isEmpty()) {
+                        this.wait();
+                    }
+                    command = this.commandExitQueue.poll();
+                }
                 try {
                     output.writeObject(command);
                     output.flush();
@@ -167,15 +135,16 @@ public class SocketClient implements VirtualClient, Runnable {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                // System.err.println("");
+                e.printStackTrace();
                 break;
             }
         }
     }
 
     private void runCli() throws RemoteException {
-        // this.view = new GameCli();
-        // [...]
+        this.view = new Tui(miniModel, this);
+        miniModel.setView(view);
+        view.run();
     }
 
     private void runGui() throws RemoteException {

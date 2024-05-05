@@ -8,6 +8,7 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
@@ -173,8 +174,12 @@ public class InputVerifier {
                 return new JoinGameCommand(Integer.parseInt(parameters[0]), parameters[1], color);
 
             case "CREATE":
-                // TODO: implement create command
-                // return new CreateCommand();
+                if (parameters.length != 4)
+                    throw new IllegalCommandException("Invalid number of parameters");
+
+                return new CreateGameCommand(Integer.parseInt(parameters[0]), parameters[1],
+                        Color.valueOf(parameters[2]),
+                        Integer.parseInt(parameters[3]));
 
             default:
                 throw new IllegalCommandException("Invalid command");

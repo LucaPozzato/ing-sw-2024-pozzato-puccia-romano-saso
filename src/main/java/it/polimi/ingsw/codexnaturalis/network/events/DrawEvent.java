@@ -11,18 +11,21 @@ import java.util.List;
 public class DrawEvent extends Event {
     @Serial
     private static final long serialVersionUID = 402918736529103L;
+    private String state;
     private Board board;
     private List<Hand> hands;
 
-    public DrawEvent(List<Hand> hands, Board board, Integer turnCounter) {
+    public DrawEvent(String state, List<Hand> hands, Board board, Integer turnCounter) {
+        this.state = state;
         this.board = board;
         this.hands = hands;
+        this.state = state;
     }
 
     @Override
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
         miniModel.setBoard(board);
         miniModel.setHands(hands);
+        miniModel.setState(state);
     }
-
 }

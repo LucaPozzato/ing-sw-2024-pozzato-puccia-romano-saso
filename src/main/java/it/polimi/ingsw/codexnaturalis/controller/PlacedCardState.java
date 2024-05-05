@@ -8,11 +8,13 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class PlacedCardState extends ControllerState {
     // TODO: remove regionMatches and use equals -> code more readable
-    public PlacedCardState(Game game) {
-        super(game);
+    public PlacedCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
+        super(game, rmiServer, socketServer);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PlacedCardState extends ControllerState {
         if (game.getBoard().getActualPoints(player) >= 20)
             game.setLastTurn();
 
-        super.game.setState(new DrawnCardState(super.game));
+        super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
         // Points resulting from resources objective are computed at the end of the game
         // (END GAME STATE) since they could be covered anytime during the match
     }

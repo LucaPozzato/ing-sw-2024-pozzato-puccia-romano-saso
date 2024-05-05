@@ -17,14 +17,14 @@ public class SocketSkeleton implements VirtualClient, Runnable {
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
 
-    public SocketSkeleton (VirtualServer server, Socket socket) throws IOException {
+    public SocketSkeleton(VirtualServer server, Socket socket) throws IOException {
         this.server = server;
-        this.input = new ObjectInputStream(socket.getInputStream());
         this.output = new ObjectOutputStream(socket.getOutputStream());
+        this.input = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
-    public void receiveEvent(Event event) throws IllegalStateException {
+    public void receiveEvent(Event event) throws RemoteException {
         try {
             output.writeObject(event);
             output.flush();
@@ -34,7 +34,7 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         }
     }
 
-    public void sendCommand(Command command) throws IllegalStateException {
+    public void sendCommand(Command command) throws RemoteException {
         this.server.receiveCommand(command);
     }
 

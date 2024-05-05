@@ -11,12 +11,14 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class ChooseSetUpState extends ControllerState {
     Map<Player, Boolean> setUpMap = new HashMap<>();
 
-    public ChooseSetUpState(Game game, Map<Player, Boolean> setUpMap) {
-        super(game);
+    public ChooseSetUpState(Game game, RmiServer rmiServer, SocketServer socketServer, Map<Player, Boolean> setUpMap) {
+        super(game, rmiServer, socketServer);
         if (setUpMap != null)
             this.setUpMap = setUpMap;
     }
@@ -55,8 +57,8 @@ public class ChooseSetUpState extends ControllerState {
         }
 
         if (setUpMap.keySet().size() == super.game.getNumPlayers())
-            super.game.setState(new PlacedCardState(super.game));
+            super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
         else
-            super.game.setState(new ChooseSetUpState(super.game, setUpMap));
+            super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
     }
 }
