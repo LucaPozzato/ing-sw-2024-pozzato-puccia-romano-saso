@@ -7,6 +7,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -55,26 +56,26 @@ public class WaitPlayerState extends ControllerState {
 
         if (isFull()) {
 
-//            Event event = new StartGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
-//                    game.getBoard(), game.getCurrentPlayer(), null);
-//            super.rmiServer.sendEvent(event);
-//            try {
-//                super.socketServer.sendEvent(event);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            Event event = new JoinGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
+                    game.getBoard(), game.getCurrentPlayer(), null);
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
         }else {
 
-//            Event event = new StartGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
-//                    game.getBoard(), game.getCurrentPlayer(), null);
-//            super.rmiServer.sendEvent(event);
-//            try {
-//                super.socketServer.sendEvent(event);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            Event event = new JoinGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+                    game.getBoard(), game.getCurrentPlayer(), null);
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
         }

@@ -16,6 +16,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
@@ -166,7 +167,7 @@ public class InitState extends ControllerState {
         dealCommonObjective();
         dealSecretObjective();
 
-        Event event = new StartGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+        Event event = new CreateGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
                 game.getBoard(), game.getCurrentPlayer(), null);
         super.rmiServer.sendEvent(event);
         try {

@@ -217,13 +217,13 @@ public class EndGameState extends ControllerState {
             }
         }
 
-//        Event event = new EndGameEvent("EndGame", game.getBoard(), currentWinner );
-//        super.rmiServer.sendEvent(event);
-//        try {
-//            super.socketServer.sendEvent(event);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Event event = new EndGameEvent("EndGame", game.getBoard(), currentWinner );
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

@@ -59,13 +59,13 @@ public class PlacedCardState extends ControllerState {
         if (game.getBoard().getActualPoints(player) >= 20)
             game.setLastTurn();
 
-//        Event event = new PlaceEvent("Draw",game.getStructures(), game.getHands());
-//        super.rmiServer.sendEvent(event);
-//        try {
-//            super.socketServer.sendEvent(event);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Event event = new PlaceEvent("Draw",game.getStructures(), game.getHands());
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
         // Points resulting from resources objective are computed at the end of the game

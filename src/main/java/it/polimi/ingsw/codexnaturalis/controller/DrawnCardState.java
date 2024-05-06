@@ -52,13 +52,13 @@ public class DrawnCardState extends ControllerState {
         updateDeck(card, fromDeck);
         nextTurn();
 
-//        Event event = new DrawEvent("Place", game.getHands(), game.getBoard(), game.getTurnCounter(), game.isLastTurn());
-//        super.rmiServer.sendEvent(event);
-//        try {
-//            super.socketServer.sendEvent(event);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Event event = new DrawEvent("Place", game.getHands(), game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }

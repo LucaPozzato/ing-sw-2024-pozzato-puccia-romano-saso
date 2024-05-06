@@ -3,7 +3,6 @@ package it.polimi.ingsw.codexnaturalis;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
-import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 import java.io.*;
