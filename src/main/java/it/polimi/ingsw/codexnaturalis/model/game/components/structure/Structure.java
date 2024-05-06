@@ -94,7 +94,7 @@ public class Structure implements Serializable {
      * structure will give. It checks if the card is front up or down and if it is
      * a gold or resource card. If the card is front up, it will check the points
      * type and return the points accordingly.
-     * 
+     *
      * @param placed  the card to be placed
      * @param frontUp the side of the card that will be visible (front side up ->
      *                true, front side down -> false)
@@ -217,7 +217,7 @@ public class Structure implements Serializable {
     /**
      * This method is used to place a card on the structure. It checks if the card
      * can be placed and then places it.
-     * 
+     *
      * @param father   the card on which the new card will be placed
      * @param card     the card to be placed
      * @param position the position of the new card relative to the father card (TL,
@@ -265,7 +265,7 @@ public class Structure implements Serializable {
                 return fatherCoordinate + 99;
             default:
                 throw new IllegalArgumentException("Invalid position"); // -> maybe function that calls calcCoordinates
-                                                                        // checks for suitable arguments
+                // checks for suitable arguments
         }
     }
 
@@ -343,7 +343,7 @@ public class Structure implements Serializable {
     /**
      * This method's aim is to provide a simplified search space for
      * SearchXPattern's methods.
-     * 
+     *
      * @param coordinateToCard to extract the coordinate of the placed card
      * @return max distance from the centre of the matrux
      * @throws IllegalCommandException ex
@@ -367,7 +367,7 @@ public class Structure implements Serializable {
     /**
      * This method is used to test purposes after filling the structure with some
      * values. It will print a [2*radius][2*radius] matrix
-     * 
+     *
      * @param fullMatrix the full [80][80] matrix
      * @param radius     radius computed in getRadius
      */

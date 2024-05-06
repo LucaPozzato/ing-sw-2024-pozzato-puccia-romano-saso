@@ -8,7 +8,6 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
@@ -51,18 +50,21 @@ public class TestMain extends Thread{
         deck.shuffleGoldDeck();
         deck.shuffleResourceDeck();
 
+
         Hand hand = new Hand();
+        Hand secondHand = new Hand();
         hand.setInitCard(initialCards.get(0));
+        hand.setSecretObjective(objectiveCards.get(0));
+
+        Board board = new Board();
+        board.setCommonObjectives(List.of(objectiveCards.get(5),objectiveCards.get(8)));
+
+
+        Structure structure = new Structure();
         try {
             hand.addCard(deck.drawResourceCard());
             hand.addCard(deck.drawResourceCard());
             hand.addCard(deck.drawGoldCard());
-        } catch (IllegalCommandException e) {
-            throw new RuntimeException(e);
-        }
-
-        Hand secondHand = new Hand();
-        try {
             secondHand.addCard(deck.drawResourceCard());
             secondHand.addCard(deck.drawResourceCard());
             secondHand.addCard(deck.drawGoldCard());
@@ -70,10 +72,11 @@ public class TestMain extends Thread{
             throw new RuntimeException(e);
         }
 
-        Platform.runLater(() ->{
-            game.updatePlayers(List.of(luca,nick));
 
-        });
+//        Platform.runLater(() ->{
+//            game.updatePlayers(List.of(luca,nick));
+//
+//        });
 
         try {
             Thread.sleep(2000);
@@ -82,14 +85,16 @@ public class TestMain extends Thread{
         }
 
         Platform.runLater(() ->{
+            game.setInitialCard(hand.getInitCard());
             game.updatePlayers(List.of(nick,filippo,luca,marco));
             //game.updateDeck(deck);
         });
 
 
         Platform.runLater(() ->{
-            game.showAlert("Hand update, click 'ok' to continue");
+            //game.showAlert("Hand update, click 'ok' to continue");
             game.updateHand(List.of(hand,secondHand));
+            game.updateBoard(board);
 
         });
 
@@ -98,21 +103,21 @@ public class TestMain extends Thread{
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
-//
-//        Platform.runLater(() ->{
-//            game.showAlert("Deck update, click 'ok' to continue");
-//            game.updateDeck(deck);
-//
-//        });
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         Platform.runLater(() ->{
-            game.showAlert("Current player update, click 'ok' to continue");
+            //game.showAlert("Deck update, click 'ok' to continue");
+            game.updateDeck(deck);
+
+        });
+
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        Platform.runLater(() ->{
+            //game.showAlert("Current player update, click 'ok' to continue");
             game.updateCurrentPlayer(luca);
 
         });
@@ -120,28 +125,6 @@ public class TestMain extends Thread{
     }
 
     public static void main(String[] args) throws Exception {
-
-//
-//        Game app = new Game();
-//        Player luca = new Player("Luca");
-//        Player nick = new Player("Nick");
-//        app = app.getInstance();
-//        app.run();
-//
-//        Game finalApp = app;
-//        new Thread(() -> {
-//            try{
-//                Thread.sleep(2000);
-//                Platform.runLater(finalApp::ciao);
-//            }
-//            catch (InterruptedException e){};
-//        }).start();
-//        app.ciao();
-
-        //app.updatePlayers(List.of(luca,nick));
-
-
-
 
 
 
@@ -192,6 +175,14 @@ public class TestMain extends Thread{
 
 
 
+
+    }
+
+    public void drawCommand(){
+
+    }
+
+    public void placeCommand(){
 
     }
 }

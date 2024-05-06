@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -69,25 +70,37 @@
       </HBox>
    </bottom>
    <right>
-      <VBox alignment="CENTER" prefHeight="483.0" prefWidth="160.0" spacing="10.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="483.0" prefWidth="131.0" spacing="2.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deck:" />
-            <ImageView fx:id="resourceCard1" fitHeight="93.0" fitWidth="145.0" onMouseClicked="#resourceCard1Click" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resourceDeckCard" fitHeight="78.0" fitWidth="118.0" onMouseClicked="#resourceDeckCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="resourceCard2" fitHeight="88.0" fitWidth="128.0" onMouseClicked="#resourceCard2Click" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resourceCard1" fitHeight="77.0" fitWidth="110.0" onMouseClicked="#resourceCard1Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="goldCard1" fitHeight="93.0" fitWidth="145.0" onMouseClicked="#goldCard1Click" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resourceCard2" fitHeight="77.0" fitWidth="110.0" onMouseClicked="#resourceCard2Click" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../FrontCards/G09f.jpg" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="6.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="goldDeckCard" fitHeight="78.0" fitWidth="118.0" onMouseClicked="#goldDeckCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="goldCard2" fitHeight="88.0" fitWidth="128.0" onMouseClicked="#goldCard2Click" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="goldCard1" fitHeight="77.0" fitWidth="110.0" onMouseClicked="#goldCard1Click" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../FrontCards/G09f.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="goldCard2" fitHeight="77.0" fitWidth="110.0" onMouseClicked="#goldCard2Click" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../FrontCards/G09f.jpg" />
                </image>
@@ -192,7 +205,7 @@
       </HBox>
    </top>
    <left>
-      <VBox prefHeight="459.0" prefWidth="116.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="459.0" prefWidth="131.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="38.0" prefWidth="118.0">
                <children>
@@ -270,14 +283,10 @@
          </children></VBox>
    </left>
    <center>
-      <Pane prefHeight="483.0" prefWidth="934.0" style="-fx-border-color: #1111; -fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fx:id="initialCard" fitHeight="74.0" fitWidth="111.0" layoutX="408.0" layoutY="256.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../FrontCards/G09f.jpg" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
+      <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <content>
+            <Pane fx:id="structurePane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" />
+         </content>
+      </ScrollPane>
    </center>
 </BorderPane>
