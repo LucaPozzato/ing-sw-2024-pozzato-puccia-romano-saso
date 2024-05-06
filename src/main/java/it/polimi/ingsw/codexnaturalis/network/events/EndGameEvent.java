@@ -6,16 +6,16 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 
 import java.io.Serial;
+import java.util.List;
 
 public class EndGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 819362547038261L;
     private String state;
     private Board board;
-    private Player winner;
+    private List<Player> winner;
 
-    public EndGameEvent(String state, Board board, Player winner) {
-        this.state = state;
+    public EndGameEvent(String state, Board board, List<Player> winner) {
         this.board = board;
         this.winner = winner;
         this.state = state;

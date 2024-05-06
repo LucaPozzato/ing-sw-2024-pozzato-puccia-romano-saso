@@ -31,7 +31,7 @@ public class MiniModel {
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
-    private Player winner;
+    private List<Player> winner;
     private Chat chat;
     private String error;
     private String state;
@@ -101,7 +101,7 @@ public class MiniModel {
         return this.turnCounter;
     }
 
-    public Player getWinner() {
+    public List<Player> getWinner() {
         return this.winner;
     }
 
@@ -189,7 +189,7 @@ public class MiniModel {
         this.turnCounter = turnCounter;
     }
 
-    public void setWinner(Player winner) {
+    public void setWinner(List<Player> winner) {
         this.winner = winner;
     }
 

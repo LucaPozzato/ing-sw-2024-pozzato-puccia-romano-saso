@@ -13,6 +13,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteChair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
+import it.polimi.ingsw.codexnaturalis.network.events.EndGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
@@ -214,5 +216,14 @@ public class EndGameState extends ControllerState {
                 }
             }
         }
+
+//        Event event = new EndGameEvent("EndGame", game.getBoard(), currentWinner );
+//        super.rmiServer.sendEvent(event);
+//        try {
+//            super.socketServer.sendEvent(event);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
     }
 }

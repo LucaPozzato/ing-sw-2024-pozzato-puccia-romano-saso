@@ -6,6 +6,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -51,10 +53,31 @@ public class WaitPlayerState extends ControllerState {
         super.game.getPlayers().get(super.game.getPlayers().size() - 1).setColor(color);
         super.game.addParticipant();
 
-        if (isFull())
+        if (isFull()) {
+
+//            Event event = new StartGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
+//                    game.getBoard(), game.getCurrentPlayer(), null);
+//            super.rmiServer.sendEvent(event);
+//            try {
+//                super.socketServer.sendEvent(event);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
-        else
+        }else {
+
+//            Event event = new StartGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+//                    game.getBoard(), game.getCurrentPlayer(), null);
+//            super.rmiServer.sendEvent(event);
+//            try {
+//                super.socketServer.sendEvent(event);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
             super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
+        }
     }
 
     private boolean isFull() {

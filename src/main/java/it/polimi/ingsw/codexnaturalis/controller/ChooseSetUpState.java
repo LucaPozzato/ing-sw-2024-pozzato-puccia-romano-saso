@@ -11,6 +11,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -56,9 +58,29 @@ public class ChooseSetUpState extends ControllerState {
             setUpMap.put(player, true);
         }
 
-        if (setUpMap.keySet().size() == super.game.getNumPlayers())
+        if (setUpMap.keySet().size() == super.game.getNumPlayers()) {
             super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
-        else
+
+//            Event event = new StartGameEvent("Place", game.getPlayers(), game.getStructures(), game.getHands(),
+//                    game.getBoard(), game.getCurrentPlayer(), null /*is the game.getNextPlayer() already available?*/);
+//            super.rmiServer.sendEvent(event);
+//            try {
+//                super.socketServer.sendEvent(event);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
+        } else
+            // for the interface to be responsive, we might want to send an event for each choice. This way the player doesn't need
+            // to wait for all the choices to be made before being able to see his
+//            Event event = new StartGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
+//                    game.getBoard(), game.getCurrentPlayer(), null /*is the game.getNextPlayer() already available?*/);
+//            super.rmiServer.sendEvent(event);
+//            try {
+//                super.socketServer.sendEvent(event);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
     }
 }
