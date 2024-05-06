@@ -39,6 +39,7 @@ public class Tui implements View {
         terminalPrinter = new TerminalPrinter();
         players = new ArrayList<>();
         initialStage = true;
+        chooseStage = false;
     }
 
     @Override
@@ -64,20 +65,21 @@ public class Tui implements View {
     @Override
     public void updateState(String state) {
         terminalPrinter.updateCurrentState(state);
-        state = state.toUpperCase();
+        // state = state.toUpperCase();
         if (state.equals("Wait")) {
-            terminalPrinter.updateAlert("Waiting for other players...");
+            terminalPrinter.updateAlert("Warning: waiting for other players to join ...");
             initialStage = true;
             print();
             terminalPrinter.clearAlert();
         } else if (state.equals("Choose")) {
             initialStage = false;
             chooseStage = true;
+            print();
         } else {
             initialStage = false;
             chooseStage = false;
+            print();
         }
-        print();
     }
 
     @Override

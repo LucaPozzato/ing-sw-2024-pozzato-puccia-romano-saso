@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
+import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
@@ -13,6 +14,7 @@ import java.util.Queue;
 
 public class RmiServer implements VirtualServer {
     private ControllerState controller;
+    private Game model;
     private List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
@@ -31,6 +33,10 @@ public class RmiServer implements VirtualServer {
 
     public void setController(ControllerState controller) {
         this.controller = controller;
+    }
+
+    public void setModel(Game model) {
+        this.model = model;
     }
 
     @Override
@@ -60,7 +66,7 @@ public class RmiServer implements VirtualServer {
                     }
                     command = this.commandEntryQueue.poll();
                 }
-                command.execute(controller);
+                command.execute(model.getState());
             } catch (Exception e) {
                 e.printStackTrace();
                 break;

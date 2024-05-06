@@ -1,16 +1,16 @@
 package it.polimi.ingsw.codexnaturalis;
 
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
-
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
 public class ServerMain {
 
@@ -30,7 +30,9 @@ public class ServerMain {
             Game game = new Game(0, (RmiServer) rmiServer, socketServer);
             ControllerState controller = game.getState();
             rmiServer.setController(controller);
+            rmiServer.setModel(game);
             socketServer.setController(controller);
+            // sockrtServer.setModel(game);
 
         } catch (RemoteException e) {
             System.err.println("Error starting server");
