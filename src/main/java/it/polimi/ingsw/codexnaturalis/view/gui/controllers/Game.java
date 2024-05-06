@@ -98,9 +98,6 @@ public class Game extends Application implements View, Initializable {
         handCard1.setOpacity(.5);
         handCard2.setOpacity(.5);
         handCard3.setOpacity(1);
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(.5);
 
     }
 
