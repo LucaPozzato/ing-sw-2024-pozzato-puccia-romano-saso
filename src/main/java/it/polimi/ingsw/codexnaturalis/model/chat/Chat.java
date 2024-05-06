@@ -1,12 +1,12 @@
 package it.polimi.ingsw.codexnaturalis.model.chat;
 
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.util.Pair;
+
 public class Chat {
-    int nextId = 0;
+    private int nextId = 0;
 
     private List<Pair<Integer, ChatMessage>> chatMessages;
 

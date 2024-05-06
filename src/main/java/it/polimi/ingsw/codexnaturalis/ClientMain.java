@@ -1,16 +1,18 @@
 package it.polimi.ingsw.codexnaturalis;
 
-import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
-import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
-import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
-import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
+import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
+import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
+import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
+import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class ClientMain {
     public static void main(String[] args) {
@@ -79,7 +81,7 @@ public class ClientMain {
         try {
             VirtualServer server = null;
             Registry registry;
-            registry = LocateRegistry.getRegistry(DefaultValue.Remote_ip, DefaultValue.port_RMI);
+            registry = LocateRegistry.getRegistry(DefaultValue.remoteIP, DefaultValue.port_RMI);
             server = (VirtualServer) registry.lookup(DefaultValue.servername_RMI);
             RmiClient client = new RmiClient(server, isCli);
             System.out.println(
@@ -93,7 +95,7 @@ public class ClientMain {
     private static void startSocketClient(boolean isCli) {
         Socket socket = null;
         try {
-            socket = new Socket(DefaultValue.serverIp, DefaultValue.port_Socket);
+            socket = new Socket(DefaultValue.serverIP, DefaultValue.port_Socket);
             SocketClient client = new SocketClient(socket, isCli);
             new Thread(client).start();
 
