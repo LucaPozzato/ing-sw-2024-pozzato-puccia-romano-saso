@@ -24,6 +24,13 @@ public class SocketClient implements VirtualClient, Runnable {
     private View view;
     private final MiniModel miniModel;
 
+    /**
+     * costructor of the RmiClient, sets the socket to which the client will connect, the client interface choice and
+     * instantiates the MiniModel and the two queues that will manage the events and the commands
+     * @param socket
+     * @param isCli
+     * @throws RemoteException
+     */
     public SocketClient(Socket socket, boolean isCli) throws RemoteException {
         this.socket = socket;
         this.isCli = isCli;
@@ -32,6 +39,15 @@ public class SocketClient implements VirtualClient, Runnable {
         this.commandExitQueue = new LinkedList<Command>();
     }
 
+    /**
+     * this method is called right after the creation of the client by the clientMain
+     * connects the client to the provided socket opening an output and input stream
+     * starts two threads to process events and commands
+     * starts the cli or the gui according to the client choice
+     * creates and infinite loop which keeps on reading from the input stream connected to the server
+     * it then deserializes the information creating an event and calls the receiveEvent method
+     * @throws RemoteException
+     */
     @Override
     public void run() {
         System.out.println("Socket client started");
@@ -70,16 +86,32 @@ public class SocketClient implements VirtualClient, Runnable {
         }
     }
 
+    /**
+     * this method is called by the RmiServer to send an event, which is an update in the model.
+     * it adds the event to a queue in order to return immediately
+     * the event will later be processed by another thread
+     * @param event
+     * @throws RemoteException
+     */
     @Override
     public synchronized void receiveEvent(Event event) throws IllegalStateException {
         eventEntryQueue.add(event);
         notifyAll();
     }
 
+    /**
+     * creates a Thread to process the events received
+     */
     public void processEventThread() {
         new Thread(this::processEvent).start();
     }
 
+    /**
+     * this method creates an infinite loop in which it
+     * gets the lock on the client and if the queue is Empty waits for an event to be added
+     * once awoken, removes the event from the queue, synchronizes on the MiniModel and
+     * calls the execution method in the event doJob passing the MiniModel
+     */
     public void processEvent() {
         while (true) {
             try {
@@ -101,15 +133,30 @@ public class SocketClient implements VirtualClient, Runnable {
         }
     }
 
+    /**
+     * this method is called by the [view?] to send to the server a command taken by input.
+     * it adds the command to a queue in order to return immediately
+     * the event will later be processed by another thread
+     * @param command
+     * @throws RemoteException
+     */
     public synchronized void sendCommand(Command command) throws IllegalStateException {
         commandExitQueue.add(command);
         notifyAll();
     }
 
+    /**
+     * creates a Thread to process the commands to send
+     */
     public void processCommandThread() {
         new Thread(this::processCommand).start();
     }
 
+    /**
+     * this method creates an infinite loop that
+     * gets the lock on the client and if the queue is Empty waits for a command to be added
+     * once awoken, removes the command from the queue and writes it the output stream
+     */
     public void processCommand() {
         while (true) {
             try {
@@ -135,12 +182,20 @@ public class SocketClient implements VirtualClient, Runnable {
         }
     }
 
+    /**
+     * this creates a Cli view and runs it
+     * @throws RemoteException
+     */
     private void runCli() throws RemoteException {
         this.view = new Tui(miniModel, this);
         miniModel.setView(view);
         view.run();
     }
 
+    /**
+     * this creates a Gui view and runs it
+     * @throws RemoteException
+     */
     private void runGui() throws RemoteException {
         // this.view = new GameGui();
         // [...]

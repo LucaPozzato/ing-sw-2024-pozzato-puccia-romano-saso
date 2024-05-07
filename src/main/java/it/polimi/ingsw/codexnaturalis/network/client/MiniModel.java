@@ -11,10 +11,13 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.view.View;
 
+/**
+ * this clas serves as a local copy of the model on the client side that
+ * contains only the needed pieces of information and none of the model logic
+ * it is updated to by the events, sent from the server, and for every update
+ * it calls the viewUpdate methods to modify the view
+ */
 public class MiniModel {
-
-    // Clients update will call the setters to save the changes
-    // View will be notified of the changes and act consequently
 
     private int gameId;
     private Player myPlayer;

@@ -6,6 +6,11 @@ import java.io.Serializable;
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
+/**
+ * Commands are created by the view according to the clients' input
+ * they are later passed to the client, sent through the network to the server
+ * which will call the execute method, passing the controller
+ */
 public abstract class Command implements Serializable {
     @Serial
     private static final long serialVersionUID = 380164927530291L;
