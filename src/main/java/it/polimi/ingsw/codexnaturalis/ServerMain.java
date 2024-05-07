@@ -29,10 +29,10 @@ public class ServerMain {
 
             Game game = new Game(0, (RmiServer) rmiServer, socketServer);
             ControllerState controller = game.getState();
-            rmiServer.setController(controller);
+            //rmiServer.setController(controller);
             rmiServer.setModel(game);
-            socketServer.setController(controller);
-            // sockrtServer.setModel(game);
+            //socketServer.setController(controller);
+            socketServer.setModel(game);
 
         } catch (RemoteException e) {
             System.err.println("Error starting server");

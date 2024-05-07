@@ -22,7 +22,7 @@ public class SocketClient implements VirtualClient, Runnable {
     private final Queue<Command> commandExitQueue;
     private final boolean isCli;
     private View view;
-    private MiniModel miniModel;
+    private final MiniModel miniModel;
 
     public SocketClient(Socket socket, boolean isCli) throws RemoteException {
         this.socket = socket;
@@ -39,19 +39,13 @@ public class SocketClient implements VirtualClient, Runnable {
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
 
-            if (isCli) {
-                try {
-                    runCli();
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                try {
-                    runGui();
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            processEventThread();
+            processCommandThread();
+
+            if (isCli)
+                runCli();
+            else
+                runGui();
 
             while (true) {
                 try {

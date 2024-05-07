@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Queue;
 
 public class RmiServer implements VirtualServer {
-    private ControllerState controller;
+    //private ControllerState controller;
     private Game model;
-    private List<VirtualClient> clients;
+    private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
 
@@ -31,9 +31,9 @@ public class RmiServer implements VirtualServer {
         processEventThread();
     }
 
-    public void setController(ControllerState controller) {
-        this.controller = controller;
-    }
+//    public void setController(ControllerState controller) {
+//        this.controller = controller;
+//    }
 
     public void setModel(Game model) {
         this.model = model;
@@ -86,7 +86,6 @@ public class RmiServer implements VirtualServer {
     }
 
     public void processEvent() {
-        // TODO: gestione eccezioni
         while (true) {
             try {
                 Event event = null;

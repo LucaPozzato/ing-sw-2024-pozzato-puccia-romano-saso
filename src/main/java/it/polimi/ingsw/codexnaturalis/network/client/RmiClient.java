@@ -18,7 +18,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private final Queue<Command> commandExitQueue;
     private final boolean isCli;
     private View view;
-    private MiniModel miniModel;
+    private final MiniModel miniModel;
 
     public RmiClient(VirtualServer server, boolean isCli) throws RemoteException {
         this.server = server;

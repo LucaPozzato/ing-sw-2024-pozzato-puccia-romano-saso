@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
+import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
@@ -17,8 +18,9 @@ import java.util.List;
 import java.util.Queue;
 
 public class SocketServer implements VirtualServer, Runnable {
-    private ControllerState controller;
-    final List<VirtualClient> clients;
+    //private ControllerState controller;
+    private Game model;
+    private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
 
@@ -28,14 +30,19 @@ public class SocketServer implements VirtualServer, Runnable {
         this.eventExitQueue = new LinkedList<Event>();
     }
 
-    public void setController(ControllerState controller) {
-        this.controller = controller;
-    }
+//    public void setController(ControllerState controller) {
+//        this.controller = controller;
+//    }
 
+    public void setModel(Game model) {
+        this.model = model;
+    }
     @Override
     public void receiveCommand(Command command) throws RemoteException {
-        commandEntryQueue.add(command);
-        notifyAll();
+        synchronized (this) {
+            commandEntryQueue.add(command);
+            notifyAll();
+        }
     }
 
     public void processCommandThread() {
@@ -48,14 +55,15 @@ public class SocketServer implements VirtualServer, Runnable {
                 Command command = null;
                 synchronized (this) {
                     while (this.commandEntryQueue.isEmpty()) {
+                        System.out.println("socket server waiting");
                         this.wait();
+                        System.out.println(
+                                "socket server thread command queue: " + System.identityHashCode(this.commandEntryQueue));
+                        System.out.println("socket server woken up");
                     }
                     command = this.commandEntryQueue.poll();
                 }
-                synchronized (this.controller) {
-                    assert command != null;
-                    command.execute(controller);
-                }
+                command.execute(model.getState());
             } catch (Exception e) {
                 e.printStackTrace();
                 break;
@@ -97,6 +105,7 @@ public class SocketServer implements VirtualServer, Runnable {
 
     @Override
     public void connect(VirtualClient client) {
+        System.out.println("socket client connected");
         synchronized (this.clients) {
             this.clients.add(client);
         }
@@ -114,6 +123,10 @@ public class SocketServer implements VirtualServer, Runnable {
 
     public void run() {
         Socket socket = null;
+
+        processCommandThread();
+        processEventThread();
+
         while (true) {
             try (ServerSocket serverSocket = new ServerSocket(DefaultValue.port_Socket)) {
                 socket = serverSocket.accept();
@@ -137,16 +150,5 @@ public class SocketServer implements VirtualServer, Runnable {
                 e.printStackTrace();
             }
         }
-
-        // Socket socket = null;
-        // while (!Thread.interrupted()) {
-        // socket = this.accept();
-        // SocketSkeleton client = new SocketSkeleton(this, socket);
-        // clients.add(client);
-        // new Thread(client).start();
-        // }
-        // } catch (IOException e) {
-        // throw new RuntimeException(e);
-        // }
     }
 }
