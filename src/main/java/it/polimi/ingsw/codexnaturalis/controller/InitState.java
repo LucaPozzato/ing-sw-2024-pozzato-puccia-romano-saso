@@ -269,4 +269,11 @@ public class InitState extends ControllerState {
         super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
         throw new IllegalCommandException("Can't draw card yet");
     }
+
+//    @Override
+//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
+//        throw new IllegalCommandException("Game not set up yet");
+//    }
+
+
 }

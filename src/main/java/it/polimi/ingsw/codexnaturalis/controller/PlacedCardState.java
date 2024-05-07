@@ -77,6 +77,13 @@ public class PlacedCardState extends ControllerState {
         throw new IllegalCommandException("Card already drawn in last turn");
     }
 
+//    @Override
+//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
+//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
+//        super.game.getChat().addMessage(chatMessage);
+//    }
+
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());

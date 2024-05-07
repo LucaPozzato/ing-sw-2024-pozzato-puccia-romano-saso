@@ -32,4 +32,6 @@ public abstract class ControllerState {
             throws IllegalCommandException;
 
     public abstract void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException;
+
+    //public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException;
 }

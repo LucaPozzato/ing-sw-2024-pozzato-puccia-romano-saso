@@ -98,4 +98,12 @@ public class WaitPlayerState extends ControllerState {
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
         throw new IllegalCommandException("Can't draw card yet");
     }
+
+//    @Override
+//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
+//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
+//        super.game.getChat().addMessage(chatMessage);
+//    }
+
 }

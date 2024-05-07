@@ -3,6 +3,7 @@ package it.polimi.ingsw.codexnaturalis.controller;
 import java.util.EmptyStackException;
 import java.util.List;
 
+import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
@@ -62,6 +63,14 @@ public class DrawnCardState extends ControllerState {
 
         super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }
+
+//    @Override
+//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
+//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
+//        super.game.getChat().addMessage(chatMessage);
+//    }
+
 
     private void updateDeck(Card card, String fromDeck) throws IllegalCommandException {
         Card tempCard = null;
