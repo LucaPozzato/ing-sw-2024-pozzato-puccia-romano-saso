@@ -431,8 +431,10 @@ public class TerminalPrinter {
         y++;
         if (alert.contains("Warning"))
             System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;94m" + alert + "\u001B[0m");
-        else
+        else if (alert.contains("Error"))
             System.out.print("\u001B[" + y + ";" + x + "H\u001B[48;5;124m" + alert + "\u001B[0m");
+        else
+            System.out.println("\u001B[" + y + ";" + x + "H\u001B[48;5;55m" + alert + "\u001B[0m");
     }
 
     private void printScoreBoard(int y, int x) {

@@ -21,6 +21,7 @@ public class MiniModel {
 
     private int gameId;
     private Player myPlayer;
+    private String nickname;
     private List<Player> players;
     private List<Hand> playerHands;
     // private List<Hand> playerHands; //BUG: if I pass playerHands to the client, a
@@ -145,14 +146,21 @@ public class MiniModel {
         this.gameId = gameId;
     }
 
-    public void setMyPlayer(Player myPlayer) {
-        this.myPlayer = myPlayer;
-        view.updateMyPlayer(myPlayer);
+    public void setMyPlayer(String myPlayer) {
+        // BUG: everyone is gonna get the same nickname when joining simultaneously
+        this.nickname = myPlayer;
     }
 
     public void setPlayers(List<Player> players) {
         this.players = players;
         view.updatePlayers(players);
+        for (Player p : players) {
+            if (p.getNickname().equals(nickname)) {
+                this.myPlayer = p;
+                view.updateMyPlayer(p);
+                break;
+            }
+        }
     }
 
     public void setPlayerStructure(List<Structure> playerStructures) {

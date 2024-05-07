@@ -1,6 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
-public class Triplet<X, Y, Z>{
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Triplet<X, Y, Z> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 198312934098263L;
     private final X x;
     private final Y y;
     private Z z;

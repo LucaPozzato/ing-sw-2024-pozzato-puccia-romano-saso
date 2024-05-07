@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
+import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
@@ -12,9 +15,6 @@ import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
-import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
 public class InputVerifier {
     private MiniModel miniModel;
@@ -32,6 +32,7 @@ public class InputVerifier {
         }
         String[] commandArray = command.split(": ");
         String[] parameters = commandArray[1].split(", ");
+        Color color = null;
 
         switch (commandArray[0]) {
             case "CHOOSE":
@@ -42,9 +43,9 @@ public class InputVerifier {
                 if (parameters.length != 2)
                     throw new IllegalCommandException("Invalid number of parameters");
 
-                if (parameters[0].equals("FRONT"))
+                if (parameters[0].equals("FRONT") || parameters[0].equals("F"))
                     side = true;
-                else if (parameters[0].equals("BACK"))
+                else if (parameters[0].equals("BACK") || parameters[0].equals("B"))
                     side = false;
                 else {
                     throw new IllegalCommandException("Invalid side choice");
@@ -142,7 +143,7 @@ public class InputVerifier {
                 return new DrawCommand(player, card, fromDeck);
 
             case "JOIN":
-                Color color = null;
+                color = null;
                 if (parameters.length != 3)
                     throw new IllegalCommandException("Invalid number of parameters");
 
@@ -171,14 +172,39 @@ public class InputVerifier {
                     throw new IllegalCommandException("Invalid color choice");
                 }
 
+                miniModel.setMyPlayer(parameters[1]);
                 return new JoinGameCommand(Integer.parseInt(parameters[0]), parameters[1], color);
 
             case "CREATE":
+                color = null;
+
                 if (parameters.length != 4)
                     throw new IllegalCommandException("Invalid number of parameters");
 
+                switch (parameters[2]) {
+                    case "RED", "R":
+                        color = Color.RED;
+                        break;
+
+                    case "BLUE", "B":
+                        color = Color.BLUE;
+                        break;
+
+                    case "GREEN", "G":
+                        color = Color.GREEN;
+                        break;
+
+                    case "YELLOW", "Y":
+                        color = Color.YELLOW;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                miniModel.setMyPlayer(parameters[1]);
                 return new CreateGameCommand(Integer.parseInt(parameters[0]), parameters[1],
-                        Color.valueOf(parameters[2]),
+                        color,
                         Integer.parseInt(parameters[3]));
 
             default:

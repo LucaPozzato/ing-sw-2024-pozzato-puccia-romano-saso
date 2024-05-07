@@ -47,7 +47,9 @@ public class Tui implements View {
         terminalPrinter.clear();
         ReadThread readThread = new ReadThread();
         readThread.start();
+        terminalPrinter.updateAlert("Create or join a game to start playing");
         terminalPrinter.printInitialStage();
+        terminalPrinter.clearAlert();
     }
 
     @Override
@@ -57,7 +59,7 @@ public class Tui implements View {
 
     @Override
     public void updateError(String error) {
-        terminalPrinter.updateAlert(error);
+        terminalPrinter.updateAlert("Error: " + error);
         print();
         terminalPrinter.clearAlert();
     }
@@ -279,6 +281,7 @@ public class Tui implements View {
 
                     String move = input.readLine();
                     move = move.toUpperCase();
+                    // BUG: username is set to capital when it should be case insensitive
                     switch (move) {
                         case "QUIT", "Q":
                             System.exit(0);
@@ -294,7 +297,7 @@ public class Tui implements View {
                                 printNextPlayerView();
                             break;
 
-                        case "RESET", "R", "EXIT":
+                        case "RESET", "R", "EXIT", "ESC", "E":
                             if (!initialStage && !chooseStage)
                                 resetView();
                             break;
@@ -302,12 +305,11 @@ public class Tui implements View {
                         default:
                             try {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
-                                // print();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                // terminalPrinter.updateAlert(e.getMessage());
-                                // print();
-                                // terminalPrinter.clearAlert();
+                                terminalPrinter.updateAlert("Error: " + e.getMessage());
+                                print();
+                                terminalPrinter.clearAlert();
                             }
                             break;
                     }

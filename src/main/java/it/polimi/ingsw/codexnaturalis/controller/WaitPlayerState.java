@@ -8,7 +8,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -50,14 +49,22 @@ public class WaitPlayerState extends ControllerState {
     }
 
     private void createNewPlayers(String nickname, Color color) {
-        super.game.getPlayers().get(super.game.getPlayers().size() - 1).setNickname(nickname);
-        super.game.getPlayers().get(super.game.getPlayers().size() - 1).setColor(color);
+        Player player = super.game.getPlayers().get(super.game.getPlayers().size() - 1);
+        player.setNickname(nickname);
+        player.setColor(color);
         super.game.addParticipant();
+
+        // FIXME: clean this up
+        try {
+            super.game.getBoard().updateActualScore(player, 0);
+        } catch (IllegalCommandException e) {
+            e.printStackTrace();
+        }
 
         if (isFull()) {
 
             Event event = new JoinGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getCurrentPlayer(), null);
+                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
@@ -66,10 +73,10 @@ public class WaitPlayerState extends ControllerState {
             }
 
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
-        }else {
+        } else {
 
             Event event = new JoinGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getCurrentPlayer(), null);
+                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
@@ -99,11 +106,13 @@ public class WaitPlayerState extends ControllerState {
         throw new IllegalCommandException("Can't draw card yet");
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
-//        super.game.getChat().addMessage(chatMessage);
-//    }
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+    // //right know the chat is not part of the game hp:we instantiate it in the
+    // contruction of the game and keep an attribute of it
+    // super.game.getChat().addMessage(chatMessage);
+    // }
 
 }

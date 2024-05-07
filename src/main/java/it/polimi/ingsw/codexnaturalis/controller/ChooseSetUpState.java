@@ -47,20 +47,35 @@ public class ChooseSetUpState extends ControllerState {
         throw new IllegalCommandException("Can't draw card yet");
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
-//        super.game.getChat().addMessage(chatMessage);
-//    }
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+    // //right know the chat is not part of the game hp:we instantiate it in the
+    // contruction of the game and keep an attribute of it
+    // super.game.getChat().addMessage(chatMessage);
+    // }
 
     public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
         if (setUpMap.keySet().size() > 0 && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
             throw new IllegalCommandException("Player already made his choice");
         } else {
+            for (Player p : super.game.getPlayers()) {
+                if (player.getNickname().equals(p.getNickname())) {
+                    player = p;
+                    break;
+                }
+            }
             Hand hand = super.game.getHandByPlayer(player);
             InitialCard initCard = hand.getInitCard();
             super.game.getStructureByPlayer(player).placeCard(null, initCard, null, side);
+
+            for (Card obj : hand.getChooseBetweenObj()) {
+                if (obj.getIdCard().equals(objCard.getIdCard())) {
+                    objCard = (ObjectiveCard) obj;
+                    break;
+                }
+            }
 
             hand.setSecretObjective(objCard);
             setUpMap.put(player, true);
@@ -70,7 +85,7 @@ public class ChooseSetUpState extends ControllerState {
             super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
 
             Event event = new StartGameEvent("Place", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getCurrentPlayer(), null );
+                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
@@ -79,10 +94,12 @@ public class ChooseSetUpState extends ControllerState {
             }
 
         } else {
-            // for the interface to be responsive, we might want to send an event for each choice. This way the player doesn't need
+            // for the interface to be responsive, we might want to send an event for each
+            // choice. This way the player doesn't need
             // to wait for all the choices to be made before being able to see his
             Event event = new ChooseEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getCurrentPlayer(), null /*is the game.getNextPlayer() already available?*/);
+                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
+                    null /* is the game.getNextPlayer() already available? */);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);

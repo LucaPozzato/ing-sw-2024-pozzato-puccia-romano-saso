@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
+import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
@@ -18,18 +19,18 @@ public class StartGameEvent extends Event {
     private List<Structure> playerStructure;
     private List<Hand> hands;
     private Board board;
+    private Deck deck;
     private Player currentPlayer;
     private Player nextPlayer;
 
     public StartGameEvent(String state, List<Player> players, List<Structure> playerStructure, List<Hand> hands,
-            Board board,
-            Player currentPlayer,
-            Player nextPlayer) {
+            Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
         this.state = state;
         this.players = players;
         this.playerStructure = playerStructure;
         this.hands = hands;
         this.board = board;
+        this.deck = deck;
         this.currentPlayer = currentPlayer;
         this.nextPlayer = nextPlayer;
     }
@@ -40,6 +41,7 @@ public class StartGameEvent extends Event {
         miniModel.setPlayerStructure(playerStructure);
         miniModel.setHands(hands);
         miniModel.setBoard(board);
+        miniModel.setDeck(deck);
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);

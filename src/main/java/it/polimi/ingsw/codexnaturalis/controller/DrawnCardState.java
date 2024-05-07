@@ -3,7 +3,6 @@ package it.polimi.ingsw.codexnaturalis.controller;
 import java.util.EmptyStackException;
 import java.util.List;
 
-import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
@@ -14,7 +13,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.DrawEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -46,6 +44,22 @@ public class DrawnCardState extends ControllerState {
 
     @Override
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
+        for (Player p : super.game.getPlayers()) {
+            if (p.getNickname().equals(player.getNickname())) {
+                player = p;
+                break;
+            }
+        }
+
+        // BUG: fromDeck is not checked and card is gonna throw exception when
+        // c.getIdCard().equals(card.getIdCard()) -> card = null
+        for (Card c : super.game.getBoard().getUncoveredCards()) {
+            if (c.getIdCard().equals(card.getIdCard())) {
+                card = c;
+                break;
+            }
+        }
+
         if (!player.equals(super.game.getCurrentPlayer())) {
             throw new IllegalCommandException("Not your turn");
         }
@@ -53,7 +67,9 @@ public class DrawnCardState extends ControllerState {
         updateDeck(card, fromDeck);
         nextTurn();
 
-        Event event = new DrawEvent("Place", game.getHands(), game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+        // FIXME: needs to set the next player
+        Event event = new DrawEvent("Place", game.getHands(), game.getBoard(), game.getTurnCounter(),
+                game.isLastTurn());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -64,13 +80,14 @@ public class DrawnCardState extends ControllerState {
         super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
-//        super.game.getChat().addMessage(chatMessage);
-//    }
-
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+    // //right know the chat is not part of the game hp:we instantiate it in the
+    // contruction of the game and keep an attribute of it
+    // super.game.getChat().addMessage(chatMessage);
+    // }
 
     private void updateDeck(Card card, String fromDeck) throws IllegalCommandException {
         Card tempCard = null;
@@ -116,6 +133,7 @@ public class DrawnCardState extends ControllerState {
     }
 
     private void nextTurn() {
+        // BUG: currentPlayer after end of turn is not set correctly
         super.game.setCurrentPlayer(super.game.getNextPlayer());
         if (super.game.isLastTurn()) {
             if (super.game.getTurnCounter() >= 0)
@@ -125,6 +143,7 @@ public class DrawnCardState extends ControllerState {
                 super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
         }
         List<Player> players = super.game.getPlayers();
-        super.game.setNextPlayer(players.get((players.indexOf(super.game.getCurrentPlayer()) + 1) % players.size()));
+        super.game.setNextPlayer(players.get((players.indexOf(super.game.getCurrentPlayer())
+                + 1) % players.size()));
     }
 }

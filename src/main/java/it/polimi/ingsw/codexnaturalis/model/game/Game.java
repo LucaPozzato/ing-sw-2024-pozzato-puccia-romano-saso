@@ -9,7 +9,6 @@ import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.controller.InitState;
-import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
@@ -41,7 +40,7 @@ public class Game implements Serializable {
     private Integer turnCounter = 0;
     final List<VirtualClient> clients = new ArrayList<>();
     private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
-    //private Chat chat;
+    // private Chat chat;
 
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
@@ -50,7 +49,7 @@ public class Game implements Serializable {
         this.playerHand = new ArrayList<>();
         this.playerStructure = new ArrayList<>();
         this.strategyMap = new HashMap<>();
-        //this.chat = new Chat;
+        // this.chat = new Chat;
     }
 
     public void notifyAllObservers() {
@@ -136,7 +135,7 @@ public class Game implements Serializable {
     public Map<Player, List<Pair<Strategy, Card>>> getStrategyMap() {
         return strategyMap;
     }
-    //public Chat getChat(){return this.chat};
+    // public Chat getChat(){return this.chat};
 
     public void setLastTurn() {
         this.lastTurn = true;
@@ -179,8 +178,11 @@ public class Game implements Serializable {
         this.currentPlayer = currentPlayer;
     }
 
+    // FIXME: quick fix for now
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
+        // currentPlayer = players.get((players.indexOf(currentPlayer) + 1) %
+        // players.size());
     }
 
     public void addParticipant() {

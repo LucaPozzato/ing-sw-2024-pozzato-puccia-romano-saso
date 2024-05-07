@@ -5,7 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
@@ -28,10 +27,9 @@ public class ServerMain {
             rmiServer.run();
 
             Game game = new Game(0, (RmiServer) rmiServer, socketServer);
-            ControllerState controller = game.getState();
-            //rmiServer.setController(controller);
+            // rmiServer.setController(controller);
             rmiServer.setModel(game);
-            //socketServer.setController(controller);
+            // socketServer.setController(controller);
             socketServer.setModel(game);
 
         } catch (RemoteException e) {

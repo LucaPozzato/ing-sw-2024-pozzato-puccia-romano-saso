@@ -18,7 +18,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -68,12 +67,20 @@ public class InitState extends ControllerState {
     private void createFirstPlayer(String nick, Color color, int numPlayers) {
         // TODO togliere dal costruttore di Players il nickname e il colore e istituire
         // dei setter specifici
+        Player player = new Player(nick, color);
 
-        super.game.getPlayers().add(new Player(nick, color));
+        super.game.getPlayers().add(player);
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
         super.game.addParticipant();
+
+        // FIXME: clean this up
+        try {
+            super.game.getBoard().updateActualScore(player, 0);
+        } catch (IllegalCommandException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -154,21 +161,22 @@ public class InitState extends ControllerState {
     @Override
     public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
         createDecks();
+
+        game.setBoard(new Board()); // FIXME: not amazing to do this here
+        game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
+        game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
+        game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
+        game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
+
         createFirstPlayer(nick, color, numPlayers);
         dealHands(numPlayers);
         dealInitialCard();
-
-        super.game.setBoard(new Board()); // FIXME: not amazing to do this here
-        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawResourceCard()); // FIXME
-        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawResourceCard()); // FIXME
-        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawGoldCard()); // FIXME
-        super.game.getBoard().addUncoveredCard(super.game.getDeck().drawGoldCard()); // FIXME
 
         dealCommonObjective();
         dealSecretObjective();
 
         Event event = new CreateGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
-                game.getBoard(), game.getCurrentPlayer(), null);
+                game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -270,10 +278,10 @@ public class InitState extends ControllerState {
         throw new IllegalCommandException("Can't draw card yet");
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        throw new IllegalCommandException("Game not set up yet");
-//    }
-
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // throw new IllegalCommandException("Game not set up yet");
+    // }
 
 }

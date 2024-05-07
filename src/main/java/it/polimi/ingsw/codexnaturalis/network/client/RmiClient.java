@@ -1,16 +1,16 @@
 package it.polimi.ingsw.codexnaturalis.network.client;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
-
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private final VirtualServer server;
@@ -110,7 +110,6 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     public void sendCommand(Command command) throws RemoteException {
         synchronized (this) {
             commandExitQueue.add(command);
-            System.out.println("client queue: " + System.identityHashCode(this.commandExitQueue));
             notifyAll();
         }
     }
@@ -132,11 +131,9 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         while (true) {
             try {
                 Command command = null;
-                System.out.println("client thread queue: " + System.identityHashCode(this.commandExitQueue));
                 synchronized (this) {
                     while (this.commandExitQueue.isEmpty()) {
                         this.wait();
-                        System.out.println("woken up");
                     }
                     command = this.commandExitQueue.poll();
                 }

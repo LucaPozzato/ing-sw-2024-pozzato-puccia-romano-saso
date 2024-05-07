@@ -10,7 +10,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -38,6 +37,33 @@ public class PlacedCardState extends ControllerState {
     @Override
     public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
+        for (Player p : super.game.getPlayers()) {
+            if (p.getNickname().equals(player.getNickname())) {
+                player = p;
+                break;
+            }
+        }
+        // FIXME: throw all necessary exceptions
+
+        if (father.getIdCard().equals(super.game.getHandByPlayer(player).getInitCard().getIdCard()))
+            father = super.game.getHandByPlayer(player).getInitCard();
+        else {
+            for (Card card : super.game.getHandByPlayer(player).getCardsHand()) {
+                if (card.getIdCard().equals(father.getIdCard())) {
+                    father = card;
+                    break;
+                }
+            }
+        }
+
+        for (Card card : super.game.getHandByPlayer(player).getCardsHand()) {
+            if (card.getIdCard().equals(placeThis.getIdCard())) {
+                placeThis = card;
+                break;
+            }
+        }
+
+        // BUG: exceptions are lost
 
         if (!player.equals(game.getCurrentPlayer()))
             throw new IllegalCommandException("Not your turn");
@@ -59,7 +85,8 @@ public class PlacedCardState extends ControllerState {
         if (game.getBoard().getActualPoints(player) >= 20)
             game.setLastTurn();
 
-        Event event = new PlaceEvent("Draw",game.getStructures(), game.getHands());
+        // BUG: currentPlayer is null?
+        Event event = new PlaceEvent("Draw", game.getStructures(), game.getHands());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -77,12 +104,14 @@ public class PlacedCardState extends ControllerState {
         throw new IllegalCommandException("Card already drawn in last turn");
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-//        //right know the chat is not part of the game hp:we instantiate it in the contruction of the game and keep an attribute of it
-//        super.game.getChat().addMessage(chatMessage);
-//    }
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
+    // //right know the chat is not part of the game hp:we instantiate it in the
+    // contruction of the game and keep an attribute of it
+    // super.game.getChat().addMessage(chatMessage);
+    // }
 
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
