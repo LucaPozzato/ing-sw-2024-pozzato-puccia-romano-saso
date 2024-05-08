@@ -31,22 +31,22 @@
                <children>
                   <ImageView fx:id="blue" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#blueSelected" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../SymbolsPng/pedinaBlu.png" />
+                        <Image url="@../../SymbolsPng/BLUE.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="yellow" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#yellowSelected" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../SymbolsPng/pedinaGialla.png" />
+                        <Image url="@../../SymbolsPng/YELLOW.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="red" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#redSelected" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../SymbolsPng/pedinaRossa.png" />
+                        <Image url="@../../SymbolsPng/RED.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="green" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#greenSelected" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../SymbolsPng/pedinaVerde.png" />
+                        <Image url="@../../SymbolsPng/GREEN.png" />
                      </image>
                   </ImageView>
                </children>

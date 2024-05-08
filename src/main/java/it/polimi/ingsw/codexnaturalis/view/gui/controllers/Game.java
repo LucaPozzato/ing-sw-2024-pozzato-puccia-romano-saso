@@ -2,9 +2,11 @@ package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
 import it.polimi.ingsw.codexnaturalis.TestMain;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
@@ -14,7 +16,9 @@ import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Application;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
@@ -22,14 +26,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.ScrollPane;
+import javafx.util.Pair;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
-import java.awt.*;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
@@ -59,22 +69,30 @@ public class Game extends Application implements View, Initializable {
 
     @FXML
     private List<Rectangle> rectangleList = new ArrayList<Rectangle>();
+    @FXML
+    private BorderPane borderPane;
 
     @FXML
-    private Pane structurePane;
+    private Pane structurePane, chatPane, boardPane;
 
     @FXML
     private ScrollPane scrollPane;
 
+    @FXML
+    private TextArea textArea;
+
+    @FXML
+    private TextField inputText;
+
     String handCard1URL, handCard2URL, handCard3URL;
 
-    private Player player;
+    private Player myPlayer;
     private InitialCard initialCardCard;
     private double lastX, lastY; // Memorizza le coordinate dell'ultimo evento
     int rPressed = 0;
     int fPressed = 1;
 
-
+    ViewFactory viewFactory = new ViewFactory();
 
 
     @FXML
@@ -163,7 +181,29 @@ public class Game extends Application implements View, Initializable {
 
     @FXML
     void boardVisibility(MouseEvent event) {
+        boardPane.setVisible(true);
+        borderPane.setCenter(boardPane);
+    }
 
+    @FXML //TO DO: vai a capo se string lunga tot
+    void sendMessage(MouseEvent event) {
+        String message = inputText.getText();
+        if (!Objects.equals(message, "")){
+            textArea.appendText("You: " + message + "\n\n");
+            inputText.clear();
+        }
+
+    }
+
+    @FXML //TO DO: vai a capo se string lunga tot
+    void sendMessageByEnter(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER ) {
+            String message = inputText.getText();
+            if (!Objects.equals(message, "")){
+                textArea.appendText("You: " + message + "\n\n");
+                inputText.clear();
+            }
+        }
     }
 
 
@@ -191,7 +231,7 @@ public class Game extends Application implements View, Initializable {
 
 
     @Override
-    public void updateChat(Chat chat) {
+    public void updateChat(Chat chat) throws IOException {
 
     }
 
@@ -202,7 +242,7 @@ public class Game extends Application implements View, Initializable {
 
     @Override
     public void updateMyPlayer(Player player) {
-        this.player = player;
+        this.myPlayer = player;
     }
 
     @Override
@@ -218,18 +258,13 @@ public class Game extends Application implements View, Initializable {
         else{
             System.out.println("Player not matching" + player.getNickname()); //Metti un alert in caso...
         }
+        System.out.print("\nCurrent Player updated!");
 
-//        System.out.println(player.getNickname() + "\n" +
-//                nickname1.getText() + "\n" +
-//                nickname2.getText() + "\n" +
-//                nickname3.getText() + "\n" +
-//                nickname4.getText() + "\n");
 
     }
 
     @Override
     public void updatePlayers(List<Player> players) {
-        System.out.print("ciaop");
         nickname1.setText(players.get(0).getNickname());
         nickname2.setText(players.get(1).getNickname());
 
@@ -246,12 +281,97 @@ public class Game extends Application implements View, Initializable {
             nickname4.setVisible(true);
             nickname4Visibility.setVisible(true);
         }
+        System.out.print("\nPlayers updated!");
 
     }
 
+    public void createGhostRectangles(Card card, double x, double y) throws IllegalCommandException {
+        int position = 0;
+        int width = 111;
+        int height = 74;
+        for (String s: card.getFrontCorners()){
+            //System.out.println("\nCorner corrente: \n" + s);
+            if(s != null && position==0){
+                Rectangle rectangle = new Rectangle(x-82, y-44,width,height);
+                rectangleList.add(rectangle);
+                rectangle.setFill(Color.web("#808080", 0.2));
+                structurePane.getChildren().add(rectangle);
+            }
+            else if(s != null && position==1){
+                Rectangle rectangle = new Rectangle(x+82, y-44,width,height);
+                rectangleList.add(rectangle);
+                rectangle.setFill(Color.web("#808080", 0.2));
+                structurePane.getChildren().add(rectangle);
+            }
+            else if(s != null && position==2){
+                Rectangle rectangle = new Rectangle(x+82, y+44,width,height);
+                rectangleList.add(rectangle);
+                rectangle.setFill(Color.web("#808080", 0.2));
+                structurePane.getChildren().add(rectangle);
+            }
+            else if(s != null && position==3){
+                Rectangle rectangle = new Rectangle(x-82, y+44,width,height);
+                rectangleList.add(rectangle);
+                rectangle.setFill(Color.web("#808080", 0.2));
+                structurePane.getChildren().add(rectangle);
+            }
+            position++;
+    }
+}
+
+    //TO DO: metti l'inserimento della initialCard da qui.. e poi leva metodo sotto..
     @Override
     public void updateStructures(List<Structure> structures) {
-        //Qui devo ricostruire le strutture degli altri players
+        int position = 0;
+        Structure myStructure = structures.get(0);
+        Image image = null;
+        Card cardForAngles;
+
+        //TO DO: Capisci se quando la funzione viene creata una seconda volta le carte precedenti vengono eliminate?
+        for(Pair<Card, Boolean> card: myStructure.getPlacedCards()){
+
+            if (position == 1){
+                int x = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
+                int y = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
+                //System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y + "\n");
+                if (card.getValue().toString().equals("true")){
+                    image = pathFront(card.getKey().toString().substring(6,9));
+                }
+                else if (card.getValue().toString().equals("false")){
+                    image = pathBack(card.getKey().toString().substring(6,9));
+                }
+
+                ImageView imageView = new ImageView(image);
+
+                imageView.setFitWidth(111);
+                imageView.setFitHeight(74);
+                imageView.setLayoutX(945+82*(x-40));
+                imageView.setLayoutY(1000-44*(y-40)); //TO DO: vedi qui... -
+
+                //TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche sopra le carte piazzate..NO!
+//                try{
+//                    createGhostRectangles(card.getKey(), imageView.getLayoutX(), imageView.getLayoutY());}
+//                catch (Exception ignored){}
+
+                //System.out.println("posi " + imageView.getLayoutX() + " " +  imageView.getLayoutY() + "\n");
+                structurePane.getChildren().add(imageView);
+            }
+            else
+                position++;
+
+
+        }
+//        for(Rectangle rectangle: rectangleList){
+//            rectangle.setOnMouseEntered(event -> {
+//                rectangle.setFill(Color.web("#808080", 0.8));
+//            });
+//
+//            // Gestore per quando il mouse esce dal rettangolo
+//            rectangle.setOnMouseExited(event -> {
+//                rectangle.setFill(Color.web("#808080", 0.1));
+//            });
+//
+//        }
     }
 
 
@@ -277,6 +397,8 @@ public class Game extends Application implements View, Initializable {
         handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
         handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
 
+        System.out.print("\nHand updated!");
+
     }
 
     //TO DO: Manca la board effettiva... solo la parte delle obj comuni e' stata trattata
@@ -284,6 +406,11 @@ public class Game extends Application implements View, Initializable {
     public void updateBoard(Board board) {
         String publicObjectiveOne;
         String publicObjectiveTwo;
+        String myPlayerColor = myPlayer.getColor().toString();
+        System.out.printf("My player color: " + myPlayerColor);
+        ImageView pedina;
+        int points = 23;
+        //int points = board.getActualPoints(myPlayer);
 
         publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22,25);
         publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22,25);
@@ -291,8 +418,201 @@ public class Game extends Application implements View, Initializable {
         publicObjective1.setImage(pathFront(publicObjectiveOne));
         publicObjective2.setImage(pathFront(publicObjectiveTwo));
 
+
+        switch(points) {
+            case 1:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(399);
+                pedina.setLayoutY(403);
+                setDimension(pedina);
+                break;
+            case 2:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(449);
+                pedina.setLayoutY(403);
+                setDimension(pedina);
+                break;
+            case 3:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(499);
+                pedina.setLayoutY(403);
+                setDimension(pedina);
+                break;
+            case 4:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(358);
+                setDimension(pedina);
+                break;
+            case 5:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(474);
+                pedina.setLayoutY(358);
+                setDimension(pedina);
+                break;
+            case 6:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(424);
+                pedina.setLayoutY(358);
+                setDimension(pedina);
+                break;
+            case 7:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(358);
+                setDimension(pedina);
+                break;
+            case 8:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(313);
+                setDimension(pedina);
+                break;
+            case 9:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(424);
+                pedina.setLayoutY(313);
+                setDimension(pedina);
+                break;
+            case 10:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(474);
+                pedina.setLayoutY(313);
+                setDimension(pedina);
+                break;
+            case 11:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(313);
+                setDimension(pedina);
+                break;
+            case 12:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(267);
+                setDimension(pedina);
+                break;
+            case 13:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(474);
+                pedina.setLayoutY(267);
+                setDimension(pedina);
+                break;
+            case 14:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(424);
+                pedina.setLayoutY(267);
+                setDimension(pedina);
+                break;
+            case 15:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(267);
+                setDimension(pedina);
+                break;
+            case 16:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(222);
+                setDimension(pedina);
+                break;
+            case 17:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(424);
+                pedina.setLayoutY(222);
+                setDimension(pedina);
+                break;
+            case 18:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(474);
+                pedina.setLayoutY(222);
+                setDimension(pedina);
+                break;
+            case 19:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(222);
+                setDimension(pedina);
+                break;
+            case 20:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(176);
+                setDimension(pedina);
+                break;
+            case 21:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(449);
+                pedina.setLayoutY(152);
+                setDimension(pedina);
+                break;
+            case 22:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(176);
+                setDimension(pedina);
+                break;
+            case 23:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(129);
+                setDimension(pedina);
+                break;
+            case 24:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(374);
+                pedina.setLayoutY(83);
+                setDimension(pedina);
+                break;
+            case 25:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(403);
+                pedina.setLayoutY(45);
+                setDimension(pedina);
+                break;
+            case 26:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(449);
+                pedina.setLayoutY(38);
+                setDimension(pedina);
+                break;
+            case 27:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(495);
+                pedina.setLayoutY(46);
+                setDimension(pedina);
+                break;
+            case 28:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(83);
+                setDimension(pedina);
+                break;
+            case 29:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(524);
+                pedina.setLayoutY(129);
+                setDimension(pedina);
+                break;
+            case 30:
+                pedina = new ImageView(symbolPath(myPlayerColor));
+                pedina.setLayoutX(449);
+                pedina.setLayoutY(93);
+                setDimension(pedina);
+                break;
+
+
+        }
+
+
+        System.out.print("\nDeck updated!");
     }
 
+    public void setDimension(ImageView pedina){
+        pedina.setFitWidth(40);
+        pedina.setFitHeight(40);
+        boardPane.getChildren().add(pedina);
+    }
     @Override
     public void updateDeck(Deck deck) {
         Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
@@ -313,6 +633,7 @@ public class Game extends Application implements View, Initializable {
         resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
         resourceCard1.setImage(pathFront(resourceCardOne));
         resourceCard2.setImage(pathFront(resourceCardTwo));
+        System.out.print("\nDeck updated!");
     }
 
     @Override
@@ -327,6 +648,11 @@ public class Game extends Application implements View, Initializable {
         Optional<ButtonType> result = alert.showAndWait();
     }
 
+
+    @FXML
+    void goBackFunct(MouseEvent event) {
+        borderPane.setCenter(scrollPane);
+    }
 
 
     @FXML
@@ -344,8 +670,13 @@ public class Game extends Application implements View, Initializable {
     }
 
     @FXML
+    void openChatFunct(MouseEvent event) throws IOException {
+        chatPane.setVisible(true);
+        borderPane.setCenter(chatPane);
+    }
+
+    @FXML
     void showBack(KeyEvent event) {
-        System.out.println("Rilevazione tast\n");
         if(event.getCode() == KeyCode.B && rPressed == 0){
 
             rPressed = 1;
@@ -407,7 +738,7 @@ public class Game extends Application implements View, Initializable {
         structurePane.getChildren().add(initialCard);
 
         for (String s: initialCardCard.getFrontCorners()){
-            System.out.println("\nCorner corrente: \n" + s);
+            //System.out.println("\nCorner corrente: \n" + s);
             if(s != null && position==0){
                 Rectangle rectangle = new Rectangle(x-82, y-44,width,height);
                 rectangleList.add(rectangle);
@@ -471,9 +802,15 @@ public class Game extends Application implements View, Initializable {
         return new Image(imageStream);
     }
 
+    public Image symbolPath(String oggetto){
+        String imagePath =  "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
+        InputStream imageStream = getClass().getResourceAsStream(imagePath);
+        assert imageStream != null;
+        return new Image(imageStream);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        ViewFactory viewFactory = new ViewFactory();
         viewFactory.showGame();
     }
 

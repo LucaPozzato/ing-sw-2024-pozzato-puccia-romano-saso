@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.view;
 
+import java.io.IOException;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
@@ -12,7 +13,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 public interface View {
     public void run();
 
-    public void updateChat(Chat chat);
+    public void updateChat(Chat chat) throws IOException;
 
     public void updateState(String state);
 

@@ -4,14 +4,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.*;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
@@ -39,6 +37,10 @@ public class TestMain extends Thread{
     @Override
     public void run() {
 
+        Player luca = new Player("Luca", Color.BLUE);
+        Player edo = new Player("Edoardo", Color.RED);
+        Player ste = new Player("Stefano", Color.GREEN);
+        Player nick = new Player("Niccolo",Color.YELLOW);
 
         Stack<ResourceCard> resourceDeck = new ResourceParser().parse();
         Stack<GoldCard> goldDeck = new GoldParser().parse();
@@ -46,31 +48,91 @@ public class TestMain extends Thread{
         List<ObjectiveCard> objectiveCards = new ObjectiveParser().parse();
 
 
+        //Simulazione flusso di gioco:
         Deck deck = new Deck(goldDeck, resourceDeck);
-        deck.shuffleGoldDeck();
-        deck.shuffleResourceDeck();
-
-
-        Hand hand = new Hand();
-        Hand secondHand = new Hand();
-        hand.setInitCard(initialCards.get(0));
-        hand.setSecretObjective(objectiveCards.get(0));
-
         Board board = new Board();
+        Hand hand1 = new Hand();
+        Structure structure1 = new Structure();
+
+        deck.shuffleResourceDeck();
+        deck.shuffleGoldDeck();
         board.setCommonObjectives(List.of(objectiveCards.get(5),objectiveCards.get(8)));
 
-
-        Structure structure = new Structure();
+        hand1.setSecretObjective(objectiveCards.get(0));
+        hand1.setInitCard(initialCards.get(0));
         try {
-            hand.addCard(deck.drawResourceCard());
-            hand.addCard(deck.drawResourceCard());
-            hand.addCard(deck.drawGoldCard());
-            secondHand.addCard(deck.drawResourceCard());
-            secondHand.addCard(deck.drawResourceCard());
-            secondHand.addCard(deck.drawGoldCard());
+            hand1.addCard(deck.drawGoldCard());
+            hand1.addCard(deck.drawResourceCard());
+            hand1.addCard(deck.drawResourceCard());
+        } catch (IllegalCommandException e) {throw new RuntimeException(e);}
+
+        try {
+            structure1.placeCard(null,hand1.getInitCard(),null,true);
+            Card card1 = deck.drawResourceCard();
+            structure1.placeCard(hand1.getInitCard(),card1,"TR",false);
+            structure1.placeCard(hand1.getInitCard(),deck.drawResourceCard(),"TL",false);
+            structure1.placeCard(hand1.getInitCard(),deck.drawResourceCard(),"BL",false);
+            Card card2 = deck.drawResourceCard();
+            structure1.placeCard(hand1.getInitCard(),card2,"BR",false);
+            Card card3 = deck.drawResourceCard();
+            structure1.placeCard(card2,card3,"BR",false);
+            Card card4 = deck.drawResourceCard();
+            structure1.placeCard(card3,card4,"BR",false);
+            Card card5 = deck.drawResourceCard();
+            structure1.placeCard(card4,card5,"BR",false);
+            Card card6 = deck.drawResourceCard();
+            structure1.placeCard(card5,card6,"BR",false);
+            Card card7 = deck.drawResourceCard();
+            structure1.placeCard(card6,card7,"BR",false);
+            //structure1.placeCard(null,hand1.getInitCard(),null,true);
+
         } catch (IllegalCommandException e) {
             throw new RuntimeException(e);
         }
+
+
+
+        //Aggiornamenti
+        Platform.runLater(() ->{
+            game.setInitialCard(hand1.getInitCard());
+            game.updatePlayers(List.of(luca,edo,ste,nick));
+            game.updateDeck(deck);
+            game.updateHand(List.of(hand1));
+            game.updateCurrentPlayer(luca);
+            game.updateMyPlayer(luca);
+            game.updateBoard(board);
+            game.updateStructures(List.of(structure1));
+        });
+
+
+//        Deck deck = new Deck(goldDeck, resourceDeck);
+//        deck.shuffleGoldDeck();
+//        deck.shuffleResourceDeck();
+//
+//        //Prima hand
+//        Hand hand = new Hand();
+//        Hand secondHand = new Hand();
+//        hand.setInitCard(initialCards.get(0));
+//        hand.setSecretObjective(objectiveCards.get(0));
+//
+//        Board board = new Board();
+//        board.setCommonObjectives(List.of(objectiveCards.get(5),objectiveCards.get(8)));
+//
+//        //Struttura
+//        Structure structure1 = new Structure();
+//        try { structure1.placeCard(null, hand.getInitCard(), null, true);
+//        } catch (IllegalCommandException e) {throw new RuntimeException(e);}
+//
+////        try {
+//            hand.addCard(deck.drawResourceCard());
+//            hand.addCard(deck.drawResourceCard());
+//            hand.addCard(deck.drawGoldCard());
+//            secondHand.addCard(deck.drawResourceCard());
+//            secondHand.addCard(deck.drawResourceCard());
+//            secondHand.addCard(deck.drawGoldCard());
+//        } catch (IllegalCommandException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
 //        Platform.runLater(() ->{
@@ -78,25 +140,25 @@ public class TestMain extends Thread{
 //
 //        });
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        Platform.runLater(() ->{
-            game.setInitialCard(hand.getInitCard());
-            game.updatePlayers(List.of(nick,filippo,luca,marco));
-            //game.updateDeck(deck);
-        });
-
-
-        Platform.runLater(() ->{
-            //game.showAlert("Hand update, click 'ok' to continue");
-            game.updateHand(List.of(hand,secondHand));
-            game.updateBoard(board);
-
-        });
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        Platform.runLater(() ->{
+//            game.setInitialCard(hand.getInitCard());
+//            game.updatePlayers(List.of(nick,filippo,luca,marco));
+//            //game.updateDeck(deck);
+//        });
+//
+//
+//        Platform.runLater(() ->{
+//            //game.showAlert("Hand update, click 'ok' to continue");
+//            game.updateHand(List.of(hand,secondHand));
+//            game.updateBoard(board);
+//
+//        });
 
 //        try {
 //            Thread.sleep(5000);
@@ -104,79 +166,22 @@ public class TestMain extends Thread{
 //            throw new RuntimeException(e);
 //        }
 
-        Platform.runLater(() ->{
-            //game.showAlert("Deck update, click 'ok' to continue");
-            game.updateDeck(deck);
-
-        });
-
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        Platform.runLater(() ->{
-            //game.showAlert("Current player update, click 'ok' to continue");
-            game.updateCurrentPlayer(luca);
-
-        });
+//        Platform.runLater(() ->{
+//            //game.showAlert("Deck update, click 'ok' to continue");
+//            game.updateDeck(deck);
+//
+//        });
+//
+//
+//        Platform.runLater(() ->{
+//            //game.showAlert("Current player update, click 'ok' to continue");
+//            game.updateCurrentPlayer(luca);
+//
+//        });
 
     }
 
-    public static void main(String[] args) throws Exception {
 
-
-
-
-
-        //GameTui gameTui = new GameTui();
-
-//        Hand hand = new Hand();
-//        Hand secondHand = new Hand();
-//        Board board = new Board();
-//        Structure structure = new Structure();
-//        Structure secondStructure = new Structure();
-//        Deck deck = new Deck(goldDeck, resourceDeck);
-//        Player luca = new Player("Luca");
-//        Player nick = new Player("Nick");
-//        gameTui.updatePlayers(List.of(luca, nick));
-//        gameTui.updateMyPlayer(luca);
-//        gameTui.updateCurrentPlayer(luca);
-
-//
-//
-//        hand.setChooseBetweenObj(List.of(objectiveCards.get(0), objectiveCards.get(1)));
-//        hand.setInitCard(initialCards.get(0));
-//        hand.addCard(resourceDeck.pop());
-//        hand.addCard(resourceDeck.pop());
-//        hand.addCard(goldDeck.pop());
-//        secondHand.addCard(resourceDeck.pop());
-//        secondHand.addCard(resourceDeck.pop());
-//        secondHand.addCard(goldDeck.pop());
-//        secondStructure.placeCard(null, initialCards.get(1), null, true);
-//        board.addUncoveredCard(resourceDeck.pop());
-//        board.addUncoveredCard(resourceDeck.pop());
-//        board.addUncoveredCard(goldDeck.pop());
-//        board.addUncoveredCard(goldDeck.pop());
-//        board.setCommonObjectives(List.of(objectiveCards.get(2), objectiveCards.get(3)));
-//        board.updateActualScore(luca, 0);
-//        board.updateActualScore(nick, 0);
-//        gameTui.updateStructure(List.of(structure, secondStructure));
-//        gameTui.updateDeck(deck);
-//        gameTui.updateBoard(board);
-//        gameTui.updateHand(List.of(hand, secondHand));
-//        gameTui.setInitialStage(true);
-//
-//        ReadThread readThread = gameMain.new ReadThread(controller, gameTui, hand, structure, deck, board,
-//                secondStructure,
-//                secondHand);
-//        readThread.start();
-
-
-
-
-    }
 
     public void drawCommand(){
 

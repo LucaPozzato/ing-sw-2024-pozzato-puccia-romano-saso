@@ -51,6 +51,13 @@ public class ViewFactory {
 
     }
 
+    public void showChat(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chatStage.fxml"));
+        createStage(loader);
+
+    }
+
+
 
     public void showJoinGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("joinGame.fxml"));
