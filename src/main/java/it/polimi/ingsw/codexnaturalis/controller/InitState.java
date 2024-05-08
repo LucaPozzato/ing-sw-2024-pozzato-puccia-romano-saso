@@ -123,8 +123,6 @@ public class InitState extends ControllerState {
      * Randomly chooses two cards parsed from the objective card's JSON file and
      * assigns them to the commonObjective game's attribute
      */
-    // TODO: Verify that the collection returned from the parse() method is already
-    // shuffled
     private void dealCommonObjective() {
         objPar = new ObjectiveParser();
         for (int i = 0; i < 2; i++) {
@@ -136,8 +134,6 @@ public class InitState extends ControllerState {
      * Randomly chooses two cards parsed from the objective card's JSON file in
      * order for the player to choose one between them as secret objective
      */
-    // TODO: Verify that the collection returned from the parse() method is already
-    // shuffled
 
     private void dealSecretObjective() {
         for (Player player : game.getPlayers()) {
@@ -157,7 +153,6 @@ public class InitState extends ControllerState {
      * @throws IllegalCommandException propagates above the possibly rising
      *                                 exceptions
      */
-
     @Override
     public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
         createDecks();

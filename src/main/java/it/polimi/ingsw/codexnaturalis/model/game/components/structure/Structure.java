@@ -58,7 +58,11 @@ public class Structure implements Serializable {
         return cardMatrix;
     }
 
-    public Map<String, Integer> getVisibleSymbols() {
+    public int getSatisfiedPatterns() {
+        return satisfiedPatterns;
+    }
+
+    public Map<String, Integer> getvisibleSymbols() {
         return visibleSymbols;
     }
 
@@ -79,10 +83,6 @@ public class Structure implements Serializable {
         }
         visibleObjects = visibleObjects.substring(0, visibleObjects.length() - 1);
         return visibleObjects;
-    }
-
-    public Map<String, Integer> getvisibleSymbols() {
-        return visibleSymbols;
     }
 
     public List<Pair<Card, Boolean>> getPlacedCards() {
@@ -140,11 +140,25 @@ public class Structure implements Serializable {
         this.satisfiedPatterns++;
     }
 
-    public int getSatisfiedPatterns() {
-        return satisfiedPatterns;
-    }
-
-    private Boolean isPlaceable(Card father, Card card, Integer coordinate, String position, Boolean frontUp)
+    /**
+     * This method acts differently according to the type of card the user want to place. <br>
+     * If the card is an initial one isPlaceable return true only in there's not another initial card placed on the structure. <br>
+     * Else it sequentially performs these actions:  Checks if the father card is present <br>
+     * If father card is not placed, the new card cannot be placed <br>
+     * If father card is not placed, the new card cannot be placed <br>
+     * Checks if the card is already placed <br>
+     * Checks if another card is already placed in that coordinate <br>
+     * Checks if the placed card does not cover one of the uncoverable corners of neighbour cards <br>
+     * If the placed card is a Gold one checks if the player's structure satisfies card's requirement <br>
+     * @param father the card under the placed one
+     * @param card the card user want to place
+     * @param coordinate the coordinate on the matrix where the card is placed computed in the placeCard method according to the position string passed
+     * @param frontUp the side choose for the placement
+     * @return true is the card is placeable, exception otherwise. The method never returns false.
+     * @throws IllegalCommandException thrown when a card is not placeable. A proper description message is linked to the exception.
+     */
+    //TODO: consider to set as private this method, made public for test purposes
+    public Boolean isPlaceable(Card father, Card card, Integer coordinate, Boolean frontUp)
             throws IllegalCommandException {
         // checks if initial card is placeable
         if (card instanceof InitialCard) {
@@ -197,9 +211,9 @@ public class Structure implements Serializable {
         // Checks if bottom right card exists and does not have null in TL corner
         if (coordinateToCard.containsKey(coordinate + 99)) {
             if (coordinateToCard.get(coordinate + 99).getSide()) {
-                if (coordinateToCard.get(coordinate + 99).getFirst().getFrontCorners().get(0).equals("NULL"))
+                if (coordinateToCard.get(coordinate + 99).getFirst().getFrontCorners().getFirst().equals("NULL"))
                     throw new IllegalCommandException("Card cannot be placed on null corner");
-            } else if (coordinateToCard.get(coordinate + 99).getFirst().getBackCorners().get(0).equals("NULL"))
+            } else if (coordinateToCard.get(coordinate + 99).getFirst().getBackCorners().getFirst().equals("NULL"))
                 throw new IllegalCommandException("Card cannot be placed on null corner");
         }
 
@@ -210,7 +224,6 @@ public class Structure implements Serializable {
                     throw new IllegalCommandException("Gold card requirements not met");
             }
         }
-
         return true;
     }
 
@@ -230,7 +243,7 @@ public class Structure implements Serializable {
         // Calculates coordinates of new card
         Integer destinationCoord = calcCoordinate(father, position);
         // Checks if the card can be placed and places it
-        isPlaceable(father, card, destinationCoord, position, frontUp);
+        isPlaceable(father, card, destinationCoord, frontUp);
 
         cardToCoordinate.put(card, new Triplet<>(destinationCoord, frontUp, false));
         coordinateToCard.put(destinationCoord, new Triplet<>(card, frontUp, false));
@@ -383,4 +396,21 @@ public class Structure implements Serializable {
             System.out.print("\n");
         }
     }
+
+    /*
+    Tested methods:
+
+    [x] getVisibleResources
+    [x] getVisibleObjects
+    [x] getPointsFromPlayableCard
+    [x] placeCard
+    [x] getRadius
+    [x] printReducedMatrix
+    [] isPlaceable
+    [] calcCoordinate
+    [] calcVisibleSymbols
+    [] increaseSatisfiedPatterns
+    [] getPlacedCards
+
+    */
 }

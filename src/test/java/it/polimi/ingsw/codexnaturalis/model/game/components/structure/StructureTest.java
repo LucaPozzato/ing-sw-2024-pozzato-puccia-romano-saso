@@ -1,10 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -24,7 +19,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import javafx.util.Pair;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class StructureTest {
+
     @Test
     void testGetPointsFromPlayableCard() {
         Structure structure = new Structure();
@@ -211,250 +209,6 @@ public class StructureTest {
         // [x] check gold card corner point type with 3 corners
         // [x] check gold card corner point type with 4 corners
     }
-
-    // @Test
-    // void testGetPointsFromPattern() {
-
-    // Structure structure = new Structure();
-    // ResourceParser parser = new ResourceParser();
-    // ObjectiveParser objPars = new ObjectiveParser();
-
-    // InitialCard initialCardTest = new InitialParser().parse().get(0);
-    // ResourceCard RedTest1 = parser.parse().get(0); // R01
-    // ResourceCard RedTest2 = parser.parse().get(1); // R02
-    // ResourceCard BluTest1 = parser.parse().get(22); // R23
-    // ResourceCard BluTest2 = parser.parse().get(26); // R27
-    // ResourceCard BluTest3 = parser.parse().get(21); // R22
-    // ResourceCard GreenTest1 = parser.parse().get(18); // R19
-
-    // List<Card> patternList = new ArrayList<Card>();
-    // patternList.add(objPars.parse().get(4));
-
-    // try {
-    // structure.placeCard(null, initialCardTest, null, true);
-    // structure.placeCard(initialCardTest, RedTest1, "BL", true);
-    // structure.placeCard(initialCardTest, BluTest1, "BR", true);
-    // structure.placeCard(BluTest1, BluTest2, "BR", true);
-    // structure.placeCard(BluTest2, BluTest3, "BL", true);
-    // structure.placeCard(BluTest3, GreenTest1, "BL", true);
-    // structure.placeCard(GreenTest1, RedTest2, "TL", true);
-
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // int result = 0;
-    // try {
-    // result = structure.getPointsFromPatterns(patternList, RedTest2);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // assertEquals(3, result);
-
-    // //////////////////////////////////
-
-    // ResourceCard GreenTest2 = parser.parse().get(16); // R17
-    // ResourceCard GreenTest3 = parser.parse().get(15); // R16
-    // patternList.removeLast();
-    // patternList.add(objPars.parse().get(1));
-
-    // try {
-    // structure.placeCard(GreenTest1, GreenTest2, "BR", true);
-    // structure.placeCard(GreenTest2, GreenTest3, "BR", true);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // result = 0;
-    // try {
-    // result = structure.getPointsFromPatterns(patternList, GreenTest3)
-    // + structure.getPointsFromPatterns(patternList, RedTest2);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(0, result);
-
-    // ////////////////////////////////// <- mixed chair and stair pattern which
-    // fails
-    // ////////////////////////////////// due to share of a card among
-
-    // ResourceCard GreenTest4 = parser.parse().get(12); // R13
-
-    // try {
-    // structure.placeCard(GreenTest3, GreenTest4, "BR", true);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // result = 0;
-    // try {
-    // result = structure.getPointsFromPatterns(patternList, RedTest2)
-    // + structure.getPointsFromPatterns(patternList, GreenTest3);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // assertEquals(2, result);
-
-    // //////////////////////////////////
-
-    // Structure structure_II = new Structure();
-    // ResourceParser parser_II = new ResourceParser();
-    // InitialParser InitialParser_II = new InitialParser();
-    // ObjectiveParser objPars_II = new ObjectiveParser();
-
-    // InitialCard initialCardTest_II = InitialParser_II.parse().get(0);
-    // ResourceCard RedTest1_II = parser_II.parse().get(0); // R01
-    // ResourceCard RedTest2_II = parser_II.parse().get(1); // R02
-    // ResourceCard BluTest1_II = parser_II.parse().get(22); // R23
-    // ResourceCard BluTest2_II = parser_II.parse().get(26); // R27
-    // ResourceCard BluTest3_II = parser_II.parse().get(21); // R22
-    // ResourceCard GreenTest1_II = parser_II.parse().get(18); // R19
-    // ResourceCard GreenTest2_II = parser_II.parse().get(16); // R17
-    // ResourceCard GreenTest3_II = parser_II.parse().get(15); // R16
-    // ResourceCard GreenTest4_II = parser_II.parse().get(12); // R13
-    // ResourceCard PurpleTest1_II = parser_II.parse().get(32); // R33
-
-    // List<Card> patternList_II = new ArrayList<Card>();
-    // patternList_II.add(objPars_II.parse().get(1));
-    // patternList_II.add(objPars_II.parse().get(4));
-
-    // try {
-    // structure_II.placeCard(null, initialCardTest_II, null, true);
-    // structure_II.placeCard(initialCardTest_II, RedTest1_II, "BL", true);
-    // structure_II.placeCard(initialCardTest_II, BluTest1_II, "BR", true);
-    // structure_II.placeCard(BluTest1_II, BluTest2_II, "BR", true);
-    // structure_II.placeCard(BluTest2_II, BluTest3_II, "BL", true);
-    // structure_II.placeCard(BluTest3_II, GreenTest1_II, "BL", true);
-    // structure_II.placeCard(GreenTest1_II, RedTest2_II, "TL", true);
-    // structure_II.placeCard(GreenTest1_II, PurpleTest1_II, "BR", true);
-    // structure_II.placeCard(PurpleTest1_II, GreenTest2_II, "BR", true);
-    // structure_II.placeCard(GreenTest2_II, GreenTest3_II, "BR", true);
-    // structure_II.placeCard(GreenTest3_II, GreenTest4_II, "BR", true);
-
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // result = 0;
-    // try {
-    // result = structure_II.getPointsFromPatterns(patternList_II, GreenTest4_II)
-    // + structure_II.getPointsFromPatterns(patternList_II, RedTest2_II);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // assertEquals(5, result);
-
-    // //////////////////////////////////
-
-    // ResourceCard GreenTest5_II = parser_II.parse().get(17); // R18
-    // try {
-    // structure_II.placeCard(GreenTest4_II, GreenTest5_II, "BR", true);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // try {
-    // result = structure_II.getPointsFromPatterns(patternList, GreenTest5_II);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // assertEquals(0, result);
-
-    // //////////////////////////////////
-
-    // ObjectiveCard shroomIdol = objPars_II.parse().get(8);
-    // ObjectiveCard vegIdol = objPars_II.parse().get(9);
-    // ObjectiveCard wolfIdol = objPars_II.parse().get(10);
-    // ObjectiveCard mosquitoIdol = objPars_II.parse().get(11);
-
-    // int pointsmade = 0;
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(shroomIdol);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(4, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(vegIdol);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(2, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(wolfIdol);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(2, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(mosquitoIdol);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(2, pointsmade);
-
-    // //////////////////////////////////
-    // ObjectiveCard foldedhandsWiseman = objPars_II.parse().get(12);
-    // ObjectiveCard scrollWiseman = objPars_II.parse().get(13);
-    // ObjectiveCard inkWiseman = objPars_II.parse().get(14);
-    // ObjectiveCard featherWiseman = objPars_II.parse().get(15);
-
-    // ResourceCard GreenTest6_II = parser_II.parse().get(14); // R15
-    // ResourceCard PurpleTest2_II = parser_II.parse().get(36); // R37
-
-    // try {
-    // structure_II.placeCard(GreenTest5_II, GreenTest6_II, "BL", true);
-    // structure_II.placeCard(GreenTest6_II, PurpleTest2_II, "BR", true);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-
-    // pointsmade = 0;
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(foldedhandsWiseman);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(3, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(scrollWiseman);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(0, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(inkWiseman);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(0, pointsmade);
-
-    // try {
-    // pointsmade = structure_II.getPointsFromObjResCard(featherWiseman);
-    // } catch (IllegalCommandException e) {
-    // System.out.println(e.getMessage());
-    // }
-    // assertEquals(2, pointsmade);
-
-    // // [x] chair pattern check
-    // // [x] mixed chair and stair pattern which fails due to share of a card among
-    // // two patterns
-    // // [x] stair pattern check
-    // // [x] mixed chair and stair pattern which succeeds
-    // // [x] multistair pattern
-    // // [x] resource requirement check
-    // // [x] object requirement check
-    // // [x] foldedhandWiseman requirement check
-    // }
 
     @Test
     void testGetVisibleObjects() {
@@ -840,7 +594,69 @@ public class StructureTest {
             System.out.println(e.getMessage());
         }
 
-        structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
+//        structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
         assertEquals(4, structure.getRadius(structure.getCoordinateToCard()));
+    }
+
+    @Test
+    void testIsPlaceable() throws IllegalCommandException {
+        Structure structure = new Structure();
+        Stack<ResourceCard> resourceDeck = new ResourceParser().parse();
+        InitialCard initcard = new InitialParser().parse().get(2);
+        ResourceCard rescard = resourceDeck.pop();
+        Boolean result = false;
+        Throwable thrown = null;
+
+        try {
+            result = structure.isPlaceable(null, rescard, 4040, true);
+        } catch (Exception e){
+            thrown = e;
+        }
+        assertEquals("Bottom card cannot be null", thrown.getMessage());
+
+        try {
+            result = structure.isPlaceable(null, initcard, 4040, true);
+        } catch (Exception e){
+            thrown = e;
+        }
+        assertTrue(result);
+        structure.placeCard(null, initcard, null, true);
+
+        InitialCard anotherinitcard = new InitialParser().parse().get(1);
+
+        try {
+            result = structure.isPlaceable(initcard, anotherinitcard, 4040, true);
+        } catch (Exception e){
+            thrown = e;
+        }
+        assertEquals("Initial card already placed", thrown.getMessage());
+
+        try {
+            result = structure.isPlaceable(initcard, rescard, 4141, true);
+        } catch (Exception e){
+            thrown = e;
+        }
+        assertTrue(result);
+        structure.placeCard(initcard, rescard, "TR", true);
+
+        ResourceCard onCorner = resourceDeck.pop();
+
+        try {
+            result = structure.isPlaceable(rescard, onCorner, 4042, true);
+        } catch (Exception e){
+            thrown = e;
+        }
+        assertEquals("Card cannot be placed on null corner", thrown.getMessage());
+
+
+
+        // [x] Trying to place another card before the initial one -> error
+        // [x] Trying to place the initial card -> ok
+        // [x] Trying to place another initial card -> error
+        // [x] Trying to place a placeable card -> ok
+        // [?] Trying to place a card which is not linked to the father -> error.
+        // This call is impossible since isPlaceable is called by placeCard which computes and passes as coordinates the coordinates of the father which are correct and then check the existence of the father and corner compliance
+        // [x] Trying to place a card which covers a null corner -> error
+
     }
 }

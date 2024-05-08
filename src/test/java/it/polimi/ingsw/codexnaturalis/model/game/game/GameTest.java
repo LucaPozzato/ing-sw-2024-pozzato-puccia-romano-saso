@@ -31,7 +31,6 @@ public class GameTest {
         Game game = new Game(1, null, null);
         Player player = new Player();
 
-
         Structure structure = new Structure();
         ResourceParser parser = new ResourceParser();
         ObjectiveParser objPars = new ObjectiveParser();
@@ -87,4 +86,17 @@ public class GameTest {
             fail(e.getMessage());
         }
     }
+
+
+
+    // [x] chair pattern check
+    // [x] mixed chair and stair pattern which fails due to share of a card among
+    // two patterns
+    // [x] stair pattern check
+    // [x] mixed chair and stair pattern which succeeds
+    // [x] multistair pattern
+    // [x] resource requirement check
+    // [x] object requirement check
+    // [x] foldedhandWiseman requirement check
+
 }
