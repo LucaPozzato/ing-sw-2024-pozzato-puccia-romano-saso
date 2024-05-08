@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.controller;
 
 import java.util.Collections;
+import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.GoldParser;
@@ -31,6 +33,8 @@ public class InitState extends ControllerState {
     private GoldParser goldPar;
     private InitialParser initPar;
     private ObjectiveParser objPar;
+    private List<ObjectiveCard> objCards;
+    private List<InitialCard> initCards;
 
     /**
      * InitState's constructor
@@ -39,6 +43,14 @@ public class InitState extends ControllerState {
      */
     public InitState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
+        this.goldPar = new GoldParser();
+        this.resPar = new ResourceParser();
+        this.initPar = new InitialParser();
+        this.initCards = initPar.parse();
+        Collections.shuffle(initCards);
+        this.objPar = new ObjectiveParser();
+        this.objCards = objPar.parse();
+        Collections.shuffle(objCards);
     }
 
     /**
@@ -78,6 +90,8 @@ public class InitState extends ControllerState {
         // FIXME: clean this up
         try {
             super.game.getBoard().updateActualScore(player, 0);
+            // FIXME: this is a temporary solution
+            super.game.getBoard().updateActualScore(player, 19);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }
@@ -112,10 +126,8 @@ public class InitState extends ControllerState {
      * card shuffled deck and assigning it to each player
      */
     private void dealInitialCard() {
-        initPar = new InitialParser();
-        Collections.shuffle(initPar.parse());
         for (Player player : game.getPlayers()) {
-            game.getHandByPlayer(player).setInitCard(initPar.parse().removeFirst());
+            game.getHandByPlayer(player).setInitCard(initCards.removeFirst());
         }
     }
 
@@ -124,9 +136,8 @@ public class InitState extends ControllerState {
      * assigns them to the commonObjective game's attribute
      */
     private void dealCommonObjective() {
-        objPar = new ObjectiveParser();
         for (int i = 0; i < 2; i++) {
-            game.getBoard().getCommonObjectives().add(objPar.parse().removeFirst());
+            game.getBoard().getCommonObjectives().add(objCards.removeFirst());
         }
     }
 
@@ -138,7 +149,7 @@ public class InitState extends ControllerState {
     private void dealSecretObjective() {
         for (Player player : game.getPlayers()) {
             for (int i = 0; i < 2; i++) {
-                game.getHandByPlayer(player).getChooseBetweenObj().add(objPar.parse().removeFirst());
+                game.getHandByPlayer(player).getChooseBetweenObj().add(objCards.removeFirst());
             }
         }
     }

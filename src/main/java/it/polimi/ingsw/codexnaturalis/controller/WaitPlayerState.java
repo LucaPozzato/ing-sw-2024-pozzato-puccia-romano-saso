@@ -49,7 +49,7 @@ public class WaitPlayerState extends ControllerState {
     }
 
     private void createNewPlayers(String nickname, Color color) {
-        Player player = super.game.getPlayers().get(super.game.getPlayers().size() - 1);
+        Player player = super.game.getPlayers().get(super.game.getNumParticipants());
         player.setNickname(nickname);
         player.setColor(color);
         super.game.addParticipant();
@@ -57,6 +57,8 @@ public class WaitPlayerState extends ControllerState {
         // FIXME: clean this up
         try {
             super.game.getBoard().updateActualScore(player, 0);
+            // FIXME: this is a temporary solution
+            super.game.getBoard().updateActualScore(player, 19);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }

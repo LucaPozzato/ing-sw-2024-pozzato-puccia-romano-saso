@@ -1,5 +1,15 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.Stack;
+
 import it.polimi.ingsw.codexnaturalis.TestMain;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -16,47 +26,38 @@ import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.*;
-import java.util.List;
 
 public class Game extends Application implements View, Initializable {
-    
-    
-    //Utils FXML
+
+    // Utils FXML
     @FXML
-    private Text mushroomsPoints , leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints, potionPoints;
+    private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints,
+            potionPoints;
 
     @FXML
     private Text connectionType;
 
     @FXML
-    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2, secreteObjective, publicObjective1, publicObjective2;
+    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2,
+            secreteObjective, publicObjective1, publicObjective2;
 
     @FXML
     private Text nickname1, nickname2, nickname3, nickname4;
@@ -93,7 +94,6 @@ public class Game extends Application implements View, Initializable {
     int fPressed = 1;
 
     ViewFactory viewFactory = new ViewFactory();
-
 
     @FXML
     void handCard1Clicked(MouseEvent event) {
@@ -185,27 +185,26 @@ public class Game extends Application implements View, Initializable {
         borderPane.setCenter(boardPane);
     }
 
-    @FXML //TO DO: vai a capo se string lunga tot
+    @FXML // TO DO: vai a capo se string lunga tot
     void sendMessage(MouseEvent event) {
         String message = inputText.getText();
-        if (!Objects.equals(message, "")){
+        if (!Objects.equals(message, "")) {
             textArea.appendText("You: " + message + "\n\n");
             inputText.clear();
         }
 
     }
 
-    @FXML //TO DO: vai a capo se string lunga tot
+    @FXML // TO DO: vai a capo se string lunga tot
     void sendMessageByEnter(KeyEvent event) {
-        if(event.getCode() == KeyCode.ENTER ) {
+        if (event.getCode() == KeyCode.ENTER) {
             String message = inputText.getText();
-            if (!Objects.equals(message, "")){
+            if (!Objects.equals(message, "")) {
                 textArea.appendText("You: " + message + "\n\n");
                 inputText.clear();
             }
         }
     }
-
 
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
@@ -222,16 +221,13 @@ public class Game extends Application implements View, Initializable {
 
     }
 
-
     @Override
     public void run() {
         launch();
     }
 
-
-
     @Override
-    public void updateChat(Chat chat) throws IOException {
+    public void updateChat(Chat chat) {
 
     }
 
@@ -246,20 +242,24 @@ public class Game extends Application implements View, Initializable {
     }
 
     @Override
+    public void updateWinners(List<Player> winners) {
+
+    }
+
+    @Override
     public void updateCurrentPlayer(Player player) {
-        if(Objects.equals(nickname1.getText(), player.getNickname()))
+        if (Objects.equals(nickname1.getText(), player.getNickname()))
             nickname1.setFill(Color.BLUE);
-        else if(Objects.equals(nickname2.getText(), player.getNickname()))
+        else if (Objects.equals(nickname2.getText(), player.getNickname()))
             nickname2.setFill(Color.BLUE);
-        else if(Objects.equals(nickname3.getText(), player.getNickname()))
+        else if (Objects.equals(nickname3.getText(), player.getNickname()))
             nickname3.setFill(Color.BLUE);
-        else if(Objects.equals(nickname4.getText(), player.getNickname()))
+        else if (Objects.equals(nickname4.getText(), player.getNickname()))
             nickname4.setFill(Color.BLUE);
-        else{
-            System.out.println("Player not matching" + player.getNickname()); //Metti un alert in caso...
+        else {
+            System.out.println("Player not matching" + player.getNickname()); // Metti un alert in caso...
         }
         System.out.print("\nCurrent Player updated!");
-
 
     }
 
@@ -268,12 +268,12 @@ public class Game extends Application implements View, Initializable {
         nickname1.setText(players.get(0).getNickname());
         nickname2.setText(players.get(1).getNickname());
 
-        if (players.size() == 3){
+        if (players.size() == 3) {
             nickname3.setText(players.get(2).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
         }
-        if (players.size() == 4){
+        if (players.size() == 4) {
             nickname3.setText(players.get(2).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
@@ -289,37 +289,35 @@ public class Game extends Application implements View, Initializable {
         int position = 0;
         int width = 111;
         int height = 74;
-        for (String s: card.getFrontCorners()){
-            //System.out.println("\nCorner corrente: \n" + s);
-            if(s != null && position==0){
-                Rectangle rectangle = new Rectangle(x-82, y-44,width,height);
+        for (String s : card.getFrontCorners()) {
+            // System.out.println("\nCorner corrente: \n" + s);
+            if (s != null && position == 0) {
+                Rectangle rectangle = new Rectangle(x - 82, y - 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==1){
-                Rectangle rectangle = new Rectangle(x+82, y-44,width,height);
+            } else if (s != null && position == 1) {
+                Rectangle rectangle = new Rectangle(x + 82, y - 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==2){
-                Rectangle rectangle = new Rectangle(x+82, y+44,width,height);
+            } else if (s != null && position == 2) {
+                Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==3){
-                Rectangle rectangle = new Rectangle(x-82, y+44,width,height);
+            } else if (s != null && position == 3) {
+                Rectangle rectangle = new Rectangle(x - 82, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
             }
             position++;
+        }
     }
-}
 
-    //TO DO: metti l'inserimento della initialCard da qui.. e poi leva metodo sotto..
+    // TO DO: metti l'inserimento della initialCard da qui.. e poi leva metodo
+    // sotto..
     @Override
     public void updateStructures(List<Structure> structures) {
         int position = 0;
@@ -327,53 +325,53 @@ public class Game extends Application implements View, Initializable {
         Image image = null;
         Card cardForAngles;
 
-        //TO DO: Capisci se quando la funzione viene creata una seconda volta le carte precedenti vengono eliminate?
-        for(Pair<Card, Boolean> card: myStructure.getPlacedCards()){
+        // TO DO: Capisci se quando la funzione viene creata una seconda volta le carte
+        // precedenti vengono eliminate?
+        for (Pair<Card, Boolean> card : myStructure.getPlacedCards()) {
 
-            if (position == 1){
+            if (position == 1) {
                 int x = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
                 int y = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
-                //System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y + "\n");
-                if (card.getValue().toString().equals("true")){
-                    image = pathFront(card.getKey().toString().substring(6,9));
-                }
-                else if (card.getValue().toString().equals("false")){
-                    image = pathBack(card.getKey().toString().substring(6,9));
+                // System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y + "\n");
+                if (card.getValue().toString().equals("true")) {
+                    image = pathFront(card.getKey().toString().substring(6, 9));
+                } else if (card.getValue().toString().equals("false")) {
+                    image = pathBack(card.getKey().toString().substring(6, 9));
                 }
 
                 ImageView imageView = new ImageView(image);
 
                 imageView.setFitWidth(111);
                 imageView.setFitHeight(74);
-                imageView.setLayoutX(945+82*(x-40));
-                imageView.setLayoutY(1000-44*(y-40)); //TO DO: vedi qui... -
+                imageView.setLayoutX(945 + 82 * (x - 40));
+                imageView.setLayoutY(1000 - 44 * (y - 40)); // TO DO: vedi qui... -
 
-                //TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche sopra le carte piazzate..NO!
-//                try{
-//                    createGhostRectangles(card.getKey(), imageView.getLayoutX(), imageView.getLayoutY());}
-//                catch (Exception ignored){}
+                // TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche
+                // sopra le carte piazzate..NO!
+                // try{
+                // createGhostRectangles(card.getKey(), imageView.getLayoutX(),
+                // imageView.getLayoutY());}
+                // catch (Exception ignored){}
 
-                //System.out.println("posi " + imageView.getLayoutX() + " " +  imageView.getLayoutY() + "\n");
+                // System.out.println("posi " + imageView.getLayoutX() + " " +
+                // imageView.getLayoutY() + "\n");
                 structurePane.getChildren().add(imageView);
-            }
-            else
+            } else
                 position++;
 
-
         }
-//        for(Rectangle rectangle: rectangleList){
-//            rectangle.setOnMouseEntered(event -> {
-//                rectangle.setFill(Color.web("#808080", 0.8));
-//            });
-//
-//            // Gestore per quando il mouse esce dal rettangolo
-//            rectangle.setOnMouseExited(event -> {
-//                rectangle.setFill(Color.web("#808080", 0.1));
-//            });
-//
-//        }
+        // for(Rectangle rectangle: rectangleList){
+        // rectangle.setOnMouseEntered(event -> {
+        // rectangle.setFill(Color.web("#808080", 0.8));
+        // });
+        //
+        // // Gestore per quando il mouse esce dal rettangolo
+        // rectangle.setOnMouseExited(event -> {
+        // rectangle.setFill(Color.web("#808080", 0.1));
+        // });
+        //
+        // }
     }
-
 
     @Override
     public void updateHand(List<Hand> hands) {
@@ -383,10 +381,10 @@ public class Game extends Application implements View, Initializable {
         String card3;
         String secretObjectiveCard;
 
-        card1 = hand.getCardsHand().get(0).toString().substring(6,9);
-        card2 = hand.getCardsHand().get(1).toString().substring(6,9);
-        card3 = hand.getCardsHand().get(2).toString().substring(6,9);
-        secretObjectiveCard = hand.getSecretObjective().toString().substring(22,25);
+        card1 = hand.getCardsHand().get(0).toString().substring(6, 9);
+        card2 = hand.getCardsHand().get(1).toString().substring(6, 9);
+        card3 = hand.getCardsHand().get(2).toString().substring(6, 9);
+        secretObjectiveCard = hand.getSecretObjective().toString().substring(22, 25);
 
         handCard1.setImage(pathFront(card1));
         handCard2.setImage(pathFront(card2));
@@ -401,7 +399,8 @@ public class Game extends Application implements View, Initializable {
 
     }
 
-    //TO DO: Manca la board effettiva... solo la parte delle obj comuni e' stata trattata
+    // TO DO: Manca la board effettiva... solo la parte delle obj comuni e' stata
+    // trattata
     @Override
     public void updateBoard(Board board) {
         String publicObjectiveOne;
@@ -410,16 +409,15 @@ public class Game extends Application implements View, Initializable {
         System.out.printf("My player color: " + myPlayerColor);
         ImageView pedina;
         int points = 23;
-        //int points = board.getActualPoints(myPlayer);
+        // int points = board.getActualPoints(myPlayer);
 
-        publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22,25);
-        publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22,25);
+        publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22, 25);
+        publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22, 25);
 
         publicObjective1.setImage(pathFront(publicObjectiveOne));
         publicObjective2.setImage(pathFront(publicObjectiveTwo));
 
-
-        switch(points) {
+        switch (points) {
             case 1:
                 pedina = new ImageView(symbolPath(myPlayerColor));
                 pedina.setLayoutX(399);
@@ -601,30 +599,29 @@ public class Game extends Application implements View, Initializable {
                 setDimension(pedina);
                 break;
 
-
         }
-
 
         System.out.print("\nDeck updated!");
     }
 
-    public void setDimension(ImageView pedina){
+    public void setDimension(ImageView pedina) {
         pedina.setFitWidth(40);
         pedina.setFitHeight(40);
         boardPane.getChildren().add(pedina);
     }
+
     @Override
     public void updateDeck(Deck deck) {
         Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
         Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
-        String goldDeckCardOne = deck.drawGoldCard().toString().substring(6,9);
-        String goldCardOne = deck.drawGoldCard().toString().substring(6,9);
-        String goldCardTwo = deck.drawGoldCard().toString().substring(6,9);
+        String goldDeckCardOne = deck.drawGoldCard().toString().substring(6, 9);
+        String goldCardOne = deck.drawGoldCard().toString().substring(6, 9);
+        String goldCardTwo = deck.drawGoldCard().toString().substring(6, 9);
 
-        String resourceDeckCardOne = deck.drawResourceCard().toString().substring(6,9);
-        String resourceCardOne = deck.drawResourceCard().toString().substring(6,9);
-        String resourceCardTwo = deck.drawResourceCard().toString().substring(6,9);
+        String resourceDeckCardOne = deck.drawResourceCard().toString().substring(6, 9);
+        String resourceCardOne = deck.drawResourceCard().toString().substring(6, 9);
+        String resourceCardTwo = deck.drawResourceCard().toString().substring(6, 9);
 
         goldDeckCard.setImage(pathBack(goldDeckCardOne));
         goldCard1.setImage(pathFront(goldCardOne));
@@ -641,19 +638,17 @@ public class Game extends Application implements View, Initializable {
 
     }
 
-    public void showAlert(String message){
+    public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("What's happening?");
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
     }
 
-
     @FXML
     void goBackFunct(MouseEvent event) {
         borderPane.setCenter(scrollPane);
     }
-
 
     @FXML
     void paneClickReset(MouseEvent event) {
@@ -677,15 +672,15 @@ public class Game extends Application implements View, Initializable {
 
     @FXML
     void showBack(KeyEvent event) {
-        if(event.getCode() == KeyCode.B && rPressed == 0){
+        if (event.getCode() == KeyCode.B && rPressed == 0) {
 
             rPressed = 1;
             if (fPressed == 1)
                 fPressed--;
 
-            String card1 =  handCard1URL.substring(43,46);
-            String card2 =  handCard2URL.substring(43,46);
-            String card3 =  handCard3URL.substring(43,46);
+            String card1 = handCard1URL.substring(43, 46);
+            String card2 = handCard2URL.substring(43, 46);
+            String card3 = handCard3URL.substring(43, 46);
 
             handCard1.setImage(pathBack(card1));
             handCard2.setImage(pathBack(card2));
@@ -695,16 +690,15 @@ public class Game extends Application implements View, Initializable {
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card3 + "b.jpg";
 
-        }
-        else if(event.getCode() == KeyCode.F && fPressed == 0){
+        } else if (event.getCode() == KeyCode.F && fPressed == 0) {
 
             fPressed = 1;
             if (rPressed == 1)
                 rPressed--;
 
-            String card1 =  handCard1URL.substring(42,45);
-            String card2 =  handCard2URL.substring(42,45);
-            String card3 =  handCard3URL.substring(42,45);
+            String card1 = handCard1URL.substring(42, 45);
+            String card2 = handCard2URL.substring(42, 45);
+            String card3 = handCard3URL.substring(42, 45);
 
             handCard1.setImage(pathFront(card1));
             handCard2.setImage(pathFront(card2));
@@ -716,14 +710,14 @@ public class Game extends Application implements View, Initializable {
         }
     }
 
-    public void setInitialCard(InitialCard initialCard1){
-        int x,y;
+    public void setInitialCard(InitialCard initialCard1) {
+        int x, y;
         int width = 111;
         int height = 74;
-        int position = 0; //0=up left, 1=up right, 2=bottom left, 3=bottom right
+        int position = 0; // 0=up left, 1=up right, 2=bottom left, 3=bottom right
         this.initialCardCard = initialCard1;
 
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + initialCard1.getIdCard() + "f.jpg";
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + initialCard1.getIdCard() + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         Image initialCardImage = new Image(imageStream);
@@ -737,28 +731,25 @@ public class Game extends Application implements View, Initializable {
 
         structurePane.getChildren().add(initialCard);
 
-        for (String s: initialCardCard.getFrontCorners()){
-            //System.out.println("\nCorner corrente: \n" + s);
-            if(s != null && position==0){
-                Rectangle rectangle = new Rectangle(x-82, y-44,width,height);
+        for (String s : initialCardCard.getFrontCorners()) {
+            // System.out.println("\nCorner corrente: \n" + s);
+            if (s != null && position == 0) {
+                Rectangle rectangle = new Rectangle(x - 82, y - 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==1){
-                Rectangle rectangle = new Rectangle(x+82, y-44,width,height);
+            } else if (s != null && position == 1) {
+                Rectangle rectangle = new Rectangle(x + 82, y - 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==2){
-                Rectangle rectangle = new Rectangle(x+82, y+44,width,height);
+            } else if (s != null && position == 2) {
+                Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
-            }
-            else if(s != null && position==3){
-                Rectangle rectangle = new Rectangle(x-82, y+44,width,height);
+            } else if (s != null && position == 3) {
+                Rectangle rectangle = new Rectangle(x - 82, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
                 structurePane.getChildren().add(rectangle);
@@ -768,7 +759,7 @@ public class Game extends Application implements View, Initializable {
 
         }
 
-        for(Rectangle rectangle: rectangleList){
+        for (Rectangle rectangle : rectangleList) {
             rectangle.setOnMouseEntered(event -> {
                 rectangle.setFill(Color.web("#808080", 0.8));
             });
@@ -780,30 +771,28 @@ public class Game extends Application implements View, Initializable {
 
         }
 
-
     }
 
-
-    public void setConnectionType(String tipoDiConnessione){
+    public void setConnectionType(String tipoDiConnessione) {
         connectionType.setText(tipoDiConnessione);
     }
 
-    public Image pathFront(String oggetto){
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
+    public Image pathFront(String oggetto) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
     }
 
-    public Image pathBack(String oggetto){
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/BackCards/" + oggetto + "b.jpg";
+    public Image pathBack(String oggetto) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + oggetto + "b.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
     }
 
-    public Image symbolPath(String oggetto){
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
+    public Image symbolPath(String oggetto) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
@@ -817,7 +806,6 @@ public class Game extends Application implements View, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
         handCard1.setFocusTraversable(true);
         handCard1.requestFocus();
         TestMain testMain = new TestMain(this);
@@ -826,8 +814,10 @@ public class Game extends Application implements View, Initializable {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        double hCenter = (structurePane.getPrefWidth() - scrollPane.getViewportBounds().getWidth()) / 2 / structurePane.getPrefWidth();
-        double vCenter = (structurePane.getPrefHeight() - scrollPane.getViewportBounds().getHeight()) / 2 / structurePane.getPrefHeight();
+        double hCenter = (structurePane.getPrefWidth() - scrollPane.getViewportBounds().getWidth()) / 2
+                / structurePane.getPrefWidth();
+        double vCenter = (structurePane.getPrefHeight() - scrollPane.getViewportBounds().getHeight()) / 2
+                / structurePane.getPrefHeight();
         scrollPane.setHvalue(hCenter);
         scrollPane.setVvalue(vCenter);
 
@@ -845,13 +835,11 @@ public class Game extends Application implements View, Initializable {
             scrollPane.setVvalue(scrollPane.getVvalue() - deltaY / structurePane.getHeight());
         });
 
-
         scrollPane.setOnMouseReleased(event -> {
-            //focus per funzione di back
+            // focus per funzione di back
             handCard1.setFocusTraversable(true);
             handCard1.requestFocus();
         });
-
 
     }
 }

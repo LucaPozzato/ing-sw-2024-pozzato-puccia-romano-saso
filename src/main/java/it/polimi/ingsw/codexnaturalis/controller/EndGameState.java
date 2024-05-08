@@ -10,9 +10,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteChair;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
+import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.network.events.EndGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
@@ -24,7 +23,7 @@ public class EndGameState extends ControllerState {
     public EndGameState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
         matchEnded();
-        // declareWinner();
+        declareWinner();
     }
 
     @Override
@@ -53,10 +52,11 @@ public class EndGameState extends ControllerState {
         throw new IllegalCommandException("Match has ended");
     }
 
-//    @Override
-//    public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException {
-//        throw new IllegalCommandException("Match has ended");
-//    }
+    // @Override
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException {
+    // throw new IllegalCommandException("Match has ended");
+    // }
 
     /**
      * This method's aim is to gather in a single data structure the pattern
@@ -134,9 +134,10 @@ public class EndGameState extends ControllerState {
      */
 
     private void setStrategies(Player player) throws IllegalCommandException {
-        if (super.game.getStrategyMap().get(player) != null) {
-            super.game.getStrategyMap().get(player).clear();
-        }
+        super.game.getStrategyMap().put(player, new ArrayList<>());
+        // if (super.game.getStrategyMap().get(player) != null) {
+        // super.game.getStrategyMap().get(player).clear();
+        // }
 
         List<Card> gatheredObj = gatherPatterns(player);
         gatheredObj.addAll(gatherTotem(player));
@@ -169,18 +170,36 @@ public class EndGameState extends ControllerState {
      */
     private void matchEnded() {
         try {
+            System.out.println("scores before match ended: " + super.game.getBoard().getActualScores());
+
+            System.out.println("match endeeeedddddd bitch");
             int virtualPoints = 0;
             for (Player player : super.game.getPlayers()) {
-                // fill player's strategy map with the pair <Strategy, ObjectiveCard>.
-                // Structure of the map: <Player,List<Pair<Strategy, ObjectiveCard>>
-                setStrategies(player);
+                try {
+                    // fill player's strategy map with the pair <Strategy, ObjectiveCard>.
+                    // Structure of the map: <Player,List<Pair<Strategy, ObjectiveCard>>
 
-                // for each player compute the points made from patterns and from totems
-                virtualPoints += super.game.getPatternsTotemPoints(player, super.game.getStrategyMap());
-                // virtual points becomes actual
-                super.game.getBoard().updateActualScore(player, virtualPoints);
-                virtualPoints = 0;
+                    setStrategies(player);
+
+                    // for each player compute the points made from patterns and from totems
+
+                    // BUG: virtualPoints not correct
+                    virtualPoints += super.game.getPatternsTotemPoints(player, super.game.getStrategyMap());
+
+                    System.out.println("new points from pattern: " + virtualPoints);
+                    // virtual points becomes actual
+                    super.game.getBoard().updateActualScore(player, virtualPoints);
+                    virtualPoints = 0;
+
+                    System.out.println("scores after update of player: " + player.getNickname()
+                            + super.game.getBoard().getActualScores());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            System.out.println("scores after match ended: " + super.game.getBoard().getActualScores());
+
         } catch (Exception e) {
             super.game.throwException(e.getMessage());
         }
@@ -193,9 +212,16 @@ public class EndGameState extends ControllerState {
      *
      */
     private void declareWinner() {
+        System.out.println("declared winner");
         Integer max = 0;
         List<Player> currentWinner = new ArrayList<>();
+
+        System.out.println("scores before declaration: " + super.game.getBoard().getActualScores());
+
         for (Player player : super.game.getPlayers()) {
+            System.out.println("satisfied patterns of the player: " + player.getNickname() + ", "
+                    + super.game.getStructureByPlayer(player).getSatisfiedPatterns());
+            // FIXME: satisfiedPatterns is always 0
             Integer pointsByPlayerX = super.game.getBoard().getActualPoints(player);
             if (pointsByPlayerX > max) {
                 max = pointsByPlayerX;
@@ -211,23 +237,27 @@ public class EndGameState extends ControllerState {
                     currentWinner.add(player);
                 }
             }
-            if (currentWinner.size() == 1) {
-                System.out.println("The winner is: " + currentWinner.getFirst().getNickname());
-            } else if (currentWinner.size() > 1) {
-                System.out.println("The winners are: ");
-                for (Player coWinner : currentWinner) {
-                    System.out.println(" " + coWinner.getNickname());
-                }
-            }
         }
 
-        Event event = new EndGameEvent("EndGame", game.getBoard(), currentWinner );
+        if (currentWinner.size() == 1) {
+            System.out.println("The winner is: " + currentWinner.getFirst().getNickname());
+        } else if (currentWinner.size() > 1) {
+            System.out.println("The winners are: ");
+            for (Player coWinner : currentWinner) {
+                System.out.println(" " + coWinner.getNickname());
+            }
+        } else {
+            System.out.println("No winner");
+        }
+
+        System.out.println("final scores: " + super.game.getBoard().getActualScores());
+
+        Event event = new EndGameEvent("End", game.getBoard(), currentWinner);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

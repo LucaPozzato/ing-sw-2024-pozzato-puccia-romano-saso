@@ -154,8 +154,9 @@ public class MiniModel {
     public void setPlayers(List<Player> players) {
         this.players = players;
         view.updatePlayers(players);
+        // BUG: players should not have nickname == null
         for (Player p : players) {
-            if (p.getNickname().equals(nickname)) {
+            if (p != null && p.getNickname() != null && p.getNickname().equals(nickname)) {
                 this.myPlayer = p;
                 view.updateMyPlayer(p);
                 break;
@@ -202,6 +203,7 @@ public class MiniModel {
 
     public void setWinner(List<Player> winner) {
         this.winner = winner;
+        view.updateWinners(winner);
     }
 
 }

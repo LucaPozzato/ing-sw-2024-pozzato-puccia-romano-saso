@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
+import javafx.util.Pair;
 
 public class PlacedCardState extends ControllerState {
     // TODO: remove regionMatches and use equals -> code more readable
@@ -43,14 +44,18 @@ public class PlacedCardState extends ControllerState {
                 break;
             }
         }
+
+        if (!player.equals(game.getCurrentPlayer()))
+            throw new IllegalCommandException("Not your turn");
+
         // FIXME: throw all necessary exceptions
 
         if (father.getIdCard().equals(super.game.getHandByPlayer(player).getInitCard().getIdCard()))
             father = super.game.getHandByPlayer(player).getInitCard();
         else {
-            for (Card card : super.game.getHandByPlayer(player).getCardsHand()) {
-                if (card.getIdCard().equals(father.getIdCard())) {
-                    father = card;
+            for (Pair<Card, Boolean> card : super.game.getStructureByPlayer(player).getPlacedCards()) {
+                if (card.getKey().getIdCard().equals(father.getIdCard())) {
+                    father = card.getKey();
                     break;
                 }
             }
@@ -65,13 +70,10 @@ public class PlacedCardState extends ControllerState {
 
         // BUG: exceptions are lost
 
-        if (!player.equals(game.getCurrentPlayer()))
-            throw new IllegalCommandException("Not your turn");
-
         Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
 
-        removeFromHand(placeThis);
         structure.placeCard(father, placeThis, position, frontUp);
+        removeFromHand(placeThis);
 
         // Compute the points which are direct consequence of card's placement:
 
@@ -82,11 +84,14 @@ public class PlacedCardState extends ControllerState {
         int pointFromCard = structure.getPointsFromPlayableCard(placeThis, frontUp);
         updateActualPoints(pointFromCard);
 
-        if (game.getBoard().getActualPoints(player) >= 20)
+        if (game.getBoard().getActualPoints(player) >= 20 && !game.isLastTurn()) {
+            System.out.println("before setting last turn");
             game.setLastTurn();
+            System.out.println("after setting last turn: " + game.isLastTurn());
+        }
 
         // BUG: currentPlayer is null?
-        Event event = new PlaceEvent("Draw", game.getStructures(), game.getHands());
+        Event event = new PlaceEvent("Draw", game.getStructures(), game.getHands(), game.getBoard());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -101,7 +106,7 @@ public class PlacedCardState extends ControllerState {
 
     @Override
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        throw new IllegalCommandException("Card already drawn in last turn");
+        throw new IllegalCommandException("Cannot draw a card now");
     }
 
     // @Override

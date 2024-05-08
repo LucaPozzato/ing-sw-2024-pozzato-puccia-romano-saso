@@ -12,10 +12,16 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Triplet;
 public class ConcreteStair implements Strategy {
 
     /**
-     * The method uses the cardMatrix and the wholeCells card attribute in order to identify the 3 cards which compose the stair pattern in a 3x3 matrix. <b>
-     * Than the reduced matrix computed using radius is visited by letting scroll the 3x3 matrix with the highlighted cells on it and counting the matches in patternFound.
-     * @param structure the player structure to get the cardmatrix and the cardToCoordinates
-     * @param objCard the stair objective we want to look for on the player structure
+     * The method uses the cardMatrix and the wholeCells card attribute in order to
+     * identify the 3 cards which compose the stair pattern in a 3x3 matrix. <b>
+     * Than the reduced matrix computed using radius is visited by letting scroll
+     * the 3x3 matrix with the highlighted cells on it and counting the matches in
+     * patternFound.
+     * 
+     * @param structure the player structure to get the cardmatrix and the
+     *                  cardToCoordinates
+     * @param objCard   the stair objective we want to look for on the player
+     *                  structure
      * @return the number of points made due to objective satisfaction
      * @throws IllegalCommandException
      */
@@ -23,9 +29,11 @@ public class ConcreteStair implements Strategy {
     public int compute(Structure structure, Card objCard) throws IllegalCommandException {
         Map<Card, Triplet<Integer, Boolean, Boolean>> cardToCoordinate = structure.getCardToCoordinate();
         Card[][] matrix = structure.getCardMatrix();
+        System.out.println("Esco qua: 1");
         int radius = structure.getRadius(structure.getCoordinateToCard());
+        System.out.println("Esco qua: 2");
         int[] wholeCells = objCard.getWholeCells();
-
+        System.out.println("Esco qua: 3");
 
         int patternsFound = 0;
         for (int i = 40 + radius; i >= 40 - radius + 2; i--) {
@@ -45,6 +53,7 @@ public class ConcreteStair implements Strategy {
                         && lower.getSymbol().equals(objCard.getMustHave())
                         && !cardToCoordinate.get(lower).getVisited()) {
 
+                    System.out.println("Pattern Trovato");
                     cardToCoordinate.get(upper).setVisited(true);
                     cardToCoordinate.get(middle).setVisited(true);
                     cardToCoordinate.get(lower).setVisited(true);

@@ -21,8 +21,11 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private final MiniModel miniModel;
 
     /**
-     * costructor of the RmiClient, sets the server to which the client connect, the client interface choice and
-     * instantiates the MiniModel and the two queues that will manage the events and the commands
+     * costructor of the RmiClient, sets the server to which the client connect, the
+     * client interface choice and
+     * instantiates the MiniModel and the two queues that will manage the events and
+     * the commands
+     * 
      * @param server
      * @param isCli
      * @throws RemoteException
@@ -36,10 +39,12 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     /**
-     * this method is called right after the creation of the client by the clientMain
+     * this method is called right after the creation of the client by the
+     * clientMain
      * it connects the client to the server
      * starts two threads to process events and commands
      * starts the cli or the gui according to the client choice
+     * 
      * @throws RemoteException
      */
     public void run() throws RemoteException {
@@ -54,9 +59,11 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     /**
-     * this method is called by the RmiServer to send an event, which is an update in the model.
+     * this method is called by the RmiServer to send an event, which is an update
+     * in the model.
      * it adds the event to a queue in order to return immediately
      * the event will later be processed by another thread
+     * 
      * @param event
      * @throws RemoteException
      */
@@ -75,8 +82,10 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
     /**
      * this method creates an infinite loop in which it
-     * gets the lock on the client and if the queue is Empty waits for an event to be added
-     * once awoken, removes the event from the queue, synchronizes on the MiniModel and
+     * gets the lock on the client and if the queue is Empty waits for an event to
+     * be added
+     * once awoken, removes the event from the queue, synchronizes on the MiniModel
+     * and
      * calls the execution method in the event doJob passing the MiniModel
      */
     public void processEvent() {
@@ -95,15 +104,16 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
 
     /**
-     * this method is called by the [view?] to send to the server a command taken by input.
+     * this method is called by the [view?] to send to the server a command taken by
+     * input.
      * it adds the command to a queue in order to return immediately
      * the event will later be processed by another thread
+     * 
      * @param command
      * @throws RemoteException
      */
@@ -123,8 +133,10 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
     /**
      * this method creates an infinite loop that
-     * gets the lock on the client and if the queue is Empty waits for a command to be added
-     * once awoken, removes the command from the queue, synchronizes on the server and
+     * gets the lock on the client and if the queue is Empty waits for a command to
+     * be added
+     * once awoken, removes the command from the queue, synchronizes on the server
+     * and
      * calls the method exposed by the server receiveCommand() passing the command
      */
     public void processCommand() {
@@ -141,13 +153,13 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
 
     /**
      * this creates a Cli view and runs it
+     * 
      * @throws RemoteException
      */
     private void runCli() throws RemoteException {
@@ -158,6 +170,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
 
     /**
      * creates a Gui view and runs it
+     * 
      * @throws RemoteException
      */
     private void runGui() throws RemoteException {

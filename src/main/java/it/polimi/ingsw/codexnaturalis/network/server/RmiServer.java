@@ -93,7 +93,6 @@ public class RmiServer implements VirtualServer {
                 System.out.println("> " + commandName[commandName.length - 1] + " executed");
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
@@ -154,7 +153,6 @@ public class RmiServer implements VirtualServer {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }

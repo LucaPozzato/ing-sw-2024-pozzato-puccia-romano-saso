@@ -25,17 +25,23 @@ public class Tui implements View {
     private InputVerifier inputVerifier;
     private Painter painter;
     private List<Player> players;
+    private List<Player> winners;
     private Player myPlayer;
     private Boolean chooseStage;
     private Boolean initialStage;
     private VirtualClient client;
+
+    // BUG: input is deleted after new events are received
+    // BUG: fix input verification -> sometimes index out of bounds or incorrect
+    // error
+    // BUG: have events filtered by the client -> join/create/choose phase, error
+    // messages, ...
 
     public Tui(MiniModel miniModel, VirtualClient client) {
         inputVerifier = new InputVerifier(miniModel);
         this.client = client;
         drawer = new Drawer();
         painter = new Painter();
-
         terminalPrinter = new TerminalPrinter();
         players = new ArrayList<>();
         initialStage = true;
@@ -67,21 +73,33 @@ public class Tui implements View {
     @Override
     public void updateState(String state) {
         terminalPrinter.updateCurrentState(state);
+        String alert = "";
         // state = state.toUpperCase();
-        if (state.equals("Wait")) {
-            terminalPrinter.updateAlert("Warning: waiting for other players to join ...");
-            initialStage = true;
-            print();
-            terminalPrinter.clearAlert();
-        } else if (state.equals("Choose")) {
-            initialStage = false;
-            chooseStage = true;
-            print();
-        } else {
-            initialStage = false;
-            chooseStage = false;
-            print();
+        switch (state) {
+            case "Wait":
+                alert = "Waiting for other players to join ...";
+                initialStage = true;
+                break;
+            case "Choose":
+                initialStage = false;
+                chooseStage = true;
+                print();
+                break;
+            case "End":
+                alert = "Congratulations to the winners: ";
+                for (Player player : winners) {
+                    alert += player.getNickname() + ", ";
+                }
+                alert = alert.substring(0, alert.length() - 2);
+                break;
+            default:
+                initialStage = false;
+                chooseStage = false;
+                break;
         }
+        terminalPrinter.updateAlert(alert);
+        print();
+        terminalPrinter.clearAlert();
     }
 
     @Override
@@ -105,6 +123,12 @@ public class Tui implements View {
             playersString.add(player.getNickname());
         }
         terminalPrinter.updatePlayers(playersString);
+        print();
+    }
+
+    @Override
+    public void updateWinners(List<Player> winners) {
+        this.winners = winners;
         print();
     }
 
@@ -287,12 +311,12 @@ public class Tui implements View {
                             System.exit(0);
                             break;
 
-                        case "CHAT":
+                        case "CHAT", "C":
                             if (!initialStage && !chooseStage)
                                 printChat();
                             break;
 
-                        case "NEXT":
+                        case "NEXT", "N":
                             if (!initialStage && !chooseStage)
                                 printNextPlayerView();
                             break;

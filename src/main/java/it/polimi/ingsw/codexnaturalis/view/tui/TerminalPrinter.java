@@ -49,13 +49,11 @@ public class TerminalPrinter {
     public void updateStructures(List<String> structures) {
         if (structure != null)
             this.structures = structures;
-        indexPlayer = indexMyPlayer;
     }
 
     public void updateHands(List<List<String>> hands) {
         if (hands != null)
             this.hands = hands;
-        indexPlayer = indexMyPlayer;
     }
 
     public void updateBoard(List<String> board) {
@@ -83,7 +81,6 @@ public class TerminalPrinter {
     public void updateResources(List<String> resources) {
         if (resources != null)
             this.resourcesList = resources;
-        indexPlayer = indexMyPlayer;
     }
 
     public void updateAlert(String alert) {
@@ -225,6 +222,7 @@ public class TerminalPrinter {
 
     public void updateMyPlayer(Integer index) {
         indexMyPlayer = index;
+        indexPlayer = index;
     }
 
     public void printNext() {

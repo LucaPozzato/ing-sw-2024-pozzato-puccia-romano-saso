@@ -1,13 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
-import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
-import it.polimi.ingsw.codexnaturalis.model.game.Game;
-import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
-import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
-import it.polimi.ingsw.codexnaturalis.network.commands.Command;
-import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,6 +8,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import it.polimi.ingsw.codexnaturalis.model.game.Game;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
+import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
     private Game model;
@@ -37,6 +36,7 @@ public class SocketServer implements VirtualServer, Runnable {
      * this method is called by the client to send a command taken by input
      * it adds the command to a queue in order to return immediately
      * the command will later be processed by another thread
+     * 
      * @param command
      * @throws RemoteException
      */
@@ -57,7 +57,8 @@ public class SocketServer implements VirtualServer, Runnable {
 
     /**
      * this method creates an infinite loop in which it
-     * gets the lock on the server and if the queue is Empty waits for a command to be added
+     * gets the lock on the server and if the queue is Empty waits for a command to
+     * be added
      * once awoken, removes the event from the queue and
      * calls the execution method in the event execute passing the controller
      */
@@ -70,7 +71,8 @@ public class SocketServer implements VirtualServer, Runnable {
                         System.out.println("socket server waiting");
                         this.wait();
                         System.out.println(
-                                "socket server thread command queue: " + System.identityHashCode(this.commandEntryQueue));
+                                "socket server thread command queue: "
+                                        + System.identityHashCode(this.commandEntryQueue));
                         System.out.println("socket server woken up");
                     }
                     command = this.commandEntryQueue.poll();
@@ -78,15 +80,16 @@ public class SocketServer implements VirtualServer, Runnable {
                 command.execute(model.getState());
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
 
     /**
-     * this method is called by the Model to send to the client an event, which is an update on the model
+     * this method is called by the Model to send to the client an event, which is
+     * an update on the model
      * it adds the event to a queue in order to return immediately
      * the event will later be processed by another thread
+     * 
      * @param event
      * @throws RemoteException
      */
@@ -105,9 +108,12 @@ public class SocketServer implements VirtualServer, Runnable {
 
     /**
      * this method creates an infinite loop that
-     * gets the lock on the server and if the queue is Empty waits for an event to be added
-     * once awoken, removes the event from the queue, synchronizes on the list of client skeletons and
-     * for each client skeleton it calls the method exposed by the client skeleton receiveEvent(), passing the event
+     * gets the lock on the server and if the queue is Empty waits for an event to
+     * be added
+     * once awoken, removes the event from the queue, synchronizes on the list of
+     * client skeletons and
+     * for each client skeleton it calls the method exposed by the client skeleton
+     * receiveEvent(), passing the event
      */
     public void processEvent() {
         while (true) {
@@ -126,13 +132,13 @@ public class SocketServer implements VirtualServer, Runnable {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
 
     /**
      * register the client socket in its list
+     * 
      * @param client
      */
     @Override
@@ -145,6 +151,7 @@ public class SocketServer implements VirtualServer, Runnable {
 
     /**
      * TODO
+     * 
      * @param client
      */
     public void disconnectClient(VirtualClient client) {

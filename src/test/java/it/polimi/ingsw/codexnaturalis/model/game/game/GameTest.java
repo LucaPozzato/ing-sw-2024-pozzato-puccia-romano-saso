@@ -20,10 +20,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.model.game.strategies.Strategy;
-import javafx.util.Pair;
-
-import javax.security.auth.login.CredentialNotFoundException;
+import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
+import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class GameTest {
     @Test
@@ -78,16 +76,14 @@ public class GameTest {
         }
 
         try {
-            game.getStrategyMap().put(player, new ArrayList<Pair<Strategy, Card>>());
+            // game.getStrategyMap().put(player, new ArrayList<Pair<Strategy, Card>>());
             // endState.setStrategies(player);
-            EndGameState endState = new EndGameState(game, null, null);
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(5, game.getBoard().getActualPoints(player));
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-
-
 
     // [x] chair pattern check
     // [x] mixed chair and stair pattern which fails due to share of a card among

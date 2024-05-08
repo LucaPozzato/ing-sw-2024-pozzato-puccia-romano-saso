@@ -39,23 +39,16 @@ public class DrawnCardState extends ControllerState {
     @Override
     public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
             throws IllegalCommandException {
-        throw new IllegalCommandException("Card already placed");
+        throw new IllegalCommandException("Cannot place card now");
     }
 
     @Override
     public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
+        Boolean matchEnded = false;
+
         for (Player p : super.game.getPlayers()) {
             if (p.getNickname().equals(player.getNickname())) {
                 player = p;
-                break;
-            }
-        }
-
-        // BUG: fromDeck is not checked and card is gonna throw exception when
-        // c.getIdCard().equals(card.getIdCard()) -> card = null
-        for (Card c : super.game.getBoard().getUncoveredCards()) {
-            if (c.getIdCard().equals(card.getIdCard())) {
-                card = c;
                 break;
             }
         }
@@ -64,12 +57,22 @@ public class DrawnCardState extends ControllerState {
             throw new IllegalCommandException("Not your turn");
         }
 
+        if (fromDeck == null || fromDeck.equals(""))
+            for (Card c : super.game.getBoard().getUncoveredCards()) {
+                if (c.getIdCard().equals(card.getIdCard())) {
+                    card = c;
+                    break;
+                }
+            }
+        else
+            card = null;
+
         updateDeck(card, fromDeck);
-        nextTurn();
+        matchEnded = nextTurn();
 
         // FIXME: needs to set the next player
-        Event event = new DrawEvent("Place", game.getHands(), game.getBoard(), game.getTurnCounter(),
-                game.isLastTurn());
+        Event event = new DrawEvent("Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(), game.getBoard(),
+                game.getTurnCounter(), game.isLastTurn());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -77,7 +80,10 @@ public class DrawnCardState extends ControllerState {
             e.printStackTrace();
         }
 
-        super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
+        if (matchEnded)
+            super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+        else
+            super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }
 
     // @Override
@@ -90,16 +96,15 @@ public class DrawnCardState extends ControllerState {
     // }
 
     private void updateDeck(Card card, String fromDeck) throws IllegalCommandException {
-        Card tempCard = null;
-
-        if (super.game.getDeck().getGoldDeck().isEmpty() && super.game.getDeck().getResourceDeck().isEmpty()) {
+        if (super.game.getDeck().getGoldDeck().isEmpty() && super.game.getDeck().getResourceDeck().isEmpty()
+                && !super.game.isLastTurn()) {
             super.game.setLastTurn();
         }
 
         // if chosen deck is gold then draw from gold deck
         if (fromDeck.equals("GOLD")) {
             try {
-                tempCard = super.game.getDeck().drawGoldCard();
+                card = super.game.getDeck().drawGoldCard();
             } catch (EmptyStackException e) {
                 throw new IllegalCommandException("No more gold cards in the deck");
             }
@@ -107,7 +112,7 @@ public class DrawnCardState extends ControllerState {
         // if chosen deck is resource then draw from resource deck
         else if (fromDeck.equals("RESOURCE")) {
             try {
-                tempCard = super.game.getDeck().drawResourceCard();
+                card = super.game.getDeck().drawResourceCard();
             } catch (EmptyStackException e) {
                 throw new IllegalCommandException("No more resource cards in the deck");
             }
@@ -120,30 +125,32 @@ public class DrawnCardState extends ControllerState {
             // draw a new card from the same deck as the chosen card and add it to the
             // uncovered cards
             if (card instanceof GoldCard) {
-                tempCard = super.game.getDeck().drawGoldCard();
-                super.game.getBoard().addUncoveredCard(tempCard);
+                super.game.getBoard().addUncoveredCard(super.game.getDeck().drawGoldCard());
             } else if (card instanceof ResourceCard) {
-                tempCard = super.game.getDeck().drawResourceCard();
-                super.game.getBoard().addUncoveredCard(tempCard);
+                super.game.getBoard().addUncoveredCard(super.game.getDeck().drawResourceCard());
             }
         }
         // add card in the hand of the player
-        super.game.getHandByPlayer(super.game.getCurrentPlayer()).addCard(tempCard);
+        super.game.getHandByPlayer(super.game.getCurrentPlayer()).addCard(card);
 
     }
 
-    private void nextTurn() {
-        // BUG: currentPlayer after end of turn is not set correctly
-        super.game.setCurrentPlayer(super.game.getNextPlayer());
-        if (super.game.isLastTurn()) {
-            if (super.game.getTurnCounter() >= 0)
-                // [ ] test the >= 0
-                super.game.removeTurn();
-            else
-                super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
-        }
+    private Boolean nextTurn() {
         List<Player> players = super.game.getPlayers();
-        super.game.setNextPlayer(players.get((players.indexOf(super.game.getCurrentPlayer())
+        super.game.setCurrentPlayer(players.get((players.indexOf(super.game.getCurrentPlayer())
                 + 1) % players.size()));
+
+        if (super.game.isLastTurn()) {
+            if (super.game.getTurnCounter() > 0) {
+                // [ ] test the >= 0
+                System.out.println("turn counter before remove " + super.game.getTurnCounter());
+                super.game.removeTurn();
+                System.out.println("turn counter after remove " + super.game.getTurnCounter());
+            } else {
+                System.out.println("end game state");
+                return true;
+            }
+        }
+        return false;
     }
 }

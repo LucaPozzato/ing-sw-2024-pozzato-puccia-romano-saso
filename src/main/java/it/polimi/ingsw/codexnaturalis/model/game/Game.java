@@ -139,7 +139,7 @@ public class Game implements Serializable {
 
     public void setLastTurn() {
         this.lastTurn = true;
-        this.turnCounter = players.size() + (players.size() - players.indexOf(currentPlayer) + 1);
+        this.turnCounter = players.size() + players.size() - (players.indexOf(currentPlayer) + 1);
     }
 
     public void setState(ControllerState state) {
@@ -210,6 +210,7 @@ public class Game implements Serializable {
                 getStructureByPlayer(player).getCardToCoordinate().get(card).setVisited(false);
             }
         }
+
         return points;
     }
 
