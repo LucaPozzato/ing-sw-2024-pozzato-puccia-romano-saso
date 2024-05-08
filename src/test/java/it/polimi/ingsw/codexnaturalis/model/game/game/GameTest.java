@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.model.game.game;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class GameTest {
     void getPatternsTotemPointsTest() {
         Game game = new Game(1, null, null);
         Player player = new Player();
+
 
         Structure structure = new Structure();
         ResourceParser parser = new ResourceParser();
@@ -60,6 +62,7 @@ public class GameTest {
         game.setBoard(board);
         board = game.getBoard();
         board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
 
         // Piazzo le carte sulla board
         try {
@@ -79,9 +82,7 @@ public class GameTest {
             game.getStrategyMap().put(player, new ArrayList<Pair<Strategy, Card>>());
             // endState.setStrategies(player);
             EndGameState endState = new EndGameState(game, null, null);
-
-            // TODO: determine why this call gives the wrong result
-            // System.out.println(game.getBoard().getActualPoints(player));
+            assertEquals(5, game.getBoard().getActualPoints(player));
         } catch (Exception e) {
             fail(e.getMessage());
         }

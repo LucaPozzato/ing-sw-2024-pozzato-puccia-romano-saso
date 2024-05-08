@@ -179,7 +179,6 @@ public class EndGameState extends ControllerState {
                 virtualPoints += super.game.getPatternsTotemPoints(player, super.game.getStrategyMap());
                 // virtual points becomes actual
                 super.game.getBoard().updateActualScore(player, virtualPoints);
-
                 virtualPoints = 0;
             }
         } catch (Exception e) {

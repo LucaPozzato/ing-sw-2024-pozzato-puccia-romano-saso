@@ -205,12 +205,11 @@ public class Game implements Serializable {
             // Points will contain the times an objective is satisfied * the number of
             // points linked to that objective
             points += pair.getKey().compute(getStructureByPlayer(player), pair.getValue());
-            // Clears the set visited attribute in the map and prepares from another search
+            // Clears the set visited attribute in the map and prepares for another search
             for (Card card : getStructureByPlayer(player).getCardToCoordinate().keySet()) {
                 getStructureByPlayer(player).getCardToCoordinate().get(card).setVisited(false);
             }
         }
-        System.out.println(points);
         return points;
     }
 
