@@ -9,10 +9,10 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 public class CreateGameCommand extends Command {
     @Serial
     // private static final long serialVersionUID = 380164927530291L;
-    String nickName;
-    Color color;
-    Integer gameId;
-    Integer numOfPlayers;
+    private String nickName;
+    private Color color;
+    private Integer gameId;
+    private Integer numOfPlayers;
 
     public CreateGameCommand(Integer gameId, String nickName, Color color, Integer numOfPlayers) {
         this.nickName = nickName;
@@ -24,6 +24,9 @@ public class CreateGameCommand extends Command {
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
         controller.initialized(nickName, color, numOfPlayers);
-        // FIXME: gameID should be used in case of multiple games
+    }
+
+    public int getGameId(){
+        return this.gameId;
     }
 }

@@ -10,11 +10,14 @@ import java.io.Serial;
 public class DrawCommand extends Command {
     @Serial
     private static final long serialVersionUID = 572903618492730L;
-    Player player;
-    Card card;
-    String fromDeck;
+    private Player player;
+    private Card card;
+    private String fromDeck;
+    private Integer gameId;
 
-    public DrawCommand(Player player, Card card, String fromDeck) {
+
+    public DrawCommand(Integer gameId, Player player, Card card, String fromDeck) {
+        this.gameId =gameId;
         this.player = player;
         this.card = card;
         this.fromDeck = fromDeck;
@@ -25,4 +28,7 @@ public class DrawCommand extends Command {
         controller.drawnCard(player, card, fromDeck);
     }
 
+    public int getGameId(){
+        return this.gameId;
+    }
 }

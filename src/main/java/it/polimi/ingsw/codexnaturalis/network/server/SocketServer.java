@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
@@ -17,6 +14,7 @@ import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
+    //private Map<Integer,Game> games;
     private Game model;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
@@ -26,6 +24,7 @@ public class SocketServer implements VirtualServer, Runnable {
         this.clients = new ArrayList<>();
         this.commandEntryQueue = new LinkedList<Command>();
         this.eventExitQueue = new LinkedList<Event>();
+        //this.games = new HashMap<>();
     }
 
     public void setModel(Game model) {

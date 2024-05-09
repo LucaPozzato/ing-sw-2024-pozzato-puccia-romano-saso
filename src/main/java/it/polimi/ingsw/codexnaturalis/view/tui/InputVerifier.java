@@ -61,7 +61,8 @@ public class InputVerifier {
 
                 objCard = (ObjectiveCard) miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
                         .getChooseBetweenObj().get(objIndex);
-                return new ChooseCommand(player, side, objCard);
+                //TODO: gameid
+                return new ChooseCommand(0, player, side, objCard);
 
             case "PLACE":
                 Card placeThis = null;
@@ -103,7 +104,8 @@ public class InputVerifier {
                     throw new IllegalCommandException("Father absent in structure");
                 }
 
-                return new PlaceCommand(player, father, placeThis, parameters[2], Boolean.parseBoolean(parameters[3]));
+                //TODO: gameid
+                return new PlaceCommand(0, player, father, placeThis, parameters[2], Boolean.parseBoolean(parameters[3]));
 
             case "DRAW":
                 Card card = null;
@@ -140,7 +142,8 @@ public class InputVerifier {
                     throw new IllegalCommandException("Invalid card ID");
                 }
 
-                return new DrawCommand(player, card, fromDeck);
+                //TODO: gameid
+                return new DrawCommand(0, player, card, fromDeck);
 
             case "JOIN":
                 color = null;

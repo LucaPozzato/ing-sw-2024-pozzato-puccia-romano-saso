@@ -13,6 +13,7 @@ import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
 public class RmiServer implements VirtualServer {
+    //private Map<Integer,Game> games;
     private Game model;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
@@ -29,6 +30,7 @@ public class RmiServer implements VirtualServer {
         this.clients = new ArrayList<>();
         this.commandEntryQueue = new LinkedList<>();
         this.eventExitQueue = new LinkedList<>();
+        //this.games = new HashMap<>();
     }
 
     /**

@@ -22,6 +22,9 @@ public class JoinGameCommand extends Command {
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
         controller.joinGame(nickName, color);
-        // FIXME: gameID should be used in case of multiple games
+    }
+
+    public int getGameId(){
+        return this.gameId;
     }
 }

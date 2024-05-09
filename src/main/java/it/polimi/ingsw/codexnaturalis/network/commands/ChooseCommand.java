@@ -10,11 +10,13 @@ import java.io.Serial;
 public class ChooseCommand extends Command {
     @Serial
     private static final long serialVersionUID = 923874056382019L;
-    Player player;
-    Boolean side;
-    ObjectiveCard objCard;
+    private Integer gameId;
+    private Player player;
+    private Boolean side;
+    private ObjectiveCard objCard;
 
-    public ChooseCommand(Player player, Boolean side, ObjectiveCard objCard) {
+    public ChooseCommand(Integer gameId, Player player, Boolean side, ObjectiveCard objCard) {
+        this.gameId =gameId;
         this.player = player;
         this.side = side;
         this.objCard = objCard;
@@ -23,5 +25,9 @@ public class ChooseCommand extends Command {
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
         controller.chooseSetUp(player, side, objCard);
+    }
+
+    public int getGameId(){
+        return this.gameId;
     }
 }

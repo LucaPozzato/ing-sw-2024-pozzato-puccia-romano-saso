@@ -9,7 +9,7 @@ import java.io.Serial;
 public class ChatCommand extends Command {
     @Serial
     private static final long serialVersionUID = 38011127530291L;
-
+    private int gameId;
     private String message;
     private Player sender;
     private Player receiver;
@@ -17,7 +17,8 @@ public class ChatCommand extends Command {
     //TODO: can the view get the timeStamp information?
     //private long timeStamp;
 
-    public ChatCommand (String message, Player sender, Player receiver/*, long timeStamp*/) {
+    public ChatCommand (Integer gameId, String message, Player sender, Player receiver/*, long timeStamp*/) {
+        this.gameId = gameId;
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
@@ -30,5 +31,9 @@ public class ChatCommand extends Command {
         // the method of the controller has to create a new ChatMessage with these information and add it to the chat
         // then create a new Event with the whole chat and send it
         // it should be possible to send messages in each state but for the IniState and maybe the EndGameState
+    }
+
+    public int getGameId(){
+        return this.gameId;
     }
 }
