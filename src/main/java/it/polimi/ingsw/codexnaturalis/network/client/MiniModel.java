@@ -141,11 +141,7 @@ public class MiniModel {
     public void setChat(Chat chat) {
         this.chat = chat;
         //FIXME:trycatch perchè piange intellij
-        try {
             view.updateChat(chat);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void setGameId(int gameId) {
