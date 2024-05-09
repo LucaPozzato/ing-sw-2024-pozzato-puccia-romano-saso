@@ -13,11 +13,13 @@ import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
 public class SocketSkeleton implements VirtualClient, Runnable {
 
+    private final String clientId;
     private final VirtualServer server;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
 
     public SocketSkeleton(VirtualServer server, Socket socket) throws IOException {
+        this.clientId = null;
         this.server = server;
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
@@ -67,5 +69,10 @@ public class SocketSkeleton implements VirtualClient, Runnable {
             }
 
         }
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 }

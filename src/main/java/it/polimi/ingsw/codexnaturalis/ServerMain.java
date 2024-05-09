@@ -26,10 +26,13 @@ public class ServerMain {
             new Thread(socketServer).start();
             rmiServer.run();
 
+            // Map<Integer,Game> games = new HashMap<>;
             Game game = new Game(0, (RmiServer) rmiServer, socketServer);
-            // rmiServer.setController(controller);
+            // rmiServer.setGames(games);
+            // rmiServer.setSocketServer(socketServer);
             rmiServer.setModel(game);
-            // socketServer.setController(controller);
+            // socketServer.setGames(games);
+            // socketServer.setRmiServer(rmiServer);
             socketServer.setModel(game);
 
         } catch (RemoteException e) {

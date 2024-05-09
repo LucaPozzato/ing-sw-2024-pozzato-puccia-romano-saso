@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Tui implements View {
     // messages, ...
 
     public Tui(MiniModel miniModel, VirtualClient client) {
-        inputVerifier = new InputVerifier(miniModel);
+        inputVerifier = new InputVerifier(miniModel, client);
         this.client = client;
         drawer = new Drawer();
         painter = new Painter();
@@ -55,7 +56,6 @@ public class Tui implements View {
         readThread.start();
         terminalPrinter.updateAlert("Create or join a game to start playing");
         terminalPrinter.printInitialStage();
-        terminalPrinter.clearAlert();
     }
 
     @Override
@@ -65,9 +65,7 @@ public class Tui implements View {
 
     @Override
     public void updateError(String error) {
-        terminalPrinter.updateAlert("Error: " + error);
-        print();
-        terminalPrinter.clearAlert();
+        printAlert("Error" + error);
     }
 
     @Override
@@ -77,7 +75,7 @@ public class Tui implements View {
         // state = state.toUpperCase();
         switch (state) {
             case "Wait":
-                alert = "Waiting for other players to join ...";
+                alert = "Warning: waiting for other players to join ...";
                 initialStage = true;
                 break;
             case "Choose":
@@ -97,9 +95,7 @@ public class Tui implements View {
                 chooseStage = false;
                 break;
         }
-        terminalPrinter.updateAlert(alert);
-        print();
-        terminalPrinter.clearAlert();
+        printAlert(alert);
     }
 
     @Override
@@ -299,12 +295,37 @@ public class Tui implements View {
 
     class ReadThread extends Thread {
         public void run() {
+            String[] cmd = { "/bin/sh", "-c", "stty raw </dev/tty" };
+            try {
+                Runtime.getRuntime().exec(cmd);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             try {
                 while (true) {
                     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+                    String move = "";
 
-                    String move = input.readLine();
+                    while (true) {
+                        int c = input.read();
+                        while (c != 13) {
+                            if (c == 3)
+                                System.exit(0);
+                            else if (c == 127)
+                                move = move.substring(0, move.length() - 1);
+                            else
+                                move += Character.toString((char) c);
+                            terminalPrinter.updateInput(move);
+                            print();
+                            c = input.read();
+                        }
+                        break;
+                    }
+
+                    terminalPrinter.clearInput();
                     move = move.toUpperCase();
+
                     // BUG: username is set to capital when it should be case insensitive
                     switch (move) {
                         case "QUIT", "Q":
@@ -331,17 +352,13 @@ public class Tui implements View {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                terminalPrinter.updateAlert("Error: " + e.getMessage());
-                                print();
-                                terminalPrinter.clearAlert();
+                                printAlert("Error: " + e.getMessage());
                             }
                             break;
                     }
                 }
             } catch (Exception e) {
-                terminalPrinter.updateAlert(e.getMessage());
-                print();
-                terminalPrinter.clearAlert();
+                printAlert("Error: " + e.getMessage());
             }
         }
     }

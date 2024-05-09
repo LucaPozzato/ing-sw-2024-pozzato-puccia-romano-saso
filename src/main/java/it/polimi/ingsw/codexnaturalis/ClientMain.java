@@ -17,6 +17,13 @@ import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 public class ClientMain {
     public static void main(String[] args) {
         System.out.println("\033[2J\033[1;1H");
+        String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
+
+        try {
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         try {
@@ -112,6 +119,7 @@ public class ClientMain {
             }
         }
     }
+
 }
 
 // // TODO: I believe we can force the serverip and port as default values.

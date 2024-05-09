@@ -401,31 +401,32 @@ public class Drawer {
         switch (card.getShape()) {
             case "STAIRS":
                 switch (card.getMustHave()) {
-                    case "SHROOM":
-                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│  " + ANSI_RED + "╭─╮"
-                                + ANSI_RESET
-                                + "      │\n│  " + ANSI_RED + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_RED + "╰─╭─╮"
-                                + ANSI_RESET + "  │\n│      " + ANSI_RED + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
-                        break;
-                    case "ANIMAL":
-                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│  " + ANSI_BLUE + "╭─╮"
-                                + ANSI_RESET
-                                + "      │\n│  " + ANSI_BLUE + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_BLUE
-                                + "╰─╭─╮"
-                                + ANSI_RESET + "  │\n│      " + ANSI_BLUE + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
-                        break;
                     case "VEGETABLE":
-                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_GREEN + "╭─╮"
+                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│  " + ANSI_GREEN + "╭─╮"
                                 + ANSI_RESET
-                                + "  │\n│    " + ANSI_GREEN + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_GREEN + "╭─╮─╯"
-                                + ANSI_RESET + "    │\n│  " + ANSI_GREEN + "╰─╯" + ANSI_RESET
-                                + "      │\n╰───────────╯";
+                                + "      │\n│  " + ANSI_GREEN + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_GREEN
+                                + "╰─╭─╮"
+                                + ANSI_RESET + "  │\n│      " + ANSI_GREEN + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
                         break;
                     case "INSECT":
-                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_PURPLE + "╭─╮"
+                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│  " + ANSI_PURPLE + "╭─╮"
                                 + ANSI_RESET
-                                + "  │\n│    " + ANSI_PURPLE + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_PURPLE + "╭─╮─╯"
-                                + ANSI_RESET + "    │\n│  " + ANSI_PURPLE + "╰─╯" + ANSI_RESET
+                                + "      │\n│  " + ANSI_PURPLE + "╰─╭─╮" + ANSI_RESET + "    │\n│    " + ANSI_PURPLE
+                                + "╰─╭─╮"
+                                + ANSI_RESET + "  │\n│      " + ANSI_PURPLE + "╰─╯" + ANSI_RESET + "  │\n╰───────────╯";
+                        break;
+                    case "SHROOM":
+                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_RED + "╭─╮"
+                                + ANSI_RESET
+                                + "  │\n│    " + ANSI_RED + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_RED + "╭─╮─╯"
+                                + ANSI_RESET + "    │\n│  " + ANSI_RED + "╰─╯" + ANSI_RESET
+                                + "      │\n╰───────────╯";
+                        break;
+                    case "ANIMAL":
+                        cardString = "╭───────────╮\n│  " + card.getIdCard() + "   2  │\n│      " + ANSI_BLUE + "╭─╮"
+                                + ANSI_RESET
+                                + "  │\n│    " + ANSI_BLUE + "╭─╮─╯" + ANSI_RESET + "  │\n│  " + ANSI_BLUE + "╭─╮─╯"
+                                + ANSI_RESET + "    │\n│  " + ANSI_BLUE + "╰─╯" + ANSI_RESET
                                 + "      │\n╰───────────╯";
                         break;
                     default:

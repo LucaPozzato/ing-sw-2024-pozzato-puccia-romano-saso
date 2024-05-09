@@ -15,6 +15,8 @@ public class CreateGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 123403916472093L;
 
+    private String clientId;
+    private Integer gameId;
     private String state;
     private List<Player> players;
     private List<Structure> playerStructure;
@@ -24,8 +26,12 @@ public class CreateGameEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public CreateGameEvent(String state, List<Player> players, List<Structure> playerStructure, List<Hand> hands,
+    public CreateGameEvent(String clientId, Integer gameId, String state, List<Player> players,
+            List<Structure> playerStructure,
+            List<Hand> hands,
             Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+        this.clientId = clientId;
+        this.gameId = gameId;
         this.state = state;
         this.players = players;
         this.playerStructure = playerStructure;
@@ -38,6 +44,7 @@ public class CreateGameEvent extends Event {
 
     @Override
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
+        miniModel.setGameId(gameId);
         miniModel.setPlayers(players);
         miniModel.setPlayerStructure(playerStructure);
         miniModel.setHands(hands);
@@ -46,5 +53,10 @@ public class CreateGameEvent extends Event {
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 }

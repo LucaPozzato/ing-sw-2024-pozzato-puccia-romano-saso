@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.UUID;
 
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
@@ -13,6 +14,7 @@ import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 public class RmiClient extends UnicastRemoteObject implements VirtualClient {
+    private final String clientId;
     private final VirtualServer server;
     private final Queue<Event> eventEntryQueue;
     private final Queue<Command> commandExitQueue;
@@ -31,6 +33,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      * @throws RemoteException
      */
     public RmiClient(VirtualServer server, boolean isCli) throws RemoteException {
+        this.clientId = createClientId();
         this.server = server;
         this.isCli = isCli;
         this.miniModel = new MiniModel();
@@ -176,6 +179,16 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private void runGui() throws RemoteException {
         // this.view = new GameGui();
         // [...]
+    }
+
+    private String createClientId() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 
 }

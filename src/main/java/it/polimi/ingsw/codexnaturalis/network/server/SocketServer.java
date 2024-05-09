@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
@@ -14,22 +17,34 @@ import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
-    //private Map<Integer,Game> games;
+    // private final Map<Integer,Game> games;
+    // private final Map<Integer, List<VirtualClient>> players;
     private Game model;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
+    // private final RmiServer rmiServer;
 
     public SocketServer() throws IOException {
         this.clients = new ArrayList<>();
         this.commandEntryQueue = new LinkedList<Command>();
         this.eventExitQueue = new LinkedList<Event>();
-        //this.games = new HashMap<>();
+        // this.games = new HashMap<>();
+        // this.players = new HashMap<>();
+
     }
 
     public void setModel(Game model) {
         this.model = model;
     }
+
+    // public void setGames( Map<Integer,Game> games) {
+    // this.games = games;
+    // }
+
+    // public void setRmiServer(RmiServer rmiServer) {
+    // this.rmiServer = rmiServer;
+    // }
 
     /**
      * this method is called by the client to send a command taken by input
@@ -76,6 +91,20 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                     command = this.commandEntryQueue.poll();
                 }
+                // Integer gameId = command.getGameId();
+
+                // if (command instanceof CreateGameCommand) {
+                // if (games.containsKey(gameId)) {
+                // games.put(gameId, new Game(gameId, rmiServer, this));
+                // } else
+                // this.receiveEvent(new ErrorEvent("gameId already taken"));
+                // }
+
+                // if(games.containsKey(gameId))
+                // command.execute(games.get(gameId).getState());
+                // else
+                // this.receiveEvent(new ErrorEvent("gameId not valid"));
+
                 command.execute(model.getState());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -124,15 +153,50 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                     event = this.eventExitQueue.poll();
                 }
+
+                // Integer gameId = event.getGameId();
+                // SocketClient client = null;
+
+                // if (event instanceof CreateGameEvent ) {
+                // players.put(gameId, new ArrayList<>());
+                /*
+                 * for (var c: clients )
+                 * if (c.getClientId().equals(event.getClientId())){
+                 * client = c;
+                 * break;
+                 * }
+                 */
+                // players.get(gameId).add(client);
+                // }else if (event instanceof JoinGameEvent) {
+                /*
+                 * for (var c: clients )
+                 * if (c.getClientId().equals(event.getClientId())){
+                 * client = c;
+                 * break;
+                 * }
+                 */
+                // players.get(gameId).add(client);
+                // }
+
+                // synchronized (this.players.get(gameId)) {
+                // for (var client : this.players.get(gameId)) {
+                // client.receiveEvent(event);
+                // System.out.println("> event sent to client");
+                // }
+                // }
+
                 synchronized (this.clients) {
                     for (var client : this.clients) {
                         client.receiveEvent(event);
+                        System.out.println("> event sent to client");
                     }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**

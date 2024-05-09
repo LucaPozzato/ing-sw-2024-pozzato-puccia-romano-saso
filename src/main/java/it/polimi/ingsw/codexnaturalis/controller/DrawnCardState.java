@@ -22,12 +22,12 @@ public class DrawnCardState extends ControllerState {
     }
 
     @Override
-    public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
+    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
         throw new IllegalCommandException("Game already initialized");
     }
 
     @Override
-    public void joinGame(String nickname, Color color) throws IllegalCommandException {
+    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
         throw new IllegalCommandException("Game already joined");
     }
 

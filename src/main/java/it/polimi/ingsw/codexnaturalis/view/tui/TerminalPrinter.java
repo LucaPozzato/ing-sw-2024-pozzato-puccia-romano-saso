@@ -8,7 +8,7 @@ public class TerminalPrinter {
     private List<List<String>> hands;
     private List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resourcesList,
             players;
-    private String scoreBoard, alert, currentPlayer, currentState, structure, resources, chat;
+    private String scoreBoard, alert, currentPlayer, currentState, structure, resources, chat, onScreenStage, input;
     private int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0,
             indexMyPlayer = 0;
 
@@ -38,6 +38,7 @@ public class TerminalPrinter {
         this.resources = "";
         this.scoreBoard = "";
         this.alert = "";
+        this.input = "";
         this.chat = "";
     }
 
@@ -76,6 +77,11 @@ public class TerminalPrinter {
             this.objectives.set(1, objectives.get(0));
             this.objectives.set(2, objectives.get(1));
         }
+    }
+
+    public void updateInput(String input) {
+        if (input != null)
+            this.input = input;
     }
 
     public void updateResources(List<String> resources) {
@@ -118,6 +124,11 @@ public class TerminalPrinter {
             this.currentState = currentState;
     }
 
+    public void updateMyPlayer(Integer index) {
+        indexMyPlayer = index;
+        indexPlayer = index;
+    }
+
     public void clearAlert() {
         this.alert = "";
     }
@@ -132,16 +143,32 @@ public class TerminalPrinter {
         System.out.println("\033[2J");
     }
 
-    public void clearInput() {
-        if (board.get(0).split("\n").length * board.size() / 2 > structure.split("\n").length / 2 + 2
-                + hand.get(0).split("\n").length)
-            System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
-                    + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
-        else
-            System.out.print("\u001B["
-                    + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7) + ";"
-                    + (minX + 1) + "H" + " ".repeat(maxX - minX - 2));
+    public void resetView() {
+        alert = "";
+        indexPlayer = indexMyPlayer;
+        structure = structures.get(indexPlayer);
+        hand = hands.get(indexPlayer);
+        resources = resourcesList.get(indexPlayer);
+    }
 
+    public void clearInput() {
+        this.input = "";
+        switch (onScreenStage) {
+            case "Chat":
+                printChat();
+                break;
+            case "Initial":
+                printInitialStage();
+                break;
+            case "Choose":
+                printChoosePhase();
+                break;
+            case "Game":
+                print();
+                break;
+            default:
+                break;
+        }
     }
 
     public void printChat() {
@@ -184,7 +211,9 @@ public class TerminalPrinter {
         // print input box
         printBox(x, y + boxHeight, boxWidth, 3, "Input");
 
-        System.out.print("\u001B[" + (y + boxHeight + 1) + ";" + (x + 1) + "H");
+        System.out.print("\u001B[" + (y + boxHeight + 1) + ";" + (x + 1) + "H" + input);
+
+        onScreenStage = "Chat";
     }
 
     public void printInitialStage() {
@@ -196,7 +225,9 @@ public class TerminalPrinter {
         printAlert(midHeight + 2, midWidth - Math.max("Alert".length(), alert.length()) / 2 - 1);
 
         printBox(midWidth - 21, midHeight - 2, 43, 3, "Input");
-        System.out.print("\u001B[" + (midHeight - 1) + ";" + (midWidth - 20) + "H");
+        System.out.print("\u001B[" + (midHeight - 1) + ";" + (midWidth - 20) + "H" + input);
+
+        onScreenStage = "Initial";
     }
 
     public void printChoosePhase() {
@@ -217,12 +248,10 @@ public class TerminalPrinter {
 
         printBox(minX, midHeight + chooseObjectives.get(0).split("\n").length + 2, maxX - minX, 3, "Input");
         System.out.print(
-                "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H");
-    }
+                "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H"
+                        + input);
 
-    public void updateMyPlayer(Integer index) {
-        indexMyPlayer = index;
-        indexPlayer = index;
+        onScreenStage = "Choose";
     }
 
     public void printNext() {
@@ -231,14 +260,6 @@ public class TerminalPrinter {
             alert = "Warning: viewing " + players.get(indexPlayer) + "'s game details";
         else
             alert = "";
-        structure = structures.get(indexPlayer);
-        hand = hands.get(indexPlayer);
-        resources = resourcesList.get(indexPlayer);
-    }
-
-    public void resetView() {
-        alert = "";
-        indexPlayer = indexMyPlayer;
         structure = structures.get(indexPlayer);
         hand = hands.get(indexPlayer);
         resources = resourcesList.get(indexPlayer);
@@ -330,7 +351,7 @@ public class TerminalPrinter {
                     (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
             printBox(minX, midHeight + board.get(0).split("\n").length * board.size() / 2 + 3, maxX - minX, 3, "Input");
             System.out.print("\u001B[" + (midHeight + board.get(0).split("\n").length * board.size() / 2 + 4) + ";"
-                    + (minX + 1) + "H");
+                    + (minX + 1) + "H" + input);
         } else {
             printAlert(midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 9,
                     (maxX + minX - Math.max("Alert".length(), alert.length())) / 2 - 1);
@@ -338,8 +359,10 @@ public class TerminalPrinter {
                     maxX - minX, 3, "Input");
             System.out.print(
                     "\u001B[" + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
-                            + ";" + (minX + 1) + "H");
+                            + ";" + (minX + 1) + "H" + input);
         }
+
+        onScreenStage = "Game";
     }
 
     private void printStructure(int y, int x) {

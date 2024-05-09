@@ -1,11 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.network.commands;
 
+import java.io.Serial;
+
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-
-import java.io.Serial;
 
 public class PlaceCommand extends Command {
     @Serial
@@ -31,7 +31,8 @@ public class PlaceCommand extends Command {
         controller.placedCard(player, father, placeThis, position, frontUp);
     }
 
-    public int getGameId(){
+    @Override
+    public int getGameId() {
         return this.gameId;
     }
 }

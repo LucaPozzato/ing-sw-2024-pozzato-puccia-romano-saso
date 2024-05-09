@@ -1,6 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.network.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,8 +139,8 @@ public class MiniModel {
 
     public void setChat(Chat chat) {
         this.chat = chat;
-        //FIXME:trycatch perchè piange intellij
-            view.updateChat(chat);
+        // FIXME:trycatch perchè piange intellij
+        view.updateChat(chat);
     }
 
     public void setGameId(int gameId) {

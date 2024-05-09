@@ -165,7 +165,7 @@ public class InitState extends ControllerState {
      *                                 exceptions
      */
     @Override
-    public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
+    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
         createDecks();
 
         game.setBoard(new Board()); // FIXME: not amazing to do this here
@@ -181,8 +181,8 @@ public class InitState extends ControllerState {
         dealCommonObjective();
         dealSecretObjective();
 
-        Event event = new CreateGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
-                game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+        Event event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
+                game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -204,7 +204,7 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void joinGame(String nickname, Color color) throws IllegalCommandException {
+    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
         super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
         throw new IllegalCommandException();
     }

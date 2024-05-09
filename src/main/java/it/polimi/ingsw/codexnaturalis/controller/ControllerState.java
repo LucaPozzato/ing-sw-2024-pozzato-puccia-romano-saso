@@ -21,9 +21,10 @@ public abstract class ControllerState {
         this.socketServer = socketServer;
     }
 
-    public abstract void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException;
+    public abstract void initialized(String clientId, String nick, Color color, int numPlayers)
+            throws IllegalCommandException;
 
-    public abstract void joinGame(String nickname, Color color) throws IllegalCommandException;
+    public abstract void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException;
 
     public abstract void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard)
             throws IllegalCommandException;
@@ -33,5 +34,6 @@ public abstract class ControllerState {
 
     public abstract void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException;
 
-    //public abstract void text(String message, Player sender, Player receiver/*, long timeStamp*/) throws IllegalCommandException;
+    // public abstract void text(String message, Player sender, Player receiver/*,
+    // long timeStamp*/) throws IllegalCommandException;
 }

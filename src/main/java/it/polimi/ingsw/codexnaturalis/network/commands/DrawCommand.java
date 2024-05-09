@@ -1,11 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.network.commands;
 
+import java.io.Serial;
+
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-
-import java.io.Serial;
 
 public class DrawCommand extends Command {
     @Serial
@@ -15,9 +15,8 @@ public class DrawCommand extends Command {
     private String fromDeck;
     private Integer gameId;
 
-
     public DrawCommand(Integer gameId, Player player, Card card, String fromDeck) {
-        this.gameId =gameId;
+        this.gameId = gameId;
         this.player = player;
         this.card = card;
         this.fromDeck = fromDeck;
@@ -28,7 +27,8 @@ public class DrawCommand extends Command {
         controller.drawnCard(player, card, fromDeck);
     }
 
-    public int getGameId(){
+    @Override
+    public int getGameId() {
         return this.gameId;
     }
 }

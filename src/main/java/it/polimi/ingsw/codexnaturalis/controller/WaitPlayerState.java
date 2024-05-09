@@ -17,12 +17,12 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
+    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
         throw new IllegalCommandException("Game already initialized");
     }
 
     @Override
-    public void joinGame(String nickname, Color color) throws IllegalCommandException {
+    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
         if (nickname.equals("")) {
             throw new IllegalCommandException("Nickname can't be empty");
         }
@@ -40,7 +40,7 @@ public class WaitPlayerState extends ControllerState {
             throw new IllegalCommandException("Game already full");
         }
 
-        createNewPlayers(nickname, color);
+        createNewPlayers(clientId, nickname, color);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class WaitPlayerState extends ControllerState {
         throw new IllegalCommandException("Game not set up yet");
     }
 
-    private void createNewPlayers(String nickname, Color color) {
+    private void createNewPlayers(String clientId, String nickname, Color color) {
         Player player = super.game.getPlayers().get(super.game.getNumParticipants());
         player.setNickname(nickname);
         player.setColor(color);
@@ -65,7 +65,8 @@ public class WaitPlayerState extends ControllerState {
 
         if (isFull()) {
 
-            Event event = new JoinGameEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
+            Event event = new JoinGameEvent(clientId, "Choose", game.getPlayers(), game.getStructures(),
+                    game.getHands(),
                     game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {
@@ -77,7 +78,7 @@ public class WaitPlayerState extends ControllerState {
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
         } else {
 
-            Event event = new JoinGameEvent("Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+            Event event = new JoinGameEvent(clientId, "Wait", game.getPlayers(), game.getStructures(), game.getHands(),
                     game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {

@@ -8,6 +8,7 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
@@ -18,9 +19,11 @@ import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
 
 public class InputVerifier {
     private MiniModel miniModel;
+    private VirtualClient client;
 
-    public InputVerifier(MiniModel miniModel) {
+    public InputVerifier(MiniModel miniModel, VirtualClient client) {
         this.miniModel = miniModel;
+        this.client = client;
     }
 
     public Command move(Player player, String command) throws IllegalCommandException {
@@ -61,8 +64,8 @@ public class InputVerifier {
 
                 objCard = (ObjectiveCard) miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
                         .getChooseBetweenObj().get(objIndex);
-                //TODO: gameid
-                return new ChooseCommand(0, player, side, objCard);
+                // TODO: gameid
+                return new ChooseCommand(miniModel.getGameId(), player, side, objCard);
 
             case "PLACE":
                 Card placeThis = null;
@@ -104,8 +107,9 @@ public class InputVerifier {
                     throw new IllegalCommandException("Father absent in structure");
                 }
 
-                //TODO: gameid
-                return new PlaceCommand(0, player, father, placeThis, parameters[2], Boolean.parseBoolean(parameters[3]));
+                // TODO: gameid
+                return new PlaceCommand(miniModel.getGameId(), player, father, placeThis, parameters[2],
+                        Boolean.parseBoolean(parameters[3]));
 
             case "DRAW":
                 Card card = null;
@@ -142,8 +146,8 @@ public class InputVerifier {
                     throw new IllegalCommandException("Invalid card ID");
                 }
 
-                //TODO: gameid
-                return new DrawCommand(0, player, card, fromDeck);
+                // TODO: gameid
+                return new DrawCommand(miniModel.getGameId(), player, card, fromDeck);
 
             case "JOIN":
                 color = null;
@@ -176,7 +180,12 @@ public class InputVerifier {
                 }
 
                 miniModel.setMyPlayer(parameters[1]);
-                return new JoinGameCommand(Integer.parseInt(parameters[0]), parameters[1], color);
+                try {
+                    return new JoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
+                            color);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             case "CREATE":
                 color = null;
@@ -206,9 +215,13 @@ public class InputVerifier {
                 }
 
                 miniModel.setMyPlayer(parameters[1]);
-                return new CreateGameCommand(Integer.parseInt(parameters[0]), parameters[1],
-                        color,
-                        Integer.parseInt(parameters[3]));
+
+                try {
+                    return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
+                            color, Integer.parseInt(parameters[3]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             default:
                 throw new IllegalCommandException("Invalid command");

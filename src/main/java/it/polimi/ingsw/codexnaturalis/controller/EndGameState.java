@@ -27,12 +27,12 @@ public class EndGameState extends ControllerState {
     }
 
     @Override
-    public void initialized(String nick, Color color, int numPlayers) throws IllegalCommandException {
+    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
         throw new IllegalCommandException("Match has ended");
     }
 
     @Override
-    public void joinGame(String nickname, Color color) throws IllegalCommandException {
+    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
         throw new IllegalCommandException("Match has ended");
     }
 
@@ -172,7 +172,7 @@ public class EndGameState extends ControllerState {
         try {
             System.out.println("scores before match ended: " + super.game.getBoard().getActualScores());
 
-            System.out.println("match endeeeedddddd bitch");
+            System.out.println("MATCH ENDED BITCHHHHHH");
             int virtualPoints = 0;
             for (Player player : super.game.getPlayers()) {
                 try {
@@ -180,6 +180,8 @@ public class EndGameState extends ControllerState {
                     // Structure of the map: <Player,List<Pair<Strategy, ObjectiveCard>>
 
                     setStrategies(player);
+                    System.out.println("La strategy map del game per il player" + player.getNickname() + "è: "
+                            + super.game.getStrategyMap());
 
                     // for each player compute the points made from patterns and from totems
 
@@ -212,15 +214,17 @@ public class EndGameState extends ControllerState {
      *
      */
     private void declareWinner() {
-        System.out.println("declared winner");
+        // System.out.println("declared winner");
         Integer max = 0;
         List<Player> currentWinner = new ArrayList<>();
 
-        System.out.println("scores before declaration: " + super.game.getBoard().getActualScores());
+        // System.out.println("scores before declaration: " +
+        // super.game.getBoard().getActualScores());
 
         for (Player player : super.game.getPlayers()) {
-            System.out.println("satisfied patterns of the player: " + player.getNickname() + ", "
-                    + super.game.getStructureByPlayer(player).getSatisfiedPatterns());
+            // System.out.println("satisfied patterns of the player: " +
+            // player.getNickname() + ", "
+            // + super.game.getStructureByPlayer(player).getSatisfiedPatterns());
             // FIXME: satisfiedPatterns is always 0
             Integer pointsByPlayerX = super.game.getBoard().getActualPoints(player);
             if (pointsByPlayerX > max) {

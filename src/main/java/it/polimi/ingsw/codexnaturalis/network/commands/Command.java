@@ -18,6 +18,10 @@ public abstract class Command implements Serializable {
     public Command() {
     }
 
-    public void execute(ControllerState controller) throws IllegalCommandException{
+    public void execute(ControllerState controller) throws IllegalCommandException {
+    }
+
+    public int getGameId() {
+        return 0;
     }
 }

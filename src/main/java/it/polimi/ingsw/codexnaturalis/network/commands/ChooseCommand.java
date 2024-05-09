@@ -1,11 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.network.commands;
 
+import java.io.Serial;
+
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-
-import java.io.Serial;
 
 public class ChooseCommand extends Command {
     @Serial
@@ -16,7 +16,7 @@ public class ChooseCommand extends Command {
     private ObjectiveCard objCard;
 
     public ChooseCommand(Integer gameId, Player player, Boolean side, ObjectiveCard objCard) {
-        this.gameId =gameId;
+        this.gameId = gameId;
         this.player = player;
         this.side = side;
         this.objCard = objCard;
@@ -27,7 +27,8 @@ public class ChooseCommand extends Command {
         controller.chooseSetUp(player, side, objCard);
     }
 
-    public int getGameId(){
+    @Override
+    public int getGameId() {
         return this.gameId;
     }
 }
