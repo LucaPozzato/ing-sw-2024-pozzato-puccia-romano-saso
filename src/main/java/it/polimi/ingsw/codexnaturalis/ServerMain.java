@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
@@ -26,14 +28,12 @@ public class ServerMain {
             new Thread(socketServer).start();
             rmiServer.run();
 
-            // Map<Integer,Game> games = new HashMap<>;
-            Game game = new Game(0, (RmiServer) rmiServer, socketServer);
-            // rmiServer.setGames(games);
-            // rmiServer.setSocketServer(socketServer);
-            rmiServer.setModel(game);
-            // socketServer.setGames(games);
-            // socketServer.setRmiServer(rmiServer);
-            socketServer.setModel(game);
+            Map<Integer, Game> games = new HashMap<>();
+            // Game game = new Game(0, (RmiServer) rmiServer, socketServer);
+            rmiServer.setGames(games);
+            rmiServer.setSocketServer(socketServer);
+            socketServer.setGames(games);
+            socketServer.setRmiServer(rmiServer);
 
         } catch (RemoteException e) {
             System.err.println("Error starting server");

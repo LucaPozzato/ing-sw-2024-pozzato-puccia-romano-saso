@@ -12,12 +12,15 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class PlaceEvent extends Event {
     @Serial
     private static final long serialVersionUID = 693215087341982L;
-    private String state;
-    List<Structure> playerStructure;
-    List<Hand> hands;
-    Board board;
 
-    public PlaceEvent(String state, List<Structure> playerStructure, List<Hand> hands, Board board) {
+    private Integer gameId;
+    private String state;
+    private List<Structure> playerStructure;
+    private List<Hand> hands;
+    private Board board;
+
+    public PlaceEvent(Integer gameId, String state, List<Structure> playerStructure, List<Hand> hands, Board board) {
+        this.gameId = gameId;
         this.state = state;
         this.playerStructure = playerStructure;
         this.hands = hands;
@@ -30,5 +33,10 @@ public class PlaceEvent extends Event {
         miniModel.setPlayerStructure(playerStructure);
         miniModel.setHands(hands);
         miniModel.setBoard(board);
+    }
+
+    @Override
+    public int getGameId() {
+        return gameId;
     }
 }

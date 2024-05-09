@@ -71,8 +71,8 @@ public class DrawnCardState extends ControllerState {
         matchEnded = nextTurn();
 
         // FIXME: needs to set the next player
-        Event event = new DrawEvent("Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(), game.getBoard(),
-                game.getTurnCounter(), game.isLastTurn());
+        Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
+                game.getBoard(), game.getTurnCounter(), game.isLastTurn());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

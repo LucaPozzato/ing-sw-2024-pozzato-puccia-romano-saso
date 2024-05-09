@@ -84,8 +84,8 @@ public class ChooseSetUpState extends ControllerState {
         if (setUpMap.keySet().size() == super.game.getNumPlayers()) {
             super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
 
-            Event event = new StartGameEvent("Place", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+            Event event = new StartGameEvent(game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
+                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
@@ -97,8 +97,8 @@ public class ChooseSetUpState extends ControllerState {
             // for the interface to be responsive, we might want to send an event for each
             // choice. This way the player doesn't need
             // to wait for all the choices to be made before being able to see his
-            Event event = new ChooseEvent("Choose", game.getPlayers(), game.getStructures(), game.getHands(),
-                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
+            Event event = new ChooseEvent(game.getGameId(), "Choose", game.getPlayers(), game.getStructures(),
+                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
                     null /* is the game.getNextPlayer() already available? */);
             super.rmiServer.sendEvent(event);
             try {

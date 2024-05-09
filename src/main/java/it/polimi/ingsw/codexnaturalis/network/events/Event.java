@@ -26,4 +26,9 @@ public abstract class Event implements Serializable {
     public String getClientId() {
         return null;
     }
+
+    public int getGameId() {
+        return 0;
+    }
+
 }

@@ -91,7 +91,7 @@ public class InitState extends ControllerState {
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution
-            super.game.getBoard().updateActualScore(player, 19);
+            super.game.getBoard().updateActualScore(player, 12);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }
@@ -183,6 +183,7 @@ public class InitState extends ControllerState {
 
         Event event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

@@ -58,16 +58,16 @@ public class WaitPlayerState extends ControllerState {
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution
-            super.game.getBoard().updateActualScore(player, 19);
+            super.game.getBoard().updateActualScore(player, 12);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }
 
         if (isFull()) {
 
-            Event event = new JoinGameEvent(clientId, "Choose", game.getPlayers(), game.getStructures(),
-                    game.getHands(),
-                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+            Event event = new JoinGameEvent(clientId, game.getGameId(), "Choose", game.getPlayers(),
+                    game.getStructures(), game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
+                    null);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
@@ -77,8 +77,8 @@ public class WaitPlayerState extends ControllerState {
 
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
         } else {
-
-            Event event = new JoinGameEvent(clientId, "Wait", game.getPlayers(), game.getStructures(), game.getHands(),
+            Event event = new JoinGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
+                    game.getHands(),
                     game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
             super.rmiServer.sendEvent(event);
             try {

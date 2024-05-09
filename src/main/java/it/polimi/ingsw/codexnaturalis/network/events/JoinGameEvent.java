@@ -16,6 +16,7 @@ public class JoinGameEvent extends Event {
     private static final long serialVersionUID = 333303916472093L;
 
     private String clientId;
+    private int gameId;
     private String state;
     private List<Player> players;
     private List<Structure> playerStructure;
@@ -25,10 +26,12 @@ public class JoinGameEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public JoinGameEvent(String clientId, String state, List<Player> players, List<Structure> playerStructure,
+    public JoinGameEvent(String clientId, int gameId, String state, List<Player> players,
+            List<Structure> playerStructure,
             List<Hand> hands,
             Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
         this.clientId = clientId;
+        this.gameId = gameId;
         this.state = state;
         this.players = players;
         this.playerStructure = playerStructure;
@@ -54,5 +57,10 @@ public class JoinGameEvent extends Event {
     @Override
     public String getClientId() {
         return this.clientId;
+    }
+
+    @Override
+    public int getGameId() {
+        return this.gameId;
     }
 }

@@ -153,6 +153,9 @@ public class TerminalPrinter {
 
     public void clearInput() {
         this.input = "";
+    }
+
+    public void print() {
         switch (onScreenStage) {
             case "Chat":
                 printChat();
@@ -164,9 +167,10 @@ public class TerminalPrinter {
                 printChoosePhase();
                 break;
             case "Game":
-                print();
+                printGame();
                 break;
             default:
+                printInitialStage();
                 break;
         }
     }
@@ -265,7 +269,7 @@ public class TerminalPrinter {
         resources = resourcesList.get(indexPlayer);
     }
 
-    public void print() {
+    public void printGame() {
         midHeight = height / 2 - 3;
         delta = (maxX + minX) / 2 - width / 2;
         if (delta > 0)

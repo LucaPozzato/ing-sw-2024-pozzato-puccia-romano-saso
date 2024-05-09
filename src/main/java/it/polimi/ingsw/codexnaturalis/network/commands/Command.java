@@ -24,4 +24,8 @@ public abstract class Command implements Serializable {
     public int getGameId() {
         return 0;
     }
+
+    public String getClientId() {
+        return null;
+    }
 }

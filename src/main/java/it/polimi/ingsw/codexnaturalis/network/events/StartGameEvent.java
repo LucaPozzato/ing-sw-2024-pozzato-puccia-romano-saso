@@ -14,6 +14,8 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class StartGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 820945163792530L;
+
+    private Integer gameId;
     private String state;
     private List<Player> players;
     private List<Structure> playerStructure;
@@ -23,8 +25,9 @@ public class StartGameEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public StartGameEvent(String state, List<Player> players, List<Structure> playerStructure, List<Hand> hands,
-            Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+    public StartGameEvent(Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
+            List<Hand> hands, Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+        this.gameId = gameId;
         this.state = state;
         this.players = players;
         this.playerStructure = playerStructure;
@@ -45,5 +48,10 @@ public class StartGameEvent extends Event {
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);
+    }
+
+    @Override
+    public int getGameId() {
+        return gameId;
     }
 }

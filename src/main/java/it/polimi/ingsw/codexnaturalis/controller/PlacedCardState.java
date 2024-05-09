@@ -91,7 +91,7 @@ public class PlacedCardState extends ControllerState {
         }
 
         // BUG: currentPlayer is null?
-        Event event = new PlaceEvent("Draw", game.getStructures(), game.getHands(), game.getBoard());
+        Event event = new PlaceEvent(game.getGameId(), "Draw", game.getStructures(), game.getHands(), game.getBoard());
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

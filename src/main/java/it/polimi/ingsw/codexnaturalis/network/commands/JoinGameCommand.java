@@ -30,4 +30,9 @@ public class JoinGameCommand extends Command {
     public int getGameId() {
         return this.gameId;
     }
+
+    @Override
+    public String getClientId() {
+        return clientId;
+    }
 }

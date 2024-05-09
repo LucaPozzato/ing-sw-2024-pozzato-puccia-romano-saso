@@ -81,7 +81,6 @@ public class Tui implements View {
             case "Choose":
                 initialStage = false;
                 chooseStage = true;
-                print();
                 break;
             case "End":
                 alert = "Congratulations to the winners: ";
@@ -263,13 +262,13 @@ public class Tui implements View {
     private void printNextPlayerView() {
         terminalPrinter.clear();
         terminalPrinter.printNext();
-        terminalPrinter.print();
+        terminalPrinter.printGame();
     }
 
     private void resetView() {
         terminalPrinter.clear();
         terminalPrinter.resetView();
-        terminalPrinter.print();
+        terminalPrinter.printGame();
     }
 
     private void printChat() {
@@ -284,7 +283,9 @@ public class Tui implements View {
         else if (chooseStage)
             terminalPrinter.printChoosePhase();
         else
-            terminalPrinter.print();
+            // BUG: if I'm in chat, and I type a character I call print and it goes back to
+            // the game
+            terminalPrinter.printGame();
     }
 
     private void printAlert(String alert) {
@@ -296,31 +297,40 @@ public class Tui implements View {
     class ReadThread extends Thread {
         public void run() {
             String[] cmd = { "/bin/sh", "-c", "stty raw </dev/tty" };
-            try {
-                Runtime.getRuntime().exec(cmd);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String[] cmdReset = { "/bin/sh", "-c", "stty sane </dev/tty" };
 
             try {
                 while (true) {
                     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
                     String move = "";
 
+                    try {
+                        Runtime.getRuntime().exec(cmd);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     while (true) {
                         int c = input.read();
                         while (c != 13) {
                             if (c == 3)
                                 System.exit(0);
-                            else if (c == 127)
-                                move = move.substring(0, move.length() - 1);
-                            else
+                            else if (c == 127) {
+                                if (move.length() > 0)
+                                    move = move.substring(0, move.length() - 1);
+                            } else
                                 move += Character.toString((char) c);
                             terminalPrinter.updateInput(move);
                             print();
                             c = input.read();
                         }
                         break;
+                    }
+
+                    try {
+                        Runtime.getRuntime().exec(cmdReset);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
                     terminalPrinter.clearInput();

@@ -256,7 +256,7 @@ public class EndGameState extends ControllerState {
 
         System.out.println("final scores: " + super.game.getBoard().getActualScores());
 
-        Event event = new EndGameEvent("End", game.getBoard(), currentWinner);
+        Event event = new EndGameEvent(game.getGameId(), "End", game.getBoard(), currentWinner);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

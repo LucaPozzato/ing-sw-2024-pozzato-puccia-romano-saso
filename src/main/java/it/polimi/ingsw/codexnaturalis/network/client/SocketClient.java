@@ -179,7 +179,6 @@ public class SocketClient implements VirtualClient, Runnable {
         while (true) {
             try {
                 Command command = null;
-                System.out.println("client thread queue: " + System.identityHashCode(this.commandExitQueue));
                 synchronized (this) {
                     while (this.commandExitQueue.isEmpty()) {
                         this.wait();

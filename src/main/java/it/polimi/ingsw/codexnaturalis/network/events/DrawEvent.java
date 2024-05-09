@@ -13,6 +13,8 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class DrawEvent extends Event {
     @Serial
     private static final long serialVersionUID = 402918736529103L;
+
+    private Integer gameId;
     private String state;
     private Board board;
     private List<Hand> hands;
@@ -21,8 +23,10 @@ public class DrawEvent extends Event {
     private Integer turnCounter;
     private boolean lastTurn;
 
-    public DrawEvent(String state, List<Hand> hands, Player currentPlayer, Deck deck, Board board, Integer turnCounter,
+    public DrawEvent(Integer gameId, String state, List<Hand> hands, Player currentPlayer, Deck deck, Board board,
+            Integer turnCounter,
             boolean lastTurn) {
+        this.gameId = gameId;
         this.board = board;
         this.hands = hands;
         this.deck = deck;
@@ -41,5 +45,10 @@ public class DrawEvent extends Event {
         miniModel.setState(state);
         miniModel.setTurnCounter(turnCounter);
         miniModel.setLastTurn(lastTurn);
+    }
+
+    @Override
+    public int getGameId() {
+        return gameId;
     }
 }

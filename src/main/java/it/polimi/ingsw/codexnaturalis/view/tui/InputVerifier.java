@@ -215,7 +215,6 @@ public class InputVerifier {
                 }
 
                 miniModel.setMyPlayer(parameters[1]);
-
                 try {
                     return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
                             color, Integer.parseInt(parameters[3]));

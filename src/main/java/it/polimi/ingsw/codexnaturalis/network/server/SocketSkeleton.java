@@ -9,11 +9,13 @@ import java.rmi.RemoteException;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
 public class SocketSkeleton implements VirtualClient, Runnable {
 
-    private final String clientId;
+    private String clientId;
     private final VirtualServer server;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
@@ -55,6 +57,11 @@ public class SocketSkeleton implements VirtualClient, Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 Command command = (Command) input.readObject();
                 if (command != null) {
+                    System.out.println("skeleton received command: " + command.getClass().getSimpleName());
+                    if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)) {
+                        this.clientId = command.getClientId();
+                        System.out.println("skeleton client id: " + this.clientId);
+                    }
                     sendCommand(command);
                 }
             }

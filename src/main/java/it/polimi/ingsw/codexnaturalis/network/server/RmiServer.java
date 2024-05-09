@@ -2,25 +2,31 @@ package it.polimi.ingsw.codexnaturalis.network.server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-//import java.util.Map;
+import java.util.Map;
 import java.util.Queue;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
+import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
 
 public class RmiServer implements VirtualServer {
-    // private Map<Integer, Game> games;
-    // private final Map<Integer, List<VirtualClient>> players;
-    private Game model;
+    private Map<Integer, Game> games;
+    private final Map<Integer, List<VirtualClient>> players;
+    // private Game model;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
-    // private final SocketServer socketServer;
+    private SocketServer socketServer;
 
     /**
      * constructor of the RmiServer, it instantiates the list of the clients
@@ -33,8 +39,7 @@ public class RmiServer implements VirtualServer {
         this.clients = new ArrayList<>();
         this.commandEntryQueue = new LinkedList<>();
         this.eventExitQueue = new LinkedList<>();
-        // this.games = new HashMap<>();
-        // this.players = new HashMap<>();
+        this.players = new HashMap<>();
     }
 
     /**
@@ -46,17 +51,17 @@ public class RmiServer implements VirtualServer {
         processEventThread();
     }
 
-    public void setModel(Game model) {
-        this.model = model;
+    // public void setModel(Game model) {
+    // this.model = model;
+    // }
+
+    public void setGames(Map<Integer, Game> games) {
+        this.games = games;
     }
 
-    // public void setGames( Map<Integer,Game> games) {
-    // this.games = games;
-    // }
-
-    // public void setSocketServer (SocketServer socketServer){
-    // this.socketServer = socketServer;
-    // }
+    public void setSocketServer(SocketServer socketServer) {
+        this.socketServer = socketServer;
+    }
 
     /**
      * this method is called by the client to send a command taken by input
@@ -103,21 +108,29 @@ public class RmiServer implements VirtualServer {
                     command = this.commandEntryQueue.poll();
                 }
 
-                // Integer gameId = command.getGameId();
+                Integer gameId = command.getGameId();
 
-                // if (command instanceof CreateGameCommand) {
-                // if (games.containsKey(gameId)) {
-                // games.put(gameId, new Game(gameId, this, socketServer));
-                // } else
-                // this.receiveEvent(new ErrorEvent("gameId already taken"));
-                // }
+                if (command instanceof CreateGameCommand) {
+                    if (!games.containsKey(gameId)) {
+                        games.put(gameId, new Game(gameId, this, socketServer));
+                    } else {
+                        RmiClient client = null;
+                        for (var c : clients) {
+                            if (c.getClientId().equals(command.getClientId())) {
+                                client = (RmiClient) c;
+                                break;
+                            }
+                        }
+                        client.receiveEvent(new ErrorEvent(command.getGameId(), "gameId already taken"));
+                    }
+                }
 
                 String[] commandName = command.getClass().getName().split("\\.");
-                // if(games.containsKey(gameId))
-                // command.execute(games.get(gameId).getState());
-                // else
-                // this.receiveEvent(new ErrorEvent("gameId not valid"));
-                command.execute(model.getState());
+                if (games.containsKey(gameId))
+                    command.execute(games.get(gameId).getState());
+                else
+                    this.sendEvent(new ErrorEvent(command.getGameId(), "gameId not valid"));
+                // command.execute(model.getState());
                 System.out.println("> " + commandName[commandName.length - 1] + " executed");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -174,41 +187,33 @@ public class RmiServer implements VirtualServer {
                     System.out.println("> " + eventName[eventName.length - 1] + " processed");
                 }
 
-                // Integer gameId = event.getGameId();
-                // RmiClient client = null;
+                Integer gameId = event.getGameId();
+                VirtualClient client = null;
 
-                // if (event instanceof CreateGameEvent ) {
-                // players.put(gameId, new ArrayList<>());
-                /*
-                 * for (var c: clients )
-                 * if (c.getClientId().equals(event.getClientId())){
-                 * client = c;
-                 * break;
-                 * }
-                 */
-                // players.get(gameId).add(client);
-                // }else if (event instanceof JoinGameEvent) {
-                /*
-                 * for (var c: clients )
-                 * if (c.getClientId().equals(event.getClientId())){
-                 * client = c;
-                 * break;
-                 * }
-                 */
-                // players.get(gameId).add(client);
-                // }
+                if (event instanceof CreateGameEvent) {
+                    players.put(gameId, new ArrayList<>());
+                    for (var c : clients)
+                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                            client = c;
+                            players.get(gameId).add(client);
+                            break;
+                        }
+                } else if (event instanceof JoinGameEvent) {
+                    for (var c : clients)
+                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                            client = c;
+                            players.get(gameId).add(client);
+                            break;
+                        }
+                }
 
-                // synchronized (this.players.get(gameId)) {
-                // for (var client : this.players.get(gameId)) {
-                // client.receiveEvent(event);
-                // System.out.println("> event sent to client");
-                // }
-                // }
-
-                synchronized (this.clients) {
-                    for (var client : this.clients) {
-                        client.receiveEvent(event);
-                        System.out.println("> event sent to client");
+                if (this.players.get(gameId) != null) {
+                    synchronized (this.players.get(gameId)) {
+                        for (var c : this.players.get(gameId)) {
+                            c.receiveEvent(event);
+                            System.out.println(c);
+                            System.out.println("> event sent to client");
+                        }
                     }
                 }
             } catch (Exception e) {

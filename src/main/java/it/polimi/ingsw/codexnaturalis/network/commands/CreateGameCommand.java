@@ -15,7 +15,7 @@ public class CreateGameCommand extends Command {
     private Integer gameId;
     private Integer numOfPlayers;
 
-    public CreateGameCommand(String ClientId, Integer gameId, String nickName, Color color, Integer numOfPlayers) {
+    public CreateGameCommand(String clientId, Integer gameId, String nickName, Color color, Integer numOfPlayers) {
         this.clientId = clientId;
         this.nickName = nickName;
         this.color = color;
@@ -31,5 +31,10 @@ public class CreateGameCommand extends Command {
     @Override
     public int getGameId() {
         return this.gameId;
+    }
+
+    @Override
+    public String getClientId() {
+        return clientId;
     }
 }

@@ -15,6 +15,7 @@ public class ChooseEvent extends Event {
     @Serial
     private static final long serialVersionUID = 432103916472093L;
 
+    private Integer gameId;
     private String state;
     private List<Player> players;
     private List<Structure> playerStructure;
@@ -24,8 +25,10 @@ public class ChooseEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public ChooseEvent(String state, List<Player> players, List<Structure> playerStructure, List<Hand> hands,
+    public ChooseEvent(Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
+            List<Hand> hands,
             Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+        this.gameId = gameId;
         this.state = state;
         this.players = players;
         this.playerStructure = playerStructure;
@@ -46,5 +49,10 @@ public class ChooseEvent extends Event {
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);
+    }
+
+    @Override
+    public int getGameId() {
+        return gameId;
     }
 }
