@@ -125,7 +125,8 @@ public class RmiServer implements VirtualServer {
                                 break;
                             }
                         }
-                        client.receiveEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
+                        client.receiveEvent(
+                                new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
@@ -208,6 +209,14 @@ public class RmiServer implements VirtualServer {
                             players.get(gameId).add(client);
                             break;
                         }
+                } else if (event instanceof ErrorEvent) {
+                    for (var c : clients)
+                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                            client = c;
+                            if (!players.get(gameId).contains(client))
+                                players.get(gameId).add(client);
+                            break;
+                        }
                 }
 
                 if (this.players.get(gameId) != null) {
@@ -223,6 +232,7 @@ public class RmiServer implements VirtualServer {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**

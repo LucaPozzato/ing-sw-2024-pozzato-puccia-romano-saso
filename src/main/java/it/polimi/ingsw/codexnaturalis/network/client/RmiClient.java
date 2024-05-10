@@ -73,7 +73,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      */
     @Override
     public synchronized void receiveEvent(Event event) throws RemoteException {
-        if (event instanceof ErrorEvent){
+        if (event instanceof ErrorEvent) {
             if (clientId.equals(event.getClientId())) {
                 eventEntryQueue.add(event);
                 notifyAll();

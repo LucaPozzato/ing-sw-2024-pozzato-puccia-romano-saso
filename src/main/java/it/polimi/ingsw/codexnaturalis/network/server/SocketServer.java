@@ -113,7 +113,8 @@ public class SocketServer implements VirtualServer, Runnable {
                                 break;
                             }
                         }
-                        client.receiveEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
+                        client.receiveEvent(
+                                new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
@@ -197,6 +198,14 @@ public class SocketServer implements VirtualServer, Runnable {
                             break;
                         }
                     }
+                } else if (event instanceof ErrorEvent) {
+                    for (var c : clients)
+                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                            client = (SocketSkeleton) c;
+                            if (!players.get(gameId).contains(client))
+                                players.get(gameId).add(client);
+                            break;
+                        }
                 }
 
                 if (this.players.get(gameId) != null) {

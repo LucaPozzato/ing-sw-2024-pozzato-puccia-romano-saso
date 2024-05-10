@@ -9,6 +9,7 @@ import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.controller.InitState;
+import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
@@ -26,6 +27,7 @@ public class Game implements Serializable {
     @Serial
     private static final long serialVersionUID = 621094738562930L;
     private int gameId;
+    private Chat chat;
     private ControllerState gameState;
     private List<Player> players;
     private List<Hand> playerHand;
@@ -45,6 +47,7 @@ public class Game implements Serializable {
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
         this.gameState = new InitState(this, rmiServer, socketServer);
+        this.chat = new Chat();
         this.players = new ArrayList<>();
         this.playerHand = new ArrayList<>();
         this.playerStructure = new ArrayList<>();
@@ -52,20 +55,12 @@ public class Game implements Serializable {
         // this.chat = new Chat;
     }
 
-    public void notifyAllObservers() {
-        // ...
-    }
-
-    public void addObserver(VirtualClient client) {
-        clients.add(client);
-    }
-
-    public void removeObserver(VirtualClient client) {
-        clients.remove(client);
-    }
-
     public void addPlayer(Player player) {
         players.add(player);
+    }
+
+    public Chat getChat() {
+        return this.chat;
     }
 
     public Player getNextPlayer() {

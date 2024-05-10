@@ -29,7 +29,7 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color)  {
+    public void joinGame(String clientId, String nickname, Color color) {
         try {
             if (nickname.equals("")) {
                 throw new IllegalCommandException("Nickname can't be empty");
@@ -49,8 +49,8 @@ public class WaitPlayerState extends ControllerState {
             }
 
             createNewPlayers(clientId, nickname, color);
-
-        } catch (IllegalCommandException err){
+        } catch (IllegalCommandException err) {
+            System.out.println("> sent error: " + err.getMessage());
             Event event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
             super.rmiServer.sendEvent(event);
             try {
@@ -123,7 +123,8 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
+            Boolean frontUp) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
         super.rmiServer.sendEvent(event);
         try {

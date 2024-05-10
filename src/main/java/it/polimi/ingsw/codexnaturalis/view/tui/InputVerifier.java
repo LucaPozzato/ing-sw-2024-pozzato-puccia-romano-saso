@@ -1,6 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.view.tui;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
+import it.polimi.ingsw.codexnaturalis.network.commands.ChatCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
@@ -21,10 +21,12 @@ import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
 public class InputVerifier {
     private MiniModel miniModel;
     private VirtualClient client;
+    private Tui tui;
 
-    public InputVerifier(MiniModel miniModel, VirtualClient client) {
+    public InputVerifier(MiniModel miniModel, VirtualClient client, Tui tui) {
         this.miniModel = miniModel;
         this.client = client;
+        this.tui = tui;
     }
 
     public Command move(Player player, String command) throws IllegalCommandException {
@@ -35,10 +37,85 @@ public class InputVerifier {
             }
         }
         String[] commandArray = command.split(": ");
+        if (commandArray.length != 2)
+            throw new IllegalCommandException("Invalid command format");
+
+        String commandString = commandArray[0].toUpperCase();
         String[] parameters = commandArray[1].split(", ");
         Color color = null;
 
-        switch (commandArray[0]) {
+        switch (commandString) {
+            case "CREATE":
+                color = null;
+
+                if (parameters.length != 4)
+                    throw new IllegalCommandException("Invalid number of parameters");
+
+                switch (parameters[2].toUpperCase()) {
+                    case "RED", "R":
+                        color = Color.RED;
+                        break;
+
+                    case "BLUE", "B":
+                        color = Color.BLUE;
+                        break;
+
+                    case "GREEN", "G":
+                        color = Color.GREEN;
+                        break;
+
+                    case "YELLOW", "Y":
+                        color = Color.YELLOW;
+                        break;
+
+                    default:
+                        throw new IllegalCommandException("Invalid color choice");
+                }
+
+                miniModel.setMyPlayer(parameters[1]);
+                tui.okInit();
+                try {
+                    return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
+                            color, Integer.parseInt(parameters[3]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            case "JOIN":
+                color = null;
+                if (parameters.length != 3)
+                    throw new IllegalCommandException("Invalid number of parameters");
+
+                switch (parameters[2].toUpperCase()) {
+                    case "RED", "R":
+                        color = Color.RED;
+                        break;
+
+                    case "BLUE", "B":
+                        color = Color.BLUE;
+                        break;
+
+                    case "GREEN", "G":
+                        color = Color.GREEN;
+                        break;
+
+                    case "YELLOW", "Y":
+                        color = Color.YELLOW;
+                        break;
+
+                    default:
+                        throw new IllegalCommandException("Invalid color choice");
+                }
+
+                miniModel.setMyPlayer(parameters[1]);
+                tui.okInit();
+                try {
+                    return new JoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
+                            color);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             case "CHOOSE":
                 Boolean side = false;
                 Integer objIndex = 0;
@@ -66,6 +143,7 @@ public class InputVerifier {
                 objCard = (ObjectiveCard) miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
                         .getChooseBetweenObj().get(objIndex);
                 // TODO: gameid
+                tui.okChoose();
                 try {
                     return new ChooseCommand(client.getClientId(), miniModel.getGameId(), player, side, objCard);
                 } catch (Exception e) {
@@ -84,8 +162,8 @@ public class InputVerifier {
                     }
                 }
 
-                if (placeThis.equals(null)) {
-                    throw new IllegalCommandException("Placed card not in hand");
+                if (placeThis == null) {
+                    throw new IllegalCommandException("Card to place not in hand");
                 }
 
                 // checks if the placed card's father is in the structure
@@ -108,13 +186,14 @@ public class InputVerifier {
                     }
                 }
 
-                if (father.equals(null)) {
-                    throw new IllegalCommandException("Father absent in structure");
+                if (father == null) {
+                    throw new IllegalCommandException("Bottom card not in structure");
                 }
 
                 // TODO: gameid
                 try {
-                    return new PlaceCommand(client.getClientId(), miniModel.getGameId(), player, father, placeThis, parameters[2],
+                    return new PlaceCommand(client.getClientId(), miniModel.getGameId(), player, father, placeThis,
+                            parameters[2],
                             Boolean.parseBoolean(parameters[3]));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -135,8 +214,8 @@ public class InputVerifier {
                             if (cards.getIdCard().equals(parameters[0]))
                                 card = cards;
                         }
-                        if (card.equals(null)) {
-                            throw new IllegalCommandException("Invalid card ID");
+                        if (card == null) {
+                            throw new IllegalCommandException("Card not in board");
                         }
                     }
                 } else if (parameters[0].contains("G")) {
@@ -147,8 +226,8 @@ public class InputVerifier {
                             if (cards.getIdCard().equals(parameters[0]))
                                 card = cards;
                         }
-                        if (card.equals(null)) {
-                            throw new IllegalCommandException("Invalid card ID");
+                        if (card == null) {
+                            throw new IllegalCommandException("Card not in board");
                         }
                     }
                 } else {
@@ -162,75 +241,28 @@ public class InputVerifier {
                     e.printStackTrace();
                 }
 
-            case "JOIN":
-                color = null;
-                if (parameters.length != 3)
+            case "SEND":
+                Player receiver = null;
+
+                if (parameters.length == 2) {
+                    for (Player p : miniModel.getPlayers()) {
+                        if (p.getNickname().equals(parameters[1])) {
+                            receiver = p;
+                            break;
+                        }
+                    }
+                    if (receiver == null) {
+                        throw new IllegalCommandException("Receiver not found");
+                    }
+                } else if (parameters.length == 1) {
+                    receiver = null;
+                } else {
                     throw new IllegalCommandException("Invalid number of parameters");
-
-                switch (parameters[2]) {
-                    case "RED", "R":
-                        color = Color.RED;
-                        break;
-
-                    case "BLUE", "B":
-                        color = Color.BLUE;
-                        break;
-
-                    case "GREEN", "G":
-                        color = Color.GREEN;
-                        break;
-
-                    case "YELLOW", "Y":
-                        color = Color.YELLOW;
-                        break;
-
-                    default:
-                        break;
                 }
 
-                if (color.equals(null)) {
-                    throw new IllegalCommandException("Invalid color choice");
-                }
-
-                miniModel.setMyPlayer(parameters[1]);
                 try {
-                    return new JoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
-                            color);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            case "CREATE":
-                color = null;
-
-                if (parameters.length != 4)
-                    throw new IllegalCommandException("Invalid number of parameters");
-
-                switch (parameters[2]) {
-                    case "RED", "R":
-                        color = Color.RED;
-                        break;
-
-                    case "BLUE", "B":
-                        color = Color.BLUE;
-                        break;
-
-                    case "GREEN", "G":
-                        color = Color.GREEN;
-                        break;
-
-                    case "YELLOW", "Y":
-                        color = Color.YELLOW;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                miniModel.setMyPlayer(parameters[1]);
-                try {
-                    return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
-                            color, Integer.parseInt(parameters[3]));
+                    return new ChatCommand(client.getClientId(), miniModel.getGameId(), parameters[0], player,
+                            receiver);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

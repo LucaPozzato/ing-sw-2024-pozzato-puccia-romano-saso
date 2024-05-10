@@ -30,6 +30,9 @@ public class Tui implements View {
     private Player myPlayer;
     private Boolean chooseStage;
     private Boolean initialStage;
+    private Boolean chatStage;
+    private Boolean okInit;
+    private Boolean okChoose;
     private VirtualClient client;
 
     // BUG: input is deleted after new events are received
@@ -39,7 +42,7 @@ public class Tui implements View {
     // messages, ...
 
     public Tui(MiniModel miniModel, VirtualClient client) {
-        inputVerifier = new InputVerifier(miniModel, client);
+        inputVerifier = new InputVerifier(miniModel, client, this);
         this.client = client;
         drawer = new Drawer();
         painter = new Painter();
@@ -47,6 +50,9 @@ public class Tui implements View {
         players = new ArrayList<>();
         initialStage = true;
         chooseStage = false;
+        chatStage = false;
+        okInit = false;
+        okChoose = false;
     }
 
     @Override
@@ -61,24 +67,45 @@ public class Tui implements View {
     @Override
     public void updateChat(Chat chat) {
         terminalPrinter.updateChat(drawer.drawChat(chat, myPlayer));
+        print();
     }
 
     @Override
     public void updateError(String error) {
-        printAlert("Error" + error);
+        System.out.println("got error: " + error);
+        okInit = false;
+        okChoose = false;
+        printAlert("Error: " + error);
+        terminalPrinter.clearInput();
+    }
+
+    public void okInit() {
+        okInit = true;
+    }
+
+    public void okChoose() {
+        okChoose = true;
     }
 
     @Override
     public void updateState(String state) {
         terminalPrinter.updateCurrentState(state);
         String alert = "";
-        // state = state.toUpperCase();
         switch (state) {
             case "Wait":
-                alert = "Warning: waiting for other players to join ...";
+                if (okInit)
+                    alert = "Warning: waiting for other players to join ...";
+                else {
+                    alert = "Create or join a game to start playing";
+                }
                 initialStage = true;
                 break;
             case "Choose":
+                if (okChoose)
+                    alert = "Warning: waiting for other players to choose ...";
+                else {
+                    alert = "Choose a card to play";
+                }
                 initialStage = false;
                 chooseStage = true;
                 break;
@@ -94,7 +121,8 @@ public class Tui implements View {
                 chooseStage = false;
                 break;
         }
-        printAlert(alert);
+        terminalPrinter.updateAlert(alert);
+        print();
     }
 
     @Override
@@ -266,14 +294,10 @@ public class Tui implements View {
     }
 
     private void resetView() {
+        chatStage = false;
         terminalPrinter.clear();
         terminalPrinter.resetView();
         terminalPrinter.printGame();
-    }
-
-    private void printChat() {
-        terminalPrinter.clear();
-        terminalPrinter.printChat();
     }
 
     private void print() {
@@ -282,9 +306,9 @@ public class Tui implements View {
             terminalPrinter.printInitialStage();
         else if (chooseStage)
             terminalPrinter.printChoosePhase();
+        else if (chatStage)
+            terminalPrinter.printChat();
         else
-            // BUG: if I'm in chat, and I type a character I call print and it goes back to
-            // the game
             terminalPrinter.printGame();
     }
 
@@ -298,6 +322,8 @@ public class Tui implements View {
         public void run() {
             String[] cmd = { "/bin/sh", "-c", "stty raw </dev/tty" };
             String[] cmdReset = { "/bin/sh", "-c", "stty sane </dev/tty" };
+            int width = 0;
+            int height = 0;
 
             try {
                 while (true) {
@@ -310,22 +336,36 @@ public class Tui implements View {
                         e.printStackTrace();
                     }
 
-                    while (true) {
-                        int c = input.read();
-                        while (c != 13) {
-                            if (c == 3)
-                                System.exit(0);
-                            else if (c == 127) {
-                                if (move.length() > 0)
-                                    move = move.substring(0, move.length() - 1);
-                            } else
-                                move += Character.toString((char) c);
-                            terminalPrinter.updateInput(move);
-                            print();
-                            c = input.read();
-                        }
-                        break;
+                    int c = input.read();
+                    while (c != 13) {
+                        if (c == 3)
+                            System.exit(0);
+                        else if (c == 127) {
+                            if (move.length() > 0)
+                                move = move.substring(0, move.length() - 1);
+                        } else
+                            move += Character.toString((char) c);
+                        terminalPrinter.updateInput(move);
+                        print();
+                        c = input.read();
                     }
+
+                    System.out.println("\033[999;999H");
+                    System.out.println("\033[6n");
+                    System.out.println("\033[1;1H");
+
+                    String size = "";
+                    c = input.read();
+                    while (c != 82) {
+                        size += (char) c;
+                        c = input.read();
+                    }
+
+                    String[] parts = size.split(";");
+                    width = Integer.parseInt(parts[1]);
+                    height = Integer.parseInt(parts[0].substring(parts[0].indexOf("[") + 1));
+
+                    terminalPrinter.setSize(width, height);
 
                     try {
                         Runtime.getRuntime().exec(cmdReset);
@@ -334,7 +374,11 @@ public class Tui implements View {
                     }
 
                     terminalPrinter.clearInput();
-                    move = move.toUpperCase();
+
+                    String tempMove = move.toUpperCase();
+                    if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND")) {
+                        move = move.toUpperCase();
+                    }
 
                     // BUG: username is set to capital when it should be case insensitive
                     switch (move) {
@@ -344,7 +388,8 @@ public class Tui implements View {
 
                         case "CHAT", "C":
                             if (!initialStage && !chooseStage)
-                                printChat();
+                                chatStage = true;
+                            print();
                             break;
 
                         case "NEXT", "N":

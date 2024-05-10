@@ -1,8 +1,13 @@
 package it.polimi.ingsw.codexnaturalis.model.chat;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
-public class ChatMessage {
+public class ChatMessage implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 109283746501143L;
 
     private String message;
     private Player sender;

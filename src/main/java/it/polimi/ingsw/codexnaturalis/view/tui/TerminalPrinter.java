@@ -8,7 +8,7 @@ public class TerminalPrinter {
     private List<List<String>> hands;
     private List<String> hand, board, decks, objectives, initialCard, chooseObjectives, structures, resourcesList,
             players;
-    private String scoreBoard, alert, currentPlayer, currentState, structure, resources, chat, onScreenStage, input;
+    private String scoreBoard, alert, currentPlayer, currentState, structure, resources, chat, input;
     private int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0,
             indexMyPlayer = 0;
 
@@ -40,6 +40,16 @@ public class TerminalPrinter {
         this.alert = "";
         this.input = "";
         this.chat = "";
+    }
+
+    public void setSize(int width, int height) {
+        if (width < 10 || height < 10) {
+            this.width = 175;
+            this.height = 60;
+        } else {
+            this.width = width;
+            this.height = height;
+        }
     }
 
     public void updateChat(String chat) {
@@ -134,9 +144,6 @@ public class TerminalPrinter {
     }
 
     public void clear() {
-        // set console size
-        System.out.print("\u001B[8;" + height + ";" + width + "t");
-
         System.out.println("\033[?7h");
 
         // clear console
@@ -155,36 +162,18 @@ public class TerminalPrinter {
         this.input = "";
     }
 
-    public void print() {
-        switch (onScreenStage) {
-            case "Chat":
-                printChat();
-                break;
-            case "Initial":
-                printInitialStage();
-                break;
-            case "Choose":
-                printChoosePhase();
-                break;
-            case "Game":
-                printGame();
-                break;
-            default:
-                printInitialStage();
-                break;
-        }
-    }
-
     public void printChat() {
         // function that prints the chat
-        int x = 2;
-        int y = 2;
+        int x;
+        int y;
         int boxWidth;
         int boxHeight;
         String title = "Chat";
 
-        boxWidth = width - 2;
-        boxHeight = height - 5;
+        boxWidth = (int) (width * 0.5) - 2;
+        boxHeight = (int) (height * 0.5) - 5;
+        x = (width - boxWidth) / 2;
+        y = (height - boxHeight) / 2 - 4;
 
         printBox(x, y, boxWidth, boxHeight, title);
 
@@ -212,12 +201,12 @@ public class TerminalPrinter {
             System.out.print("\u001B[" + (y + i - start + 1) + ";" + (x + 1) + "H" + chatLines[i]);
         }
 
+        printAlert(y + boxHeight + 4, (width / 2) - (Math.max("Alert".length(), alert.length()) / 2) - 1);
+
         // print input box
-        printBox(x, y + boxHeight, boxWidth, 3, "Input");
+        printBox(x, y + boxHeight + 1, boxWidth, 3, "Input");
 
-        System.out.print("\u001B[" + (y + boxHeight + 1) + ";" + (x + 1) + "H" + input);
-
-        onScreenStage = "Chat";
+        System.out.print("\u001B[" + (y + boxHeight + 2) + ";" + (x + 1) + "H" + input);
     }
 
     public void printInitialStage() {
@@ -230,8 +219,6 @@ public class TerminalPrinter {
 
         printBox(midWidth - 21, midHeight - 2, 43, 3, "Input");
         System.out.print("\u001B[" + (midHeight - 1) + ";" + (midWidth - 20) + "H" + input);
-
-        onScreenStage = "Initial";
     }
 
     public void printChoosePhase() {
@@ -254,8 +241,6 @@ public class TerminalPrinter {
         System.out.print(
                 "\u001B[" + (midHeight + chooseObjectives.get(0).split("\n").length + 3) + ";" + (minX + 1) + "H"
                         + input);
-
-        onScreenStage = "Choose";
     }
 
     public void printNext() {
@@ -365,8 +350,6 @@ public class TerminalPrinter {
                     "\u001B[" + (midHeight + structure.split("\n").length / 2 + hand.get(0).split("\n").length + 7)
                             + ";" + (minX + 1) + "H" + input);
         }
-
-        onScreenStage = "Game";
     }
 
     private void printStructure(int y, int x) {

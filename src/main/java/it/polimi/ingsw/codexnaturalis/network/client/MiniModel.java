@@ -139,7 +139,6 @@ public class MiniModel {
 
     public void setChat(Chat chat) {
         this.chat = chat;
-        // FIXME:trycatch perchè piange intellij
         view.updateChat(chat);
     }
 

@@ -167,9 +167,7 @@ public class InitState extends ControllerState {
      */
     @Override
     public void initialized(String clientId, String nick, Color color, int numPlayers) {
-
         Event event = null;
-
         try {
             createDecks();
 
@@ -189,9 +187,9 @@ public class InitState extends ControllerState {
             event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
                     game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
 
-        } catch (IllegalCommandException e){
+        } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
-        } catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -216,7 +214,7 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void joinGame(String clientId, String nickname, Color color)  {
+    public void joinGame(String clientId, String nickname, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game not created yet");
         super.rmiServer.sendEvent(event);
         try {
@@ -241,14 +239,14 @@ public class InitState extends ControllerState {
      */
     @Override
     public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
-    Event event = new ErrorEvent(clientId, game.getGameId(), "Game not set up yet");
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game not set up yet");
         super.rmiServer.sendEvent(event);
         try {
-        super.socketServer.sendEvent(event);
-    } catch (Exception e) {
-        e.printStackTrace();
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
     /**
      * Methods inherited from State. When it's called in InitState an exception is
@@ -268,7 +266,8 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
+            Boolean frontUp) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
         super.rmiServer.sendEvent(event);
         try {

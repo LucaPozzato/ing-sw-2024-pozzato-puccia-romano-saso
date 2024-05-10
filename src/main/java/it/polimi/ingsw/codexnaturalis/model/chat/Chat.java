@@ -1,11 +1,16 @@
 package it.polimi.ingsw.codexnaturalis.model.chat;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.util.Pair;
 
-public class Chat {
+public class Chat implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 109283746501965L;
+
     private int nextId = 0;
 
     private List<Pair<Integer, ChatMessage>> chatMessages;
