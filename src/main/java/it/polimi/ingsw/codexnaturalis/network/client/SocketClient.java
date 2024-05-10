@@ -108,7 +108,7 @@ public class SocketClient implements VirtualClient, Runnable {
      */
     @Override
     public synchronized void receiveEvent(Event event) throws IllegalStateException {
-        if (event instanceof ErrorEvent){
+        if (event instanceof ErrorEvent) {
             if (clientId.equals(event.getClientId())) {
                 eventEntryQueue.add(event);
                 notifyAll();
@@ -238,4 +238,8 @@ public class SocketClient implements VirtualClient, Runnable {
         return this.clientId;
     }
 
+    @Override
+    public void ping() throws RemoteException {
+        // do nothing
+    }
 }

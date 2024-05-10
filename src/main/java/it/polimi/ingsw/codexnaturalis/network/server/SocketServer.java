@@ -26,7 +26,7 @@ import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 public class SocketServer implements VirtualServer, Runnable {
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
-    // private Game model;
+    private Map<SocketSkeleton, Boolean> connected;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
@@ -38,6 +38,7 @@ public class SocketServer implements VirtualServer, Runnable {
         this.eventExitQueue = new LinkedList<Event>();
         this.games = null;
         this.players = new HashMap<>();
+        this.connected = new HashMap<>();
     }
 
     // public void setModel(Game model) {
@@ -50,6 +51,10 @@ public class SocketServer implements VirtualServer, Runnable {
 
     public void setRmiServer(RmiServer rmiServer) {
         this.rmiServer = rmiServer;
+    }
+
+    public Map<SocketSkeleton, Boolean> getConnected() {
+        return connected;
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
 public class RmiServer implements VirtualServer {
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
-    // private Game model;
+    private Map<VirtualClient, Boolean> connected;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
@@ -40,6 +41,7 @@ public class RmiServer implements VirtualServer {
         this.commandEntryQueue = new LinkedList<>();
         this.eventExitQueue = new LinkedList<>();
         this.players = new HashMap<>();
+        this.connected = new HashMap<>();
     }
 
     /**
@@ -49,6 +51,7 @@ public class RmiServer implements VirtualServer {
         System.out.println("rmi server running");
         processCommandThread();
         processEventThread();
+        new Thread(this::pinger).start();
     }
 
     // public void setModel(Game model) {
@@ -245,6 +248,33 @@ public class RmiServer implements VirtualServer {
         System.out.println("client connected");
         synchronized (this.clients) {
             this.clients.add(client);
+        }
+    }
+
+    private void pinger() {
+        System.out.println("started thread pinger");
+        while (true) {
+            VirtualClient client = null;
+            for (var c : clients) {
+                System.out.println("trying to ping");
+                client = c;
+                System.out.println("pinging client");
+                try {
+                    client.ping();
+                    connected.put(client, true);
+                } catch (ConnectException e) {
+                    connected.put(client, false);
+                    System.out.println("client disconnected");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("client ponged");
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

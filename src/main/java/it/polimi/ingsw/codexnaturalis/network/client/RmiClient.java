@@ -179,6 +179,10 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         view.run();
     }
 
+    public void ping() throws RemoteException {
+        // do nothing
+    }
+
     /**
      * creates a Gui view and runs it
      * 

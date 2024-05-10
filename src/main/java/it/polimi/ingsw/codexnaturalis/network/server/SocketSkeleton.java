@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -55,6 +56,7 @@ public class SocketSkeleton implements VirtualClient, Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
+                ((SocketServer) server).getConnected().put(this, true);
                 Command command = (Command) input.readObject();
                 if (command != null) {
                     System.out.println("skeleton received command: " + command.getClass().getSimpleName());
@@ -65,6 +67,9 @@ public class SocketSkeleton implements VirtualClient, Runnable {
                     sendCommand(command);
                 }
             }
+        } catch (EOFException e) {
+            System.out.println("Client disconnected");
+            ((SocketServer) server).getConnected().put(this, false);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -81,5 +86,10 @@ public class SocketSkeleton implements VirtualClient, Runnable {
     @Override
     public String getClientId() {
         return this.clientId;
+    }
+
+    @Override
+    public void ping() throws RemoteException {
+        // do nothing
     }
 }
