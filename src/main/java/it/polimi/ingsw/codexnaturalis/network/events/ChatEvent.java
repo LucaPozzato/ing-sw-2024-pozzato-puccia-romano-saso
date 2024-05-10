@@ -9,11 +9,13 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class ChatEvent extends Event {
     @Serial
     private static final long serialVersionUID = 380111272220291L;
-
+    private String clientId;
     private Chat chat;
     private Integer gameId;
 
-    public ChatEvent(Integer gameId, Chat chat) {
+    public ChatEvent(String clientId, Integer gameId, Chat chat) {
+        this.clientId = clientId;
+        this.gameId = gameId;
         this.chat = chat;
     }
 
@@ -25,5 +27,10 @@ public class ChatEvent extends Event {
     @Override
     public int getGameId() {
         return gameId;
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 }

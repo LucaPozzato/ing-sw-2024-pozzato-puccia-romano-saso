@@ -14,7 +14,7 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class ChooseEvent extends Event {
     @Serial
     private static final long serialVersionUID = 432103916472093L;
-
+    private String clientId;
     private Integer gameId;
     private String state;
     private List<Player> players;
@@ -25,9 +25,10 @@ public class ChooseEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public ChooseEvent(Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
+    public ChooseEvent(String clientId, Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
             List<Hand> hands,
             Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+        this.clientId = clientId;
         this.gameId = gameId;
         this.state = state;
         this.players = players;
@@ -49,6 +50,11 @@ public class ChooseEvent extends Event {
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 
     @Override

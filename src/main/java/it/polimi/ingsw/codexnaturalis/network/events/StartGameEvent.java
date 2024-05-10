@@ -15,6 +15,7 @@ public class StartGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 820945163792530L;
 
+    private String clientId;
     private Integer gameId;
     private String state;
     private List<Player> players;
@@ -25,8 +26,9 @@ public class StartGameEvent extends Event {
     private Player currentPlayer;
     private Player nextPlayer;
 
-    public StartGameEvent(Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
+    public StartGameEvent(String clientId, Integer gameId, String state, List<Player> players, List<Structure> playerStructure,
             List<Hand> hands, Board board, Deck deck, Player currentPlayer, Player nextPlayer) {
+        this.clientId = clientId;
         this.gameId = gameId;
         this.state = state;
         this.players = players;
@@ -48,6 +50,11 @@ public class StartGameEvent extends Event {
         miniModel.setCurrentPlayer(currentPlayer);
         miniModel.setNextPlayer(nextPlayer);
         miniModel.setState(state);
+    }
+
+    @Override
+    public String getClientId() {
+        return this.clientId;
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.UUID;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
@@ -72,8 +73,15 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      */
     @Override
     public synchronized void receiveEvent(Event event) throws RemoteException {
-        eventEntryQueue.add(event);
-        notifyAll();
+        if (event instanceof ErrorEvent){
+            if (clientId.equals(event.getClientId())) {
+                eventEntryQueue.add(event);
+                notifyAll();
+            }
+        } else {
+            eventEntryQueue.add(event);
+            notifyAll();
+        }
     }
 
     /**

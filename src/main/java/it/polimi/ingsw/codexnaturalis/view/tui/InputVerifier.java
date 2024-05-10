@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.view.tui;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,11 @@ public class InputVerifier {
                 objCard = (ObjectiveCard) miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
                         .getChooseBetweenObj().get(objIndex);
                 // TODO: gameid
-                return new ChooseCommand(miniModel.getGameId(), player, side, objCard);
+                try {
+                    return new ChooseCommand(client.getClientId(), miniModel.getGameId(), player, side, objCard);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             case "PLACE":
                 Card placeThis = null;
@@ -108,8 +113,12 @@ public class InputVerifier {
                 }
 
                 // TODO: gameid
-                return new PlaceCommand(miniModel.getGameId(), player, father, placeThis, parameters[2],
-                        Boolean.parseBoolean(parameters[3]));
+                try {
+                    return new PlaceCommand(client.getClientId(), miniModel.getGameId(), player, father, placeThis, parameters[2],
+                            Boolean.parseBoolean(parameters[3]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             case "DRAW":
                 Card card = null;
@@ -147,7 +156,11 @@ public class InputVerifier {
                 }
 
                 // TODO: gameid
-                return new DrawCommand(miniModel.getGameId(), player, card, fromDeck);
+                try {
+                    return new DrawCommand(client.getClientId(), miniModel.getGameId(), player, card, fromDeck);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             case "JOIN":
                 color = null;

@@ -13,6 +13,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteChair;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteOR;
 import it.polimi.ingsw.codexnaturalis.model.game.strategies.ConcreteStair;
 import it.polimi.ingsw.codexnaturalis.network.events.EndGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -27,29 +28,59 @@ public class EndGameState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
-        throw new IllegalCommandException("Match has ended");
+    public void initialized(String clientId, String nick, Color color, int numPlayers)  {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
-        throw new IllegalCommandException("Match has ended");
+    public void joinGame(String clientId, String nickname, Color color) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void chooseSetUp(Player nickname, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        throw new IllegalCommandException("Match has ended");
+    public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException {
-        throw new IllegalCommandException("Match has ended");
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp){
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+
     @Override
-    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        throw new IllegalCommandException("Match has ended");
+    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @Override

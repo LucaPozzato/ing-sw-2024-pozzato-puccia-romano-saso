@@ -10,12 +10,15 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 public class DrawCommand extends Command {
     @Serial
     private static final long serialVersionUID = 572903618492730L;
+    private String clientId;
+
     private Player player;
     private Card card;
     private String fromDeck;
     private Integer gameId;
 
-    public DrawCommand(Integer gameId, Player player, Card card, String fromDeck) {
+    public DrawCommand(String clientId, Integer gameId, Player player, Card card, String fromDeck) {
+        this.clientId = clientId;
         this.gameId = gameId;
         this.player = player;
         this.card = card;
@@ -24,7 +27,12 @@ public class DrawCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.drawnCard(player, card, fromDeck);
+        controller.drawnCard(clientId, player, card, fromDeck);
+    }
+
+    @Override
+    public String getClientId() {
+        return clientId;
     }
 
     @Override

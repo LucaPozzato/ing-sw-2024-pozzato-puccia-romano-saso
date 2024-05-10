@@ -6,6 +6,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
@@ -17,35 +18,58 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already initialized");
+    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
-        if (nickname.equals("")) {
-            throw new IllegalCommandException("Nickname can't be empty");
-        }
-
-        for (Player p : super.game.getPlayers()) {
-            if (p.getColor() != null && p.getColor().equals(color)) {
-                throw new IllegalCommandException("Color already taken");
+    public void joinGame(String clientId, String nickname, Color color)  {
+        try {
+            if (nickname.equals("")) {
+                throw new IllegalCommandException("Nickname can't be empty");
             }
-            if (p.getNickname() != null && p.getNickname().equals(nickname)) {
-                throw new IllegalCommandException("Nickname already taken");
+
+            for (Player p : super.game.getPlayers()) {
+                if (p.getColor() != null && p.getColor().equals(color)) {
+                    throw new IllegalCommandException("Color already taken");
+                }
+                if (p.getNickname() != null && p.getNickname().equals(nickname)) {
+                    throw new IllegalCommandException("Nickname already taken");
+                }
+            }
+
+            if (isFull()) {
+                throw new IllegalCommandException("Game already full");
+            }
+
+            createNewPlayers(clientId, nickname, color);
+
+        } catch (IllegalCommandException err){
+            Event event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
-        if (isFull()) {
-            throw new IllegalCommandException("Game already full");
-        }
-
-        createNewPlayers(clientId, nickname, color);
     }
 
     @Override
-    public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        throw new IllegalCommandException("Game not set up yet");
+    public void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game not set up yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void createNewPlayers(String clientId, String nickname, Color color) {
@@ -99,14 +123,25 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException {
-        throw new IllegalCommandException("Can't place card yet");
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        throw new IllegalCommandException("Can't draw card yet");
+    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @Override

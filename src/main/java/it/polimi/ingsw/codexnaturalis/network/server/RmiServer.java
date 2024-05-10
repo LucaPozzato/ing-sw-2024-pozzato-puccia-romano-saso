@@ -125,7 +125,7 @@ public class RmiServer implements VirtualServer {
                                 break;
                             }
                         }
-                        client.receiveEvent(new ErrorEvent(command.getGameId(), "gameId already taken"));
+                        client.receiveEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
@@ -133,7 +133,7 @@ public class RmiServer implements VirtualServer {
                 if (games.containsKey(gameId))
                     command.execute(games.get(gameId).getState());
                 else
-                    this.sendEvent(new ErrorEvent(command.getGameId(), "gameId not valid"));
+                    this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId not valid"));
                 System.out.println("> " + commandName[commandName.length - 1] + " executed");
             } catch (Exception e) {
                 e.printStackTrace();

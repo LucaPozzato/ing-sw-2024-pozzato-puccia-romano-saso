@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.DrawEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -22,57 +23,88 @@ public class DrawnCardState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already initialized");
+    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already joined");
+    public void joinGame(String clientId, String nickname, Color color) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void chooseSetUp(Player nickname, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already set up");
+    public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already set up");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException {
-        throw new IllegalCommandException("Cannot place card now");
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card now");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
+    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+
+        Event event = null;
         Boolean matchEnded = false;
 
-        for (Player p : super.game.getPlayers()) {
-            if (p.getNickname().equals(player.getNickname())) {
-                player = p;
-                break;
-            }
-        }
+        try {
 
-        if (!player.equals(super.game.getCurrentPlayer())) {
-            throw new IllegalCommandException("Not your turn");
-        }
-
-        if (fromDeck == null || fromDeck.equals(""))
-            for (Card c : super.game.getBoard().getUncoveredCards()) {
-                if (c.getIdCard().equals(card.getIdCard())) {
-                    card = c;
+            for (Player p : super.game.getPlayers()) {
+                if (p.getNickname().equals(player.getNickname())) {
+                    player = p;
                     break;
                 }
             }
-        else
-            card = null;
 
-        updateDeck(card, fromDeck);
-        matchEnded = nextTurn();
+            if (!player.equals(super.game.getCurrentPlayer())) {
+                throw new IllegalCommandException("Not your turn");
+            }
 
-        // FIXME: needs to set the next player
-        Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
-                game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+            if (fromDeck == null || fromDeck.equals(""))
+                for (Card c : super.game.getBoard().getUncoveredCards()) {
+                    if (c.getIdCard().equals(card.getIdCard())) {
+                        card = c;
+                        break;
+                    }
+                }
+            else
+                card = null;
+
+            updateDeck(card, fromDeck);
+            matchEnded = nextTurn();
+
+            // FIXME: needs to set the next player
+            event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
+                    game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+        } catch (IllegalCommandException e){
+            event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
+        }
+
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

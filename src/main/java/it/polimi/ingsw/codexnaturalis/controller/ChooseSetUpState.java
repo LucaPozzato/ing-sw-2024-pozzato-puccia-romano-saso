@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.ChooseEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
@@ -27,24 +28,47 @@ public class ChooseSetUpState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already initialized");
+    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
-        throw new IllegalCommandException("Game already joined");
+    public void joinGame(String clientId, String nickname, Color color) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException {
-        throw new IllegalCommandException("Can't place card yet");
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        throw new IllegalCommandException("Can't draw card yet");
+    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can`t draw card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @Override
@@ -56,57 +80,64 @@ public class ChooseSetUpState extends ControllerState {
     // super.game.getChat().addMessage(chatMessage);
     // }
 
-    public void chooseSetUp(Player player, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        if (setUpMap.keySet().size() > 0 && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
-            throw new IllegalCommandException("Player already made his choice");
-        } else {
-            for (Player p : super.game.getPlayers()) {
-                if (player.getNickname().equals(p.getNickname())) {
-                    player = p;
-                    break;
-                }
-            }
-            Hand hand = super.game.getHandByPlayer(player);
-            InitialCard initCard = hand.getInitCard();
-            super.game.getStructureByPlayer(player).placeCard(null, initCard, null, side);
+    @Override
+    public void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard) {
 
-            for (Card obj : hand.getChooseBetweenObj()) {
-                if (obj.getIdCard().equals(objCard.getIdCard())) {
-                    objCard = (ObjectiveCard) obj;
-                    break;
+        Event event = null;
+
+        try {
+
+            if (setUpMap.keySet().size() > 0 && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
+                throw new IllegalCommandException("Player already made his choice");
+            } else {
+                for (Player p : super.game.getPlayers()) {
+                    if (player.getNickname().equals(p.getNickname())) {
+                        player = p;
+                        break;
+                    }
                 }
+                Hand hand = super.game.getHandByPlayer(player);
+                InitialCard initCard = hand.getInitCard();
+                super.game.getStructureByPlayer(player).placeCard(null, initCard, null, side);
+
+                for (Card obj : hand.getChooseBetweenObj()) {
+                    if (obj.getIdCard().equals(objCard.getIdCard())) {
+                        objCard = (ObjectiveCard) obj;
+                        break;
+                    }
+                }
+
+                hand.setSecretObjective(objCard);
+                setUpMap.put(player, true);
             }
 
-            hand.setSecretObjective(objCard);
-            setUpMap.put(player, true);
+            if (setUpMap.keySet().size() == super.game.getNumPlayers()) {
+                super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
+
+                event = new StartGameEvent(clientId, game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
+                        game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+
+            } else {
+                // for the interface to be responsive, we might want to send an event for each
+                // choice. This way the player doesn't need
+                // to wait for all the choices to be made before being able to see his
+                event = new ChooseEvent(clientId, game.getGameId(), "Choose", game.getPlayers(), game.getStructures(),
+                        game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
+                        null /* is the game.getNextPlayer() already available? */);
+
+                super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
+            }
+
+        } catch (IllegalCommandException err){
+            event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
         }
 
-        if (setUpMap.keySet().size() == super.game.getNumPlayers()) {
-            super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
-
-            Event event = new StartGameEvent(game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
-                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
-            super.rmiServer.sendEvent(event);
-            try {
-                super.socketServer.sendEvent(event);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            // for the interface to be responsive, we might want to send an event for each
-            // choice. This way the player doesn't need
-            // to wait for all the choices to be made before being able to see his
-            Event event = new ChooseEvent(game.getGameId(), "Choose", game.getPlayers(), game.getStructures(),
-                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
-                    null /* is the game.getNextPlayer() already available? */);
-            super.rmiServer.sendEvent(event);
-            try {
-                super.socketServer.sendEvent(event);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }

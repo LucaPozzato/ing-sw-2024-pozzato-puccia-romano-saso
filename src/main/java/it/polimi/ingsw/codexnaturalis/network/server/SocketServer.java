@@ -113,14 +113,14 @@ public class SocketServer implements VirtualServer, Runnable {
                                 break;
                             }
                         }
-                        client.receiveEvent(new ErrorEvent(command.getGameId(), "gameId already taken"));
+                        client.receiveEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
                 if (games.containsKey(gameId))
                     command.execute(games.get(gameId).getState());
                 else
-                    this.sendEvent(new ErrorEvent(command.getGameId(), "gameId not valid"));
+                    this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId not valid"));
 
             } catch (Exception e) {
                 e.printStackTrace();

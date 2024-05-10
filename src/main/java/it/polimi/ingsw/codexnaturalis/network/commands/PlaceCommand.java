@@ -10,6 +10,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 public class PlaceCommand extends Command {
     @Serial
     private static final long serialVersionUID = 293847506109283L;
+    private String clientId;
+
     private Integer gameId;
     private Player player;
     private Card father;
@@ -17,7 +19,8 @@ public class PlaceCommand extends Command {
     private String position;
     private Boolean frontUp;
 
-    public PlaceCommand(Integer gameId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+    public PlaceCommand(String clientId, Integer gameId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+        this.clientId = clientId;
         this.gameId = gameId;
         this.player = player;
         this.father = father;
@@ -28,11 +31,16 @@ public class PlaceCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.placedCard(player, father, placeThis, position, frontUp);
+        controller.placedCard(clientId, player, father, placeThis, position, frontUp);
     }
 
     @Override
     public int getGameId() {
         return this.gameId;
+    }
+
+    @Override
+    public String getClientId() {
+        return clientId;
     }
 }

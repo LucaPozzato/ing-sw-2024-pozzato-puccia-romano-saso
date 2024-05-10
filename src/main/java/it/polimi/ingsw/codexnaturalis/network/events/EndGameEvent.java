@@ -11,7 +11,6 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 public class EndGameEvent extends Event {
     @Serial
     private static final long serialVersionUID = 819362547038261L;
-
     private Integer gameId;
     private String state;
     private Board board;

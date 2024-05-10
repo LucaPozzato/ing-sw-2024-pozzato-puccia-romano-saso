@@ -19,6 +19,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -165,24 +166,34 @@ public class InitState extends ControllerState {
      *                                 exceptions
      */
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) throws IllegalCommandException {
-        createDecks();
+    public void initialized(String clientId, String nick, Color color, int numPlayers) {
 
-        game.setBoard(new Board()); // FIXME: not amazing to do this here
-        game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
-        game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
-        game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
-        game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
+        Event event = null;
 
-        createFirstPlayer(nick, color, numPlayers);
-        dealHands(numPlayers);
-        dealInitialCard();
+        try {
+            createDecks();
 
-        dealCommonObjective();
-        dealSecretObjective();
+            game.setBoard(new Board()); // FIXME: not amazing to do this here
+            game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
+            game.getBoard().addUncoveredCard(game.getDeck().drawResourceCard()); // FIXME
+            game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
+            game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
 
-        Event event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
-                game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+            createFirstPlayer(nick, color, numPlayers);
+            dealHands(numPlayers);
+            dealInitialCard();
+
+            dealCommonObjective();
+            dealSecretObjective();
+
+            event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
+                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+
+        } catch (IllegalCommandException e){
+            event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
 
         super.rmiServer.sendEvent(event);
         try {
@@ -205,16 +216,21 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void joinGame(String clientId, String nickname, Color color) throws IllegalCommandException {
-        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
-        throw new IllegalCommandException();
+    public void joinGame(String clientId, String nickname, Color color)  {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Game not created yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Methods inherited from State. When it's called in InitState an exception is
      * thrown.
      * 
-     * @param nickName the state deputed to manage this method's invocation needs
+     * @param nickname the state deputed to manage this method's invocation needs
      *                 this parameter
      * @param side     the state deputed to manage this method's invocation needs
      *                 this parameter
@@ -224,9 +240,15 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void chooseSetUp(Player nickname, Boolean side, ObjectiveCard objCard) throws IllegalCommandException {
-        throw new IllegalCommandException("Game not set up yet");
+    public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
+    Event event = new ErrorEvent(clientId, game.getGameId(), "Game not set up yet");
+        super.rmiServer.sendEvent(event);
+        try {
+        super.socketServer.sendEvent(event);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
     /**
      * Methods inherited from State. When it's called in InitState an exception is
@@ -246,10 +268,14 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void placedCard(Player player, Card father, Card placeThis, String position, Boolean frontUp)
-            throws IllegalCommandException {
-        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
-        throw new IllegalCommandException("Can't place card yet");
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -265,24 +291,15 @@ public class InitState extends ControllerState {
      * @throws IllegalCommandException the exception thrown when this method is
      *                                 called in this state
      */
-
-    /**
-     * Methods inherited from State. When it's called in InitState an exception is
-     * thrown.
-     * 
-     * @param player   the state deputed to manage this method's invocation needs
-     *                 this parameter
-     * @param card     the state deputed to manage this method's invocation needs
-     *                 this parameter
-     * @param fromDeck the state deputed to manage this method's invocation needs
-     *                 this parameter
-     * @throws IllegalCommandException the exception thrown when this method is
-     *                                 called in this state
-     */
     @Override
-    public void drawnCard(Player player, Card card, String fromDeck) throws IllegalCommandException {
-        super.game.setState(new InitState(super.game, super.rmiServer, super.socketServer));
-        throw new IllegalCommandException("Can't draw card yet");
+    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @Override
