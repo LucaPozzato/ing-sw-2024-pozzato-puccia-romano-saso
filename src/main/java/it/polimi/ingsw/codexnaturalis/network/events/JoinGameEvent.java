@@ -45,6 +45,7 @@ public class JoinGameEvent extends Event {
     @Override
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
         miniModel.setPlayers(players);
+        miniModel.setGameId(gameId);
         miniModel.setPlayerStructure(playerStructure);
         miniModel.setHands(hands);
         miniModel.setBoard(board);

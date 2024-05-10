@@ -101,17 +101,21 @@ public class RmiServer implements VirtualServer {
                 Command command = null;
                 synchronized (this) {
                     while (this.commandEntryQueue.isEmpty()) {
-                        System.out.println("server command entry queue thread waiting");
+                        System.out.println("rmi server command entry queue thread waiting");
                         this.wait();
-                        System.out.println("server command entry queue thread woken up");
+                        System.out.println("rmi server command entry queue thread woken up");
                     }
                     command = this.commandEntryQueue.poll();
                 }
 
                 Integer gameId = command.getGameId();
 
+                System.out.println("rmi server received command with gameIdd: " + gameId);
+                System.out.println("rmi server command received: " + command.getClass().getName());
+
                 if (command instanceof CreateGameCommand) {
                     if (!games.containsKey(gameId)) {
+                        System.out.println("rmi server creating a new game");
                         games.put(gameId, new Game(gameId, this, socketServer));
                     } else {
                         RmiClient client = null;
@@ -130,7 +134,6 @@ public class RmiServer implements VirtualServer {
                     command.execute(games.get(gameId).getState());
                 else
                     this.sendEvent(new ErrorEvent(command.getGameId(), "gameId not valid"));
-                // command.execute(model.getState());
                 System.out.println("> " + commandName[commandName.length - 1] + " executed");
             } catch (Exception e) {
                 e.printStackTrace();

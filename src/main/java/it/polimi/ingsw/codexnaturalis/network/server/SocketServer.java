@@ -98,10 +98,12 @@ public class SocketServer implements VirtualServer, Runnable {
                     command = this.commandEntryQueue.poll();
                 }
                 Integer gameId = command.getGameId();
+                System.out.println("socket server received command with gameIdd: " + gameId);
+                System.out.println("socket server command received: " + command.getClass().getName());
 
-                System.out.println("server command received: " + command.getClass().getName());
                 if (command instanceof CreateGameCommand) {
                     if (!games.containsKey(gameId)) {
+                        System.out.println("socket server creating a new game");
                         games.put(gameId, new Game(gameId, rmiServer, this));
                     } else {
                         SocketClient client = null;

@@ -149,7 +149,7 @@ public class Game implements Serializable {
     public void setNumPlayers(int numPlayers) {
         // FIXME: do this in initState
         for (int i = 0; i < numPlayers - 1; i++) {
-            this.players.add(new Player());
+            this.players.add(new Player(""));
         }
         this.numPlayers = numPlayers;
     }
