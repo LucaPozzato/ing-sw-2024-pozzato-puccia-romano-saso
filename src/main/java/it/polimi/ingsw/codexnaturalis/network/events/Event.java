@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -20,7 +21,7 @@ public abstract class Event implements Serializable {
     public Event() {
     }
 
-    public void doJob(MiniModel miniModel) throws IllegalCommandException {
+    public void doJob(MiniModel miniModel) throws IllegalCommandException, IOException {
     }
 
     public String getClientId() {

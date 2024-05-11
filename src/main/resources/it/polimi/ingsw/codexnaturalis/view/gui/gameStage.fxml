@@ -19,7 +19,7 @@
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game">
    <bottom>
-      <HBox alignment="CENTER" prefHeight="131.0" prefWidth="1200.0" spacing="10.0" style="-fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
+      <HBox fx:id="handCard" alignment="CENTER" prefHeight="131.0" prefWidth="1200.0" spacing="10.0" style="-fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="143.0" prefWidth="435.0" style="-fx-background-color: #A9A9A9;">
                <children>
@@ -30,9 +30,9 @@
                   </ImageView>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="143.0" prefWidth="435.0" spacing="10.0" style="-fx-background-color: #A9A9A9;">
+            <HBox fx:id="handCard" alignment="CENTER" onKeyPressed="#showBack" prefHeight="143.0" prefWidth="435.0" spacing="10.0" style="-fx-background-color: #A9A9A9;">
                <children>
-                  <ImageView fx:id="handCard1" fitHeight="116.0" fitWidth="170.0" onKeyPressed="#showBack" onMouseClicked="#handCard1Clicked" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="handCard1" fitHeight="116.0" fitWidth="170.0" onMouseClicked="#handCard1Clicked" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../FrontCards/G11f.jpg" />
                      </image>
@@ -368,7 +368,17 @@
                         <Button layoutX="19.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="goBack" />
                      </children>
                   </Pane>
-               </children></Pane>
+                  <ScrollPane fx:id="scrollPaneOthers" prefHeight="483.0" prefWidth="937.0">
+                     <content>
+                        <Pane fx:id="otherStructuresPane" prefHeight="2000.0" prefWidth="2000.0" visible="false">
+                           <children>
+                              <Text layoutX="401.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prova" />
+                           </children>
+                        </Pane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
          </content>
       </ScrollPane>
    </center>

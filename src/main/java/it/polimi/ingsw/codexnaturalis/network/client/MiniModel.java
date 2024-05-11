@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.network.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public class MiniModel {
         view.updateError(error);
     }
 
-    public void setChat(Chat chat) {
+    public void setChat(Chat chat) throws IOException {
         this.chat = chat;
         view.updateChat(chat);
     }

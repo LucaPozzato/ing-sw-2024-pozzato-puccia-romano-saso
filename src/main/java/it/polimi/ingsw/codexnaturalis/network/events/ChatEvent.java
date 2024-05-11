@@ -6,6 +6,10 @@ import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 
+
+import java.io.IOException;
+import java.io.Serial;
+
 public class ChatEvent extends Event {
     @Serial
     private static final long serialVersionUID = 380111272220291L;
@@ -20,7 +24,7 @@ public class ChatEvent extends Event {
     }
 
     @Override
-    public void doJob(MiniModel minimodel) throws IllegalCommandException {
+    public void doJob(MiniModel minimodel) throws IllegalCommandException, IOException {
         minimodel.setChat(chat);
     }
 

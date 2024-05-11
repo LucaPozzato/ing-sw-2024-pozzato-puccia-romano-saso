@@ -37,20 +37,24 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/*TO DO (GENERAL):
+-Gestisci i ritardi dei giocatori (x non gioca da 10min... che si fa...)
+-Gestisci flusso con GameInizialize, ecc
+-
+-
+*/
 public class Game extends Application implements View, Initializable {
 
     // Utils FXML
     @FXML
-    private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints,
-            potionPoints;
+    private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints, potionPoints;
 
     @FXML
     private Text connectionType;
@@ -70,14 +74,15 @@ public class Game extends Application implements View, Initializable {
 
     @FXML
     private List<Rectangle> rectangleList = new ArrayList<Rectangle>();
+
     @FXML
     private BorderPane borderPane;
 
     @FXML
-    private Pane structurePane, chatPane, boardPane;
+    private Pane structurePane,otherStructuresPane, chatPane, boardPane;
 
     @FXML
-    private ScrollPane scrollPane;
+    private ScrollPane scrollPane, scrollPaneOthers;
 
     @FXML
     private TextArea textArea;
@@ -85,98 +90,231 @@ public class Game extends Application implements View, Initializable {
     @FXML
     private TextField inputText;
 
+    @FXML
+    private HBox handCard;
+
     String handCard1URL, handCard2URL, handCard3URL;
+    Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card, currentDeckGoldCard, currentDeckResource1Card, currentDeckResource2Card, currentDeckResourceCard;
+    private ImageView structureCardSelected;
 
     private Player myPlayer;
+    private TestMain testMain;
     private InitialCard initialCardCard;
     private double lastX, lastY; // Memorizza le coordinate dell'ultimo evento
     int rPressed = 0;
     int fPressed = 1;
 
+    List<ImageView> cardPlaced = new ArrayList<>();
+
     ViewFactory viewFactory = new ViewFactory();
+
+    //Gestione evento di placeCard
+
+    Card  currentSelected = null, currentSelectedDeck;
+    String currentAngle;
+    boolean currentSelectedFrontUp = true;
+    private ImageView currentSelectedImage;
+    boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialSetupDeck = true, isHandCardSelected;
+
 
     @FXML
     void handCard1Clicked(MouseEvent event) {
-        handCard1.setOpacity(1);
-        handCard2.setOpacity(.5);
-        handCard3.setOpacity(.5);
+
+        if(!isCardPlaced){
+            handCard1.setOpacity(1);
+            handCard2.setOpacity(.5);
+            handCard3.setOpacity(.5);
+
+            currentSelected = currentHandCard1;
+            currentSelectedImage = handCard1;
+            isHandCardSelected = true;
+            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
+        }
+
 
     }
 
     @FXML
     void handCard2Clicked(MouseEvent event) {
-        handCard1.setOpacity(.5);
-        handCard2.setOpacity(1);
-        handCard3.setOpacity(.5);
+
+        if(!isCardPlaced){
+            handCard1.setOpacity(.5);
+            handCard2.setOpacity(1);
+            handCard3.setOpacity(.5);
+
+            currentSelected = currentHandCard2;
+            currentSelectedImage = handCard2;
+            isHandCardSelected = true;
+            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
+        }
+
+
 
     }
 
     @FXML
     void handCard3Clicked(MouseEvent event) {
-        handCard1.setOpacity(.5);
-        handCard2.setOpacity(.5);
-        handCard3.setOpacity(1);
+        if(!isCardPlaced){
+            handCard1.setOpacity(.5);
+            handCard2.setOpacity(.5);
+            handCard3.setOpacity(1);
+
+            currentSelected = currentHandCard3;
+            currentSelectedImage = handCard3;
+            isHandCardSelected = true;
+            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
+        }
+
+
+
 
     }
 
     @FXML
-    void goldCard1Click(MouseEvent event) {
-        goldDeckCard.setOpacity(.5);
-        goldCard1.setOpacity(1);
-        goldCard2.setOpacity(.5);
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(.5);
+    void goldCard1Click(MouseEvent event) throws IllegalCommandException {
+        if(!cardDrawn){
+            goldDeckCard.setOpacity(.5);
+            goldCard1.setOpacity(1);
+            goldCard2.setOpacity(.5);
+            resourceDeckCard.setOpacity(.5);
+            resourceCard1.setOpacity(.5);
+            resourceCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(goldCard1.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
+            currentSelectedDeck = currentDeckGold1Card;
+            //System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
+            testMain.drawCommand(currentDeckGold1Card);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
+
     }
 
     @FXML
-    void goldCard2Click(MouseEvent event) {
-        goldDeckCard.setOpacity(.5);
-        goldCard1.setOpacity(.5);
-        goldCard2.setOpacity(1);
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(.5);
+    void goldCard2Click(MouseEvent event) throws IllegalCommandException {
+        if (!cardDrawn){
+            goldDeckCard.setOpacity(.5);
+            goldCard1.setOpacity(.5);
+            goldCard2.setOpacity(1);
+            resourceDeckCard.setOpacity(.5);
+            resourceCard1.setOpacity(.5);
+            resourceCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(goldCard2.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
+            currentSelectedDeck = currentDeckGold2Card;
+            //System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
+            testMain.drawCommand(currentDeckGold2Card);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
+
     }
 
     @FXML
-    void goldDeckCardClick(MouseEvent event) {
-        goldDeckCard.setOpacity(1);
-        goldCard1.setOpacity(.5);
-        goldCard2.setOpacity(.5);
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(.5);
+    void goldDeckCardClick(MouseEvent event) throws IllegalCommandException {
+
+        if (!cardDrawn){
+            goldDeckCard.setOpacity(1);
+            goldCard1.setOpacity(.5);
+            goldCard2.setOpacity(.5);
+            resourceDeckCard.setOpacity(.5);
+            resourceCard1.setOpacity(.5);
+            resourceCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(goldDeckCard.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
+            currentSelectedDeck = currentDeckGoldCard;
+            //System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
+            testMain.drawCommand(currentDeckGoldCard);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
     }
 
     @FXML
-    void resourceCard1Click(MouseEvent event) {
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(1);
-        resourceCard2.setOpacity(.5);
-        goldDeckCard.setOpacity(.5);
-        goldCard1.setOpacity(.5);
-        goldCard2.setOpacity(.5);
+    void resourceCard1Click(MouseEvent event) throws IllegalCommandException {
+
+        if(!cardDrawn){
+            resourceDeckCard.setOpacity(.5);
+            resourceCard1.setOpacity(1);
+            resourceCard2.setOpacity(.5);
+            goldDeckCard.setOpacity(.5);
+            goldCard1.setOpacity(.5);
+            goldCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(resourceCard1.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource1Card);
+            currentSelectedDeck = currentDeckResource1Card;
+            testMain.drawCommand(currentDeckResource1Card);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
     }
 
     @FXML
-    void resourceCard2Click(MouseEvent event) {
-        resourceDeckCard.setOpacity(.5);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(1);
-        goldDeckCard.setOpacity(.5);
-        goldCard1.setOpacity(.5);
-        goldCard2.setOpacity(.5);
+    void resourceCard2Click(MouseEvent event) throws IllegalCommandException {
+
+        if(!cardDrawn){
+            resourceDeckCard.setOpacity(.5);
+            resourceCard1.setOpacity(.5);
+            resourceCard2.setOpacity(1);
+            goldDeckCard.setOpacity(.5);
+            goldCard1.setOpacity(.5);
+            goldCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(resourceCard2.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource2Card);
+            currentSelectedDeck = currentDeckResource2Card;
+            testMain.drawCommand(currentDeckResource2Card);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
     }
 
     @FXML
-    void resourceDeckCardClick(MouseEvent event) {
-        resourceDeckCard.setOpacity(1);
-        resourceCard1.setOpacity(.5);
-        resourceCard2.setOpacity(.5);
-        goldDeckCard.setOpacity(.5);
-        goldCard1.setOpacity(.5);
-        goldCard2.setOpacity(.5);
+    void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException {
+
+        if(!cardDrawn){
+            resourceDeckCard.setOpacity(1);
+            resourceCard1.setOpacity(.5);
+            resourceCard2.setOpacity(.5);
+            goldDeckCard.setOpacity(.5);
+            goldCard1.setOpacity(.5);
+            goldCard2.setOpacity(.5);
+
+            currentSelectedImage.setImage(resourceDeckCard.getImage());
+            currentSelectedImage.setVisible(true);
+            isHandCardSelected = false;
+
+            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
+            currentSelectedDeck = currentDeckResourceCard;
+            testMain.drawCommand(currentDeckResourceCard);
+            cardDrawn = true;
+            isCardPlaced = false;
+        }
+
     }
 
     @FXML
@@ -208,6 +346,8 @@ public class Game extends Application implements View, Initializable {
 
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
+//        otherStructuresPane.setVisible(true);
+//        borderPane.setCenter(scrollPaneOthers);
 
     }
 
@@ -259,7 +399,7 @@ public class Game extends Application implements View, Initializable {
         else {
             System.out.println("Player not matching" + player.getNickname()); // Metti un alert in caso...
         }
-        System.out.print("\nCurrent Player updated!");
+        //System.out.print("\nCurrent Player updated!");
 
     }
 
@@ -281,7 +421,7 @@ public class Game extends Application implements View, Initializable {
             nickname4.setVisible(true);
             nickname4Visibility.setVisible(true);
         }
-        System.out.print("\nPlayers updated!");
+        //System.out.print("\nPlayers updated!");
 
     }
 
@@ -321,13 +461,48 @@ public class Game extends Application implements View, Initializable {
     @Override
     public void updateStructures(List<Structure> structures) {
         int position = 0;
+        int position1= 0;
+        int points;
         Structure myStructure = structures.get(0);
+
         Image image = null;
         Card cardForAngles;
 
-        // TO DO: Capisci se quando la funzione viene creata una seconda volta le carte
-        // precedenti vengono eliminate?
-        for (Pair<Card, Boolean> card : myStructure.getPlacedCards()) {
+//        System.out.println("\n\nVisible Resources: \n\n" + myStructure.getVisibleObjects());
+//        System.out.println("\n\nVisible Resources: \n\n" + myStructure.getVisibleObjects().substring(26,27));
+
+        //TO DO: si arrivera' mai a >9?
+
+        //Aggiungo punti in base alle risorse
+        points = Integer.parseInt(myStructure.getVisibleResources().substring(11,12));
+        addPoints("VEGETABLE", points);
+
+        points = Integer.parseInt(myStructure.getVisibleResources().substring(21,22));
+        addPoints("ANIMAL", points);
+
+        points = Integer.parseInt(myStructure.getVisibleResources().substring(31,32));
+        addPoints("INSECT", points);
+
+        points = Integer.parseInt(myStructure.getVisibleResources().substring(41,42));
+        addPoints("SHROOM", points);
+
+        points = Integer.parseInt(myStructure.getVisibleObjects().substring(9,10));
+        addPoints("FEATHER", points);
+
+        points = Integer.parseInt(myStructure.getVisibleObjects().substring(16,17));
+        addPoints("INK", points);
+
+        points = Integer.parseInt(myStructure.getVisibleObjects().substring(26,27));
+        addPoints("SCROLL", points);
+
+
+
+
+
+
+
+        //TO DO: Capisci se quando la funzione viene creata una seconda volta le carte precedenti vengono eliminate?
+        for(Pair<Card, Boolean> card: myStructure.getPlacedCards()){
 
             if (position == 1) {
                 int x = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
@@ -343,59 +518,172 @@ public class Game extends Application implements View, Initializable {
 
                 imageView.setFitWidth(111);
                 imageView.setFitHeight(74);
-                imageView.setLayoutX(945 + 82 * (x - 40));
-                imageView.setLayoutY(1000 - 44 * (y - 40)); // TO DO: vedi qui... -
+                imageView.setLayoutX(945+82*(x-40));
+                imageView.setLayoutY(1000-44*(y-40));
 
-                // TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche
-                // sopra le carte piazzate..NO!
-                // try{
-                // createGhostRectangles(card.getKey(), imageView.getLayoutX(),
-                // imageView.getLayoutY());}
-                // catch (Exception ignored){}
+                //Inizio
+                imageView.setOnMouseClicked(event -> {
 
-                // System.out.println("posi " + imageView.getLayoutX() + " " +
-                // imageView.getLayoutY() + "\n");
+                    if (!isCardPlaced && isHandCardSelected){
+                        double currentAngleSelectedX = event.getX();
+                        double currentAngleSelectedY = event.getY();
+
+                        if (currentAngleSelectedX <= 29){
+                            if(currentAngleSelectedY <=30)
+                                currentAngle = "TL";
+                            else if(currentAngleSelectedY >=44)
+                                currentAngle = "BL";
+                        } else if (currentAngleSelectedX >=82) {
+                            if(currentAngleSelectedY <=30)
+                                currentAngle = "TR";
+                            else if(currentAngleSelectedY >=44)
+                                currentAngle = "BR";
+                        }
+
+                        try {
+                            testMain.placeCommand(card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
+
+
+                            currentSelectedImage.setVisible(false);
+
+
+                            isCardPlaced = true;
+                            cardDrawn = false;
+
+
+                        } catch (IllegalCommandException e) {
+                            showAlert("Sei sicuro che la carta vada li'? Ritenta"); //TO DO: cambia
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+
+
+                });
+                //Fine
+
+                //System.out.println("posi " + imageView.getLayoutX() + " " +  imageView.getLayoutY() + "\n");
                 structurePane.getChildren().add(imageView);
             } else
                 position++;
 
         }
-        // for(Rectangle rectangle: rectangleList){
-        // rectangle.setOnMouseEntered(event -> {
-        // rectangle.setFill(Color.web("#808080", 0.8));
-        // });
-        //
-        // // Gestore per quando il mouse esce dal rettangolo
-        // rectangle.setOnMouseExited(event -> {
-        // rectangle.setFill(Color.web("#808080", 0.1));
-        // });
-        //
-        // }
-    }
+
+
+        //TO DO: sistema
+//        for(Pair<Card, Boolean> card: hisStructure.getPlacedCards()){
+//            System.out.printf("\nCard:" + card.getKey() + "\n");
+//            if (position1 == 1){
+//                int x1 = hisStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
+//                int y1 = hisStructure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
+//                //System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y + "\n");
+//                if (card.getValue().toString().equals("true")){
+//                    image = pathFront(card.getKey().toString().substring(6,9));
+//                }
+//                else if (card.getValue().toString().equals("false")){
+//                    image = pathBack(card.getKey().toString().substring(6,9));
+//                }
+//
+//                ImageView imageView = new ImageView(image);
+//
+//                imageView.setFitWidth(111);
+//                imageView.setFitHeight(74);
+//                imageView.setLayoutX(945+82*(x1-40));
+//                imageView.setLayoutY(1000-44*(y1-40)); //TO DO: vedi qui... -
+
+                //TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche sopra le carte piazzate..NO!
+//                try{
+//                    createGhostRectangles(card.getKey(), imageView.getLayoutX(), imageView.getLayoutY());}
+//                catch (Exception ignored){}
+
+                //System.out.println("posi " + imageView.getLayoutX() + " " +  imageView.getLayoutY() + "\n");
+//                otherStructuresPane.getChildren().add(imageView);
+            }
+//            else{
+//                position1++;
+//                image = pathFront(initialCardCard.getIdCard());
+//                ImageView imageView = new ImageView(image);
+//                imageView.setFitWidth(111);
+//                imageView.setFitHeight(74);
+//                imageView.setLayoutX(945);
+//                imageView.setLayoutY(1000);
+//                otherStructuresPane.getChildren().add(imageView);
+//            }
+
+
+
+//        }
+//        for(Rectangle rectangle: rectangleList){
+//            rectangle.setOnMouseEntered(event -> {
+//                rectangle.setFill(Color.web("#808080", 0.8));
+//            });
+//
+//            // Gestore per quando il mouse esce dal rettangolo
+//            rectangle.setOnMouseExited(event -> {
+//                rectangle.setFill(Color.web("#808080", 0.1));
+//            });
+//
+//        }
+// }
 
     @Override
     public void updateHand(List<Hand> hands) {
         Hand hand = hands.get(0);
-        String card1;
-        String card2;
-        String card3;
-        String secretObjectiveCard;
+        if(isInitialSetupHand){
+            String card1;
+            String card2;
+            String card3;
+            String secretObjectiveCard;
 
-        card1 = hand.getCardsHand().get(0).toString().substring(6, 9);
-        card2 = hand.getCardsHand().get(1).toString().substring(6, 9);
-        card3 = hand.getCardsHand().get(2).toString().substring(6, 9);
-        secretObjectiveCard = hand.getSecretObjective().toString().substring(22, 25);
+            currentHandCard1 = hand.getCardsHand().get(0);
+            currentHandCard2 = hand.getCardsHand().get(1);
+            currentHandCard3 = hand.getCardsHand().get(2);
 
-        handCard1.setImage(pathFront(card1));
-        handCard2.setImage(pathFront(card2));
-        handCard3.setImage(pathFront(card3));
-        secreteObjective.setImage(pathFront(secretObjectiveCard));
+            card1 = hand.getCardsHand().get(0).toString().substring(6,9);
+            card2 = hand.getCardsHand().get(1).toString().substring(6,9);
+            card3 = hand.getCardsHand().get(2).toString().substring(6,9);
+            secretObjectiveCard = hand.getSecretObjective().toString().substring(22,25);
 
-        handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "f.jpg";
-        handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
-        handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
+            handCard1.setImage(pathFront(card1));
+            handCard2.setImage(pathFront(card2));
+            handCard3.setImage(pathFront(card3));
+            secreteObjective.setImage(pathFront(secretObjectiveCard));
 
-        System.out.print("\nHand updated!");
+            handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "f.jpg";
+            handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
+            handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
+
+
+            isInitialSetupHand = false;
+        }
+        else{
+            if(currentSelected == currentHandCard1){
+                currentHandCard1 = hand.getCardsHand().get(2);
+                handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                handCard.requestFocus();
+            }
+
+            else if(currentSelected == currentHandCard2){
+                currentHandCard2 = hand.getCardsHand().get(2);
+                handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+            }
+
+            else if(currentSelected == currentHandCard3){
+                currentHandCard3 = hand.getCardsHand().get(2);
+                handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+            }
+            System.out.println("\nUpdate card1: " + handCard1URL);
+            System.out.println("\nUpdate card2: " + handCard2URL);
+            System.out.println("\nUpdate card3: " + handCard3URL);
+            currentSelected = null;
+        }
+        System.out.printf("\nHand: ");
+        for (Card card: hand.getCardsHand())
+            System.out.printf(card.toString().substring(6,9) + "-");
+
+
+        //System.out.print("\nHand updated!");
 
     }
 
@@ -405,11 +693,15 @@ public class Game extends Application implements View, Initializable {
     public void updateBoard(Board board) {
         String publicObjectiveOne;
         String publicObjectiveTwo;
+        int points;
         String myPlayerColor = myPlayer.getColor().toString();
-        System.out.printf("My player color: " + myPlayerColor);
+        //System.out.printf("My player color: " + myPlayerColor);
         ImageView pedina;
-        int points = 23;
-        // int points = board.getActualPoints(myPlayer);
+        if(board.getActualPoints(myPlayer) == null)
+            points = 1;
+        else
+            points = board.getActualPoints(myPlayer);
+        //int points = board.getActualPoints(myPlayer);
 
         publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22, 25);
         publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22, 25);
@@ -601,7 +893,8 @@ public class Game extends Application implements View, Initializable {
 
         }
 
-        System.out.print("\nDeck updated!");
+
+        //System.out.print("\nDeck updated!");
     }
 
     public void setDimension(ImageView pedina) {
@@ -612,25 +905,85 @@ public class Game extends Application implements View, Initializable {
 
     @Override
     public void updateDeck(Deck deck) {
-        Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
-        Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
-        String goldDeckCardOne = deck.drawGoldCard().toString().substring(6, 9);
-        String goldCardOne = deck.drawGoldCard().toString().substring(6, 9);
-        String goldCardTwo = deck.drawGoldCard().toString().substring(6, 9);
+        if(isInitialSetupDeck){
+            Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
+            Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
-        String resourceDeckCardOne = deck.drawResourceCard().toString().substring(6, 9);
-        String resourceCardOne = deck.drawResourceCard().toString().substring(6, 9);
-        String resourceCardTwo = deck.drawResourceCard().toString().substring(6, 9);
+            currentDeckGold1Card = deck.getGoldDeck().get(deck.getGoldDeck().size()-1);
+            currentDeckGold2Card = deck.getGoldDeck().get(deck.getGoldDeck().size()-2);
+            currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size()-3);
 
-        goldDeckCard.setImage(pathBack(goldDeckCardOne));
-        goldCard1.setImage(pathFront(goldCardOne));
-        goldCard2.setImage(pathFront(goldCardTwo));
+            currentDeckResource1Card = deck.getResourceDeck().get(deck.getResourceDeck().size()-1);
+            currentDeckResource2Card = deck.getResourceDeck().get(deck.getResourceDeck().size()-2);
+            currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size()-3);
 
-        resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
-        resourceCard1.setImage(pathFront(resourceCardOne));
-        resourceCard2.setImage(pathFront(resourceCardTwo));
-        System.out.print("\nDeck updated!");
+
+            String goldDeckCardOne = currentDeckGoldCard.toString().substring(6,9);
+            String goldCardOne = currentDeckGold1Card.toString().substring(6,9);
+            String goldCardTwo = currentDeckGold2Card.toString().substring(6,9);
+
+            String resourceDeckCardOne = currentDeckResourceCard.toString().substring(6,9);
+            String resourceCardOne = currentDeckResource1Card.toString().substring(6,9);
+            String resourceCardTwo = currentDeckResource2Card.toString().substring(6,9);
+
+            goldDeckCard.setImage(pathBack(goldDeckCardOne));
+            goldCard1.setImage(pathFront(goldCardOne));
+            goldCard2.setImage(pathFront(goldCardTwo));
+
+            resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
+            resourceCard1.setImage(pathFront(resourceCardOne));
+            resourceCard2.setImage(pathFront(resourceCardTwo));
+            isInitialSetupDeck = false;
+        }
+        else{
+
+            if(currentSelectedDeck == currentDeckResourceCard){
+                currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size()-3);
+                String changeImage = currentDeckResourceCard.toString().substring(6,9);
+                resourceDeckCard.setImage(pathBack(changeImage));
+            }
+
+            else if(currentSelectedDeck == currentDeckResource1Card){
+                currentDeckResource1Card = deck.getResourceDeck().get(deck.getResourceDeck().size()-3);
+                String changeImage = currentDeckResource1Card.toString().substring(6,9);
+                resourceCard1.setImage(pathFront(changeImage));
+            }
+
+            else if(currentSelectedDeck == currentDeckResource2Card){
+                currentDeckResource2Card = deck.getResourceDeck().get(deck.getResourceDeck().size()-3);
+                String changeImage = currentDeckResource2Card.toString().substring(6,9);
+                resourceCard2.setImage(pathFront(changeImage));
+            }
+
+            else if(currentSelectedDeck == currentDeckGoldCard){
+                currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size()-3);
+                String changeImage = currentDeckGoldCard.toString().substring(6,9);
+                goldDeckCard.setImage(pathBack(changeImage));
+            }
+
+            else if(currentSelectedDeck == currentDeckGold1Card){
+                currentDeckGold1Card = deck.getGoldDeck().get(deck.getGoldDeck().size()-3);
+                String changeImage = currentDeckGold1Card.toString().substring(6,9);
+                goldCard1.setImage(pathFront(changeImage));
+            }
+
+            else if(currentSelectedDeck == currentDeckGold2Card){
+                currentDeckGold2Card = deck.getGoldDeck().get(deck.getGoldDeck().size()-3);
+                String changeImage = currentDeckGold2Card.toString().substring(6,9);
+                goldCard2.setImage(pathFront(changeImage));
+            }
+
+        }
+
+        //.print("\nDeck updated!");
+
+        System.out.print("\n\nResource Deck:");
+        for(Card card: deck.getResourceDeck())
+            System.out.printf(card.toString().substring(6,9) + "-");
+        System.out.print("\nGold Deck: ");
+        for(Card card: deck.getGoldDeck())
+            System.out.printf(card.toString().substring(6,9) + "-");
     }
 
     @Override
@@ -674,6 +1027,8 @@ public class Game extends Application implements View, Initializable {
     void showBack(KeyEvent event) {
         if (event.getCode() == KeyCode.B && rPressed == 0) {
 
+            if (currentSelected != null)
+                currentSelectedFrontUp = false;
             rPressed = 1;
             if (fPressed == 1)
                 fPressed--;
@@ -690,7 +1045,15 @@ public class Game extends Application implements View, Initializable {
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card3 + "b.jpg";
 
-        } else if (event.getCode() == KeyCode.F && fPressed == 0) {
+            System.out.println("\nFront1: " + handCard1URL);
+            System.out.println("\nFront2: " + handCard2URL);
+            System.out.println("\nFront3: " + handCard3URL);
+
+        }
+        else if(event.getCode() == KeyCode.F && fPressed == 0){
+
+            if (currentSelected != null)
+                currentSelectedFrontUp = true;
 
             fPressed = 1;
             if (rPressed == 1)
@@ -707,14 +1070,18 @@ public class Game extends Application implements View, Initializable {
             handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "b.jpg";
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "b.jpg";
+
+            System.out.println("\nBack: " + handCard1URL);
+            System.out.println("\nBack: " + handCard2URL);
+            System.out.println("\nBack: " + handCard3URL);
         }
     }
 
-    public void setInitialCard(InitialCard initialCard1) {
-        int x, y;
-        int width = 111;
-        int height = 74;
-        int position = 0; // 0=up left, 1=up right, 2=bottom left, 3=bottom right
+    public void setInitialCard(InitialCard initialCard1){
+        int x,y;
+        int width = 29;
+        int height = 30;
+        int position = 0; //0=up left, 1=up right, 2=bottom left, 3=bottom right
         this.initialCardCard = initialCard1;
 
         String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + initialCard1.getIdCard() + "f.jpg";
@@ -729,30 +1096,82 @@ public class Game extends Application implements View, Initializable {
         x = (int) initialCard.getLayoutX();
         y = (int) initialCard.getLayoutY();
 
+        initialCard.setOnMouseClicked(event -> {
+
+            if (isCardPlaced == false ){
+                double currentAngleSelectedX = event.getX();
+                double currentAngleSelectedY = event.getY();
+
+                if (currentAngleSelectedX <= 29){
+                    if(currentAngleSelectedY <=30)
+                        currentAngle = "TL";
+                    else if(currentAngleSelectedY >=44)
+                        currentAngle = "BL";
+                } else if (currentAngleSelectedX >=82) {
+                    if(currentAngleSelectedY <=30)
+                        currentAngle = "TR";
+                    else if(currentAngleSelectedY >=44)
+                        currentAngle = "BR";
+                }
+
+                try {
+                    //.println("1: \n" + initialCard1 + "2: \n" + currentSelected + " 3: \n" + currentAngle + "4: \n" + currentSelectedFrontUp);
+                    testMain.placeCommand(initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
+
+
+                    currentSelectedImage.setVisible(false);
+
+
+                    isCardPlaced = true;
+                    cardDrawn = false;
+
+
+                } catch (IllegalCommandException e) {
+                    showAlert("Sei sicuro che la carta vada li'? Ritenta");
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+
+
+
+
+
+        });
+
+        cardPlaced.add(initialCard);
         structurePane.getChildren().add(initialCard);
 
-        for (String s : initialCardCard.getFrontCorners()) {
-            // System.out.println("\nCorner corrente: \n" + s);
-            if (s != null && position == 0) {
-                Rectangle rectangle = new Rectangle(x - 82, y - 44, width, height);
+        for (String s: initialCardCard.getFrontCenterResources()){
+            addPoints(s);
+        }
+
+        for (String s: initialCardCard.getFrontCorners()){
+            //System.out.println("\nCorner corrente: \n" + s);
+            if(!Objects.equals(s, "NULL") && position==0){ //TOP LEFT
+                Rectangle rectangle = new Rectangle(x, y,width,height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 1) {
-                Rectangle rectangle = new Rectangle(x + 82, y - 44, width, height);
+                //structurePane.getChildren().add(rectangle);
+            }
+            else if(!Objects.equals(s, "NULL") && position==1){ //TOP RIGHT
+                Rectangle rectangle = new Rectangle(x+82, y,width,height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 2) {
-                Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
+                //structurePane.getChildren().add(rectangle);
+            }
+            else if(!Objects.equals(s, "NULL") && position==2){ //BOTTOM RIGHT
+                Rectangle rectangle = new Rectangle(x+82, y+44,width,height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 3) {
-                Rectangle rectangle = new Rectangle(x - 82, y + 44, width, height);
+                //structurePane.getChildren().add(rectangle);
+            }
+            else if(!Objects.equals(s, "NULL") && position==3){ //BOTTOM LEFT
+                Rectangle rectangle = new Rectangle(x, y+44,width,height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
+                //structurePane.getChildren().add(rectangle);
             }
 
             position++;
@@ -768,12 +1187,111 @@ public class Game extends Application implements View, Initializable {
             rectangle.setOnMouseExited(event -> {
                 rectangle.setFill(Color.web("#808080", 0.2));
             });
+            rectangle.setOnMouseClicked(event -> {
+
+
+            });
 
         }
 
     }
 
-    public void setConnectionType(String tipoDiConnessione) {
+    //mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints, potionPoints
+    public void addPoints(String obj){
+        int valueInteger = 0;
+        String valueString;
+        switch (obj){
+            case "SHROOM":
+                valueInteger = Integer.parseInt(mushroomsPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                mushroomsPoints.setText(valueString);
+                break;
+            case "VEGETABLE":
+                valueInteger = Integer.parseInt(leafPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                leafPoints.setText(valueString);
+                break;
+            case "ANIMAL":
+                valueInteger = Integer.parseInt(wolfPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                wolfPoints.setText(valueString);
+                break;
+            case "INSECT":
+                valueInteger = Integer.parseInt(butterflyPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                butterflyPoints.setText(valueString);
+                break;
+            case "FEATHER":
+                valueInteger = Integer.parseInt(featherPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                featherPoints.setText(valueString);
+                break;
+            case "SCROLL":
+                valueInteger = Integer.parseInt(manuscriptPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                manuscriptPoints.setText(valueString);
+                break;
+            case "INK":
+                valueInteger = Integer.parseInt(potionPoints.getText());
+                valueInteger++;
+                valueString = String.valueOf(valueInteger);
+                potionPoints.setText(valueString);
+                break;
+
+
+        }
+    }
+    public void addPoints(String obj, int points){
+        int valueInteger = 0;
+        String valueString;
+        switch (obj){
+            case "SHROOM":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                mushroomsPoints.setText(valueString);
+                break;
+            case "VEGETABLE":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                leafPoints.setText(valueString);
+                break;
+            case "ANIMAL":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                wolfPoints.setText(valueString);
+                break;
+            case "INSECT":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                butterflyPoints.setText(valueString);
+                break;
+            case "FEATHER":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                featherPoints.setText(valueString);
+                break;
+            case "SCROLL":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                manuscriptPoints.setText(valueString);
+                break;
+            case "INK":
+                valueInteger = points;
+                valueString = String.valueOf(valueInteger);
+                potionPoints.setText(valueString);
+                break;
+
+
+        }
+    }
+
+    public void setConnectionType(String tipoDiConnessione){
         connectionType.setText(tipoDiConnessione);
     }
 
@@ -806,9 +1324,27 @@ public class Game extends Application implements View, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        handCard1.setFocusTraversable(true);
-        handCard1.requestFocus();
+        mushroomsPoints.setText("0");
+        leafPoints.setText("0");
+        wolfPoints.setText("0");
+        butterflyPoints.setText("0");
+        featherPoints.setText("0");
+        manuscriptPoints.setText("0");
+        potionPoints.setText("0");
+
+//        resourceDeckCard.setDisable(true);
+//        resourceCard1.setDisable(true);
+//        resourceCard2.setDisable(true);
+//        goldDeckCard.setDisable(true);
+//        goldCard1.setDisable(true);
+//        goldCard2.setDisable(true);
+
+
+
+        handCard.setFocusTraversable(true);
+        handCard.requestFocus();
         TestMain testMain = new TestMain(this);
+        this.testMain = testMain;
         testMain.start();
 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -836,9 +1372,9 @@ public class Game extends Application implements View, Initializable {
         });
 
         scrollPane.setOnMouseReleased(event -> {
-            // focus per funzione di back
-            handCard1.setFocusTraversable(true);
-            handCard1.requestFocus();
+            //focus per funzione di back
+            handCard.setFocusTraversable(true);
+            handCard.requestFocus();
         });
 
     }
