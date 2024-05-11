@@ -163,6 +163,59 @@ public class TerminalPrinter {
     }
 
     public void printHelp() {
+        String help = "\u001B[1mCommands (case insensitive):\u001B[1m\n"
+                + "\u001B[38;5;242m>\u001B[0m create: <Game ID>, <nick name>, <password>, <color>, <number of players>\n"
+                + "\u001B[38;5;242m>\u001B[0m join: <Game ID>, <nick name>, <password>, <color>\n"
+                + "\u001B[38;5;242m>\u001B[0m rejoin: <Game ID>, <nick name>, <password>\n"
+                + "\u001B[38;5;242m>\u001B[0m choose: <side of card>, <objective card>\n"
+                + "\u001B[38;5;242m>\u001B[0m place: <ID of card to place>,  <ID of bottom card>,  <position>, <side of card>\n"
+                + "\u001B[38;5;242m>\u001B[0m draw: <ID of card to draw (also RXX/GXX)>\n"
+                + "\u001B[38;5;242m>\u001B[0m chat\n"
+                + "\u001B[38;5;242m>\u001B[0m send: <message> [, <nick name of receiver>]\n"
+                + "\u001B[38;5;242m>\u001B[0m next\n"
+                + "\u001B[38;5;242m>\u001B[0m esc\n"
+                + "\u001B[38;5;242m>\u001B[0m help\n"
+                + "\u001B[38;5;242m>\u001B[0m quit\n\n"
+                + "\u001B[1mPossible colors:\u001B[0m\n"
+                + "- yellow\n"
+                + "- red\n"
+                + "- blue\n"
+                + "- green\n\n"
+                + "\u001B[1mPossible value of objective card:\u001B[0m\n"
+                + "- 1 (objective card 1)\n"
+                + "- 2 (objective card 2)\n\n"
+                + "\u001B[1mPossible value of position:\u001B[0m\n"
+                + "- TL (top-left)\n"
+                + "- TR (top-right)\n"
+                + "- BL (bottom-left)\n"
+                + "- BR (bottom-right)\n\n"
+                + "\u001B[1mPossible side of card:\u001B[0m\n"
+                + "- front\n"
+                + "- back\n";
+
+        String[] helpLines = help.split("\n");
+
+        // get max length of help lines
+        int maxWidth = 0;
+        for (int i = 0; i < helpLines.length; i++) {
+            if (helpLines[i].length() > maxWidth)
+                maxWidth = helpLines[i].length();
+        }
+
+        int x = (width - maxWidth) / 2;
+        int y = (height - helpLines.length) / 2 - 2;
+
+        printBox(x, y, maxWidth + 2, helpLines.length + 2, "HELP PAGE");
+        x++;
+        y++;
+        for (int i = 0; i < helpLines.length; i++) {
+            System.out.print("\u001B[" + y + ";" + x + "H" + helpLines[i]);
+            y++;
+        }
+
+        x--;
+        printBox(x, y + 1, maxWidth + 2, 3, "Input");
+        System.out.print("\u001B[" + (y + 2) + ";" + (x + 1) + "H" + input);
     }
 
     public void printChat() {

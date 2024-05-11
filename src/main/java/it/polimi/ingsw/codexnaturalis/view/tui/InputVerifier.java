@@ -21,12 +21,10 @@ import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
 public class InputVerifier {
     private MiniModel miniModel;
     private VirtualClient client;
-    private Tui tui;
 
-    public InputVerifier(MiniModel miniModel, VirtualClient client, Tui tui) {
+    public InputVerifier(MiniModel miniModel, VirtualClient client) {
         this.miniModel = miniModel;
         this.client = client;
-        this.tui = tui;
     }
 
     public Command move(Player player, String command) throws IllegalCommandException {
@@ -73,7 +71,6 @@ public class InputVerifier {
                         throw new IllegalCommandException("Invalid color choice");
                 }
 
-                tui.okInit();
                 try {
                     return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
                             parameters[2], color, Integer.parseInt(parameters[4]));
@@ -107,10 +104,6 @@ public class InputVerifier {
                         throw new IllegalCommandException("Invalid color choice");
                 }
 
-                // BUG: if I do a join/create in the middle of the game I will set up a
-                // different nickname on the minimodel -> setup events should be for single
-                // players
-                tui.okInit();
                 try {
                     return new JoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
                             parameters[2], color);
@@ -144,8 +137,6 @@ public class InputVerifier {
 
                 objCard = (ObjectiveCard) miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
                         .getChooseBetweenObj().get(objIndex);
-                // TODO: gameid
-                tui.okChoose();
                 try {
                     return new ChooseCommand(client.getClientId(), miniModel.getGameId(), player, side, objCard);
                 } catch (Exception e) {

@@ -31,8 +31,7 @@ public class Tui implements View {
     private Boolean chooseStage;
     private Boolean initialStage;
     private Boolean chatStage;
-    private Boolean okInit;
-    private Boolean okChoose;
+    private Boolean helpStage;
     private VirtualClient client;
 
     // BUG: input is deleted after new events are received
@@ -42,7 +41,7 @@ public class Tui implements View {
     // messages, ...
 
     public Tui(MiniModel miniModel, VirtualClient client) {
-        inputVerifier = new InputVerifier(miniModel, client, this);
+        inputVerifier = new InputVerifier(miniModel, client);
         this.client = client;
         drawer = new Drawer();
         painter = new Painter();
@@ -51,8 +50,7 @@ public class Tui implements View {
         initialStage = true;
         chooseStage = false;
         chatStage = false;
-        okInit = false;
-        okChoose = false;
+        helpStage = false;
     }
 
     @Override
@@ -73,18 +71,8 @@ public class Tui implements View {
     @Override
     public void updateError(String error) {
         System.out.println("got error: " + error);
-        okInit = false;
-        okChoose = false;
         printAlert("Error: " + error);
         terminalPrinter.clearInput();
-    }
-
-    public void okInit() {
-        okInit = true;
-    }
-
-    public void okChoose() {
-        okChoose = true;
     }
 
     @Override
@@ -93,19 +81,11 @@ public class Tui implements View {
         String alert = "";
         switch (state) {
             case "Wait":
-                if (okInit)
-                    alert = "Warning: waiting for other players to join ...";
-                else {
-                    alert = "Create or join a game to start playing";
-                }
+                alert = "Warning: waiting for other players ...";
                 initialStage = true;
                 break;
             case "Choose":
-                if (okChoose)
-                    alert = "Warning: waiting for other players to choose ...";
-                else {
-                    alert = "Choose a card to play";
-                }
+                alert = "Choose a card to play";
                 initialStage = false;
                 chooseStage = true;
                 break;
@@ -294,7 +274,6 @@ public class Tui implements View {
     }
 
     private void resetView() {
-        chatStage = false;
         terminalPrinter.clear();
         terminalPrinter.resetView();
         terminalPrinter.printGame();
@@ -302,7 +281,9 @@ public class Tui implements View {
 
     private void print() {
         terminalPrinter.clear();
-        if (initialStage)
+        if (helpStage)
+            terminalPrinter.printHelp();
+        else if (initialStage)
             terminalPrinter.printInitialStage();
         else if (chooseStage)
             terminalPrinter.printChoosePhase();
@@ -398,8 +379,16 @@ public class Tui implements View {
                             break;
 
                         case "RESET", "R", "EXIT", "ESC", "E":
-                            if (!initialStage && !chooseStage)
+                            if (helpStage) {
+                                helpStage = false;
+                                print();
+                            } else if (!initialStage && !chooseStage)
                                 resetView();
+                            break;
+
+                        case "HELP", "H":
+                            helpStage = true;
+                            print();
                             break;
 
                         default:

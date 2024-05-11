@@ -93,7 +93,7 @@ public class InitState extends ControllerState {
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution
-            super.game.getBoard().updateActualScore(player, 12);
+            // super.game.getBoard().updateActualScore(player, 12);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }

@@ -288,9 +288,9 @@ public class RmiServer implements VirtualServer {
         while (true) {
             VirtualClient client = null;
             for (var c : clients) {
-                System.out.println("trying to ping");
+                // System.out.println("trying to ping");
                 client = c;
-                System.out.println("pinging client");
+                // System.out.println("pinging client");
                 try {
                     client.ping();
                     connected.put(client, true);
@@ -307,6 +307,7 @@ public class RmiServer implements VirtualServer {
                                 found = true;
                                 break;
                             }
+                    // BUG: maybe it should be if (found)
                     if (!found) {
                         clients.remove(client);
                         connected.remove(client);
@@ -317,7 +318,7 @@ public class RmiServer implements VirtualServer {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                System.out.println("client ponged");
+                // System.out.println("client ponged");
             }
             try {
                 Thread.sleep(5000);

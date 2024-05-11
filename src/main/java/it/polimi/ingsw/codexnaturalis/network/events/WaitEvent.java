@@ -27,4 +27,9 @@ public class WaitEvent extends Event {
     public String getClientId() {
         return this.clientId;
     }
+
+    @Override
+    public int getGameId() {
+        return gameId;
+    }
 }
