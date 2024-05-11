@@ -13,6 +13,8 @@ public interface VirtualClient extends Remote {
     void sendCommand(Command command) throws RemoteException;
 
     String getClientId() throws RemoteException;
+    String getPassword() throws RemoteException;
+    void setPassword(String password) throws RemoteException;
 
     void ping() throws RemoteException;
 }

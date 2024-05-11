@@ -83,12 +83,6 @@ public class EndGameState extends ControllerState {
         }
     }
 
-    // @Override
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException {
-    // throw new IllegalCommandException("Match has ended");
-    // }
-
     /**
      * This method's aim is to gather in a single data structure the pattern
      * objective that a certain player aspire to verify

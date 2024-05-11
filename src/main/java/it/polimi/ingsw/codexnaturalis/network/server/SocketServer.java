@@ -41,10 +41,6 @@ public class SocketServer implements VirtualServer, Runnable {
         this.connected = new HashMap<>();
     }
 
-    // public void setModel(Game model) {
-    // this.model = model;
-    // }
-
     public void setGames(Map<Integer, Game> games) {
         this.games = games;
     }
@@ -252,7 +248,7 @@ public class SocketServer implements VirtualServer, Runnable {
 
     /**
      * TODO
-     * 
+     *
      * @param client
      */
     public void disconnectClient(VirtualClient client) {

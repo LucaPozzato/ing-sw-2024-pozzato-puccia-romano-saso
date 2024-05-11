@@ -77,6 +77,7 @@ public class WaitPlayerState extends ControllerState {
         player.setNickname(nickname);
         player.setColor(color);
         super.game.addParticipant();
+        super.game.getFromPlayerToId().put(player, clientId);
 
         // FIXME: clean this up
         try {
@@ -144,14 +145,5 @@ public class WaitPlayerState extends ControllerState {
             e.printStackTrace();
         }
     }
-
-    // @Override
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException {
-    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-    // //right know the chat is not part of the game hp:we instantiate it in the
-    // contruction of the game and keep an attribute of it
-    // super.game.getChat().addMessage(chatMessage);
-    // }
 
 }

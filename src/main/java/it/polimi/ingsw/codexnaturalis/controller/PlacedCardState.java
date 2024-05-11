@@ -92,8 +92,8 @@ public class PlacedCardState extends ControllerState {
 
             // BUG: exceptions are lost
 
-            Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
 
+            Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
             structure.placeCard(father, placeThis, position, frontUp);
             removeFromHand(placeThis);
 
@@ -125,6 +125,15 @@ public class PlacedCardState extends ControllerState {
             e.printStackTrace();
         }
 
+        /*
+        TODO:manca totalmente la corrispondenza tra player e il client per sapere se è ancora connesso
+        if(rmiServer.getConnected().get(player).equals("false")){
+            structure.removeFromStructure(father, placeThis)
+            addToHand(placeThis)
+            resetActualPoints(pointFromCard)
+            super.game.setState(new PlaceCardState(super.game, super.rmiServer, super.socketServer));
+        }else{
+        */
         super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
         // Points resulting from resources objective are computed at the end of the game
         // (END GAME STATE) since they could be covered anytime during the match
@@ -141,15 +150,6 @@ public class PlacedCardState extends ControllerState {
         }
     }
 
-
-    // @Override
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException {
-    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-    // //right know the chat is not part of the game hp:we instantiate it in the
-    // contruction of the game and keep an attribute of it
-    // super.game.getChat().addMessage(chatMessage);
-    // }
 
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;

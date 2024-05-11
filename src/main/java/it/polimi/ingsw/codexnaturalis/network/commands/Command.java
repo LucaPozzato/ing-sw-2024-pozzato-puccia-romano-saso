@@ -28,4 +28,7 @@ public abstract class Command implements Serializable {
     public String getClientId() {
         return null;
     }
+    public String getPassword(){
+        return null;
+    }
 }

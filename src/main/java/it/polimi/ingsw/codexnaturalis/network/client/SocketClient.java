@@ -242,4 +242,11 @@ public class SocketClient implements VirtualClient, Runnable {
     public void ping() throws RemoteException {
         // do nothing
     }
+    @Override
+    public String getPassword(){
+        return null;
+    }
+    @Override
+    public void setPassword(String password){
+    }
 }

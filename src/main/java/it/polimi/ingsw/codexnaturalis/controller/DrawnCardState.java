@@ -101,6 +101,12 @@ public class DrawnCardState extends ControllerState {
             // FIXME: needs to set the next player
             event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
                     game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+
+            if (matchEnded)
+                super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+            else
+                super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
+
         } catch (IllegalCommandException e){
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
         }
@@ -112,20 +118,7 @@ public class DrawnCardState extends ControllerState {
             e.printStackTrace();
         }
 
-        if (matchEnded)
-            super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
-        else
-            super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
     }
-
-    // @Override
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException {
-    // ChatMessage chatMessage = new ChatMessage(message, sender, receiver, 0);
-    // //right know the chat is not part of the game hp:we instantiate it in the
-    // contruction of the game and keep an attribute of it
-    // super.game.getChat().addMessage(chatMessage);
-    // }
 
     private void updateDeck(Card card, String fromDeck) throws IllegalCommandException {
         if (super.game.getDeck().getGoldDeck().isEmpty() && super.game.getDeck().getResourceDeck().isEmpty()

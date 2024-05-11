@@ -77,12 +77,13 @@ public class InitState extends ControllerState {
      * @param color      first player's chosen color
      * @param numPlayers first player's chosen number of competitors
      */
-    private void createFirstPlayer(String nick, Color color, int numPlayers) {
+    private void createFirstPlayer(String nick, Color color, int numPlayers, String clientId) {
         // TODO togliere dal costruttore di Players il nickname e il colore e istituire
         // dei setter specifici
         Player player = new Player(nick, color);
 
         super.game.getPlayers().add(player);
+        super.game.getFromPlayerToId().put(player, clientId);
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
@@ -177,7 +178,7 @@ public class InitState extends ControllerState {
             game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
             game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
 
-            createFirstPlayer(nick, color, numPlayers);
+            createFirstPlayer(nick, color, numPlayers, clientId);
             dealHands(numPlayers);
             dealInitialCard();
 
@@ -186,6 +187,8 @@ public class InitState extends ControllerState {
 
             event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
                     game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+
+            super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
 
         } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
@@ -199,7 +202,6 @@ public class InitState extends ControllerState {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
     }
 
     /**
@@ -300,11 +302,5 @@ public class InitState extends ControllerState {
             e.printStackTrace();
         }
     }
-
-    // @Override
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException {
-    // throw new IllegalCommandException("Game not set up yet");
-    // }
 
 }

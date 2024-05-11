@@ -40,7 +40,7 @@ public class Game implements Serializable {
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
-    final List<VirtualClient> clients = new ArrayList<>();
+    private final Map <Player, String> fromPlayerToId;
     private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
     // private Chat chat;
 
@@ -52,6 +52,7 @@ public class Game implements Serializable {
         this.playerHand = new ArrayList<>();
         this.playerStructure = new ArrayList<>();
         this.strategyMap = new HashMap<>();
+        this.fromPlayerToId = new HashMap<>();
         // this.chat = new Chat;
     }
 
@@ -131,6 +132,8 @@ public class Game implements Serializable {
         return strategyMap;
     }
     // public Chat getChat(){return this.chat};
+
+    public Map<Player,String> getFromPlayerToId(){return this.getFromPlayerToId();}
 
     public void setLastTurn() {
         this.lastTurn = true;
@@ -212,5 +215,14 @@ public class Game implements Serializable {
     public void throwException(String message) {
         // update client view with message
         // client.updateError(message);
+    }
+
+    public String ClientIdFromNickname (String nickname){
+        for ( var player : fromPlayerToId.keySet() ){
+            if (player.getNickname().equals(nickname)){
+                return fromPlayerToId.get(player);
+            }
+        }
+      return null;
     }
 }

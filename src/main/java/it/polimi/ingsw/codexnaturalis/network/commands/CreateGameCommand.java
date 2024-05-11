@@ -11,13 +11,15 @@ public class CreateGameCommand extends Command {
     private static final long serialVersionUID = 380164227530291L;
     private String clientId;
     private String nickName;
+    private String password;
     private Color color;
     private Integer gameId;
     private Integer numOfPlayers;
 
-    public CreateGameCommand(String clientId, Integer gameId, String nickName, Color color, Integer numOfPlayers) {
+    public CreateGameCommand(String clientId, Integer gameId, String nickName, String password, Color color, Integer numOfPlayers) {
         this.clientId = clientId;
         this.nickName = nickName;
+        this.password = password;
         this.color = color;
         this.gameId = gameId;
         this.numOfPlayers = numOfPlayers;
@@ -37,4 +39,11 @@ public class CreateGameCommand extends Command {
     public String getClientId() {
         return clientId;
     }
+
+    @Override
+    public String getPassword(){
+        return password;
+    }
+
+
 }

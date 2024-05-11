@@ -70,6 +70,6 @@ public abstract class ControllerState {
         }
     }
 
-    // public abstract void text(String message, Player sender, Player receiver/*,
-    // long timeStamp*/) throws IllegalCommandException;
+    //public abstract void rejoin(String nickname);
+
 }
