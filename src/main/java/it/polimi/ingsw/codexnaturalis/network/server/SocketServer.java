@@ -24,6 +24,7 @@ import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
+
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
     private Map<SocketSkeleton, Boolean> connected;
