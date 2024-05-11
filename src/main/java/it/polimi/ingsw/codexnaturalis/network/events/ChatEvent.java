@@ -24,8 +24,8 @@ public class ChatEvent extends Event {
     }
 
     @Override
-    public void doJob(MiniModel minimodel) throws IllegalCommandException, IOException {
-        minimodel.setChat(chat);
+    public void doJob(MiniModel minimodel) throws IllegalCommandException {
+        //minimodel.setChat(chat);
     }
 
     @Override

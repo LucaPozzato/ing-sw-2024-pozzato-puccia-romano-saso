@@ -367,7 +367,7 @@ public class Game extends Application implements View, Initializable {
     }
 
     @Override
-    public void updateChat(Chat chat) {
+    public void updateChat(Chat chat)      {
 
     }
 
@@ -463,7 +463,7 @@ public class Game extends Application implements View, Initializable {
         int position = 0;
         int position1= 0;
         int points;
-        Structure myStructure = structures.get(0);
+        Structure myStructure = structures.getFirst();
 
         Image image = null;
         Card cardForAngles;
@@ -543,7 +543,6 @@ public class Game extends Application implements View, Initializable {
                         try {
                             testMain.placeCommand(card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
 
-
                             currentSelectedImage.setVisible(false);
 
 
@@ -567,6 +566,10 @@ public class Game extends Application implements View, Initializable {
                 structurePane.getChildren().add(imageView);
             } else
                 position++;
+
+            handCard.setFocusTraversable(true);
+            handCard.requestFocus();
+
 
         }
 
@@ -659,19 +662,29 @@ public class Game extends Application implements View, Initializable {
         }
         else{
             if(currentSelected == currentHandCard1){
-                currentHandCard1 = hand.getCardsHand().get(2);
-                handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
-                handCard.requestFocus();
+                currentHandCard1 = hand.getCardsHand().get(0);
+                if(currentSelectedFrontUp)
+                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                else if(!currentSelectedFrontUp)
+                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
             }
 
             else if(currentSelected == currentHandCard2){
-                currentHandCard2 = hand.getCardsHand().get(2);
-                handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                currentHandCard2 = hand.getCardsHand().get(1);
+                if(currentSelectedFrontUp)
+                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                else if(!currentSelectedFrontUp)
+                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
+
             }
 
             else if(currentSelected == currentHandCard3){
                 currentHandCard3 = hand.getCardsHand().get(2);
-                handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                if(currentSelectedFrontUp)
+                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                else if(!currentSelectedFrontUp)
+                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
+
             }
             System.out.println("\nUpdate card1: " + handCard1URL);
             System.out.println("\nUpdate card2: " + handCard2URL);
@@ -682,7 +695,8 @@ public class Game extends Application implements View, Initializable {
         for (Card card: hand.getCardsHand())
             System.out.printf(card.toString().substring(6,9) + "-");
 
-
+        handCard.setFocusTraversable(true);
+        handCard.requestFocus();
         //System.out.print("\nHand updated!");
 
     }
@@ -893,7 +907,8 @@ public class Game extends Application implements View, Initializable {
 
         }
 
-
+        handCard.setFocusTraversable(true);
+        handCard.requestFocus();
         //System.out.print("\nDeck updated!");
     }
 
