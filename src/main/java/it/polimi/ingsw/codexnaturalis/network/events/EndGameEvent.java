@@ -34,4 +34,9 @@ public class EndGameEvent extends Event {
     public int getGameId() {
         return gameId;
     }
+
+    @Override
+    public String getClientId() {
+        return null;
+    }
 }

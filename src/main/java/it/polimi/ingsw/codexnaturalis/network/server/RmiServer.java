@@ -10,23 +10,19 @@ import java.util.Map;
 import java.util.Queue;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
-import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.ReJoinCommand;
-import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 
 public class RmiServer implements VirtualServer {
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
-    private final Map<VirtualClient, Player> cambiami;
     private Map<VirtualClient, Boolean> connected;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
@@ -69,10 +65,10 @@ public class RmiServer implements VirtualServer {
     public void setSocketServer(SocketServer socketServer) {
         this.socketServer = socketServer;
     }
-    public Map<SocketSkeleton, Boolean> getConnected() {
-        return connected;
-    }
 
+    // public Map<SocketSkeleton, Boolean> getConnected() {
+    // return connected;
+    // }
 
     /**
      * this method is called by the client to send a command taken by input
@@ -121,7 +117,7 @@ public class RmiServer implements VirtualServer {
 
                 Integer gameId = command.getGameId();
 
-                //password setting rmi
+                // password setting rmi
                 if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)) {
                     for (var c : clients) {
                         if (c.getClientId().equals(command.getClientId())) {
@@ -151,25 +147,29 @@ public class RmiServer implements VirtualServer {
                     }
                 }
 
-                // needs to verify the gameid, that the nickname exists among the nickname of the clients in that game, tha the client connected to the clientID connected to the nickname in that game is connected
+                // needs to verify the gameid, that the nickname exists among the nickname of
+                // the clients in that game, tha the client connected to the clientID connected
+                // to the nickname in that game is connected
                 // than needs to cancel the old change his clinetId with the old Clientid
                 // update the list of clinets, the list of connected and the list of players,
-//                if (command instanceof ReJoinCommand)
-//                    if (games.containsKey(gameId))
-//                        for ( String clId : players.get(gameId) ) {
-//                            String existingClientId = (games.get(gameId).ClientIdFromNickname(command.getNickName()));
-//                            //controlliamo che il nickname nel comando sia tra i nickanme dei plaeyrs in partita
-//                            RmiClient client = null;
-//                            if (existingClientId.equals(command.getClientId()))
-//                                for (var cl : clients){
-//                                    if (cl.getClientId = clId)
-//
-//                                }
-//                                if (command.getPassword().eq
-//                            uals(getPassword()))
-//
-//
-//                        }
+                // if (command instanceof ReJoinCommand)
+                // if (games.containsKey(gameId))
+                // for ( String clId : players.get(gameId) ) {
+                // String existingClientId =
+                // (games.get(gameId).ClientIdFromNickname(command.getNickName()));
+                // //controlliamo che il nickname nel comando sia tra i nickanme dei plaeyrs in
+                // partita
+                // RmiClient client = null;
+                // if (existingClientId.equals(command.getClientId()))
+                // for (var cl : clients){
+                // if (cl.getClientId = clId)
+                //
+                // }
+                // if (command.getPassword().eq
+                // uals(getPassword()))
+                //
+                //
+                // }
 
                 String[] commandName = command.getClass().getName().split("\\.");
                 if (games.containsKey(gameId))
@@ -235,16 +235,9 @@ public class RmiServer implements VirtualServer {
                 Integer gameId = event.getGameId();
                 VirtualClient client = null;
 
-                if (event instanceof CreateGameEvent) {
-                    players.put(gameId, new ArrayList<>());
-                    for (var c : clients)
-                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
-                            client = c;
-                            players.get(gameId).add(client);
-                            //
-                            break;
-                        }
-                } else if (event instanceof JoinGameEvent) {
+                if (event instanceof InLobbyEvent) {
+                    if (!players.containsKey(gameId))
+                        players.put(gameId, new ArrayList<>());
                     for (var c : clients)
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
                             client = c;
@@ -303,7 +296,24 @@ public class RmiServer implements VirtualServer {
                     connected.put(client, true);
                 } catch (ConnectException e) {
                     connected.put(client, false);
+
                     System.out.println("client disconnected");
+                    Boolean found = false;
+                    Integer gId = null;
+                    for (var gameId : players.keySet())
+                        for (var c1 : players.get(gameId))
+                            if (client.equals(c1)) {
+                                gId = gameId;
+                                found = true;
+                                break;
+                            }
+                    if (!found) {
+                        clients.remove(client);
+                        connected.remove(client);
+                    }
+                    // } else
+                    // games.get(gId).getState().disconnect(client.getClientId());
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -317,19 +327,3 @@ public class RmiServer implements VirtualServer {
         }
     }
 }
-
-/*
-Pinger verifica la persistenza della connessione di ciascuno dei client a giro.
-Quando pinger mette a false il valore di una mappa con chiave il client allora vuol dire che si è disconnesso.
-Se il client si disconnette dobbiamo prevedere dei meccanismi di protezione che salvaguardino dalle seguenti casistiche:
-
--Il client si disconnette prima di piazzare la carta sulla struttura
--Il client si disconnette dopo avere piazzato la carta ma senza aver pescato
--Il client si disconnette dopo aver piazzato la carta e pescato dunque a turno terminato
-
-Se nell'istante in cui gli viene passato il turno faccio una copia dello stato del gioco per il client in questione
-nel momento in cui il pinger mette a false il valore sulla mappa allora bisogna fare in modo che il giocatore
-disconnesso venga escluso dal conteggio dei turni e che il suo stato venga congelato riportandolo a quello precedente al
-suo eventuale posizionamento
-
-*/

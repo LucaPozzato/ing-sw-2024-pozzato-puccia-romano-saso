@@ -43,15 +43,16 @@ public class InputVerifier {
         String commandString = commandArray[0].toUpperCase();
         String[] parameters = commandArray[1].split(", ");
         Color color = null;
+        Boolean side = null;
 
         switch (commandString) {
             case "CREATE":
                 color = null;
 
-                if (parameters.length != 4)
+                if (parameters.length != 5)
                     throw new IllegalCommandException("Invalid number of parameters");
 
-                switch (parameters[2].toUpperCase()) {
+                switch (parameters[3].toUpperCase()) {
                     case "RED", "R":
                         color = Color.RED;
                         break;
@@ -72,21 +73,20 @@ public class InputVerifier {
                         throw new IllegalCommandException("Invalid color choice");
                 }
 
-                miniModel.setMyPlayer(parameters[1]);
                 tui.okInit();
                 try {
                     return new CreateGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
-                            color, Integer.parseInt(parameters[3]));
+                            parameters[2], color, Integer.parseInt(parameters[4]));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             case "JOIN":
                 color = null;
-                if (parameters.length != 3)
+                if (parameters.length != 4)
                     throw new IllegalCommandException("Invalid number of parameters");
 
-                switch (parameters[2].toUpperCase()) {
+                switch (parameters[3].toUpperCase()) {
                     case "RED", "R":
                         color = Color.RED;
                         break;
@@ -107,17 +107,19 @@ public class InputVerifier {
                         throw new IllegalCommandException("Invalid color choice");
                 }
 
-                miniModel.setMyPlayer(parameters[1]);
+                // BUG: if I do a join/create in the middle of the game I will set up a
+                // different nickname on the minimodel -> setup events should be for single
+                // players
                 tui.okInit();
                 try {
                     return new JoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
-                            color);
+                            parameters[2], color);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             case "CHOOSE":
-                Boolean side = false;
+                side = null;
                 Integer objIndex = 0;
                 ObjectiveCard objCard = null;
 
@@ -153,6 +155,7 @@ public class InputVerifier {
             case "PLACE":
                 Card placeThis = null;
                 Card father = null;
+                side = null;
 
                 // checks if the placed card is in player's hand
                 for (Card cards : miniModel.getPlayerHands().get(miniModel.getPlayers().indexOf(player))
@@ -164,6 +167,14 @@ public class InputVerifier {
 
                 if (placeThis == null) {
                     throw new IllegalCommandException("Card to place not in hand");
+                }
+
+                if (parameters[3].equals("FRONT") || parameters[3].equals("F"))
+                    side = true;
+                else if (parameters[3].equals("BACK") || parameters[3].equals("B"))
+                    side = false;
+                else {
+                    throw new IllegalCommandException("Invalid side choice");
                 }
 
                 // checks if the placed card's father is in the structure
@@ -193,8 +204,7 @@ public class InputVerifier {
                 // TODO: gameid
                 try {
                     return new PlaceCommand(client.getClientId(), miniModel.getGameId(), player, father, placeThis,
-                            parameters[2],
-                            Boolean.parseBoolean(parameters[3]));
+                            parameters[2], side);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

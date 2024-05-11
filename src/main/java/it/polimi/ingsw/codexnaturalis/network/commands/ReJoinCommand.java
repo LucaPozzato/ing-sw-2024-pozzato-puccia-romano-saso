@@ -24,7 +24,7 @@ public class ReJoinCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.reJoinGame(nickName);
+        // controller.reJoinGame(nickName);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ReJoinCommand extends Command {
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 

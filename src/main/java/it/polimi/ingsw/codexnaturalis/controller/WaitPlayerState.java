@@ -6,9 +6,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
+import it.polimi.ingsw.codexnaturalis.network.events.ChooseEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -77,7 +78,7 @@ public class WaitPlayerState extends ControllerState {
         player.setNickname(nickname);
         player.setColor(color);
         super.game.addParticipant();
-        super.game.getFromPlayerToId().put(player, clientId);
+        // super.game.getFromPlayerToId().put(player, clientId);
 
         // FIXME: clean this up
         try {
@@ -89,22 +90,26 @@ public class WaitPlayerState extends ControllerState {
         }
 
         if (isFull()) {
-
-            Event event = new JoinGameEvent(clientId, game.getGameId(), "Choose", game.getPlayers(),
-                    game.getStructures(), game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
-                    null);
-            super.rmiServer.sendEvent(event);
+            Event inLobbyEvent = new InLobbyEvent(clientId, super.game.getGameId(), "Wait", nickname);
+            Event chooseEvent = new ChooseEvent(super.game.getGameId(), "Choose", super.game.getHands(),
+                    super.game.getPlayers());
+            super.rmiServer.sendEvent(inLobbyEvent);
             try {
-                super.socketServer.sendEvent(event);
+                super.socketServer.sendEvent(inLobbyEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            super.rmiServer.sendEvent(chooseEvent);
+            try {
+                super.socketServer.sendEvent(chooseEvent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, null));
         } else {
-            Event event = new JoinGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
-                    game.getHands(),
-                    game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+            Event event = new InLobbyEvent(clientId, super.game.getGameId(), "Wait", nickname);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);

@@ -17,10 +17,9 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
-import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.JoinGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
@@ -176,21 +175,11 @@ public class SocketServer implements VirtualServer, Runnable {
                 Integer gameId = event.getGameId();
                 SocketSkeleton client = null;
 
-                if (event instanceof CreateGameEvent) {
-                    players.put(gameId, new ArrayList<>());
+                if (event instanceof InLobbyEvent) {
+                    if (!players.containsKey(gameId))
+                        players.put(gameId, new ArrayList<>());
                     System.out.println("event game id on socket: " + event.getGameId());
                     System.out.println("create game on socket: " + gameId);
-                    System.out.println("players: " + players.get(gameId));
-                    System.out.println("num of games: " + players.keySet());
-                    for (var c : clients) {
-                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
-                            client = (SocketSkeleton) c;
-                            players.get(gameId).add(client);
-                            break;
-                        }
-                    }
-                } else if (event instanceof JoinGameEvent) {
-                    System.out.println("event game id on socket: " + event.getGameId());
                     System.out.println("players: " + players.get(gameId));
                     System.out.println("num of games: " + players.keySet());
                     for (var c : clients) {

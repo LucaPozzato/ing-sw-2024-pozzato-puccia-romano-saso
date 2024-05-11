@@ -57,7 +57,7 @@ public abstract class ControllerState {
 
             chat.addMessage(new ChatMessage(message, senderPlayer, receiverPlayer, 0));
 
-            event = new ChatEvent(clientId, game.getGameId(), chat);
+            event = new ChatEvent(game.getGameId(), chat);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }
@@ -70,6 +70,6 @@ public abstract class ControllerState {
         }
     }
 
-    //public abstract void rejoin(String nickname);
+    // public abstract void rejoin(String nickname);
 
 }

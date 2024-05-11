@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
-import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
@@ -108,14 +107,14 @@ public class SocketClient implements VirtualClient, Runnable {
      */
     @Override
     public synchronized void receiveEvent(Event event) throws IllegalStateException {
-        if (event instanceof ErrorEvent) {
+        if (event.getClientId() == null) {
+            eventEntryQueue.add(event);
+            notifyAll();
+        } else {
             if (clientId.equals(event.getClientId())) {
                 eventEntryQueue.add(event);
                 notifyAll();
             }
-        } else {
-            eventEntryQueue.add(event);
-            notifyAll();
         }
     }
 
@@ -242,11 +241,13 @@ public class SocketClient implements VirtualClient, Runnable {
     public void ping() throws RemoteException {
         // do nothing
     }
+
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return null;
     }
+
     @Override
-    public void setPassword(String password){
+    public void setPassword(String password) {
     }
 }

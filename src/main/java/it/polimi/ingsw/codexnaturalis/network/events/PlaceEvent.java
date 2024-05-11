@@ -39,4 +39,9 @@ public class PlaceEvent extends Event {
     public int getGameId() {
         return gameId;
     }
+
+    @Override
+    public String getClientId() {
+        return null;
+    }
 }

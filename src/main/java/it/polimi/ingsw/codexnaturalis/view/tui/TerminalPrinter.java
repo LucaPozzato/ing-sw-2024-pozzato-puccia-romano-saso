@@ -162,6 +162,9 @@ public class TerminalPrinter {
         this.input = "";
     }
 
+    public void printHelp() {
+    }
+
     public void printChat() {
         // function that prints the chat
         int x;
@@ -170,9 +173,9 @@ public class TerminalPrinter {
         int boxHeight;
         String title = "Chat";
 
-        boxWidth = (int) (width * 0.5) - 2;
-        boxHeight = (int) (height * 0.5) - 5;
-        x = (width - boxWidth) / 2;
+        boxWidth = maxX - minX;
+        boxHeight = (int) (height * 0.6);
+        x = minX;
         y = (height - boxHeight) / 2 - 4;
 
         printBox(x, y, boxWidth, boxHeight, title);
@@ -201,7 +204,8 @@ public class TerminalPrinter {
             System.out.print("\u001B[" + (y + i - start + 1) + ";" + (x + 1) + "H" + chatLines[i]);
         }
 
-        printAlert(y + boxHeight + 4, (width / 2) - (Math.max("Alert".length(), alert.length()) / 2) - 1);
+        printAlert(y + boxHeight + 4,
+                ((maxX - minX) / 2) + minX - (Math.max("Alert".length(), alert.length()) / 2) - 1);
 
         // print input box
         printBox(x, y + boxHeight + 1, boxWidth, 3, "Input");

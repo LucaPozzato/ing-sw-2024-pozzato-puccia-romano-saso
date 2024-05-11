@@ -18,9 +18,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.InitialParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ObjectiveParser;
 import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.CreateGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -83,7 +83,7 @@ public class InitState extends ControllerState {
         Player player = new Player(nick, color);
 
         super.game.getPlayers().add(player);
-        super.game.getFromPlayerToId().put(player, clientId);
+        // super.game.getFromPlayerToId().put(player, clientId);
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
         super.game.setNumPlayers(numPlayers);
@@ -185,8 +185,7 @@ public class InitState extends ControllerState {
             dealCommonObjective();
             dealSecretObjective();
 
-            event = new CreateGameEvent(clientId, game.getGameId(), "Wait", game.getPlayers(), game.getStructures(),
-                    game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+            event = new InLobbyEvent(clientId, super.game.getGameId(), "Wait", nick);
 
             super.game.setState(new WaitPlayerState(super.game, super.rmiServer, super.socketServer));
 

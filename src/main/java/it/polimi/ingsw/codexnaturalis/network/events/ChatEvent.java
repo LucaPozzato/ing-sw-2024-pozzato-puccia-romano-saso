@@ -1,5 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.network.events;
 
+import java.io.IOException;
 import java.io.Serial;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
@@ -13,19 +14,21 @@ import java.io.Serial;
 public class ChatEvent extends Event {
     @Serial
     private static final long serialVersionUID = 380111272220291L;
-    private String clientId;
     private Chat chat;
     private Integer gameId;
 
-    public ChatEvent(String clientId, Integer gameId, Chat chat) {
-        this.clientId = clientId;
+    public ChatEvent(Integer gameId, Chat chat) {
         this.gameId = gameId;
         this.chat = chat;
     }
 
     @Override
     public void doJob(MiniModel minimodel) throws IllegalCommandException {
-        //minimodel.setChat(chat);
+        try {
+            minimodel.setChat(chat);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -35,6 +38,6 @@ public class ChatEvent extends Event {
 
     @Override
     public String getClientId() {
-        return this.clientId;
+        return null;
     }
 }

@@ -11,10 +11,10 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.ChooseEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.WaitEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -50,7 +50,8 @@ public class ChooseSetUpState extends ControllerState {
     }
 
     @Override
-    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
+            Boolean frontUp) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
         super.rmiServer.sendEvent(event);
         try {
@@ -105,21 +106,19 @@ public class ChooseSetUpState extends ControllerState {
             if (setUpMap.keySet().size() == super.game.getNumPlayers()) {
                 super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
 
-                event = new StartGameEvent(clientId, game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
+                event = new StartGameEvent(game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
                         game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
 
             } else {
                 // for the interface to be responsive, we might want to send an event for each
                 // choice. This way the player doesn't need
                 // to wait for all the choices to be made before being able to see his
-                event = new ChooseEvent(clientId, game.getGameId(), "Choose", game.getPlayers(), game.getStructures(),
-                        game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(),
-                        null /* is the game.getNextPlayer() already available? */);
+                event = new WaitEvent(clientId, super.game.getGameId(), "Wait");
 
                 super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
             }
 
-        } catch (IllegalCommandException err){
+        } catch (IllegalCommandException err) {
             event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
         }
 

@@ -33,7 +33,7 @@ public class PlacedCardState extends ControllerState {
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color)  {
+    public void joinGame(String clientId, String nickname, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
         super.rmiServer.sendEvent(event);
         try {
@@ -55,7 +55,8 @@ public class PlacedCardState extends ControllerState {
     }
 
     @Override
-    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp) {
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
+            Boolean frontUp) {
 
         Event event = null;
 
@@ -92,7 +93,6 @@ public class PlacedCardState extends ControllerState {
 
             // BUG: exceptions are lost
 
-
             Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
             structure.placeCard(father, placeThis, position, frontUp);
             removeFromHand(placeThis);
@@ -114,7 +114,7 @@ public class PlacedCardState extends ControllerState {
 
             event = new PlaceEvent(game.getGameId(), "Draw", game.getStructures(), game.getHands(), game.getBoard());
 
-        } catch (IllegalCommandException e){
+        } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
         }
 
@@ -126,14 +126,16 @@ public class PlacedCardState extends ControllerState {
         }
 
         /*
-        TODO:manca totalmente la corrispondenza tra player e il client per sapere se è ancora connesso
-        if(rmiServer.getConnected().get(player).equals("false")){
-            structure.removeFromStructure(father, placeThis)
-            addToHand(placeThis)
-            resetActualPoints(pointFromCard)
-            super.game.setState(new PlaceCardState(super.game, super.rmiServer, super.socketServer));
-        }else{
-        */
+         * TODO:manca totalmente la corrispondenza tra player e il client per sapere se
+         * è ancora connesso
+         * if(rmiServer.getConnected().get(player).equals("false")){
+         * structure.removeFromStructure(father, placeThis)
+         * addToHand(placeThis)
+         * resetActualPoints(pointFromCard)
+         * super.game.setState(new PlaceCardState(super.game, super.rmiServer,
+         * super.socketServer));
+         * }else{
+         */
         super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
         // Points resulting from resources objective are computed at the end of the game
         // (END GAME STATE) since they could be covered anytime during the match
@@ -149,7 +151,6 @@ public class PlacedCardState extends ControllerState {
             e.printStackTrace();
         }
     }
-
 
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;

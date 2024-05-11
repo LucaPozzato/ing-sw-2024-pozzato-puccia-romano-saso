@@ -147,9 +147,9 @@ public class MiniModel {
         this.gameId = gameId;
     }
 
-    public void setMyPlayer(String myPlayer) {
+    public void setNickName(String nickname) {
         // BUG: everyone is gonna get the same nickname when joining simultaneously
-        this.nickname = myPlayer;
+        this.nickname = nickname;
     }
 
     public void setPlayers(List<Player> players) {
