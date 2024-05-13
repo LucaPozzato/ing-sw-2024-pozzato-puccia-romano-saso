@@ -15,6 +15,6 @@ public class GuiApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         ViewFactory viewFactory = new ViewFactory();
-        viewFactory.showGame();
+        viewFactory.showInitialStage();
     }
 }

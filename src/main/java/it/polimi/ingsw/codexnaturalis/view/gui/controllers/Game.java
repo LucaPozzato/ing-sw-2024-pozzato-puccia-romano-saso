@@ -23,6 +23,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -151,6 +152,7 @@ public class Game extends Application implements View, Initializable {
             System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
         }
 
+
     }
 
     @FXML
@@ -165,6 +167,7 @@ public class Game extends Application implements View, Initializable {
             isHandCardSelected = true;
             System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
         }
+
 
     }
 
@@ -358,8 +361,10 @@ public class Game extends Application implements View, Initializable {
     }
 
     @Override
-    public void run() {
-        launch();
+    public void run () {
+        GuiApp guiApp = new GuiApp();
+        guiApp.run();
+        //launch();
     }
 
     @Override
@@ -652,47 +657,59 @@ public class Game extends Application implements View, Initializable {
         } else {
             if (currentSelected == currentHandCard1) {
                 currentHandCard1 = hand.getCardsHand().get(0);
-                if (currentSelectedFrontUp)
-                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                else if (!currentSelectedFrontUp)
-                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
-            }
+                if(currentSelectedFrontUp){
+                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                    //handCard1.setImage(new Image(handCard1URL));
+                }
+                else if(!currentSelectedFrontUp){
+                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
+                    //handCard1.setImage(new Image(handCard1URL));
+                }
+           }
 
             else if (currentSelected == currentHandCard2) {
                 currentHandCard2 = hand.getCardsHand().get(1);
-                if (currentSelectedFrontUp)
-                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                else if (!currentSelectedFrontUp)
-                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
-
+                if(currentSelectedFrontUp){
+                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                    //handCard2.setImage(new Image(handCard2URL));
+                }
+                else if(!currentSelectedFrontUp){
+                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
+                    //handCard2.setImage(new Image(handCard2URL));
+                }
             }
 
-            else if (currentSelected == currentHandCard3) {
+            else if(currentSelected == currentHandCard3){
+                if(currentSelectedFrontUp){
+                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "f.jpg";
+                    //handCard3.setImage(new Image(handCard3URL));
+                }
+                else if(!currentSelectedFrontUp){
+                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + currentSelectedDeck.toString().substring(6,9) + "b.jpg";
+                    //handCard3.setImage(new Image(handCard3URL));
+                }
                 currentHandCard3 = hand.getCardsHand().get(2);
-                if (currentSelectedFrontUp)
-                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                else if (!currentSelectedFrontUp)
-                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
+                System.out.println("\ncard 3: " + currentHandCard3 + "URL: " + handCard3URL);
 
             }
             System.out.println("\nUpdate card1: " + handCard1URL);
             System.out.println("\nUpdate card2: " + handCard2URL);
             System.out.println("\nUpdate card3: " + handCard3URL);
+
+
             currentSelected = null;
+
+
         }
         System.out.printf("\nHand: ");
         for (Card card : hand.getCardsHand())
             System.out.printf(card.toString().substring(6, 9) + "-");
 
-        handCard.setFocusTraversable(true);
-        handCard.requestFocus();
-        // System.out.print("\nHand updated!");
+        //TO DO: problema quando le hand card sono verso il back e ne prendo un'altra dal deck.. se faccio B o F non va piu.. questo sotto non ha funzionato per fixxare
+        //KeyEvent simulatedEvent = new KeyEvent(KeyEvent.KEY_PRESSED, null, null, KeyCode.F, false, false, false, false);
+        //showBack(simulatedEvent);
+
+        //System.out.print("\nHand updated!");
 
     }
 
@@ -1035,11 +1052,11 @@ public class Game extends Application implements View, Initializable {
     void showBack(KeyEvent event) {
         if (event.getCode() == KeyCode.B && rPressed == 0) {
 
-            if (currentSelected != null)
-                currentSelectedFrontUp = false;
+            //if (currentSelected != null)
+            currentSelectedFrontUp = false;
             rPressed = 1;
             if (fPressed == 1)
-                fPressed--;
+                fPressed = 0;
 
             String card1 = handCard1URL.substring(43, 46);
             String card2 = handCard2URL.substring(43, 46);
@@ -1059,12 +1076,12 @@ public class Game extends Application implements View, Initializable {
 
         } else if (event.getCode() == KeyCode.F && fPressed == 0) {
 
-            if (currentSelected != null)
-                currentSelectedFrontUp = true;
+            //if (currentSelected != null)
+            currentSelectedFrontUp = true;
 
             fPressed = 1;
             if (rPressed == 1)
-                rPressed--;
+                rPressed = 0;
 
             String card1 = handCard1URL.substring(42, 45);
             String card2 = handCard2URL.substring(42, 45);
@@ -1320,6 +1337,9 @@ public class Game extends Application implements View, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        scrollPaneOthers.setVisible(false);
+        chatPane.setVisible(false);
+
         mushroomsPoints.setText("0");
         leafPoints.setText("0");
         wolfPoints.setText("0");
@@ -1335,8 +1355,8 @@ public class Game extends Application implements View, Initializable {
         // goldCard1.setDisable(true);
         // goldCard2.setDisable(true);
 
-        handCard.setFocusTraversable(true);
-        handCard.requestFocus();
+        //handCard.setFocusTraversable(true);
+        //handCard.requestFocus();
         TestMain testMain = new TestMain(this);
         this.testMain = testMain;
         testMain.start();

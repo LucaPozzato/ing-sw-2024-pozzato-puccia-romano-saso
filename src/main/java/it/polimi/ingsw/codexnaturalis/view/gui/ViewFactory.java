@@ -37,12 +37,12 @@ public class ViewFactory {
         createStage(loader);
     }
 
-    public void showGameInizializer(String username){
+    public void showGameInizializer(String username, String password, int numOfPlayers){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameInizializer.fxml"));
         createStage(loader);
         //Passo il nick a gameInizializer
         GameInizializer gameInizializer = loader.getController();
-        gameInizializer.displayName(username);
+        gameInizializer.setUp(username, password, numOfPlayers);
     }
 
     public void showGame(){

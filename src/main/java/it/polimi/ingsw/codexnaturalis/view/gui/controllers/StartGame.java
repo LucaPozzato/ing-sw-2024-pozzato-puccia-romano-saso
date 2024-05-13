@@ -53,7 +53,7 @@ public class StartGame implements Initializable{
 
         Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showGameInizializer(EnterNickname.getText()); //EnterNickname.getText()
+        viewFactory.showGameInizializer(EnterNickname.getText(), EnterPassword.getText(), Integer.parseInt(ChoosePlayers.getValue())); //EnterNickname.getText()
     }
 
     @FXML

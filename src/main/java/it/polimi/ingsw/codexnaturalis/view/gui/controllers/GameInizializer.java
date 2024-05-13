@@ -71,6 +71,9 @@ public class GameInizializer implements Initializable {
     //Utils
 
     String nickname;
+    String password;
+    int numberOfPlayers;
+
     String objectiveSelected;
     String cartaIniziale;
     String resourceElement1;
@@ -85,8 +88,11 @@ public class GameInizializer implements Initializable {
     Deck deck = new Deck(goldParser.parse(),resourceParser.parse());
     ViewFactory viewFactory = new ViewFactory();
 
-    public void displayName(String username) {
+    public void setUp(String username, String password, int numOfPlayers) {
+
         nickname = username;
+        this.password = password;
+        this.numberOfPlayers = numOfPlayers;
     }
 
     @FXML

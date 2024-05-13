@@ -6,6 +6,7 @@ module it.polimi.ingsw.codexnaturalis {
     requires java.rmi;
     requires java.desktop;
     requires javafx.base;
+    requires java.sql;
     // requires org.junit.jupiter.api;
 
     exports it.polimi.ingsw.codexnaturalis;
