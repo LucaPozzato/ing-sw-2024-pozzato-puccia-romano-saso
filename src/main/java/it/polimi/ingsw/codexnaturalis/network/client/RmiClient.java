@@ -11,7 +11,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
-import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
+import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 public class RmiClient extends UnicastRemoteObject implements VirtualClient {
@@ -75,6 +75,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      */
     @Override
     public synchronized void receiveEvent(Event event) throws RemoteException {
+        System.out.println("Received event: " + event.getClass().getSimpleName());
         if (event.getClientId() == null) {
             eventEntryQueue.add(event);
             notifyAll();
@@ -191,8 +192,8 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      * @throws RemoteException
      */
     private void runGui() throws RemoteException {
-        this.view = new Game();
-        miniModel.setView(view); //?
+        this.view = new GuiApp(this, miniModel);
+        miniModel.setView(view); // ?
         view.run();
     }
 

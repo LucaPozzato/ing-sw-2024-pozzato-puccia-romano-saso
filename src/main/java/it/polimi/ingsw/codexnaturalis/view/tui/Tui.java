@@ -382,6 +382,9 @@ public class Tui implements View {
                             if (helpStage) {
                                 helpStage = false;
                                 print();
+                            } else if (chatStage) {
+                                chatStage = false;
+                                print();
                             } else if (!initialStage && !chooseStage)
                                 resetView();
                             break;
