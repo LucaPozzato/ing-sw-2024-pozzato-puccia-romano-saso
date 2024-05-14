@@ -45,6 +45,48 @@
                   </ImageView>
                </children>
             </HBox>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Choose game id:">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter your nickname...">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Choose your password:">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="383.0" spacing="20.0">
+               <children>
+                  <ImageView fx:id="blue" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#blueSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/BLUE.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="yellow" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#yellowSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/YELLOW.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="red" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#redSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/RED.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="green" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#greenSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/GREEN.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
             <Label text="How many players">
                <VBox.margin>
                   <Insets top="30.0" />

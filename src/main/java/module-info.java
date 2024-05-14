@@ -16,6 +16,7 @@ module it.polimi.ingsw.codexnaturalis {
     exports  it.polimi.ingsw.codexnaturalis.model.game.components.structure;
     exports  it.polimi.ingsw.codexnaturalis.model.chat;
     exports  it.polimi.ingsw.codexnaturalis.model.game.components.cards;
+    exports  it. polimi. ingsw. codexnaturalis. network. client;
 
     opens it.polimi.ingsw.codexnaturalis to javafx.fxml;
 

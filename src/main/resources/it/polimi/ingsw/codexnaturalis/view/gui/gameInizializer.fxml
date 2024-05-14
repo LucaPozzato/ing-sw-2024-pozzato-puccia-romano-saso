@@ -14,43 +14,6 @@
    <children>
       <VBox alignment="CENTER" fillWidth="false" layoutX="339.0" layoutY="103.0" prefHeight="487.0" prefWidth="383.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="91.0">
-               <children>
-                  <Label text="Pick a color:">
-                     <font>
-                        <Font name="Arial" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label text="*" textFill="RED" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="383.0" spacing="20.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-               <children>
-                  <ImageView fx:id="blue" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#blueSelected" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../SymbolsPng/BLUE.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="yellow" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#yellowSelected" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../SymbolsPng/YELLOW.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="red" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#redSelected" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../SymbolsPng/RED.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="green" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#greenSelected" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../SymbolsPng/GREEN.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
             <HBox alignment="CENTER" prefHeight="10.0" prefWidth="210.0">
                <children>
                   <Label text="Choose your secret Objective:">

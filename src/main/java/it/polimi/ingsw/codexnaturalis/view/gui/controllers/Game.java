@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-import it.polimi.ingsw.codexnaturalis.TestMain;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
@@ -22,7 +21,8 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -52,7 +52,7 @@ import javafx.util.Pair;
 -
 -
 */
-public class Game extends Application implements View, Initializable {
+public class Game extends Application implements Initializable {
 
     // Utils FXML
     @FXML
@@ -102,7 +102,6 @@ public class Game extends Application implements View, Initializable {
     private ImageView structureCardSelected;
 
     private Player myPlayer;
-    private TestMain testMain;
     private InitialCard initialCardCard;
     private double lastX, lastY; // Memorizza le coordinate dell'ultimo evento
     int rPressed = 0;
@@ -111,6 +110,9 @@ public class Game extends Application implements View, Initializable {
     List<ImageView> cardPlaced = new ArrayList<>();
 
     ViewFactory viewFactory = new ViewFactory();
+
+    private MiniModel miniModel;
+    private VirtualClient virtualClient ;
 
     // Gestione evento di placeCard
 
@@ -121,6 +123,17 @@ public class Game extends Application implements View, Initializable {
     boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialSetupDeck = true,
             isHandCardSelected;
 
+//    public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
+//        this.miniModel = miniModel;
+//        this.virtualClient = virtualClient;
+//    }
+
+    public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
+        System.out.println(virtualClient);
+        this.miniModel = miniModel;
+        this.virtualClient = virtualClient;
+        System.out.println(this.virtualClient);
+    }
     @FXML
     void handCard1Clicked(MouseEvent event) {
 
@@ -185,7 +198,7 @@ public class Game extends Application implements View, Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
             currentSelectedDeck = currentDeckGold1Card;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            testMain.drawCommand(currentDeckGold1Card);
+            //testMain.drawCommand(currentDeckGold1Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -209,7 +222,7 @@ public class Game extends Application implements View, Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
             currentSelectedDeck = currentDeckGold2Card;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            testMain.drawCommand(currentDeckGold2Card);
+            //testMain.drawCommand(currentDeckGold2Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -234,7 +247,7 @@ public class Game extends Application implements View, Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
             currentSelectedDeck = currentDeckGoldCard;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            testMain.drawCommand(currentDeckGoldCard);
+            //testMain.drawCommand(currentDeckGoldCard);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -258,7 +271,7 @@ public class Game extends Application implements View, Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource1Card);
             currentSelectedDeck = currentDeckResource1Card;
-            testMain.drawCommand(currentDeckResource1Card);
+            //testMain.drawCommand(currentDeckResource1Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -282,7 +295,7 @@ public class Game extends Application implements View, Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource2Card);
             currentSelectedDeck = currentDeckResource2Card;
-            testMain.drawCommand(currentDeckResource2Card);
+            //testMain.drawCommand(currentDeckResource2Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -306,7 +319,7 @@ public class Game extends Application implements View, Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
             currentSelectedDeck = currentDeckResourceCard;
-            testMain.drawCommand(currentDeckResourceCard);
+            //testMain.drawCommand(currentDeckResourceCard);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -357,32 +370,38 @@ public class Game extends Application implements View, Initializable {
 
     }
 
-    @Override
+
     public void run() {
-        launch();
+        System.out.print("dadasd "  + miniModel + " " +  virtualClient);
+        //lancia();
     }
 
-    @Override
+    public void lancia() {
+        System.out.println("Luca pozzato king");
+        //launch();
+    }
+
+
     public void updateChat(Chat chat) {
 
     }
 
-    @Override
+
     public void updateState(String state) {
         System.out.println("State: " + state);
     }
 
-    @Override
+
     public void updateMyPlayer(Player player) {
         this.myPlayer = player;
     }
 
-    @Override
+
     public void updateWinners(List<Player> winners) {
 
     }
 
-    @Override
+
     public void updateCurrentPlayer(Player player) {
         if (Objects.equals(nickname1.getText(), player.getNickname()))
             nickname1.setFill(Color.BLUE);
@@ -399,7 +418,7 @@ public class Game extends Application implements View, Initializable {
 
     }
 
-    @Override
+
     public void updatePlayers(List<Player> players) {
         nickname1.setText(players.get(0).getNickname());
         nickname2.setText(players.get(1).getNickname());
@@ -454,7 +473,7 @@ public class Game extends Application implements View, Initializable {
 
     // TO DO: metti l'inserimento della initialCard da qui.. e poi leva metodo
     // sotto..
-    @Override
+
     public void updateStructures(List<Structure> structures) {
         int position = 0;
         int position1 = 0;
@@ -533,18 +552,12 @@ public class Game extends Application implements View, Initializable {
                                 currentAngle = "BR";
                         }
 
-                        try {
-                            testMain.placeCommand(card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
+                        //testMain.placeCommand(card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
 
-                            currentSelectedImage.setVisible(false);
+                        currentSelectedImage.setVisible(false);
 
-                            isCardPlaced = true;
-                            cardDrawn = false;
-
-                        } catch (IllegalCommandException e) {
-                            showAlert("Sei sicuro che la carta vada li'? Ritenta"); // TO DO: cambia
-                            throw new RuntimeException(e);
-                        }
+                        isCardPlaced = true;
+                        cardDrawn = false;
 
                     }
 
@@ -622,7 +635,7 @@ public class Game extends Application implements View, Initializable {
     // }
     // }
 
-    @Override
+
     public void updateHand(List<Hand> hands) {
         Hand hand = hands.get(0);
         if (isInitialSetupHand) {
@@ -715,7 +728,6 @@ public class Game extends Application implements View, Initializable {
 
     // TO DO: Manca la board effettiva... solo la parte delle obj comuni e' stata
     // trattata
-    @Override
     public void updateBoard(Board board) {
         String publicObjectiveOne;
         String publicObjectiveTwo;
@@ -930,7 +942,6 @@ public class Game extends Application implements View, Initializable {
         boardPane.getChildren().add(pedina);
     }
 
-    @Override
     public void updateDeck(Deck deck) {
 
         if (isInitialSetupDeck) {
@@ -1011,7 +1022,6 @@ public class Game extends Application implements View, Initializable {
             System.out.printf(card.toString().substring(6, 9) + "-");
     }
 
-    @Override
     public void updateError(String error) {
 
     }
@@ -1138,20 +1148,14 @@ public class Game extends Application implements View, Initializable {
                         currentAngle = "BR";
                 }
 
-                try {
-                    // .println("1: \n" + initialCard1 + "2: \n" + currentSelected + " 3: \n" +
-                    // currentAngle + "4: \n" + currentSelectedFrontUp);
-                    testMain.placeCommand(initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
+                // .println("1: \n" + initialCard1 + "2: \n" + currentSelected + " 3: \n" +
+                // currentAngle + "4: \n" + currentSelectedFrontUp);
+                //testMain.placeCommand(initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
 
-                    currentSelectedImage.setVisible(false);
+                currentSelectedImage.setVisible(false);
 
-                    isCardPlaced = true;
-                    cardDrawn = false;
-
-                } catch (IllegalCommandException e) {
-                    showAlert("Sei sicuro che la carta vada li'? Ritenta");
-                    throw new RuntimeException(e);
-                }
+                isCardPlaced = true;
+                cardDrawn = false;
 
             }
 
@@ -1331,7 +1335,7 @@ public class Game extends Application implements View, Initializable {
 
     @Override
     public void start(Stage stage) throws Exception {
-        viewFactory.showGame();
+        viewFactory.showInitialStage(this.miniModel, this.virtualClient);
     }
 
     @Override

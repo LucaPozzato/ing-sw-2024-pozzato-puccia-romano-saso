@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
-import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
@@ -12,7 +11,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
-import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
 import javafx.application.Platform;
@@ -29,20 +27,22 @@ public class GuiApp implements View {
     }
 
     @Override
-    public void run() {
+    public void run()  {
         game = new Game();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         new Thread(() -> {
             game.run();
+            Platform.runLater(()-> {
+                game.setUP(miniModel,virtualClient);
+                    });
+
         }).start();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-        }
-        try {
-            virtualClient.sendCommand(new CreateGameCommand(virtualClient.getClientId(), 0, "edo", "", Color.RED, 2));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+
+
     }
 
     @Override
@@ -56,6 +56,8 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateState(state);
         });
+
+
     }
 
     @Override

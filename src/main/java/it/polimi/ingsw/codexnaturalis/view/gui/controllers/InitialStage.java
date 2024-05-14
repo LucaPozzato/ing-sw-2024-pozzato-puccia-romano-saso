@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
@@ -23,13 +25,19 @@ public class InitialStage{
     @FXML
     private Button settings;
 
+    MiniModel miniModel;
+    VirtualClient virtualClient;
 
+    public void setUP(MiniModel miniModel, VirtualClient virtualClient){
+        this.miniModel = miniModel;
+        this.virtualClient = virtualClient;
+    }
 
     @FXML
     void startGameFunct(MouseEvent event) {
         Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showStartGame();
+        viewFactory.showStartGame(miniModel, virtualClient);
     }
     @FXML
     void joinGameFunct(MouseEvent event) {

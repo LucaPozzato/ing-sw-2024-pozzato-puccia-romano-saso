@@ -54,18 +54,6 @@ public class GameInizializer implements Initializable {
     private ImageView OB2;
 
     @FXML
-    private ImageView blue;
-
-    @FXML
-    private ImageView green;
-
-    @FXML
-    private ImageView red;
-
-    @FXML
-    private ImageView yellow;
-
-    @FXML
     private Button startGame;
 
     //Utils
@@ -81,7 +69,6 @@ public class GameInizializer implements Initializable {
     String goldElement;
 
     //Inizializzazioni
-    Color color;
     Player player;
     GoldParser goldParser = new GoldParser();
     ResourceParser resourceParser  = new ResourceParser();
@@ -111,60 +98,13 @@ public class GameInizializer implements Initializable {
         System.out.println(objectiveSelected + "\n");
     }
 
-    @FXML
-    void blueSelected(MouseEvent event) {
-        color = Color.BLUE;
-        blue.setOpacity(1);
-        red.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        green.setOpacity(0.3);
-        System.out.println("pedina Blu" + "\n");
-    }
 
-    @FXML
-    void greenSelected(MouseEvent event) {
-        color = Color.GREEN;
-        green.setOpacity(1);
-        red.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        blue.setOpacity(0.3);
-        System.out.println("pedinaVerde" + "\n");
-
-    }
-
-    @FXML
-    void redSelected(MouseEvent event) {
-        color = Color.RED;
-        red.setOpacity(1);
-        green.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        blue.setOpacity(0.3);
-        System.out.println("pedinaRossa" + "\n");
-    }
-
-    @FXML
-    void yellowSelected(MouseEvent event) {
-        color = Color.YELLOW;
-        yellow.setOpacity(1);
-        red.setOpacity(0.3);
-        green.setOpacity(0.3);
-        blue.setOpacity(0.3);
-        System.out.println("pedinaGialla" + "\n");
-    }
 
     @FXML
     void goToGame(MouseEvent event) {
 
         //Manca la scelta delle objective... le seleziona a caso..
-        if (objectiveSelected == null && color == null) {
-            System.out.println("Seleziona una carta Objective e un colore");
-            Errore.setText("Choose a color and an objective card");
-            Errore.setVisible(true);
-        } else if (color == null) {
-            System.out.println("Seleziona un colore");
-            Errore.setText("Choose a color");
-            Errore.setVisible(true);
-        } else if (objectiveSelected == null) {
+        if (objectiveSelected == null) {
             System.out.println("Seleziona una carta Objective");
             Errore.setText("Choose an objective card");
             Errore.setVisible(true);
@@ -173,7 +113,7 @@ public class GameInizializer implements Initializable {
             Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
             viewFactory.closeStage(stage);
 
-            player = new Player(nickname, password, color);
+            player = new Player(nickname);
             //No "OP1f" ma fai funzione per carte obiettivo..
             viewFactory.showGame();
         }

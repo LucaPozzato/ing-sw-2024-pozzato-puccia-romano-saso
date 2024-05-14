@@ -2,8 +2,12 @@ package it.polimi.ingsw.codexnaturalis.view.gui;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.Game;
 import it.polimi.ingsw.codexnaturalis.view.gui.controllers.GameInizializer;
+import it.polimi.ingsw.codexnaturalis.view.gui.controllers.InitialStage;
+import it.polimi.ingsw.codexnaturalis.view.gui.controllers.StartGame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -27,22 +31,27 @@ public class ViewFactory {
         return gameView;
     }
 
-    public void showInitialStage(){
+    public void showInitialStage(MiniModel miniModel, VirtualClient virtualClient){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("initialStage.fxml"));
         createStage(loader);
+        InitialStage initialStage = loader.getController();
+        initialStage.setUP(miniModel, virtualClient);
+
     }
 
-    public void showStartGame(){
+    public void showStartGame(MiniModel miniModel, VirtualClient virtualClient){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("startGame.fxml"));
         createStage(loader);
+        StartGame startGame = loader.getController();
+        startGame.setUP(miniModel, virtualClient);
+
     }
 
-    public void showGameInizializer(String username, String password, int numOfPlayers){
+    public void showGameInizializer(MiniModel miniModel, VirtualClient virtualClient){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameInizializer.fxml"));
-        createStage(loader);
-        //Passo il nick a gameInizializer
         GameInizializer gameInizializer = loader.getController();
-        gameInizializer.setUp(username, password, numOfPlayers);
+        createStage(loader);
+
     }
 
     public void showGame(){

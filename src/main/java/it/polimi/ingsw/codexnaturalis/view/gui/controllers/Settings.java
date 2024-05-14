@@ -24,7 +24,7 @@ public class Settings {
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showInitialStage();
+        //viewFactory.showInitialStage();
     }
 
     @FXML

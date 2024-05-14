@@ -1,5 +1,9 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
+import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
+import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
+import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
+import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +17,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class StartGame implements Initializable{
@@ -37,30 +42,93 @@ public class StartGame implements Initializable{
     private TextField EnterPassword;
 
     @FXML
+    private TextField EnterGameID;
+
+    @FXML
+    private ImageView blue;
+
+    @FXML
+    private ImageView green;
+
+    @FXML
+    private ImageView red;
+
+    @FXML
+    private ImageView yellow;
+
+    @FXML
     ToggleGroup toggleGroup = new ToggleGroup();
 
+    Color color;
+    MiniModel miniModel;
+    VirtualClient virtualClient;
 
 
     @FXML
     private ImageView passwordVisibility;
+
     int cambiamentoTestoPassword = 0;
 
 
-
+    public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
+        this.miniModel = miniModel;
+        this.virtualClient = virtualClient;
+    }
 
     @FXML
-    void CreateGameFunct(MouseEvent event) {
-
+    void CreateGameFunct(MouseEvent event) throws RemoteException {
+        virtualClient.sendCommand(new CreateGameCommand(virtualClient.getClientId(), Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color,Integer.parseInt(ChoosePlayers.getValue()) ));
         Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showGameInizializer(EnterNickname.getText(), EnterPassword.getText(), Integer.parseInt(ChoosePlayers.getValue())); //EnterNickname.getText()
+        viewFactory.showGameInizializer(miniModel, virtualClient); //EnterNickname.getText()
     }
 
     @FXML
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showInitialStage();
+        viewFactory.showInitialStage(miniModel, virtualClient);
+    }
+
+    @FXML
+    void blueSelected(MouseEvent event) {
+        color = Color.BLUE;
+        blue.setOpacity(1);
+        red.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        green.setOpacity(0.3);
+        System.out.println("pedina Blu" + "\n");
+    }
+
+    @FXML
+    void greenSelected(MouseEvent event) {
+        color = Color.GREEN;
+        green.setOpacity(1);
+        red.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        blue.setOpacity(0.3);
+        System.out.println("pedinaVerde" + "\n");
+
+    }
+
+    @FXML
+    void redSelected(MouseEvent event) {
+        color = Color.RED;
+        red.setOpacity(1);
+        green.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        blue.setOpacity(0.3);
+        System.out.println("pedinaRossa" + "\n");
+    }
+
+    @FXML
+    void yellowSelected(MouseEvent event) {
+        color = Color.YELLOW;
+        yellow.setOpacity(1);
+        red.setOpacity(0.3);
+        green.setOpacity(0.3);
+        blue.setOpacity(0.3);
+        System.out.println("pedinaGialla" + "\n");
     }
 
     @Override
@@ -73,8 +141,6 @@ public class StartGame implements Initializable{
         GaussianBlur blur = new GaussianBlur();
         blur.setRadius(7.5);
         EnterPassword.setEffect(blur);
-
-
 
     }
 
