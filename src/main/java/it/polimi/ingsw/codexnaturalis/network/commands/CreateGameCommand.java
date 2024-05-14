@@ -27,7 +27,7 @@ public class CreateGameCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.initialized(clientId, nickName, color, numOfPlayers);
+        controller.initialized(clientId, nickName, password, color, numOfPlayers);
     }
 
     @Override

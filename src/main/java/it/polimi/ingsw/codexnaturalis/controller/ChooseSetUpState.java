@@ -28,7 +28,7 @@ public class ChooseSetUpState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+    public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
         super.rmiServer.sendEvent(event);
         try {
@@ -39,7 +39,7 @@ public class ChooseSetUpState extends ControllerState {
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) {
+    public void joinGame(String clientId, String nickname, String password, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
         super.rmiServer.sendEvent(event);
         try {
@@ -129,5 +129,22 @@ public class ChooseSetUpState extends ControllerState {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void disconnect(String clientId){
+        //terminare la partita
+        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+    }
+
+    @Override
+    public void rejoinGame (String clientId, String nickname, String password) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

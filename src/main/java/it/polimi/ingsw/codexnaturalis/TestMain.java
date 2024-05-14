@@ -42,10 +42,10 @@ public class TestMain extends Thread{
 
         //Simulazione flusso di gioco: SETUP
 
-        luca = new Player("Luca", Color.BLUE);
-        edo = new Player("Edoardo", Color.RED);
-        ste = new Player("Stefano", Color.GREEN);
-        nick = new Player("Niccolo",Color.YELLOW);
+        // luca = new Player("Luca", Color.BLUE);
+        // edo = new Player("Edoardo", Color.RED);
+        // ste = new Player("Stefano", Color.GREEN);
+        // nick = new Player("Niccolo",Color.YELLOW);
 
         Stack<ResourceCard> resourceDeck = new ResourceParser().parse();
         Stack<GoldCard> goldDeck = new GoldParser().parse();

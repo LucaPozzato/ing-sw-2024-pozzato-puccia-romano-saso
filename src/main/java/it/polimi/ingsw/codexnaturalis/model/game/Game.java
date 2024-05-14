@@ -42,7 +42,12 @@ public class Game implements Serializable {
     private Integer turnCounter = 0;
     private final Map <Player, String> fromPlayerToId;
     private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
-    // private Chat chat;
+    private Map<Player, Boolean> connected;
+    private Structure backUpStructure;
+    private Hand backUpHand;
+    private boolean skip;
+    public final Object controllerLock;
+
 
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
@@ -53,7 +58,11 @@ public class Game implements Serializable {
         this.playerStructure = new ArrayList<>();
         this.strategyMap = new HashMap<>();
         this.fromPlayerToId = new HashMap<>();
-        // this.chat = new Chat;
+        this.connected = new HashMap<>();
+        this.backUpStructure = null;
+        this.backUpHand = null;
+        this.skip = false;
+        this.controllerLock = null;
     }
 
     public void addPlayer(Player player) {
@@ -134,6 +143,11 @@ public class Game implements Serializable {
     // public Chat getChat(){return this.chat};
 
     public Map<Player,String> getFromPlayerToId(){return this.getFromPlayerToId();}
+    public Map<Player, Boolean> getConnected(){return this.connected;}
+    public Structure getBackUpStructure(){return this.backUpStructure;}
+    public Hand getBackUpHand(){return this.backUpHand;}
+    public boolean getSkip(){return this.skip;}
+
 
     public void setLastTurn() {
         this.lastTurn = true;
@@ -144,10 +158,15 @@ public class Game implements Serializable {
         this.gameState = state;
     }
 
-    public void setNumPlayers(int numPlayers) {
+    public void setNumPlayers(int numPlayers) throws IllegalCommandException {
         // FIXME: do this in initState
+        if (numPlayers < 2 || numPlayers > 4)
+            throw new IllegalCommandException("Number of players has to be between 2 and 4!");
+
         for (int i = 0; i < numPlayers - 1; i++) {
-            this.players.add(new Player(""));
+            Player newPlayer = new Player("", "");
+            this.players.add(newPlayer);
+            this.connected.put(newPlayer, true);
         }
         this.numPlayers = numPlayers;
     }
@@ -183,6 +202,10 @@ public class Game implements Serializable {
         // players.size());
     }
 
+    public void setBackUpStructure(Structure backUpStructure){ this.backUpStructure = backUpStructure;}
+    public void setBackUpHand(Hand backUpHand){ this.backUpHand = backUpHand;}
+    public void setSkip(boolean skip){ this.skip = skip;}
+
     public void addParticipant() {
         this.numParticipants++;
     }
@@ -217,12 +240,23 @@ public class Game implements Serializable {
         // client.updateError(message);
     }
 
-    public String ClientIdFromNickname (String nickname){
+    public Player PlayerFromId (String clientId){
         for ( var player : fromPlayerToId.keySet() ){
-            if (player.getNickname().equals(nickname)){
-                return fromPlayerToId.get(player);
+            if (clientId.equals(fromPlayerToId.get(player))){
+                return player;
             }
         }
-      return null;
+        return null;
+    }
+
+    public boolean onePlayerLeft(){
+        int counter = 0;
+        for (var player: connected.keySet())
+            if (connected.get(player)) {
+                counter++;
+                if (counter > 1)
+                    return false;
+            }
+        return true;
     }
 }

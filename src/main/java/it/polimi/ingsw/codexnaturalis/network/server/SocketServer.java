@@ -20,6 +20,7 @@ import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
 public class SocketServer implements VirtualServer, Runnable {
@@ -38,7 +39,6 @@ public class SocketServer implements VirtualServer, Runnable {
         this.eventExitQueue = new LinkedList<Event>();
         this.games = null;
         this.players = new HashMap<>();
-        this.connected = new HashMap<>();
     }
 
     public void setGames(Map<Integer, Game> games) {
@@ -49,9 +49,6 @@ public class SocketServer implements VirtualServer, Runnable {
         this.rmiServer = rmiServer;
     }
 
-    public Map<SocketSkeleton, Boolean> getConnected() {
-        return connected;
-    }
 
     /**
      * this method is called by the client to send a command taken by input
@@ -120,7 +117,9 @@ public class SocketServer implements VirtualServer, Runnable {
                 }
 
                 if (games.containsKey(gameId))
-                    command.execute(games.get(gameId).getState());
+                    synchronized(games.get(gameId).controllerLock) {
+                        command.execute(games.get(gameId).getState());
+                    }
                 else
                     this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId not valid"));
 
@@ -175,7 +174,7 @@ public class SocketServer implements VirtualServer, Runnable {
                 Integer gameId = event.getGameId();
                 SocketSkeleton client = null;
 
-                if (event instanceof InLobbyEvent) {
+                if (event instanceof InLobbyEvent || event instanceof RejoinGameEvent ) {
                     if (!players.containsKey(gameId))
                         players.put(gameId, new ArrayList<>());
                     System.out.println("event game id on socket: " + event.getGameId());
@@ -209,12 +208,6 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                 }
 
-                // synchronized (this.clients) {
-                // for (var c : this.clients) {
-                // client.receiveEvent(event);
-                // System.out.println("> event sent to client");
-                // }
-                // }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -236,19 +229,19 @@ public class SocketServer implements VirtualServer, Runnable {
         }
     }
 
-    /**
-     * TODO
-     *
-     * @param client
-     */
-    public void disconnectClient(VirtualClient client) {
-        synchronized (clients) {
-            if (clients.remove(client)) {
-                if (client instanceof SocketSkeleton) {
-                    ((SocketSkeleton) client).stop();
+    public synchronized void disconnectSocket(SocketSkeleton client){
+
+        for (var gameId : players.keySet())
+            for (var client1 : players.get(gameId))
+                if (client.equals(client1)) {
+                    synchronized (games.get(gameId).controllerLock) {
+                        games.get(gameId).getState().disconnect(client.getClientId());
+                    }
+                    players.get(gameId).remove(client);
+                    break;
                 }
-            }
-        }
+
+        clients.remove(client);
     }
 
     /**

@@ -25,9 +25,12 @@ public abstract class ControllerState {
         this.socketServer = socketServer;
     }
 
-    public abstract void initialized(String clientId, String nick, Color color, int numPlayers);
 
-    public abstract void joinGame(String clientId, String nickname, Color color);
+
+
+    public abstract void initialized(String clientId, String nick, String password, Color color, int numPlayers);
+
+    public abstract void joinGame(String clientId, String nickname, String password, Color color);
 
     public abstract void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard);
 
@@ -35,6 +38,10 @@ public abstract class ControllerState {
             Boolean frontUp);
 
     public abstract void drawnCard(String clientId, Player player, Card card, String fromDeck);
+
+    public abstract void rejoinGame (String clientId, String nickname, String password);
+
+    public abstract void disconnect (String clientId);
 
     public void updateChat(String clientId, String message, Player sender, Player receiver) {
         Chat chat = game.getChat();
@@ -70,6 +77,5 @@ public abstract class ControllerState {
         }
     }
 
-    // public abstract void rejoin(String nickname);
 
 }

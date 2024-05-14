@@ -77,26 +77,22 @@ public class InitState extends ControllerState {
      * @param color      first player's chosen color
      * @param numPlayers first player's chosen number of competitors
      */
-    private void createFirstPlayer(String nick, Color color, int numPlayers, String clientId) {
+    private void createFirstPlayer(String nick, String password, Color color, int numPlayers, String clientId) throws IllegalCommandException{
         // TODO togliere dal costruttore di Players il nickname e il colore e istituire
         // dei setter specifici
-        Player player = new Player(nick, color);
+        Player player = new Player(nick, password, color);
 
         super.game.getPlayers().add(player);
-        // super.game.getFromPlayerToId().put(player, clientId);
+        super.game.getFromPlayerToId().put(player, clientId);
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
-        super.game.setNumPlayers(numPlayers);
+        super.game.setNumPlayers(numPlayers); //throws illegal command exc
         super.game.addParticipant();
-
         // FIXME: clean this up
-        try {
-            super.game.getBoard().updateActualScore(player, 0);
-            // FIXME: this is a temporary solution
-            // super.game.getBoard().updateActualScore(player, 12);
-        } catch (IllegalCommandException e) {
-            e.printStackTrace();
-        }
+        super.game.getBoard().updateActualScore(player, 0); //throws illegal command exc
+        // FIXME: this is a temporary solution
+        // super.game.getBoard().updateActualScore(player, 12);
+
     }
 
     /**
@@ -167,7 +163,7 @@ public class InitState extends ControllerState {
      *                                 exceptions
      */
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+    public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = null;
         try {
             createDecks();
@@ -178,7 +174,7 @@ public class InitState extends ControllerState {
             game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
             game.getBoard().addUncoveredCard(game.getDeck().drawGoldCard()); // FIXME
 
-            createFirstPlayer(nick, color, numPlayers, clientId);
+            createFirstPlayer(nick, password, color, numPlayers, clientId);
             dealHands(numPlayers);
             dealInitialCard();
 
@@ -215,7 +211,7 @@ public class InitState extends ControllerState {
      *                                 called in this state
      */
     @Override
-    public void joinGame(String clientId, String nickname, Color color) {
+    public void joinGame(String clientId, String nickname, String password, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game not created yet");
         super.rmiServer.sendEvent(event);
         try {
@@ -301,5 +297,23 @@ public class InitState extends ControllerState {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void disconnect(String clientId){
+        //terminare la partita
+        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+    }
+
+    @Override
+    public void rejoinGame (String clientId, String nickname, String password) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -173,7 +173,7 @@ public class GameInizializer implements Initializable {
             Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
             viewFactory.closeStage(stage);
 
-            player = new Player(nickname,color);
+            player = new Player(nickname, password, color);
             //No "OP1f" ma fai funzione per carte obiettivo..
             viewFactory.showGame();
         }

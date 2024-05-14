@@ -10,20 +10,28 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
+import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.DrawEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.*;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
 public class DrawnCardState extends ControllerState {
+    boolean drawn = false;
+
     public DrawnCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
+        if(game.getSkip()) {
+            game.setSkip(false);
+            if (nextTurn())
+                super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+            else
+                super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
+        }
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+    public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
         super.rmiServer.sendEvent(event);
         try {
@@ -34,7 +42,7 @@ public class DrawnCardState extends ControllerState {
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) {
+    public void joinGame(String clientId, String nickname, String password, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
         super.rmiServer.sendEvent(event);
         try {
@@ -67,7 +75,7 @@ public class DrawnCardState extends ControllerState {
     }
 
     @Override
-    public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+    public synchronized void drawnCard(String clientId, Player player, Card card, String fromDeck) {
 
         Event event = null;
         Boolean matchEnded = false;
@@ -107,7 +115,7 @@ public class DrawnCardState extends ControllerState {
             else
                 super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
 
-        } catch (IllegalCommandException e){
+        } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
         }
 
@@ -117,6 +125,8 @@ public class DrawnCardState extends ControllerState {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        drawn = true;
 
     }
 
@@ -162,20 +172,82 @@ public class DrawnCardState extends ControllerState {
 
     private Boolean nextTurn() {
         List<Player> players = super.game.getPlayers();
+        boolean matchEnded = false;
         super.game.setCurrentPlayer(players.get((players.indexOf(super.game.getCurrentPlayer())
                 + 1) % players.size()));
 
         if (super.game.isLastTurn()) {
             if (super.game.getTurnCounter() > 0) {
-                // [ ] test the >= 0
                 System.out.println("turn counter before remove " + super.game.getTurnCounter());
                 super.game.removeTurn();
                 System.out.println("turn counter after remove " + super.game.getTurnCounter());
+                if (!super.game.getConnected().get(super.game.getCurrentPlayer()))
+                    matchEnded = nextTurn();
             } else {
                 System.out.println("end game state");
-                return true;
+                matchEnded = true;
             }
         }
-        return false;
+
+        return matchEnded;
+    }
+
+    @Override
+    public void rejoinGame(String clientId, String nickname, String password) {
+
+        Event event = null;
+
+        boolean foundNickname = false;
+        for (var player : game.getPlayers()) {
+            if (nickname.equals(player.getNickname())) {
+                foundNickname = true;
+                if (password.equals(player.getPassword())) {
+                    if (!game.getConnected().get(player)) {
+                        game.getConnected().put(player, true);
+                        super.game.getFromPlayerToId().put(player, clientId);
+                        event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Draw", game.getPlayers(), game.getStructures(),
+                                game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+                    } else {
+                        event = new ErrorEvent(clientId, game.getGameId(), "the player is already connected");
+                    }
+                } else {
+                    event = new ErrorEvent(clientId, game.getGameId(), "wrong password");
+                }
+                break;
+            }
+        }
+
+        if (!foundNickname) {
+            event = new ErrorEvent(clientId, game.getGameId(), "no player with this nickname in the game " + game.getGameId());
+        }
+
+
+//
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized void disconnect(String clientId){
+        Player player = game.PlayerFromId(clientId);
+        super.game.getConnected().put(player, false);
+
+        if(game.onePlayerLeft())
+            super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+
+        else if (player.equals((game.getCurrentPlayer()))) {
+            if (!drawn){ //dovrebbe entrare sempre
+                game.getStructures().set(game.getPlayers().indexOf(player), game.getBackUpStructure());
+                game.getHands().set(game.getPlayers().indexOf(player), game.getBackUpHand());
+            }
+            if (nextTurn())
+                super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+            else
+                super.game.setState(new PlacedCardState(super.game, super.rmiServer, super.socketServer));
+        }
     }
 }

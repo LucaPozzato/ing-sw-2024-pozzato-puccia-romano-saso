@@ -26,7 +26,7 @@ public class JoinGameCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.joinGame(clientId, nickName, color);
+        controller.joinGame(clientId, nickName, password, color);
     }
 
     @Override

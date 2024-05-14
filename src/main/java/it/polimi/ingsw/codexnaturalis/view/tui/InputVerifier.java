@@ -10,13 +10,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
-import it.polimi.ingsw.codexnaturalis.network.commands.ChatCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.Command;
-import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.*;
 
 public class InputVerifier {
     private MiniModel miniModel;
@@ -264,6 +258,16 @@ public class InputVerifier {
                 try {
                     return new ChatCommand(client.getClientId(), miniModel.getGameId(), parameters[0], player,
                             receiver);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            case "REJOIN":
+                if (parameters.length != 3)
+                    throw new IllegalCommandException("Invalid number of parameters");
+                try {
+                    return new RejoinGameCommand(client.getClientId(), Integer.parseInt(parameters[0]), parameters[1],
+                            parameters[2]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

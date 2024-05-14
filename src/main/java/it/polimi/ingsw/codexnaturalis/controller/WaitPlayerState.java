@@ -19,7 +19,7 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void initialized(String clientId, String nick, Color color, int numPlayers) {
+    public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
         super.rmiServer.sendEvent(event);
         try {
@@ -30,7 +30,7 @@ public class WaitPlayerState extends ControllerState {
     }
 
     @Override
-    public void joinGame(String clientId, String nickname, Color color) {
+    public void joinGame(String clientId, String nickname, String password, Color color) {
         try {
             if (nickname.equals("")) {
                 throw new IllegalCommandException("Nickname can't be empty");
@@ -49,7 +49,7 @@ public class WaitPlayerState extends ControllerState {
                 throw new IllegalCommandException("Game already full");
             }
 
-            createNewPlayers(clientId, nickname, color);
+            createNewPlayers(clientId, nickname, password, color);
         } catch (IllegalCommandException err) {
             System.out.println("> sent error: " + err.getMessage());
             Event event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
@@ -73,12 +73,13 @@ public class WaitPlayerState extends ControllerState {
         }
     }
 
-    private void createNewPlayers(String clientId, String nickname, Color color) {
+    private void createNewPlayers(String clientId, String nickname, String password, Color color) {
         Player player = super.game.getPlayers().get(super.game.getNumParticipants());
         player.setNickname(nickname);
+        player.setPassword(password);
         player.setColor(color);
         super.game.addParticipant();
-        // super.game.getFromPlayerToId().put(player, clientId);
+        super.game.getFromPlayerToId().put(player, clientId);
 
         // FIXME: clean this up
         try {
@@ -143,6 +144,23 @@ public class WaitPlayerState extends ControllerState {
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card yet");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void disconnect(String clientId){
+        //terminare la partita
+        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+    }
+
+    @Override
+    public void rejoinGame (String clientId, String nickname, String password) {
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);

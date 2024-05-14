@@ -15,15 +15,14 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
 
 public class RmiServer implements VirtualServer {
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
-    private Map<VirtualClient, Boolean> connected;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
@@ -41,7 +40,6 @@ public class RmiServer implements VirtualServer {
         this.commandEntryQueue = new LinkedList<>();
         this.eventExitQueue = new LinkedList<>();
         this.players = new HashMap<>();
-        this.connected = new HashMap<>();
     }
 
     /**
@@ -54,9 +52,6 @@ public class RmiServer implements VirtualServer {
         new Thread(this::pinger).start();
     }
 
-    // public void setModel(Game model) {
-    // this.model = model;
-    // }
 
     public void setGames(Map<Integer, Game> games) {
         this.games = games;
@@ -117,15 +112,7 @@ public class RmiServer implements VirtualServer {
 
                 Integer gameId = command.getGameId();
 
-                // password setting rmi
-                if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)) {
-                    for (var c : clients) {
-                        if (c.getClientId().equals(command.getClientId())) {
-                            c.setPassword(command.getPassword());
-                            break;
-                        }
-                    }
-                }
+                //TODO: eliminare password dal client e tutto il settaggio
 
                 System.out.println("rmi server received command with gameIdd: " + gameId);
                 System.out.println("rmi server command received: " + command.getClass().getName());
@@ -147,33 +134,11 @@ public class RmiServer implements VirtualServer {
                     }
                 }
 
-                // needs to verify the gameid, that the nickname exists among the nickname of
-                // the clients in that game, tha the client connected to the clientID connected
-                // to the nickname in that game is connected
-                // than needs to cancel the old change his clinetId with the old Clientid
-                // update the list of clinets, the list of connected and the list of players,
-                // if (command instanceof ReJoinCommand)
-                // if (games.containsKey(gameId))
-                // for ( String clId : players.get(gameId) ) {
-                // String existingClientId =
-                // (games.get(gameId).ClientIdFromNickname(command.getNickName()));
-                // //controlliamo che il nickname nel comando sia tra i nickanme dei plaeyrs in
-                // partita
-                // RmiClient client = null;
-                // if (existingClientId.equals(command.getClientId()))
-                // for (var cl : clients){
-                // if (cl.getClientId = clId)
-                //
-                // }
-                // if (command.getPassword().eq
-                // uals(getPassword()))
-                //
-                //
-                // }
-
                 String[] commandName = command.getClass().getName().split("\\.");
                 if (games.containsKey(gameId))
-                    command.execute(games.get(gameId).getState());
+                    synchronized(games.get(gameId).controllerLock) {
+                        command.execute(games.get(gameId).getState());
+                    }
                 else
                     this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(), "gameId not valid"));
                 System.out.println("> " + commandName[commandName.length - 1] + " executed");
@@ -235,7 +200,7 @@ public class RmiServer implements VirtualServer {
                 Integer gameId = event.getGameId();
                 VirtualClient client = null;
 
-                if (event instanceof InLobbyEvent) {
+                if (event instanceof InLobbyEvent || event instanceof RejoinGameEvent) {
                     if (!players.containsKey(gameId))
                         players.put(gameId, new ArrayList<>());
                     for (var c : clients)
@@ -286,34 +251,28 @@ public class RmiServer implements VirtualServer {
     private void pinger() {
         System.out.println("started thread pinger");
         while (true) {
-            VirtualClient client = null;
-            for (var c : clients) {
-                // System.out.println("trying to ping");
-                client = c;
+            for (var client : clients) {
                 // System.out.println("pinging client");
                 try {
                     client.ping();
-                    connected.put(client, true);
                 } catch (ConnectException e) {
-                    connected.put(client, false);
 
                     System.out.println("client disconnected");
-                    Boolean found = false;
-                    Integer gId = null;
                     for (var gameId : players.keySet())
-                        for (var c1 : players.get(gameId))
-                            if (client.equals(c1)) {
-                                gId = gameId;
-                                found = true;
+                        for (var client1 : players.get(gameId))
+                            if (client.equals(client1)) {
+                                synchronized (games.get(gameId).controllerLock) {
+                                    try {
+                                        games.get(gameId).getState().disconnect(client.getClientId());
+                                    } catch (RemoteException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                                players.get(gameId).remove(client);
                                 break;
                             }
-                    // BUG: maybe it should be if (found)
-                    if (!found) {
-                        clients.remove(client);
-                        connected.remove(client);
-                    }
-                    // } else
-                    // games.get(gId).getState().disconnect(client.getClientId());
+
+                    clients.remove(client);
 
                 } catch (RemoteException e) {
                     e.printStackTrace();

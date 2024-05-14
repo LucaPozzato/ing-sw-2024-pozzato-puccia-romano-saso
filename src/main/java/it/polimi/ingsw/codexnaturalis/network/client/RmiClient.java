@@ -16,7 +16,6 @@ import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     private final String clientId;
-    private String password;
     private final VirtualServer server;
     private final Queue<Event> eventEntryQueue;
     private final Queue<Command> commandExitQueue;
@@ -36,7 +35,6 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
      */
     public RmiClient(VirtualServer server, boolean isCli) throws RemoteException {
         this.clientId = createClientId();
-        this.password = null;
         this.server = server;
         this.isCli = isCli;
         this.miniModel = new MiniModel();
@@ -207,14 +205,5 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         return this.clientId;
     }
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
 }

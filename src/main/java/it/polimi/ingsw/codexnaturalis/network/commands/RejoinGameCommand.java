@@ -3,10 +3,9 @@ package it.polimi.ingsw.codexnaturalis.network.commands;
 import java.io.Serial;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
-import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
-public class ReJoinCommand extends Command {
+public class RejoinGameCommand extends Command {
     @Serial
     private static final long serialVersionUID = 681033347560138L;
     private String clientId;
@@ -14,7 +13,7 @@ public class ReJoinCommand extends Command {
     private String password;
     private Integer gameId;
 
-    public ReJoinCommand(String clientId, Integer gameId, String nickName, String password) {
+    public RejoinGameCommand(String clientId, Integer gameId, String nickName, String password) {
         this.clientId = clientId;
         this.nickName = nickName;
         this.password = password;
@@ -23,7 +22,7 @@ public class ReJoinCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        controller.reJoinGame(gameId, nickName, password);
+        controller.rejoinGame(clientId, nickName, password);
     }
 
     @Override

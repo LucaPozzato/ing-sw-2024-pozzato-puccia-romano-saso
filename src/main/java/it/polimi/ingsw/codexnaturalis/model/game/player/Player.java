@@ -11,17 +11,20 @@ public class Player implements Serializable {
 
 
     private String nickname;
+    private String password;
     private Color colorPlayer;
 
     public Player() {
     }
 
-    public Player(String nickname) {
+    public Player(String nickname, String password) {
         this.nickname = nickname;
+        this.password = password;
     }
 
-    public Player(String nickname, Color color) {
+    public Player(String nickname, String password, Color color) {
         this.nickname = nickname;
+        this.password = password;
         this.colorPlayer = color;
     }
 
@@ -30,11 +33,15 @@ public class Player implements Serializable {
     }
 
     public Color getColor() {
-        return colorPlayer;
+        return this.colorPlayer;
     }
+    public String getPassword(){ return this.password;}
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setColor(Color colorPlayer) {

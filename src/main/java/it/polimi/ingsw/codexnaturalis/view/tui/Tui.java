@@ -357,7 +357,7 @@ public class Tui implements View {
                     terminalPrinter.clearInput();
 
                     String tempMove = move.toUpperCase();
-                    if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND")) {
+                    if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND") && !tempMove.contains("REJOIN")) {
                         move = move.toUpperCase();
                     }
 

@@ -17,14 +17,12 @@ import it.polimi.ingsw.codexnaturalis.network.events.Event;
 public class SocketSkeleton implements VirtualClient, Runnable {
 
     private String clientId;
-    private String password;
     private final VirtualServer server;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
 
     public SocketSkeleton(VirtualServer server, Socket socket) throws IOException {
         this.clientId = null;
-        this.password = null;
         this.server = server;
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
@@ -58,13 +56,11 @@ public class SocketSkeleton implements VirtualClient, Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                ((SocketServer) server).getConnected().put(this, true);
                 Command command = (Command) input.readObject();
                 if (command != null) {
                     System.out.println("skeleton received command: " + command.getClass().getSimpleName());
                     if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)) {
                         this.clientId = command.getClientId();
-                        this.password = command.getPassword(); // password setting socket
                         System.out.println("skeleton client id: " + this.clientId);
                     }
                     sendCommand(command);
@@ -72,7 +68,7 @@ public class SocketSkeleton implements VirtualClient, Runnable {
             }
         } catch (EOFException e) {
             System.out.println("Client disconnected");
-            ((SocketServer) server).getConnected().put(this, false);
+            ((SocketServer) server).disconnectSocket(this);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -96,12 +92,4 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         // do nothing
     }
 
-    @Override
-    public String getPassword(){
-        return this.password;
-    }
-    @Override
-    public void setPassword(String password){
-        this.password = password;
-    }
 }
