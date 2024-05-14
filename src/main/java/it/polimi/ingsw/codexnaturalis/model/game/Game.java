@@ -61,7 +61,7 @@ public class Game implements Serializable {
         this.backUpStructure = null;
         this.backUpHand = null;
         this.skip = false;
-        this.controllerLock = null;
+        this.controllerLock = new Object();
     }
 
     public void addPlayer(Player player) {
@@ -141,7 +141,7 @@ public class Game implements Serializable {
     }
     // public Chat getChat(){return this.chat};
 
-    public Map<Player,String> getFromPlayerToId(){return this.getFromPlayerToId();}
+    public Map<Player,String> getFromPlayerToId(){return this.fromPlayerToId;}
     public Map<Player, Boolean> getConnected(){return this.connected;}
     public Structure getBackUpStructure(){return this.backUpStructure;}
     public Hand getBackUpHand(){return this.backUpHand;}
