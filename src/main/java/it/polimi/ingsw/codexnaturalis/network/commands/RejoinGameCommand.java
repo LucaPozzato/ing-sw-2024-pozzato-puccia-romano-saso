@@ -12,10 +12,9 @@ public class ReJoinCommand extends Command {
     private String clientId;
     private String nickName;
     private String password;
-
     private Integer gameId;
 
-    public ReJoinCommand(String clientId, Integer gameId, String nickName, String password, Color color) {
+    public ReJoinCommand(String clientId, Integer gameId, String nickName, String password) {
         this.clientId = clientId;
         this.nickName = nickName;
         this.password = password;
@@ -24,7 +23,7 @@ public class ReJoinCommand extends Command {
 
     @Override
     public void execute(ControllerState controller) throws IllegalCommandException {
-        // controller.reJoinGame(nickName);
+        controller.reJoinGame(gameId, nickName, password);
     }
 
     @Override
