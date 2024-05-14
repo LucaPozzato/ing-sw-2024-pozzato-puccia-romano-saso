@@ -8,10 +8,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.*;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
@@ -222,10 +219,18 @@ public class PlacedCardState extends ControllerState {
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
 
-        if(game.onePlayerLeft())
-            //timeout + check again
-            super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
-        else if (player.equals((game.getCurrentPlayer()))) {
+        if(game.onePlayerLeft()){
+            //timerrrrrrrrr
+            if(game.onePlayerLeft()) {
+                Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+                super.rmiServer.sendEvent(event);
+                try {
+                    super.socketServer.sendEvent(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (player.equals((game.getCurrentPlayer()))) {
             if (placed) { //dovrebbe non entrare mai
                 game.getStructures().set(game.getPlayers().indexOf(player), game.getBackUpStructure());
                 game.getHands().set(game.getPlayers().indexOf(player), game.getBackUpHand());

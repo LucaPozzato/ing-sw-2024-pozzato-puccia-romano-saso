@@ -20,6 +20,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.parser.ResourceParser;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -299,9 +300,14 @@ public class InitState extends ControllerState {
     }
 
     @Override
-    public void disconnect(String clientId){
-        //terminare la partita
-        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+    public void disconnect(String clientId) {
+        Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

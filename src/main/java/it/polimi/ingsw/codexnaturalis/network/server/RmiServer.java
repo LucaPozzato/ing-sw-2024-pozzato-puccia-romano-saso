@@ -122,10 +122,10 @@ public class RmiServer implements VirtualServer {
                         System.out.println("rmi server creating a new game");
                         games.put(gameId, new Game(gameId, this, socketServer));
                     } else {
-                        RmiClient client = null;
+                        VirtualClient client = null;
                         for (var c : clients) {
                             if (c.getClientId().equals(command.getClientId())) {
-                                client = (RmiClient) c;
+                                client = c;
                                 break;
                             }
                         }
@@ -250,35 +250,50 @@ public class RmiServer implements VirtualServer {
 
     private void pinger() {
         System.out.println("started thread pinger");
+        VirtualClient c = null;
+        boolean disconnected = false;
         while (true) {
             for (var client : clients) {
                 // System.out.println("pinging client");
                 try {
                     client.ping();
+                    System.out.println("pinging clienttt" + client.getClientId());
                 } catch (ConnectException e) {
 
-                    System.out.println("client disconnected");
-                    for (var gameId : players.keySet())
+                    System.out.println("client disconnected" + client.getClientId());
+                    for (var gameId : players.keySet()) {
                         for (var client1 : players.get(gameId))
                             if (client.equals(client1)) {
-                                synchronized (games.get(gameId).controllerLock) {
-                                    try {
-                                        games.get(gameId).getState().disconnect(client.getClientId());
-                                    } catch (RemoteException e1) {
-                                        e1.printStackTrace();
-                                    }
+                                System.out.println("disconnected client found");
+                                //synchronized (games.get(gameId).controllerLock) {
+                                try {
+                                    System.out.println("trying to disconnect client");
+                                    games.get(gameId).getState().disconnect(client.getClientId());
+                                } catch (RemoteException e1) {
+                                    e1.printStackTrace();
                                 }
+                                //}
                                 players.get(gameId).remove(client);
                                 break;
                             }
 
-                    clients.remove(client);
+                    }
 
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                    c = client;
+                    disconnected = true;
+                    break;
+
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
                 }
                 // System.out.println("client ponged");
             }
+
+            if(disconnected) {
+                System.out.println("removing client" + c.getClientId());
+                clients.remove(c);
+            }
+
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {

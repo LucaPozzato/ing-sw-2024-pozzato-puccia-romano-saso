@@ -11,10 +11,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.Event;
-import it.polimi.ingsw.codexnaturalis.network.events.StartGameEvent;
-import it.polimi.ingsw.codexnaturalis.network.events.WaitEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.*;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -133,8 +130,13 @@ public class ChooseSetUpState extends ControllerState {
 
     @Override
     public void disconnect(String clientId){
-        //terminare la partita
-        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+        Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+        super.rmiServer.sendEvent(event);
+        try {
+            super.socketServer.sendEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

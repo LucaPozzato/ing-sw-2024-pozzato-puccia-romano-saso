@@ -235,10 +235,18 @@ public class DrawnCardState extends ControllerState {
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(player, false);
 
-        if(game.onePlayerLeft())
-            super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
-
-        else if (player.equals((game.getCurrentPlayer()))) {
+        if(game.onePlayerLeft()){
+            //timerrrrrrrrr
+            if(game.onePlayerLeft()) {
+                Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+                super.rmiServer.sendEvent(event);
+                try {
+                    super.socketServer.sendEvent(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (player.equals((game.getCurrentPlayer()))) {
             if (!drawn){ //dovrebbe entrare sempre
                 game.getStructures().set(game.getPlayers().indexOf(player), game.getBackUpStructure());
                 game.getHands().set(game.getPlayers().indexOf(player), game.getBackUpHand());
