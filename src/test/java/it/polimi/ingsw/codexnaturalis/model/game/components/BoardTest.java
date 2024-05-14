@@ -102,14 +102,14 @@ public class BoardTest {
     @Test
     void testUpdateActualScore() {
         Board board = new Board();
-        Player testPlayer = new Player("player1");
+        Player testPlayer = new Player("player1", "");
         Map<Player, Integer> actualScores;
 
         // test that verifies player are added with 0 points
         try {
             board.updateActualScore(testPlayer, 0);
             for (int i = 0; i < 3; i++) {
-                board.updateActualScore(new Player("player" + (i + 2)), i + 1);
+                board.updateActualScore(new Player("player" + (i + 2), ""), i + 1);
             }
             actualScores = board.getActualScores();
             for (Map.Entry<Player, Integer> score : actualScores.entrySet()) {
@@ -140,7 +140,7 @@ public class BoardTest {
 
         // test that verifies exception is thrown if more than 4 players
         try {
-            board.updateActualScore(new Player("player5"), 0);
+            board.updateActualScore(new Player("player5", ""), 0);
         } catch (Exception e) {
             assertEquals("Cannot have more than 4 players", e.getMessage());
         }
@@ -153,14 +153,14 @@ public class BoardTest {
     @Test
     void testUpdateVirtualScore() {
         Board board = new Board();
-        Player testPlayer = new Player("player1");
+        Player testPlayer = new Player("player1", "");
         Map<Player, Integer> virtualScores;
 
         // test that verifies player are added with 0 points
         try {
             board.updateVirtualScore(testPlayer, 0);
             for (int i = 0; i < 3; i++) {
-                board.updateVirtualScore(new Player("player" + (i + 2)), i + 1);
+                board.updateVirtualScore(new Player("player" + (i + 2), ""), i + 1);
             }
             virtualScores = board.getVirtualScores();
             for (Map.Entry<Player, Integer> score : virtualScores.entrySet()) {
@@ -191,7 +191,7 @@ public class BoardTest {
 
         // test that verifies exception is thrown if more than 4 players
         try {
-            board.updateVirtualScore(new Player("player5"), 0);
+            board.updateVirtualScore(new Player("player5", ""), 0);
         } catch (Exception e) {
             assertEquals("Cannot have more than 4 players", e.getMessage());
         }

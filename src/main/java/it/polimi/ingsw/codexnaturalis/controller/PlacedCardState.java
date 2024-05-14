@@ -8,7 +8,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
@@ -208,39 +207,7 @@ public class PlacedCardState extends ControllerState {
 
         if (!foundNickname) {
             event = new ErrorEvent(clientId, game.getGameId(), "no player with this nickname in the game " + game.getGameId());
-        }
-
-
-//            //siamo nella partita
-//            String oldClientId = (games.get(gameId).ClientIdFromNickname(command.getNickName()));
-//            //abbiamo il vecchio clientId
-//            RmiClient oldClient = null;
-//            for (var c1 : clients)
-//                if (c1.getClientId().equals(oldClientId))
-//                    oldClient = c1;
-//            //abbiamo il vecchio client, forse ora non serve, dopo si
-//
-//            //vogliamo controllare che il nickname del comando (command.getNickName)
-//
-//
-//            if (oldClientId.equals(command.getClientId()))
-//                for (VirtualClient cl : clients) {
-//                    if (cl.getClientId = clId)
-//
-//                        for (String clId : players.get(gameId)) {
-//                            String existingClientId = (games.get(gameId).ClientIdFromNickname(command.getNickName()));
-//                            //controlliamo che il nickname nel comando sia tra i nickanme dei plaeyrs in partita
-//                            RmiClient client = null;
-//                            if (existingClientId.equals(command.getClientId()))
-//                                for (var cl : clients) {
-//                                    if (cl.getClientId = clId)
-//
-//                                }
-//
-//                            if (command.getPassword().equals(getPassword()))
-//                        }
-//                }
-//        }
+        }       
 
         super.rmiServer.sendEvent(event);
         try {
@@ -249,6 +216,7 @@ public class PlacedCardState extends ControllerState {
             e.printStackTrace();
         }
     }
+    
     @Override
     public synchronized void disconnect(String clientId) {
         Player player = game.PlayerFromId(clientId);
