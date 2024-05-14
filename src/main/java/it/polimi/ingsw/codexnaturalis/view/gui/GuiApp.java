@@ -1,6 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.view.gui;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
@@ -27,7 +26,7 @@ public class GuiApp implements View {
     }
 
     @Override
-    public void run()  {
+    public void run() {
         game = new Game();
         try {
             Thread.sleep(3000);
@@ -36,12 +35,18 @@ public class GuiApp implements View {
         }
         new Thread(() -> {
             game.run();
-            Platform.runLater(()-> {
-                game.setUP(miniModel,virtualClient);
-                    });
-
         }).start();
 
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Platform.runLater(() -> {
+            game.setUP(miniModel, virtualClient);
+            game.showInitialStage();
+        });
 
     }
 
@@ -56,7 +61,6 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateState(state);
         });
-
 
     }
 

@@ -112,7 +112,7 @@ public class Game extends Application implements Initializable {
     ViewFactory viewFactory = new ViewFactory();
 
     private MiniModel miniModel;
-    private VirtualClient virtualClient ;
+    private VirtualClient virtualClient;
 
     // Gestione evento di placeCard
 
@@ -123,10 +123,10 @@ public class Game extends Application implements Initializable {
     boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialSetupDeck = true,
             isHandCardSelected;
 
-//    public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
-//        this.miniModel = miniModel;
-//        this.virtualClient = virtualClient;
-//    }
+    // public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
+    // this.miniModel = miniModel;
+    // this.virtualClient = virtualClient;
+    // }
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
         System.out.println(virtualClient);
@@ -134,6 +134,7 @@ public class Game extends Application implements Initializable {
         this.virtualClient = virtualClient;
         System.out.println(this.virtualClient);
     }
+
     @FXML
     void handCard1Clicked(MouseEvent event) {
 
@@ -198,7 +199,7 @@ public class Game extends Application implements Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
             currentSelectedDeck = currentDeckGold1Card;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            //testMain.drawCommand(currentDeckGold1Card);
+            // testMain.drawCommand(currentDeckGold1Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -222,7 +223,7 @@ public class Game extends Application implements Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
             currentSelectedDeck = currentDeckGold2Card;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            //testMain.drawCommand(currentDeckGold2Card);
+            // testMain.drawCommand(currentDeckGold2Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -247,7 +248,7 @@ public class Game extends Application implements Initializable {
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
             currentSelectedDeck = currentDeckGoldCard;
             // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            //testMain.drawCommand(currentDeckGoldCard);
+            // testMain.drawCommand(currentDeckGoldCard);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -271,7 +272,7 @@ public class Game extends Application implements Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource1Card);
             currentSelectedDeck = currentDeckResource1Card;
-            //testMain.drawCommand(currentDeckResource1Card);
+            // testMain.drawCommand(currentDeckResource1Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -295,7 +296,7 @@ public class Game extends Application implements Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource2Card);
             currentSelectedDeck = currentDeckResource2Card;
-            //testMain.drawCommand(currentDeckResource2Card);
+            // testMain.drawCommand(currentDeckResource2Card);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -319,7 +320,7 @@ public class Game extends Application implements Initializable {
 
             System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
             currentSelectedDeck = currentDeckResourceCard;
-            //testMain.drawCommand(currentDeckResourceCard);
+            // testMain.drawCommand(currentDeckResourceCard);
             cardDrawn = true;
             isCardPlaced = false;
         }
@@ -370,37 +371,25 @@ public class Game extends Application implements Initializable {
 
     }
 
-
     public void run() {
-        System.out.print("dadasd "  + miniModel + " " +  virtualClient);
-        //lancia();
+        launch();
     }
-
-    public void lancia() {
-        System.out.println("Luca pozzato king");
-        //launch();
-    }
-
 
     public void updateChat(Chat chat) {
 
     }
 
-
     public void updateState(String state) {
         System.out.println("State: " + state);
     }
-
 
     public void updateMyPlayer(Player player) {
         this.myPlayer = player;
     }
 
-
     public void updateWinners(List<Player> winners) {
 
     }
-
 
     public void updateCurrentPlayer(Player player) {
         if (Objects.equals(nickname1.getText(), player.getNickname()))
@@ -417,7 +406,6 @@ public class Game extends Application implements Initializable {
         // System.out.print("\nCurrent Player updated!");
 
     }
-
 
     public void updatePlayers(List<Player> players) {
         nickname1.setText(players.get(0).getNickname());
@@ -552,7 +540,8 @@ public class Game extends Application implements Initializable {
                                 currentAngle = "BR";
                         }
 
-                        //testMain.placeCommand(card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
+                        // testMain.placeCommand(card.getKey(), currentSelected, currentAngle,
+                        // currentSelectedFrontUp);
 
                         currentSelectedImage.setVisible(false);
 
@@ -634,7 +623,6 @@ public class Game extends Application implements Initializable {
     //
     // }
     // }
-
 
     public void updateHand(List<Hand> hands) {
         Hand hand = hands.get(0);
@@ -1150,7 +1138,8 @@ public class Game extends Application implements Initializable {
 
                 // .println("1: \n" + initialCard1 + "2: \n" + currentSelected + " 3: \n" +
                 // currentAngle + "4: \n" + currentSelectedFrontUp);
-                //testMain.placeCommand(initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
+                // testMain.placeCommand(initialCard1, currentSelected, currentAngle,
+                // currentSelectedFrontUp);
 
                 currentSelectedImage.setVisible(false);
 
@@ -1335,6 +1324,10 @@ public class Game extends Application implements Initializable {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // do nothing
+    }
+
+    public void showInitialStage() {
         viewFactory.showInitialStage(this.miniModel, this.virtualClient);
     }
 

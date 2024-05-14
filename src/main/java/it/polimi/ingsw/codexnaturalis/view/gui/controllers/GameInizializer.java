@@ -1,9 +1,13 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.Stack;
 
-import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
-import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
@@ -21,17 +25,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.Stack;
-
 public class GameInizializer implements Initializable {
 
-
-    //UI components FXML
+    // UI components FXML
     @FXML
     private Label Errore;
 
@@ -56,7 +52,7 @@ public class GameInizializer implements Initializable {
     @FXML
     private Button startGame;
 
-    //Utils
+    // Utils
 
     String nickname;
     String password;
@@ -68,11 +64,11 @@ public class GameInizializer implements Initializable {
     String resourceElement2;
     String goldElement;
 
-    //Inizializzazioni
+    // Inizializzazioni
     Player player;
     GoldParser goldParser = new GoldParser();
-    ResourceParser resourceParser  = new ResourceParser();
-    Deck deck = new Deck(goldParser.parse(),resourceParser.parse());
+    ResourceParser resourceParser = new ResourceParser();
+    Deck deck = new Deck(goldParser.parse(), resourceParser.parse());
     ViewFactory viewFactory = new ViewFactory();
 
     public void setUp(String username, String password, int numOfPlayers) {
@@ -98,23 +94,21 @@ public class GameInizializer implements Initializable {
         System.out.println(objectiveSelected + "\n");
     }
 
-
-
     @FXML
     void goToGame(MouseEvent event) {
 
-        //Manca la scelta delle objective... le seleziona a caso..
+        // Manca la scelta delle objective... le seleziona a caso..
         if (objectiveSelected == null) {
             System.out.println("Seleziona una carta Objective");
             Errore.setText("Choose an objective card");
             Errore.setVisible(true);
         } else {
             Errore.setVisible(false);
-            Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
+            Stage stage = (Stage) startGame.getScene().getWindow(); // trick for getting current stage
             viewFactory.closeStage(stage);
 
-            player = new Player(nickname);
-            //No "OP1f" ma fai funzione per carte obiettivo..
+            player = new Player(nickname, "");
+            // No "OP1f" ma fai funzione per carte obiettivo..
             viewFactory.showGame();
         }
 
@@ -123,21 +117,21 @@ public class GameInizializer implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //Generazione carta iniziale randomica per utente e inserimento
+        // Generazione carta iniziale randomica per utente e inserimento
 
         List<InitialCard> initialCardList;
         InitialParser initialParser = new InitialParser();
         initialCardList = initialParser.parse();
 
         Random rand = new Random();
-        InitialCard randomInitial = initialCardList.get(rand.nextInt(initialCardList.size())); //Carta iniziale scelta a caso
-        initialCardList.remove(randomInitial); //rimuoviamola dall'elenco delle  carte per gli altri utenti
-        //System.out.printf(String.valueOf(randomInitial));
+        InitialCard randomInitial = initialCardList.get(rand.nextInt(initialCardList.size())); // Carta iniziale scelta
+                                                                                               // a caso
+        initialCardList.remove(randomInitial); // rimuoviamola dall'elenco delle carte per gli altri utenti
+        // System.out.printf(String.valueOf(randomInitial));
 
+        cartaIniziale = randomInitial.toString().substring(20, 23);
 
-        cartaIniziale = randomInitial.toString().substring(20,23);
-
-        String imagePath =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + cartaIniziale+ ".jpg";
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + cartaIniziale + ".jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         if (imageStream == null) {
             System.out.println("Errore: risorsa non trovata nel percorso: " + imagePath);
@@ -146,25 +140,27 @@ public class GameInizializer implements Initializable {
             initialCardElement.setImage(image);
         }
 
-        //Generazione Gold card e Resource cards
+        // Generazione Gold card e Resource cards
 
         Stack<ResourceCard> resourceDeck;
 
         deck.shuffleResourceDeck();
         resourceDeck = deck.getResourceDeck();
 
-        /*System.out.println("Contents of the stack:");
-        for (ResourceCard card : resourceDeck) {
-            System.out.println(card);
-        }*/
+        /*
+         * System.out.println("Contents of the stack:");
+         * for (ResourceCard card : resourceDeck) {
+         * System.out.println(card);
+         * }
+         */
 
-        //Resource cards
+        // Resource cards
         ResourceCard resourceRandom1 = deck.drawResourceCard();
 
-        resourceElement1 = resourceRandom1.toString().substring(6,9);
+        resourceElement1 = resourceRandom1.toString().substring(6, 9);
         System.out.println("Elemento resource 1 " + resourceElement1);
 
-        String imagePath1 =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + resourceElement1 + "f.jpg";
+        String imagePath1 = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + resourceElement1 + "f.jpg";
         InputStream imageStream1 = getClass().getResourceAsStream(imagePath1);
         if (imageStream1 == null) {
             System.out.println("Errore: risorsa non trovata nel percorso: " + imagePath1);
@@ -175,11 +171,10 @@ public class GameInizializer implements Initializable {
 
         ResourceCard resourceRandom2 = deck.drawResourceCard();
 
-        resourceElement2 = resourceRandom2.toString().substring(6,9);
-        System.out.println("Elemento resource 2 "  + resourceElement2);
+        resourceElement2 = resourceRandom2.toString().substring(6, 9);
+        System.out.println("Elemento resource 2 " + resourceElement2);
 
-
-        String imagePath2 =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + resourceElement2+ "f.jpg";
+        String imagePath2 = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + resourceElement2 + "f.jpg";
         InputStream imageStream2 = getClass().getResourceAsStream(imagePath2);
         if (imageStream2 == null) {
             System.out.println("Errore: risorsa non trovata nel percorso: " + imagePath2);
@@ -192,33 +187,21 @@ public class GameInizializer implements Initializable {
         for (ResourceCard card : resourceDeck)
             System.out.println(card);
 
-
-
-
-
-        //Gold card
+        // Gold card
         deck.shuffleGoldDeck();
         GoldCard goldRandom = deck.drawGoldCard();
 
-        goldElement = goldRandom.toString().substring(6,9);
+        goldElement = goldRandom.toString().substring(6, 9);
         System.out.println("Elemento gold " + goldElement);
 
-        String imagePath3 =  "/it/polimi/ingsw/codexnaturalis/FrontCards/" + goldElement+ "f.jpg";
+        String imagePath3 = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + goldElement + "f.jpg";
         InputStream imageStream3 = getClass().getResourceAsStream(imagePath3);
         if (imageStream3 == null) {
             System.out.println("Errore: risorsa non trovata nel percorso: " + imagePath3);
-        }
-        else {
+        } else {
             Image image3 = new Image(imageStream3);
             goldELement.setImage(image3);
         }
-        }
+    }
 
 }
-
-
-
-
-
-
-
