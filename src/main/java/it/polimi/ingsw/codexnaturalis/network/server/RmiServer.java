@@ -12,7 +12,6 @@ import java.util.Queue;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
-import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
@@ -24,6 +23,7 @@ public class RmiServer implements VirtualServer {
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
     private final List<VirtualClient> clients;
+    private final Map<VirtualClient, String> clientIds;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
     private SocketServer socketServer;
@@ -37,6 +37,7 @@ public class RmiServer implements VirtualServer {
      */
     public RmiServer() throws Exception {
         this.clients = new ArrayList<>();
+        this.clientIds = new HashMap<>();
         this.commandEntryQueue = new LinkedList<>();
         this.eventExitQueue = new LinkedList<>();
         this.players = new HashMap<>();
@@ -213,8 +214,12 @@ public class RmiServer implements VirtualServer {
                     for (var c : clients)
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
                             client = c;
-                            if (!players.get(gameId).contains(client))
-                                players.get(gameId).add(client);
+                            //fix
+                            if (players.get(gameId) == null || !players.get(gameId).contains(client))
+                                c.receiveEvent(event);
+                            System.out.println("> setting error event sent to client");
+                            //if (!players.get(gameId).contains(client))
+                            //    players.get(gameId).add(client);
                             break;
                         }
                 }
@@ -246,37 +251,49 @@ public class RmiServer implements VirtualServer {
         synchronized (this.clients) {
             this.clients.add(client);
         }
+        synchronized (this.clientIds){
+            try {
+                this.clientIds.put(client, client.getClientId());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void pinger() {
         System.out.println("started thread pinger");
-        VirtualClient c = null;
-        boolean disconnected = false;
+        VirtualClient c;
+        boolean disconnected;
+
         while (true) {
+
+            c = null;
+            disconnected = false;
+
             for (var client : clients) {
                 // System.out.println("pinging client");
                 try {
                     client.ping();
-                    System.out.println("pinging clienttt" + client.getClientId());
+                    System.out.println("pinging clienttt ");
                 } catch (ConnectException e) {
 
-                    System.out.println("client disconnected" + client.getClientId());
+                    
+                    System.out.println("client disconnected");
+                    
+
                     for (var gameId : players.keySet()) {
                         for (var client1 : players.get(gameId))
                             if (client.equals(client1)) {
                                 System.out.println("disconnected client found");
                                 //synchronized (games.get(gameId).controllerLock) {
-                                try {
-                                    System.out.println("trying to disconnect client");
-                                    games.get(gameId).getState().disconnect(client.getClientId());
-                                } catch (RemoteException e1) {
-                                    e1.printStackTrace();
-                                }
-                                //}
+                                System.out.println("trying to disconnect client");
+                                games.get(gameId).getState().disconnect(clientIds.get(client));
+                                
                                 players.get(gameId).remove(client);
                                 break;
                             }
 
+                        break;
                     }
 
                     c = client;
@@ -290,8 +307,11 @@ public class RmiServer implements VirtualServer {
             }
 
             if(disconnected) {
-                System.out.println("removing client" + c.getClientId());
+                
+                System.out.println("removing client");
+                
                 clients.remove(c);
+                clientIds.remove(c);
             }
 
             try {

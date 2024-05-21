@@ -250,12 +250,14 @@ public class Game implements Serializable {
 
     public boolean onePlayerLeft(){
         int counter = 0;
-        for (var player: connected.keySet())
+        for (var player: connected.keySet()){
             if (connected.get(player)) {
                 counter++;
+                System.out.println("counting players: "+ counter );
                 if (counter > 1)
                     return false;
             }
+        }
         return true;
     }
 }

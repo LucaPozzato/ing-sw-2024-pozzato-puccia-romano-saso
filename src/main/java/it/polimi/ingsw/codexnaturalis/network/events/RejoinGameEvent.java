@@ -46,7 +46,6 @@ public class RejoinGameEvent extends Event {
     public void doJob(MiniModel miniModel) throws IllegalCommandException {
         miniModel.setGameId(gameId);
         miniModel.setNickName(nickname);
-        miniModel.setState(state);
         miniModel.setPlayers(players);
         miniModel.setPlayerStructure(playerStructure);
         miniModel.setHands(hands);

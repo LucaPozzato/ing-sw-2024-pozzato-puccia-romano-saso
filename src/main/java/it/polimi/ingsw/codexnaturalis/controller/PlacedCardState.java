@@ -8,7 +8,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.*;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
@@ -19,6 +23,10 @@ public class PlacedCardState extends ControllerState {
 
     public PlacedCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
+        Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
+        game.setBackUpStructure(structure);
+        Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
+        game.setBackUpHand(hand);
         placed = false;
     }
 
@@ -95,7 +103,7 @@ public class PlacedCardState extends ControllerState {
             // BUG: exceptions are lost
 
             Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
-            game.setBackUpStructure(structure);
+            //game.setBackUpStructure(structure);
             structure.placeCard(father, placeThis, position, frontUp);
             removeFromHand(placeThis);
 
@@ -159,7 +167,7 @@ public class PlacedCardState extends ControllerState {
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
-        game.setBackUpHand(hand);
+        //game.setBackUpHand(hand);
         // iterate over list of cards in the hand of the player to find the card with
         // the same id and then add it to the structure and remove it from the hand
         for (Card card : hand.getCardsHand()) {
@@ -192,6 +200,9 @@ public class PlacedCardState extends ControllerState {
                         super.game.getFromPlayerToId().put(player, clientId);
                         event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
                                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+                        System.out.println("trying to reconnect client");
+                        System.out.println(clientId + " " +  nickname+ " " +  game.getGameId()+ " " +  "Place"+ " " +  game.getPlayers()+ " " +  game.getStructures()+ " " + 
+                        game.getHands()+ " " +  game.getBoard()+ " " +  game.getDeck()+ " " + game.getCurrentPlayer());
                     } else {
                         event = new ErrorEvent(clientId, game.getGameId(), "the player is already connected");
                     }
@@ -221,6 +232,7 @@ public class PlacedCardState extends ControllerState {
 
         if(game.onePlayerLeft()){
             //timerrrrrrrrr
+            System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             if(game.onePlayerLeft()) {
                 Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
                 super.rmiServer.sendEvent(event);

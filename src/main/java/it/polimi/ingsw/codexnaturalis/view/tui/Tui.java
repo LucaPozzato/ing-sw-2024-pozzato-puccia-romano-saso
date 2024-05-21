@@ -296,7 +296,6 @@ public class Tui implements View {
     private void printAlert(String alert) {
         terminalPrinter.updateAlert(alert);
         print();
-        terminalPrinter.clearAlert();
     }
 
     class ReadThread extends Thread {
@@ -324,7 +323,7 @@ public class Tui implements View {
                         else if (c == 127) {
                             if (move.length() > 0)
                                 move = move.substring(0, move.length() - 1);
-                        } else
+                        } else if (c > 31 && c < 127)
                             move += Character.toString((char) c);
                         terminalPrinter.updateInput(move);
                         print();
@@ -355,9 +354,11 @@ public class Tui implements View {
                     }
 
                     terminalPrinter.clearInput();
+                    terminalPrinter.clearAlert();
 
                     String tempMove = move.toUpperCase();
-                    if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND") && !tempMove.contains("REJOIN")) {
+                    if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND")
+                            && !tempMove.contains("REJOIN")) {
                         move = move.toUpperCase();
                     }
 

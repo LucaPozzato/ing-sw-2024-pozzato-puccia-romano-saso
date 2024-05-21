@@ -11,7 +11,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.*;
+import it.polimi.ingsw.codexnaturalis.network.events.DrawEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -21,7 +25,20 @@ public class DrawnCardState extends ControllerState {
     public DrawnCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
         if(game.getSkip()) {
+            System.out.println("skipping the turn");
             game.setSkip(false);
+            System.out.println(game.getSkip());
+
+            Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
+                    game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+            
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (nextTurn())
                 super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
             else
@@ -180,13 +197,15 @@ public class DrawnCardState extends ControllerState {
                 System.out.println("turn counter before remove " + super.game.getTurnCounter());
                 super.game.removeTurn();
                 System.out.println("turn counter after remove " + super.game.getTurnCounter());
-                if (!super.game.getConnected().get(super.game.getCurrentPlayer()))
-                    matchEnded = nextTurn();
             } else {
                 System.out.println("end game state");
                 matchEnded = true;
             }
         }
+
+        if (!super.game.getConnected().get(super.game.getCurrentPlayer()))
+            if (!matchEnded)
+                matchEnded = nextTurn();
 
         return matchEnded;
     }
@@ -206,6 +225,9 @@ public class DrawnCardState extends ControllerState {
                         super.game.getFromPlayerToId().put(player, clientId);
                         event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Draw", game.getPlayers(), game.getStructures(),
                                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
+                        System.out.println("trying to reconnect client");
+                        System.out.println(clientId + " " +  nickname+ " " +  game.getGameId()+ " " +  "Place"+ " " +  game.getPlayers()+ " " +  game.getStructures()+ " " + 
+                        game.getHands()+ " " +  game.getBoard()+ " " +  game.getDeck()+ " " + game.getCurrentPlayer());
                     } else {
                         event = new ErrorEvent(clientId, game.getGameId(), "the player is already connected");
                     }
@@ -251,6 +273,17 @@ public class DrawnCardState extends ControllerState {
                 game.getStructures().set(game.getPlayers().indexOf(player), game.getBackUpStructure());
                 game.getHands().set(game.getPlayers().indexOf(player), game.getBackUpHand());
             }
+
+            Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
+                    game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+            
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (nextTurn())
                 super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
             else
