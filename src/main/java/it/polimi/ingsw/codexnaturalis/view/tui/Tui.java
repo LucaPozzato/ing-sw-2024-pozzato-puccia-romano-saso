@@ -379,7 +379,7 @@ public class Tui implements View {
                                 printNextPlayerView();
                             break;
 
-                        case "RESET", "R", "EXIT", "ESC", "E":
+                        case "RESET", "RST", "EXIT", "ESC":
                             if (helpStage) {
                                 helpStage = false;
                                 print();
