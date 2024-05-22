@@ -1,18 +1,39 @@
 # Software Engineering Project
 
-### Private repository
+## Codex Naturalis
 
-To start the CLI in (it.polimi.ingsw.codexnaturalis.model.Main) and play the game
+### To play the game
 
-Do one of the following:
+#### Client
 
-```
-> mvn exec:java
-```
+`> chmod +x client.sh`
 
-Or
+`> ./client.sh`
 
-```
-> mvn package
-> java -jar target/CodexNaturalis-1.0-SNAPSHOT.jar
-```
+or
+
+`> mvn clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"`
+
+`> java -jar target/CodexNaturalis_Client.jar`
+
+if playing from Windows make sure UTF-8 is enabled
+
+#### Server
+
+`> chmod +x server.sh`
+
+`> ./server.sh`
+
+or
+
+`> mvn clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"`
+
+`> java -jar target/CodexNaturalis_Server.jar`
+
+#### Jar
+
+To generate Jar file for client/server
+
+`> chmod +x jar.sh`
+
+`> ./jar.sh`

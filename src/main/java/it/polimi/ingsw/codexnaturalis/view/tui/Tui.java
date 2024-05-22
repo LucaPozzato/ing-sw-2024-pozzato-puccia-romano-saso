@@ -34,12 +34,6 @@ public class Tui implements View {
     private Boolean helpStage;
     private VirtualClient client;
 
-    // BUG: input is deleted after new events are received
-    // BUG: fix input verification -> sometimes index out of bounds or incorrect
-    // error
-    // BUG: have events filtered by the client -> join/create/choose phase, error
-    // messages, ...
-
     public Tui(MiniModel miniModel, VirtualClient client) {
         inputVerifier = new InputVerifier(miniModel, client);
         this.client = client;
@@ -311,7 +305,8 @@ public class Tui implements View {
                     String move = "";
 
                     try {
-                        Runtime.getRuntime().exec(cmd);
+                        if (!System.getProperty("os.name").contains("Windows"))
+                            Runtime.getRuntime().exec(cmd);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -330,25 +325,28 @@ public class Tui implements View {
                         c = input.read();
                     }
 
-                    System.out.println("\033[999;999H");
-                    System.out.println("\033[6n");
-                    System.out.println("\033[1;1H");
+                    if (!System.getProperty("os.name").contains("Windows")) {
+                        System.out.println("\033[999;999H");
+                        System.out.println("\033[6n");
+                        System.out.println("\033[1;1H");
 
-                    String size = "";
-                    c = input.read();
-                    while (c != 82) {
-                        size += (char) c;
+                        String size = "";
                         c = input.read();
+                        while (c != 82) {
+                            size += (char) c;
+                            c = input.read();
+                        }
+
+                        String[] parts = size.split(";");
+                        width = Integer.parseInt(parts[1]);
+                        height = Integer.parseInt(parts[0].substring(parts[0].indexOf("[") + 1));
+
+                        terminalPrinter.setSize(width, height);
                     }
 
-                    String[] parts = size.split(";");
-                    width = Integer.parseInt(parts[1]);
-                    height = Integer.parseInt(parts[0].substring(parts[0].indexOf("[") + 1));
-
-                    terminalPrinter.setSize(width, height);
-
                     try {
-                        Runtime.getRuntime().exec(cmdReset);
+                        if (!System.getProperty("os.name").contains("Windows"))
+                            Runtime.getRuntime().exec(cmdReset);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -362,7 +360,6 @@ public class Tui implements View {
                         move = move.toUpperCase();
                     }
 
-                    // BUG: username is set to capital when it should be case insensitive
                     switch (move) {
                         case "QUIT", "Q":
                             System.exit(0);

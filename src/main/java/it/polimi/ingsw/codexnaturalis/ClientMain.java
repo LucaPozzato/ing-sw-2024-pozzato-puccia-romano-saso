@@ -20,7 +20,8 @@ public class ClientMain {
         String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
 
         try {
-            Runtime.getRuntime().exec(cmd);
+            if (!System.getProperty("os.name").contains("Windows"))
+                Runtime.getRuntime().exec(cmd);
         } catch (IOException e) {
             e.printStackTrace();
         }

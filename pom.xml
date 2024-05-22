@@ -14,7 +14,8 @@
         <junit.version>5.10.0</junit.version>
         <maven.test.skip>false</maven.test.skip>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-        <exec.mainClass>it.polimi.ingsw.codexnaturalis.GameMain</exec.mainClass>
+        <exec.mainClass></exec.mainClass>
+        <jar.finalName></jar.finalName>
     </properties>
 
     <dependencies>
@@ -56,6 +57,7 @@
     </dependencies>
 
     <build>
+        <finalName> ${jar.finalName} </finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
