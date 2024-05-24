@@ -78,19 +78,21 @@ public class InitState extends ControllerState {
      * @param color      first player's chosen color
      * @param numPlayers first player's chosen number of competitors
      */
-    private void createFirstPlayer(String nick, String password, Color color, int numPlayers, String clientId) throws IllegalCommandException{
+    private void createFirstPlayer(String nick, String password, Color color, int numPlayers, String clientId)
+            throws IllegalCommandException {
         // TODO togliere dal costruttore di Players il nickname e il colore e istituire
         // dei setter specifici
         Player player = new Player(nick, password, color);
 
         super.game.getPlayers().add(player);
+        super.game.getConnected().put(player, true);
         super.game.getFromPlayerToId().put(player, clientId);
         // [ ] Decide who plays first
         super.game.setCurrentPlayer(super.game.getPlayers().get(0));
-        super.game.setNumPlayers(numPlayers); //throws illegal command exc
+        super.game.setNumPlayers(numPlayers); // throws illegal command exc
         super.game.addParticipant();
         // FIXME: clean this up
-        super.game.getBoard().updateActualScore(player, 0); //throws illegal command exc
+        super.game.getBoard().updateActualScore(player, 0); // throws illegal command exc
         // FIXME: this is a temporary solution
         // super.game.getBoard().updateActualScore(player, 12);
 
@@ -308,10 +310,11 @@ public class InitState extends ControllerState {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
     }
 
     @Override
-    public void rejoinGame (String clientId, String nickname, String password) {
+    public void rejoinGame(String clientId, String nickname, String password) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
         super.rmiServer.sendEvent(event);
         try {
@@ -320,6 +323,5 @@ public class InitState extends ControllerState {
             e.printStackTrace();
         }
     }
-
 
 }

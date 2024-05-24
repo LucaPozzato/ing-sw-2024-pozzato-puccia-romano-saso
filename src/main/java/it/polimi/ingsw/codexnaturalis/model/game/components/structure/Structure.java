@@ -141,23 +141,34 @@ public class Structure implements Serializable {
     }
 
     /**
-     * This method acts differently according to the type of card the user want to place. <br>
-     * If the card is an initial one isPlaceable return true only in there's not another initial card placed on the structure. <br>
-     * Else it sequentially performs these actions:  Checks if the father card is present <br>
+     * This method acts differently according to the type of card the user want to
+     * place. <br>
+     * If the card is an initial one isPlaceable return true only in there's not
+     * another initial card placed on the structure. <br>
+     * Else it sequentially performs these actions: Checks if the father card is
+     * present <br>
      * If father card is not placed, the new card cannot be placed <br>
      * If father card is not placed, the new card cannot be placed <br>
      * Checks if the card is already placed <br>
      * Checks if another card is already placed in that coordinate <br>
-     * Checks if the placed card does not cover one of the uncoverable corners of neighbour cards <br>
-     * If the placed card is a Gold one checks if the player's structure satisfies card's requirement <br>
-     * @param father the card under the placed one
-     * @param card the card user want to place
-     * @param coordinate the coordinate on the matrix where the card is placed computed in the placeCard method according to the position string passed
-     * @param frontUp the side choose for the placement
-     * @return true is the card is placeable, exception otherwise. The method never returns false.
-     * @throws IllegalCommandException thrown when a card is not placeable. A proper description message is linked to the exception.
+     * Checks if the placed card does not cover one of the uncoverable corners of
+     * neighbour cards <br>
+     * If the placed card is a Gold one checks if the player's structure satisfies
+     * card's requirement <br>
+     * 
+     * @param father     the card under the placed one
+     * @param card       the card user want to place
+     * @param coordinate the coordinate on the matrix where the card is placed
+     *                   computed in the placeCard method according to the position
+     *                   string passed
+     * @param frontUp    the side choose for the placement
+     * @return true is the card is placeable, exception otherwise. The method never
+     *         returns false.
+     * @throws IllegalCommandException thrown when a card is not placeable. A proper
+     *                                 description message is linked to the
+     *                                 exception.
      */
-    //TODO: consider to set as private this method, made public for test purposes
+    // TODO: consider to set as private this method, made public for test purposes
     public Boolean isPlaceable(Card father, Card card, Integer coordinate, Boolean frontUp)
             throws IllegalCommandException {
         // checks if initial card is placeable
@@ -278,7 +289,7 @@ public class Structure implements Serializable {
                 return fatherCoordinate + 99;
             default:
                 throw new IllegalArgumentException("Invalid position"); // -> maybe function that calls calcCoordinates
-                // checks for suitable arguments
+            // checks for suitable arguments
         }
     }
 
@@ -398,19 +409,19 @@ public class Structure implements Serializable {
     }
 
     /*
-    Tested methods:
-
-    [x] getVisibleResources
-    [x] getVisibleObjects
-    [x] getPointsFromPlayableCard
-    [x] placeCard
-    [x] getRadius
-    [x] printReducedMatrix
-    [] isPlaceable
-    [] calcCoordinate
-    [] calcVisibleSymbols
-    [] increaseSatisfiedPatterns
-    [] getPlacedCards
-
-    */
+     * Tested methods:
+     * 
+     * [x] getVisibleResources
+     * [x] getVisibleObjects
+     * [x] getPointsFromPlayableCard
+     * [x] placeCard
+     * [x] getRadius
+     * [x] printReducedMatrix
+     * [] isPlaceable
+     * [] calcCoordinate
+     * [] calcVisibleSymbols
+     * [] increaseSatisfiedPatterns
+     * [] getPlacedCards
+     * 
+     */
 }

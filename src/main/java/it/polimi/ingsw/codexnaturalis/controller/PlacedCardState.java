@@ -1,5 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
@@ -23,10 +29,29 @@ public class PlacedCardState extends ControllerState {
 
     public PlacedCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
-        Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
-        game.setBackUpStructure(structure);
-        Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
-        game.setBackUpHand(hand);
+
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+            oos.writeObject(new Pair<>(super.game.getStructureByPlayer(super.game.getCurrentPlayer()),
+                    super.game.getHandByPlayer(super.game.getCurrentPlayer())));
+
+            oos.flush();
+            oos.close();
+            bos.close();
+
+            byte[] byteData = bos.toByteArray();
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+            Pair<Structure, Hand> backUpPair = (Pair<Structure, Hand>) new ObjectInputStream(bais).readObject();
+            game.setBackUpStructure(backUpPair.getKey());
+            game.setBackUpHand(backUpPair.getValue());
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         placed = false;
     }
 
@@ -103,7 +128,7 @@ public class PlacedCardState extends ControllerState {
             // BUG: exceptions are lost
 
             Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
-            //game.setBackUpStructure(structure);
+            // game.setBackUpStructure(structure);
             structure.placeCard(father, placeThis, position, frontUp);
             removeFromHand(placeThis);
 
@@ -124,6 +149,8 @@ public class PlacedCardState extends ControllerState {
 
             event = new PlaceEvent(game.getGameId(), "Draw", game.getStructures(), game.getHands(), game.getBoard());
 
+            super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
+
         } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
         }
@@ -135,18 +162,6 @@ public class PlacedCardState extends ControllerState {
             e.printStackTrace();
         }
 
-        /*
-         * TODO:manca totalmente la corrispondenza tra player e il client per sapere se
-         * è ancora connesso
-         * if(rmiServer.getConnected().get(player).equals("false")){
-         * structure.removeFromStructure(father, placeThis)
-         * addToHand(placeThis)
-         * resetActualPoints(pointFromCard)
-         * super.game.setState(new PlaceCardState(super.game, super.rmiServer,
-         * super.socketServer));
-         * }else{
-         */
-        super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
         // Points resulting from resources objective are computed at the end of the game
         // (END GAME STATE) since they could be covered anytime during the match
 
@@ -167,7 +182,7 @@ public class PlacedCardState extends ControllerState {
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
-        //game.setBackUpHand(hand);
+        // game.setBackUpHand(hand);
         // iterate over list of cards in the hand of the player to find the card with
         // the same id and then add it to the structure and remove it from the hand
         for (Card card : hand.getCardsHand()) {
@@ -184,9 +199,8 @@ public class PlacedCardState extends ControllerState {
         super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
     }
 
-
     @Override
-    public void rejoinGame (String clientId, String nickname, String password) {
+    public void rejoinGame(String clientId, String nickname, String password) {
 
         Event event = null;
 
@@ -198,11 +212,14 @@ public class PlacedCardState extends ControllerState {
                     if (!game.getConnected().get(player)) {
                         game.getConnected().put(player, true);
                         super.game.getFromPlayerToId().put(player, clientId);
-                        event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Place", game.getPlayers(), game.getStructures(),
+                        event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Place", game.getPlayers(),
+                                game.getStructures(),
                                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
                         System.out.println("trying to reconnect client");
-                        System.out.println(clientId + " " +  nickname+ " " +  game.getGameId()+ " " +  "Place"+ " " +  game.getPlayers()+ " " +  game.getStructures()+ " " + 
-                        game.getHands()+ " " +  game.getBoard()+ " " +  game.getDeck()+ " " + game.getCurrentPlayer());
+                        System.out.println(clientId + " " + nickname + " " + game.getGameId() + " " + "Place" + " "
+                                + game.getPlayers() + " " + game.getStructures() + " " +
+                                game.getHands() + " " + game.getBoard() + " " + game.getDeck() + " "
+                                + game.getCurrentPlayer());
                     } else {
                         event = new ErrorEvent(clientId, game.getGameId(), "the player is already connected");
                     }
@@ -214,8 +231,9 @@ public class PlacedCardState extends ControllerState {
         }
 
         if (!foundNickname) {
-            event = new ErrorEvent(clientId, game.getGameId(), "no player with this nickname in the game " + game.getGameId());
-        }       
+            event = new ErrorEvent(clientId, game.getGameId(),
+                    "no player with this nickname in the game " + game.getGameId());
+        }
 
         super.rmiServer.sendEvent(event);
         try {
@@ -224,16 +242,22 @@ public class PlacedCardState extends ControllerState {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public synchronized void disconnect(String clientId) {
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
-
-        if(game.onePlayerLeft()){
-            //timerrrrrrrrr
+        System.out.println("disconnect being called");
+        if (game.onePlayerLeft()) {
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
-            if(game.onePlayerLeft()) {
+            try {
+                System.out.println("waiting for the client ot come back");
+                Thread.sleep(30000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
+            if (game.onePlayerLeft()) {
                 Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
                 super.rmiServer.sendEvent(event);
                 try {
@@ -241,14 +265,17 @@ public class PlacedCardState extends ControllerState {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
             }
-        } else if (player.equals((game.getCurrentPlayer()))) {
-            if (placed) { //dovrebbe non entrare mai
-                game.getStructures().set(game.getPlayers().indexOf(player), game.getBackUpStructure());
-                game.getHands().set(game.getPlayers().indexOf(player), game.getBackUpHand());
+        }
+
+        if (player.equals((game.getCurrentPlayer()))) {
+            if (placed) { // dovrebbe non entrare mai
+                super.game.revert();
             }
             game.setSkip(true);
             super.game.setState(new DrawnCardState(super.game, super.rmiServer, super.socketServer));
+            ((DrawnCardState) super.game.getState()).skipTurn();
         }
     }
 }

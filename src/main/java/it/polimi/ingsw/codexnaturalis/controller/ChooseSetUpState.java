@@ -129,7 +129,7 @@ public class ChooseSetUpState extends ControllerState {
     }
 
     @Override
-    public void disconnect(String clientId){
+    public void disconnect(String clientId) {
         Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
         super.rmiServer.sendEvent(event);
         try {
@@ -137,10 +137,11 @@ public class ChooseSetUpState extends ControllerState {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
     }
 
     @Override
-    public void rejoinGame (String clientId, String nickname, String password) {
+    public void rejoinGame(String clientId, String nickname, String password) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
         super.rmiServer.sendEvent(event);
         try {

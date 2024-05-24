@@ -23,13 +23,13 @@ public class EndGameState extends ControllerState {
 
     public EndGameState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
-        //BUG: metodo di terminazione partita che sia valido per tutti gli stati
+        // BUG: metodo di terminazione partita che sia valido per tutti gli stati
         matchEnded();
         declareWinner();
     }
 
     @Override
-    public void initialized(String clientId, String nick, String password, Color color, int numPlayers)  {
+    public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
         super.rmiServer.sendEvent(event);
         try {
@@ -62,7 +62,8 @@ public class EndGameState extends ControllerState {
     }
 
     @Override
-    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position, Boolean frontUp){
+    public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
+            Boolean frontUp) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
         super.rmiServer.sendEvent(event);
         try {
@@ -71,7 +72,6 @@ public class EndGameState extends ControllerState {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
@@ -85,13 +85,11 @@ public class EndGameState extends ControllerState {
     }
 
     @Override
-    public void disconnect(String clientId){
-        //terminare la partita
-        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
+    public void disconnect(String clientId) {
     }
 
     @Override
-    public void rejoinGame (String clientId, String nickname, String password) {
+    public void rejoinGame(String clientId, String nickname, String password) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
         super.rmiServer.sendEvent(event);
         try {

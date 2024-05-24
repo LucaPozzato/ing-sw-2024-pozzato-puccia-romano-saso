@@ -53,7 +53,6 @@ public class RmiServer implements VirtualServer {
         new Thread(this::pinger).start();
     }
 
-
     public void setGames(Map<Integer, Game> games) {
         this.games = games;
     }
@@ -113,7 +112,7 @@ public class RmiServer implements VirtualServer {
 
                 Integer gameId = command.getGameId();
 
-                //TODO: eliminare password dal client e tutto il settaggio
+                // TODO: eliminare password dal client e tutto il settaggio
 
                 System.out.println("rmi server received command with gameIdd: " + gameId);
                 System.out.println("rmi server command received: " + command.getClass().getName());
@@ -137,7 +136,7 @@ public class RmiServer implements VirtualServer {
 
                 String[] commandName = command.getClass().getName().split("\\.");
                 if (games.containsKey(gameId))
-                    synchronized(games.get(gameId).controllerLock) {
+                    synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
                     }
                 else
@@ -214,12 +213,12 @@ public class RmiServer implements VirtualServer {
                     for (var c : clients)
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
                             client = c;
-                            //fix
+                            // fix
                             if (players.get(gameId) == null || !players.get(gameId).contains(client))
                                 c.receiveEvent(event);
                             System.out.println("> setting error event sent to client");
-                            //if (!players.get(gameId).contains(client))
-                            //    players.get(gameId).add(client);
+                            // if (!players.get(gameId).contains(client))
+                            // players.get(gameId).add(client);
                             break;
                         }
                 }
@@ -251,7 +250,7 @@ public class RmiServer implements VirtualServer {
         synchronized (this.clients) {
             this.clients.add(client);
         }
-        synchronized (this.clientIds){
+        synchronized (this.clientIds) {
             try {
                 this.clientIds.put(client, client.getClientId());
             } catch (RemoteException e) {
@@ -264,11 +263,16 @@ public class RmiServer implements VirtualServer {
         System.out.println("started thread pinger");
         VirtualClient c;
         boolean disconnected;
+        boolean exit;
+        Integer gId;
+        String cId;
 
         while (true) {
 
             c = null;
             disconnected = false;
+            gId = null;
+            cId = null;
 
             for (var client : clients) {
                 // System.out.println("pinging client");
@@ -277,26 +281,25 @@ public class RmiServer implements VirtualServer {
                     System.out.println("pinging clienttt ");
                 } catch (ConnectException e) {
 
-                    
                     System.out.println("client disconnected");
-                    
 
                     for (var gameId : players.keySet()) {
+                        exit = false;
                         for (var client1 : players.get(gameId))
                             if (client.equals(client1)) {
-                                System.out.println("disconnected client found");
-                                //synchronized (games.get(gameId).controllerLock) {
-                                System.out.println("trying to disconnect client");
-                                games.get(gameId).getState().disconnect(clientIds.get(client));
-                                
+
                                 players.get(gameId).remove(client);
+                                gId = gameId;
+                                exit = true;
                                 break;
                             }
 
-                        break;
+                        if (exit)
+                            break;
                     }
 
                     c = client;
+                    cId = clientIds.get(c);
                     disconnected = true;
                     break;
 
@@ -306,12 +309,13 @@ public class RmiServer implements VirtualServer {
                 // System.out.println("client ponged");
             }
 
-            if(disconnected) {
-                
+            if (disconnected) {
                 System.out.println("removing client");
-                
                 clients.remove(c);
                 clientIds.remove(c);
+                System.out.println("disconnected client found");
+                System.out.println("trying to disconnect client");
+                games.get(gId).getState().disconnect(cId);
             }
 
             try {

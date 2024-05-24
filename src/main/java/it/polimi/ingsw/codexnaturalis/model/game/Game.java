@@ -39,14 +39,13 @@ public class Game implements Serializable {
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
-    private final Map <Player, String> fromPlayerToId;
+    private final Map<Player, String> fromPlayerToId;
     private final Map<Player, List<Pair<Strategy, Card>>> strategyMap;
     private Map<Player, Boolean> connected;
     private Structure backUpStructure;
     private Hand backUpHand;
     private boolean skip;
     public final Object controllerLock;
-
 
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
@@ -141,12 +140,25 @@ public class Game implements Serializable {
     }
     // public Chat getChat(){return this.chat};
 
-    public Map<Player,String> getFromPlayerToId(){return this.fromPlayerToId;}
-    public Map<Player, Boolean> getConnected(){return this.connected;}
-    public Structure getBackUpStructure(){return this.backUpStructure;}
-    public Hand getBackUpHand(){return this.backUpHand;}
-    public boolean getSkip(){return this.skip;}
+    public Map<Player, String> getFromPlayerToId() {
+        return this.fromPlayerToId;
+    }
 
+    public Map<Player, Boolean> getConnected() {
+        return this.connected;
+    }
+
+    public Structure getBackUpStructure() {
+        return this.backUpStructure;
+    }
+
+    public Hand getBackUpHand() {
+        return this.backUpHand;
+    }
+
+    public boolean getSkip() {
+        return this.skip;
+    }
 
     public void setLastTurn() {
         this.lastTurn = true;
@@ -166,6 +178,7 @@ public class Game implements Serializable {
             Player newPlayer = new Player("", "");
             this.players.add(newPlayer);
             this.connected.put(newPlayer, true);
+            System.out.println("connected size = " + this.connected.size());
         }
         this.numPlayers = numPlayers;
     }
@@ -201,9 +214,19 @@ public class Game implements Serializable {
         // players.size());
     }
 
-    public void setBackUpStructure(Structure backUpStructure){ this.backUpStructure = backUpStructure;}
-    public void setBackUpHand(Hand backUpHand){ this.backUpHand = backUpHand;}
-    public void setSkip(boolean skip){ this.skip = skip;}
+    public void setBackUpStructure(Structure backUpStructure) {
+        System.out.println("setting backup structure");
+        this.backUpStructure = backUpStructure;
+    }
+
+    public void setBackUpHand(Hand backUpHand) {
+        System.out.println("setting backup hand");
+        this.backUpHand = backUpHand;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
 
     public void addParticipant() {
         this.numParticipants++;
@@ -239,25 +262,33 @@ public class Game implements Serializable {
         // client.updateError(message);
     }
 
-    public Player PlayerFromId (String clientId){
-        for ( var player : fromPlayerToId.keySet() ){
-            if (clientId.equals(fromPlayerToId.get(player))){
+    public Player PlayerFromId(String clientId) {
+        for (var player : fromPlayerToId.keySet()) {
+            if (clientId.equals(fromPlayerToId.get(player))) {
                 return player;
             }
         }
         return null;
     }
 
-    public boolean onePlayerLeft(){
+    public boolean onePlayerLeft() {
         int counter = 0;
-        for (var player: connected.keySet()){
+        System.out.println("counting players: " + counter);
+        for (var player : connected.keySet()) {
             if (connected.get(player)) {
                 counter++;
-                System.out.println("counting players: "+ counter );
+                System.out.println("counting players: " + counter);
                 if (counter > 1)
                     return false;
             }
         }
         return true;
+    }
+
+    public void revert() {
+        System.out.println("restoring " + playerStructure.get(players.indexOf(currentPlayer)));
+        playerStructure.set(players.indexOf(currentPlayer), backUpStructure);
+        System.out.println("restored " + playerStructure.get(players.indexOf(currentPlayer)));
+        playerHand.set(players.indexOf(currentPlayer), backUpHand);
     }
 }
