@@ -14,7 +14,6 @@ import java.util.Queue;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
-import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
@@ -27,7 +26,7 @@ public class SocketServer implements VirtualServer, Runnable {
 
     private Map<Integer, Game> games;
     private final Map<Integer, List<VirtualClient>> players;
-    private Map<SocketSkeleton, Boolean> connected;
+    private final Map<VirtualClient, String> clientIds;
     private final List<VirtualClient> clients;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
@@ -35,9 +34,9 @@ public class SocketServer implements VirtualServer, Runnable {
 
     public SocketServer() throws IOException {
         this.clients = new ArrayList<>();
+        this.clientIds = new HashMap<>();
         this.commandEntryQueue = new LinkedList<Command>();
         this.eventExitQueue = new LinkedList<Event>();
-        this.games = null;
         this.players = new HashMap<>();
     }
 
@@ -48,7 +47,6 @@ public class SocketServer implements VirtualServer, Runnable {
     public void setRmiServer(RmiServer rmiServer) {
         this.rmiServer = rmiServer;
     }
-
 
     /**
      * this method is called by the client to send a command taken by input
@@ -104,10 +102,10 @@ public class SocketServer implements VirtualServer, Runnable {
                         System.out.println("socket server creating a new game");
                         games.put(gameId, new Game(gameId, rmiServer, this));
                     } else {
-                        SocketClient client = null;
+                        VirtualClient client = null;
                         for (var c : clients) {
                             if (c.getClientId().equals(command.getClientId())) {
-                                client = (SocketClient) c;
+                                client = c;
                                 break;
                             }
                         }
@@ -117,7 +115,7 @@ public class SocketServer implements VirtualServer, Runnable {
                 }
 
                 if (games.containsKey(gameId))
-                    synchronized(games.get(gameId).controllerLock) {
+                    synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
                     }
                 else
@@ -172,19 +170,16 @@ public class SocketServer implements VirtualServer, Runnable {
                 }
 
                 Integer gameId = event.getGameId();
-                SocketSkeleton client = null;
+                VirtualClient client = null;
 
-                if (event instanceof InLobbyEvent || event instanceof RejoinGameEvent ) {
+                if (event instanceof InLobbyEvent || event instanceof RejoinGameEvent) {
                     if (!players.containsKey(gameId))
                         players.put(gameId, new ArrayList<>());
-                    System.out.println("event game id on socket: " + event.getGameId());
-                    System.out.println("create game on socket: " + gameId);
-                    System.out.println("players: " + players.get(gameId));
-                    System.out.println("num of games: " + players.keySet());
                     for (var c : clients) {
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
-                            client = (SocketSkeleton) c;
+                            client = c;
                             players.get(gameId).add(client);
+                            System.out.println("adding player in players : " + players.get(gameId));
                             break;
                         }
                     }
@@ -192,8 +187,11 @@ public class SocketServer implements VirtualServer, Runnable {
                     for (var c : clients)
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
                             client = (SocketSkeleton) c;
-                            if (!players.get(gameId).contains(client))
-                                players.get(gameId).add(client);
+                            if (players.get(gameId) == null || !players.get(gameId).contains(client))
+                                c.receiveEvent(event);
+                            System.out.println("> setting error event sent to client");
+                            // if (!players.get(gameId).contains(client))
+                            // players.get(gameId).add(client);
                             break;
                         }
                 }
@@ -208,7 +206,6 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                 }
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -216,32 +213,43 @@ public class SocketServer implements VirtualServer, Runnable {
 
     }
 
-    /**
-     * register the client socket in its list
-     * 
-     * @param client
-     */
+    // never used
     @Override
     public void connect(VirtualClient client) {
         System.out.println("socket client connected");
         synchronized (this.clients) {
             this.clients.add(client);
         }
+        synchronized (this.clientIds) {
+            try {
+                this.clientIds.put(client, client.getClientId());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public synchronized void disconnectSocket(SocketSkeleton client){
+    public synchronized void disconnectSocket(SocketSkeleton client) {
+        boolean exit;
+        Integer gId = null;
 
-        for (var gameId : players.keySet())
-            for (var client1 : players.get(gameId))
+        for (var gameId : players.keySet()) {
+            exit = false;
+            for (var client1 : players.get(gameId)) {
                 if (client.equals(client1)) {
-                    synchronized (games.get(gameId).controllerLock) {
-                        games.get(gameId).getState().disconnect(client.getClientId());
-                    }
+
                     players.get(gameId).remove(client);
+                    gId = gameId;
+                    exit = true;
                     break;
                 }
-
+            }
+            if (exit)
+                break;
+        }
         clients.remove(client);
+        clientIds.remove(client);
+        games.get(gId).getState().disconnect(client.getClientId());
     }
 
     /**
@@ -272,6 +280,9 @@ public class SocketServer implements VirtualServer, Runnable {
                 client = new SocketSkeleton(this, socket);
                 new Thread(client).start();
                 clients.add(client);
+                this.clientIds.put(client, client.getClientId());
+                System.out.println("clients: " + clients.size());
+                System.out.println("clients: " + clientIds.size());
             } catch (IOException e) {
                 e.printStackTrace();
             }

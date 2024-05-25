@@ -365,7 +365,7 @@ public class Tui implements View {
                             System.exit(0);
                             break;
 
-                        case "CHAT", "C":
+                        case "CHAT":
                             if (!initialStage && !chooseStage)
                                 chatStage = true;
                             print();
@@ -393,6 +393,30 @@ public class Tui implements View {
                             break;
 
                         default:
+                            switch (move) {
+                                case "C2":
+                                    move = "create: 0, r, r, r, 2".toUpperCase();
+                                    break;
+
+                                case "C3":
+                                    move = "create: 0, r, r, r, 3".toUpperCase();
+                                    break;
+
+                                case "J1":
+                                    move = "join: 0, g, g, g".toUpperCase();
+                                    break;
+
+                                case "J2":
+                                    move = "join: 0, b, b, b".toUpperCase();
+                                    break;
+
+                                case "CH":
+                                    move = "choose: f, 1".toUpperCase();
+                                    break;
+
+                                default:
+                                    break;
+                            }
                             try {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
                             } catch (Exception e) {

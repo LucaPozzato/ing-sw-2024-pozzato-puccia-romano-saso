@@ -124,7 +124,7 @@ public class RmiServer implements VirtualServer {
                     } else {
                         VirtualClient client = null;
                         for (var c : clients) {
-                            if (c.getClientId().equals(command.getClientId())) {
+                            if (clientIds.get(c).equals(command.getClientId())) {
                                 client = c;
                                 break;
                             }

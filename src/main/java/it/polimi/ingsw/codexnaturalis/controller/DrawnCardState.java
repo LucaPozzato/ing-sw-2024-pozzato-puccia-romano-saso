@@ -15,6 +15,7 @@ import it.polimi.ingsw.codexnaturalis.network.events.DrawEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.PlaceEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.RejoinGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
@@ -243,12 +244,15 @@ public class DrawnCardState extends ControllerState {
         System.out.println("disconnect being called");
 
         if (game.onePlayerLeft()) {
-            System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
-            try {
-                System.out.println("waiting for the client ot come back");
-                Thread.sleep(30000);
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (int i = 0; i < 30; i++) {
+                try {
+                    System.out.println("waiting for the client ot come back");
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!game.onePlayerLeft())
+                    break;
             }
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             if (game.onePlayerLeft()) {
@@ -272,7 +276,17 @@ public class DrawnCardState extends ControllerState {
 
             boolean matchEnded = nextTurn();
 
-            Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(),
+            Event event = new PlaceEvent(game.getGameId(), "Place", game.getStructures(), game.getHands(),
+                    game.getBoard());
+
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(),
                     game.getDeck(),
                     game.getBoard(), game.getTurnCounter(), game.isLastTurn());
 
@@ -299,8 +313,17 @@ public class DrawnCardState extends ControllerState {
 
             boolean matchEnded = nextTurn();
 
-            Event event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(),
-                    game.getDeck(),
+            Event event = new PlaceEvent(game.getGameId(), "Place", game.getStructures(), game.getHands(),
+                    game.getBoard());
+
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
                     game.getBoard(), game.getTurnCounter(), game.isLastTurn());
 
             super.rmiServer.sendEvent(event);

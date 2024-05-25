@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.RejoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
 public class SocketSkeleton implements VirtualClient, Runnable {
@@ -59,7 +60,8 @@ public class SocketSkeleton implements VirtualClient, Runnable {
                 Command command = (Command) input.readObject();
                 if (command != null) {
                     System.out.println("skeleton received command: " + command.getClass().getSimpleName());
-                    if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)) {
+                    if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)
+                            || command instanceof RejoinGameCommand) {
                         this.clientId = command.getClientId();
                         System.out.println("skeleton client id: " + this.clientId);
                     }

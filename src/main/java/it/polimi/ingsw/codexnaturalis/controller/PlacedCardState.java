@@ -250,11 +250,15 @@ public class PlacedCardState extends ControllerState {
         System.out.println("disconnect being called");
         if (game.onePlayerLeft()) {
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
-            try {
-                System.out.println("waiting for the client ot come back");
-                Thread.sleep(30000);
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (int i = 0; i < 30; i++) {
+                try {
+                    System.out.println("waiting for the client ot come back");
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!game.onePlayerLeft())
+                    break;
             }
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             if (game.onePlayerLeft()) {
