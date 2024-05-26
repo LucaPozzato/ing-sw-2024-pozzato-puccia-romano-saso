@@ -18,7 +18,8 @@ import javafx.application.Platform;
 public class ClientMain {
     public static void main(String[] args) {
 
-        Platform.startup(()-> {});
+        Platform.startup(() -> {
+        });
 
         System.out.println("\033[2J\033[1;1H");
         String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };

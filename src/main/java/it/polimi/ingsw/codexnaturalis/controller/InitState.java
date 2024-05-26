@@ -94,7 +94,7 @@ public class InitState extends ControllerState {
         // FIXME: clean this up
         super.game.getBoard().updateActualScore(player, 0); // throws illegal command exc
         // FIXME: this is a temporary solution
-        // super.game.getBoard().updateActualScore(player, 12);
+        // super.game.getBoard().updateActualScore(player, 19);
 
     }
 

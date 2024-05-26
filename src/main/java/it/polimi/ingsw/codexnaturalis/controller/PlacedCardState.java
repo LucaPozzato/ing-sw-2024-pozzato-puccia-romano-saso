@@ -170,7 +170,13 @@ public class PlacedCardState extends ControllerState {
 
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Cannot draw a card now");
+        Event event = null;
+        if (!player.equals(super.game.getCurrentPlayer())) {
+            event = new ErrorEvent(clientId, game.getGameId(), "Not your turn");
+        } else {
+            event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card now");
+        }
+
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
@@ -212,6 +218,26 @@ public class PlacedCardState extends ControllerState {
                     if (!game.getConnected().get(player)) {
                         game.getConnected().put(player, true);
                         super.game.getFromPlayerToId().put(player, clientId);
+
+                        Player tempPlayer = null;
+                        Event event1 = null;
+                        for (Player p : game.getFromPlayerToId().keySet()) {
+                            if (game.getFromPlayerToId().get(p).equals(clientId)) {
+                                tempPlayer = p;
+                                break;
+                            }
+                        }
+                        if (tempPlayer != null) {
+                            event1 = new ErrorEvent(null, game.getGameId(),
+                                    tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                            super.rmiServer.sendEvent(event1);
+                            try {
+                                super.socketServer.sendEvent(event1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Place", game.getPlayers(),
                                 game.getStructures(),
                                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
@@ -249,6 +275,14 @@ public class PlacedCardState extends ControllerState {
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
         System.out.println("disconnect being called");
         if (game.onePlayerLeft()) {
+            Event event = new ErrorEvent(null, game.getGameId(),
+                    "You are the only player left, waiting for others to rejoin the game...");
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             for (int i = 0; i < 30; i++) {
                 try {
@@ -262,7 +296,7 @@ public class PlacedCardState extends ControllerState {
             }
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             if (game.onePlayerLeft()) {
-                Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+                event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
                 super.rmiServer.sendEvent(event);
                 try {
                     super.socketServer.sendEvent(event);
@@ -270,6 +304,25 @@ public class PlacedCardState extends ControllerState {
                     e.printStackTrace();
                 }
                 super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
+            }
+        } else {
+            Player tempPlayer = null;
+            Event event = null;
+            for (Player p : game.getFromPlayerToId().keySet()) {
+                if (game.getFromPlayerToId().get(p).equals(clientId)) {
+                    tempPlayer = p;
+                    break;
+                }
+            }
+            if (tempPlayer != null) {
+                event = new ErrorEvent(null, game.getGameId(),
+                        tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                super.rmiServer.sendEvent(event);
+                try {
+                    super.socketServer.sendEvent(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

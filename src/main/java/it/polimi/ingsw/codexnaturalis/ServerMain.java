@@ -19,6 +19,10 @@ public class ServerMain {
         System.out.println("\033[2J\033[1;1H");
 
         try {
+            System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
+            System.setProperty("java.rmi.server.port", Integer.toString(DefaultValue.port_RMI));
+            System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2500");
+
             RmiServer rmiServer = new RmiServer();
             VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(rmiServer, 0);
             Registry registry = LocateRegistry.createRegistry(DefaultValue.port_RMI);

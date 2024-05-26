@@ -52,7 +52,7 @@ public class Tui implements View {
         terminalPrinter.clear();
         ReadThread readThread = new ReadThread();
         readThread.start();
-        terminalPrinter.updateAlert("Create or join a game to start playing");
+        terminalPrinter.updateAlert("Create, join or rejoin a game to start playing");
         terminalPrinter.printInitialStage();
     }
 
@@ -352,7 +352,7 @@ public class Tui implements View {
                     }
 
                     terminalPrinter.clearInput();
-                    terminalPrinter.clearAlert();
+                    // terminalPrinter.clearAlert();
 
                     String tempMove = move.toUpperCase();
                     if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND")

@@ -204,14 +204,14 @@ public class RmiServer implements VirtualServer {
                     if (!players.containsKey(gameId))
                         players.put(gameId, new ArrayList<>());
                     for (var c : clients)
-                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                        if (clientIds.get(c) != null && clientIds.get(c).equals(event.getClientId())) {
                             client = c;
                             players.get(gameId).add(client);
                             break;
                         }
                 } else if (event instanceof ErrorEvent) {
                     for (var c : clients)
-                        if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
+                        if (clientIds.get(c) != null && clientIds.get(c).equals(event.getClientId())) {
                             client = c;
                             // fix
                             if (players.get(gameId) == null || !players.get(gameId).contains(client))
@@ -280,7 +280,6 @@ public class RmiServer implements VirtualServer {
                     client.ping();
                     System.out.println("pinging clienttt ");
                 } catch (ConnectException e) {
-
                     System.out.println("client disconnected");
 
                     for (var gameId : players.keySet()) {

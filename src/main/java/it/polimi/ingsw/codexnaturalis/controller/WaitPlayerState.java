@@ -6,7 +6,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
-import it.polimi.ingsw.codexnaturalis.network.events.*;
+import it.polimi.ingsw.codexnaturalis.network.events.ChooseEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
+import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
 import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 
@@ -82,7 +86,7 @@ public class WaitPlayerState extends ControllerState {
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution
-            // super.game.getBoard().updateActualScore(player, 12);
+            // super.game.getBoard().updateActualScore(player, 19);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }

@@ -80,7 +80,7 @@ public class ForcedEndState extends ControllerState {
 
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
+        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
