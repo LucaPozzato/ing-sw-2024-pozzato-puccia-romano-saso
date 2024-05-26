@@ -13,9 +13,13 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.client.RmiClient;
 import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
+import javafx.application.Platform;
 
 public class ClientMain {
     public static void main(String[] args) {
+
+        Platform.startup(()-> {});
+
         System.out.println("\033[2J\033[1;1H");
         String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
 

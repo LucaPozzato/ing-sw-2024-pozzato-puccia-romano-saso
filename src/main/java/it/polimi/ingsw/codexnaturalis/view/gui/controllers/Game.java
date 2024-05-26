@@ -3,14 +3,11 @@ package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.Stack;
-
+import java.rmi.RemoteException;
+import java.util.*;
+import java.util.stream.Collectors;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
+import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
@@ -23,15 +20,15 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
+import it.polimi.ingsw.codexnaturalis.network.commands.ChatCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -43,18 +40,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Pair;
 
-/*TO DO (GENERAL):
--Gestisci i ritardi dei giocatori (x non gioca da 10min... che si fa...)
--Gestisci flusso con GameInizialize, ecc
--
--
-*/
-public class Game extends Application implements Initializable {
 
-    // Utils FXML
+public class Game implements Initializable {
+
     @FXML
     private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints,
             potionPoints;
@@ -67,7 +57,7 @@ public class Game extends Application implements Initializable {
             secreteObjective, publicObjective1, publicObjective2;
 
     @FXML
-    private Text nickname1, nickname2, nickname3, nickname4;
+    private Text nickname1 = new Text(), nickname2 = new Text(), nickname3, nickname4;
 
     @FXML
     private ImageView nickname3Visibility, nickname4Visibility;
@@ -79,13 +69,17 @@ public class Game extends Application implements Initializable {
     private List<Rectangle> rectangleList = new ArrayList<Rectangle>();
 
     @FXML
-    private BorderPane borderPane;
+    private BorderPane borderPane ;
 
     @FXML
-    private Pane structurePane, otherStructuresPane, chatPane, boardPane;
+    private Pane structurePane, otherStructuresPane, chatPane, boardPane,
+                                otherStructuresPane1,
+                                otherStructuresPane2;
 
     @FXML
-    private ScrollPane scrollPane, scrollPaneOthers;
+    private ScrollPane scrollPane, scrollPaneOthers,
+                        scrollPaneOthers1,
+                        scrollPaneOthers2;
 
     @FXML
     private TextArea textArea;
@@ -93,8 +87,16 @@ public class Game extends Application implements Initializable {
     @FXML
     private TextField inputText;
 
+
+
     @FXML
     private HBox handCard;
+
+    @FXML
+    private ChoiceBox<String> ChooseSender;
+
+    private final List<String> gamePlayers = new ArrayList<>();;
+
 
     String handCard1URL, handCard2URL, handCard3URL;
     Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card,
@@ -107,9 +109,9 @@ public class Game extends Application implements Initializable {
     int rPressed = 0;
     int fPressed = 1;
 
-    List<ImageView> cardPlaced = new ArrayList<>();
+    private boolean errore = false;
 
-    ViewFactory viewFactory = new ViewFactory();
+    ViewFactory viewFactory;
 
     private MiniModel miniModel;
     private VirtualClient virtualClient;
@@ -120,19 +122,30 @@ public class Game extends Application implements Initializable {
     String currentAngle;
     boolean currentSelectedFrontUp = true;
     private ImageView currentSelectedImage;
-    boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialSetupDeck = true,
+    boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true,
             isHandCardSelected;
 
-    // public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
-    // this.miniModel = miniModel;
-    // this.virtualClient = virtualClient;
-    // }
+    String currentState;
+    FXMLLoader loader;
+    ImageView pedina;
+
+    //Pedine da far vedere nella board per gli altri player
+    ImageView pedina1;
+    ImageView pedina2;
+    ImageView pedina3;
+
+    int c = 0; //Usato per aggiungere le pedine al pane se esistono.. 1 sola volta (mettere apposto??)
+    int contatoreHandTurn = 0;
+
+
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
-        System.out.println(virtualClient);
         this.miniModel = miniModel;
         this.virtualClient = virtualClient;
-        System.out.println(this.virtualClient);
+    }
+
+    public void setUp(ViewFactory viewFactory) {
+        this.viewFactory = viewFactory;
     }
 
     @FXML
@@ -183,7 +196,8 @@ public class Game extends Application implements Initializable {
     }
 
     @FXML
-    void goldCard1Click(MouseEvent event) throws IllegalCommandException {
+    void goldCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
+
         if (!cardDrawn) {
             goldDeckCard.setOpacity(.5);
             goldCard1.setOpacity(1);
@@ -192,22 +206,47 @@ public class Game extends Application implements Initializable {
             resourceCard1.setOpacity(.5);
             resourceCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(goldCard1.getImage());
-            currentSelectedImage.setVisible(true);
             isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
+            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
+
             currentSelectedDeck = currentDeckGold1Card;
-            // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            // testMain.drawCommand(currentDeckGold1Card);
-            cardDrawn = true;
-            isCardPlaced = false;
+
+            Image currentImage = goldCard1.getImage();
+
+            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, ""));
+
+
+            checkErrorOrElse(()->{
+
+            }, ()->{
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImage);
+                currentSelectedImage.setVisible(true);
+
+            },()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
+
+
         }
 
     }
 
+
+
     @FXML
-    void goldCard2Click(MouseEvent event) throws IllegalCommandException {
+    void goldCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
         if (!cardDrawn) {
             goldDeckCard.setOpacity(.5);
             goldCard1.setOpacity(.5);
@@ -216,22 +255,43 @@ public class Game extends Application implements Initializable {
             resourceCard1.setOpacity(.5);
             resourceCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(goldCard2.getImage());
-            currentSelectedImage.setVisible(true);
+
             isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
+            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
             currentSelectedDeck = currentDeckGold2Card;
-            // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
-            // testMain.drawCommand(currentDeckGold2Card);
-            cardDrawn = true;
-            isCardPlaced = false;
+
+            Image currentImage = goldCard2.getImage();
+
+            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, ""));
+
+            checkErrorOrElse(()->{
+            }, ()->{
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImage);
+                currentSelectedImage.setVisible(true);
+
+            },()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
+
+
         }
 
     }
 
     @FXML
-    void goldDeckCardClick(MouseEvent event) throws IllegalCommandException {
+    void goldDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
 
         if (!cardDrawn) {
             goldDeckCard.setOpacity(1);
@@ -241,46 +301,91 @@ public class Game extends Application implements Initializable {
             resourceCard1.setOpacity(.5);
             resourceCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(goldDeckCard.getImage());
-            currentSelectedImage.setVisible(true);
+
             isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
+            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
             currentSelectedDeck = currentDeckGoldCard;
-            // System.out.printf("Il quale current e': \n" + currentDeckGold1Card);
+
+            Image currentImage = goldDeckCard.getImage();
+
+            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD"));
             // testMain.drawCommand(currentDeckGoldCard);
-            cardDrawn = true;
-            isCardPlaced = false;
+
+
+            checkErrorOrElse(()->{
+
+            }, ()->{
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImage);
+                currentSelectedImage.setVisible(true);
+
+            },()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
+
         }
 
     }
 
     @FXML
-    void resourceCard1Click(MouseEvent event) throws IllegalCommandException {
+    void resourceCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
 
-        if (!cardDrawn) {
-            resourceDeckCard.setOpacity(.5);
-            resourceCard1.setOpacity(1);
-            resourceCard2.setOpacity(.5);
-            goldDeckCard.setOpacity(.5);
-            goldCard1.setOpacity(.5);
-            goldCard2.setOpacity(.5);
+            if (!cardDrawn) {
+                resourceDeckCard.setOpacity(.5);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(.5);
+                goldDeckCard.setOpacity(.5);
+                goldCard1.setOpacity(.5);
+                goldCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(resourceCard1.getImage());
-            currentSelectedImage.setVisible(true);
-            isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource1Card);
-            currentSelectedDeck = currentDeckResource1Card;
-            // testMain.drawCommand(currentDeckResource1Card);
-            cardDrawn = true;
-            isCardPlaced = false;
-        }
+                isHandCardSelected = false;
+
+                currentSelectedDeck = currentDeckResource1Card;
+
+                Image currentImage = resourceCard1.getImage();
+
+                virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, ""));
+                // testMain.drawCommand(currentDeckResource1Card);
+
+
+                checkErrorOrElse(()->{
+
+                }, ()->{
+                    cardDrawn = true;
+                    isCardPlaced = false;
+                    currentSelected = null;
+
+                    currentSelectedImage.setImage(currentImage);
+                    currentSelectedImage.setVisible(true);
+
+                },()->{
+
+                    currentSelectedDeck = null;
+                    goldDeckCard.setOpacity(1);
+                    goldCard1.setOpacity(1);
+                    goldCard2.setOpacity(1);
+                    resourceDeckCard.setOpacity(1);
+                    resourceCard1.setOpacity(1);
+                    resourceCard2.setOpacity(1);
+                });
+            }
 
     }
 
     @FXML
-    void resourceCard2Click(MouseEvent event) throws IllegalCommandException {
+    void resourceCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
 
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(.5);
@@ -290,21 +395,44 @@ public class Game extends Application implements Initializable {
             goldCard1.setOpacity(.5);
             goldCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(resourceCard2.getImage());
-            currentSelectedImage.setVisible(true);
+
             isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResource2Card);
             currentSelectedDeck = currentDeckResource2Card;
+
+            Image currentImage = resourceCard2.getImage();
+
+            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, ""));
+
             // testMain.drawCommand(currentDeckResource2Card);
-            cardDrawn = true;
-            isCardPlaced = false;
+
+            checkErrorOrElse(()->{
+
+            }, ()->{
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImage);
+                currentSelectedImage.setVisible(true);
+
+            },()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
+
         }
 
     }
 
     @FXML
-    void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException {
+    void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
 
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(1);
@@ -314,15 +442,37 @@ public class Game extends Application implements Initializable {
             goldCard1.setOpacity(.5);
             goldCard2.setOpacity(.5);
 
-            currentSelectedImage.setImage(resourceDeckCard.getImage());
-            currentSelectedImage.setVisible(true);
+
             isHandCardSelected = false;
 
-            System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
+            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
             currentSelectedDeck = currentDeckResourceCard;
+
+            Image currentImage = resourceDeckCard.getImage();
+
+            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE"));
+
             // testMain.drawCommand(currentDeckResourceCard);
-            cardDrawn = true;
-            isCardPlaced = false;
+            checkErrorOrElse(()->{
+
+            }, ()->{
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImage);
+                currentSelectedImage.setVisible(true);
+
+            },()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
         }
 
     }
@@ -336,9 +486,28 @@ public class Game extends Application implements Initializable {
     @FXML // TO DO: vai a capo se string lunga tot
     void sendMessage(MouseEvent event) {
         String message = inputText.getText();
+
+        Player messageReceiver = null;
+        for(Player player: miniModel.getPlayers()){
+            if(ChooseSender.getValue() == null){
+            }
+            else if(ChooseSender.getValue().equals(player.getNickname()))
+                messageReceiver = player;
+        }
         if (!Objects.equals(message, "")) {
-            textArea.appendText("You: " + message + "\n\n");
+            try {
+                if(messageReceiver == null) {
+                    virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
+                }
+                else{
+
+                    virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, messageReceiver));
+                }
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             inputText.clear();
+            ChooseSender.setValue("All");
         }
 
     }
@@ -347,44 +516,113 @@ public class Game extends Application implements Initializable {
     void sendMessageByEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             String message = inputText.getText();
+
+
+            Player messageReceiver = null;
+            for(Player player: miniModel.getPlayers()){
+                if(ChooseSender.getValue() == null){
+                }
+                else if(ChooseSender.getValue().equals(player.getNickname()))
+                    messageReceiver = player;
+            }
             if (!Objects.equals(message, "")) {
-                textArea.appendText("You: " + message + "\n\n");
+                try {
+                    if(messageReceiver == null) {
+                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
+                    }
+                    else{
+
+                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, messageReceiver));
+                    }
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
                 inputText.clear();
+                ChooseSender.setValue("All");
             }
         }
     }
 
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
-        // otherStructuresPane.setVisible(true);
-        // borderPane.setCenter(scrollPaneOthers);
+         scrollPaneOthers1.setVisible(false);
+         otherStructuresPane1.setVisible(false);
+         scrollPaneOthers2.setVisible(false);
+         otherStructuresPane2.setVisible(false);
+
+         scrollPaneOthers.setVisible(true);
+         otherStructuresPane.setVisible(true);
+         borderPane.setCenter(scrollPaneOthers);
 
     }
 
     @FXML
     void nickname3VisibilityFunct(MouseEvent event) {
+        scrollPaneOthers.setVisible(false);
+        otherStructuresPane.setVisible(false);
+        scrollPaneOthers2.setVisible(false);
+        otherStructuresPane2.setVisible(false);
 
+        scrollPaneOthers1.setVisible(true);
+        otherStructuresPane1.setVisible(true);
+        borderPane.setCenter(scrollPaneOthers1);
     }
 
     @FXML
     void nickname4VisibilityFunct(MouseEvent event) {
+        scrollPaneOthers.setVisible(false);
+        otherStructuresPane.setVisible(false);
+        scrollPaneOthers1.setVisible(false);
+        otherStructuresPane1.setVisible(false);
 
-    }
+        scrollPaneOthers2.setVisible(true);
+        otherStructuresPane2.setVisible(true);
+        borderPane.setCenter(scrollPaneOthers2);
 
-    public void run() {
-        launch();
     }
 
     public void updateChat(Chat chat) {
+        textArea.clear();
 
+
+        for(ChatMessage chatMessage: chat.getChatMessages()){
+
+            if(chatMessage.getReceiver() == null){
+                textArea.appendText("From " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
+            }
+           else if(chatMessage.getReceiver().getNickname().equals(myPlayer.getNickname())){
+                textArea.appendText("Private message from: " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
+            }
+
+        }
     }
 
     public void updateState(String state) {
-        System.out.println("State: " + state);
+        //System.out.println("\n\nLo stato corrente è: " + state);
+        switch (state) {
+            case "Wait":
+                currentState = "Wait";
+                break;
+            case "Choose":
+                currentState = "Choose";
+                break;
+            case "End":
+                currentState = "End";
+                break;
+            default:
+                break;
+        }
     }
 
+
+
     public void updateMyPlayer(Player player) {
+
+        //System.out.print("\n (My player updated) \n");
         this.myPlayer = player;
+
+        pedina.setImage(symbolPath(myPlayer.getColor().toString()));
+
     }
 
     public void updateWinners(List<Player> winners) {
@@ -392,6 +630,13 @@ public class Game extends Application implements Initializable {
     }
 
     public void updateCurrentPlayer(Player player) {
+        //System.out.print("\n (Current player updated) \n");
+
+        nickname1.setFill(Color.BLACK);
+        nickname2.setFill(Color.BLACK);
+        nickname3.setFill(Color.BLACK);
+        nickname4.setFill(Color.BLACK);
+
         if (Objects.equals(nickname1.getText(), player.getNickname()))
             nickname1.setFill(Color.BLUE);
         else if (Objects.equals(nickname2.getText(), player.getNickname()))
@@ -408,19 +653,54 @@ public class Game extends Application implements Initializable {
     }
 
     public void updatePlayers(List<Player> players) {
-        nickname1.setText(players.get(0).getNickname());
-        nickname2.setText(players.get(1).getNickname());
+
+
+
+        //System.out.print("\n (Players updated) \n");
+
+
+        List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).collect(Collectors.toList());
+
+        if(isInitialChooseSetup){
+
+            pedina1 = new ImageView(symbolPath(otherPlayers.get(0).getColor().toString()));
+
+            if(otherPlayers.size() == 2 && otherPlayers.get(1) != null)
+                pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
+            else
+                if(otherPlayers.size() == 3 && otherPlayers.get(2) != null)
+                {
+                    pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
+                    pedina3 = new ImageView(symbolPath(otherPlayers.get(2).getColor().toString()));
+                }
+
+
+            otherPlayers.forEach(p->ChooseSender.getItems().add(p.getNickname()));
+
+            ChooseSender.getItems().add("All");
+            isInitialChooseSetup = false;
+
+        }
+
+
+
+
+
+        nickname1.setText(miniModel.getMyPlayer().getNickname());
+
+
+        nickname2.setText(otherPlayers.get(0).getNickname());
 
         if (players.size() == 3) {
-            nickname3.setText(players.get(2).getNickname());
+            nickname3.setText(players.get(1).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
         }
         if (players.size() == 4) {
-            nickname3.setText(players.get(2).getNickname());
+            nickname3.setText(players.get(1).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
-            nickname4.setText(players.get(3).getNickname());
+            nickname4.setText(players.get(2).getNickname());
             nickname4.setVisible(true);
             nickname4Visibility.setVisible(true);
         }
@@ -433,7 +713,6 @@ public class Game extends Application implements Initializable {
         int width = 111;
         int height = 74;
         for (String s : card.getFrontCorners()) {
-            // System.out.println("\nCorner corrente: \n" + s);
             if (s != null && position == 0) {
                 Rectangle rectangle = new Rectangle(x - 82, y - 44, width, height);
                 rectangleList.add(rectangle);
@@ -463,20 +742,22 @@ public class Game extends Application implements Initializable {
     // sotto..
 
     public void updateStructures(List<Structure> structures) {
+
+        //System.out.printf("\n (Structures updated) \n");
+
+        int index = miniModel.getPlayers().indexOf(myPlayer);
+
+        Structure myStructure = structures.get(index);
+
+        structures.remove(myStructure);
+
         int position = 0;
-        int position1 = 0;
         int points;
-        Structure myStructure = structures.getFirst();
+
 
         Image image = null;
-        Card cardForAngles;
+        Image pawnImage;
 
-        // System.out.println("\n\nVisible Resources: \n\n" +
-        // myStructure.getVisibleObjects());
-        // System.out.println("\n\nVisible Resources: \n\n" +
-        // myStructure.getVisibleObjects().substring(26,27));
-
-        // TO DO: si arrivera' mai a >9?
 
         // Aggiungo punti in base alle risorse
         points = Integer.parseInt(myStructure.getVisibleResources().substring(11, 12));
@@ -502,12 +783,39 @@ public class Game extends Application implements Initializable {
 
         // TO DO: Capisci se quando la funzione viene creata una seconda volta le carte
         // precedenti vengono eliminate?
+
+        pawnImage = symbolPath("BLACK");
+        ImageView imageView1 = new ImageView(pawnImage);
+        ImageView imageView2 = new ImageView(pawnImage);
+
+
         for (Pair<Card, Boolean> card : myStructure.getPlacedCards()) {
 
-            if (position == 1) {
+
+            if(position == 0){
+                setInitialCard((InitialCard) card.getKey());
+                pawnImage = symbolPath(myPlayer.getColor().toString());
+                ImageView imageView = new ImageView(pawnImage);
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(20);
+                imageView.setLayoutX(990);
+                imageView.setLayoutY(1062);
+                structurePane.getChildren().add(imageView);
+                position = 1;
+
+                if (miniModel.getPlayers().getFirst() == myPlayer){
+                    imageView2.setFitWidth(20);
+                    imageView2.setFitHeight(20);
+                    imageView2.setLayoutX(990);
+                    imageView2.setLayoutY(990);
+                    structurePane.getChildren().add(imageView2);
+                }
+            }
+
+
+            else if (position == 1) {
                 int x = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
                 int y = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
-                // System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y + "\n");
                 if (card.getValue().toString().equals("true")) {
                     image = pathFront(card.getKey().toString().substring(6, 9));
                 } else if (card.getValue().toString().equals("false")) {
@@ -540,478 +848,529 @@ public class Game extends Application implements Initializable {
                                 currentAngle = "BR";
                         }
 
-                        // testMain.placeCommand(card.getKey(), currentSelected, currentAngle,
-                        // currentSelectedFrontUp);
+                        try {
+                            virtualClient.sendCommand(new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp));
 
-                        currentSelectedImage.setVisible(false);
 
-                        isCardPlaced = true;
-                        cardDrawn = false;
+                            checkErrorOrElse(()->{
+                                currentSelectedImage = null;
+                                isHandCardSelected = false;
+
+                            }, ()->{
+                                currentSelectedImage.setVisible(false);
+
+                                isCardPlaced = true;
+                                cardDrawn = false;
+
+                            },()->{
+
+                                handCard1.setOpacity(1);
+                                handCard2.setOpacity(1);
+                                handCard3.setOpacity(1);
+                            });
+
+
+
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+
 
                     }
 
                 });
-                // Fine
 
-                // System.out.println("posi " + imageView.getLayoutX() + " " +
-                // imageView.getLayoutY() + "\n");
                 structurePane.getChildren().add(imageView);
-            } else
-                position++;
+            }
+
 
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
 
         }
 
-        // TO DO: sistema
-        // for(Pair<Card, Boolean> card: hisStructure.getPlacedCards()){
-        // System.out.printf("\nCard:" + card.getKey() + "\n");
-        // if (position1 == 1){
-        // int x1 = hisStructure.getCardToCoordinate().get(card.getKey()).getFirst() /
-        // 100;
-        // int y1 = hisStructure.getCardToCoordinate().get(card.getKey()).getFirst() %
-        // 100;
-        // //System.out.println("Carta: " + card.getKey() + "Posizione: " + x + y +
-        // "\n");
-        // if (card.getValue().toString().equals("true")){
-        // image = pathFront(card.getKey().toString().substring(6,9));
-        // }
-        // else if (card.getValue().toString().equals("false")){
-        // image = pathBack(card.getKey().toString().substring(6,9));
-        // }
-        //
-        // ImageView imageView = new ImageView(image);
-        //
-        // imageView.setFitWidth(111);
-        // imageView.setFitHeight(74);
-        // imageView.setLayoutX(945+82*(x1-40));
-        // imageView.setLayoutY(1000-44*(y1-40)); //TO DO: vedi qui... -
+        int contaStruttura = 0;
+        int test = 0;
+        List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
 
-        // TO DO: Rivedi per creareGhostRectangles negli angoli liberi, ora vanno anche
-        // sopra le carte piazzate..NO!
-        // try{
-        // createGhostRectangles(card.getKey(), imageView.getLayoutX(),
-        // imageView.getLayoutY());}
-        // catch (Exception ignored){}
+        for(Structure structure: structures){
 
-        // System.out.println("posi " + imageView.getLayoutX() + " " +
-        // imageView.getLayoutY() + "\n");
-        // otherStructuresPane.getChildren().add(imageView);
-    }
-    // else{
-    // position1++;
-    // image = pathFront(initialCardCard.getIdCard());
-    // ImageView imageView = new ImageView(image);
-    // imageView.setFitWidth(111);
-    // imageView.setFitHeight(74);
-    // imageView.setLayoutX(945);
-    // imageView.setLayoutY(1000);
-    // otherStructuresPane.getChildren().add(imageView);
-    // }
+            position = 0;
 
-    // }
-    // for(Rectangle rectangle: rectangleList){
-    // rectangle.setOnMouseEntered(event -> {
-    // rectangle.setFill(Color.web("#808080", 0.8));
-    // });
-    //
-    // // Gestore per quando il mouse esce dal rettangolo
-    // rectangle.setOnMouseExited(event -> {
-    // rectangle.setFill(Color.web("#808080", 0.1));
-    // });
-    //
-    // }
-    // }
+            for (Pair<Card, Boolean> card : structure.getPlacedCards()) {
+                if(position == 0){
+                    int x, y;
+                    int width = 29;
+                    int height = 30;
 
-    public void updateHand(List<Hand> hands) {
-        Hand hand = hands.get(0);
-        if (isInitialSetupHand) {
-            String card1;
-            String card2;
-            String card3;
-            String secretObjectiveCard;
+                    String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card.getKey().getIdCard() + "f.jpg";
+                    InputStream imageStream = getClass().getResourceAsStream(imagePath);
+                    assert imageStream != null;
+                    Image initialCardImage = new Image(imageStream);
+                    ImageView initialCard = new ImageView(initialCardImage);
+                    initialCard.setFitWidth(111);
+                    initialCard.setFitHeight(74);
+                    initialCard.setLayoutX(945);
+                    initialCard.setLayoutY(1000);
+                    x = (int) initialCard.getLayoutX();
+                    y = (int) initialCard.getLayoutY();
 
-            currentHandCard1 = hand.getCardsHand().get(0);
-            currentHandCard2 = hand.getCardsHand().get(1);
-            currentHandCard3 = hand.getCardsHand().get(2);
+                    pawnImage = symbolPath(otherPlayers.get(contaStruttura).getColor().toString());
+                    ImageView imageView = new ImageView(pawnImage);
+                    imageView.setFitWidth(20);
+                    imageView.setFitHeight(20);
+                    imageView.setLayoutX(990);
+                    imageView.setLayoutY(1062);
 
-            card1 = hand.getCardsHand().get(0).toString().substring(6, 9);
-            card2 = hand.getCardsHand().get(1).toString().substring(6, 9);
-            card3 = hand.getCardsHand().get(2).toString().substring(6, 9);
-            secretObjectiveCard = hand.getSecretObjective().toString().substring(22, 25);
+                    if (miniModel.getPlayers().getFirst() == otherPlayers.get(contaStruttura)){
+                        imageView1.setFitWidth(20);
+                        imageView1.setFitHeight(20);
+                        imageView1.setLayoutX(990);
+                        imageView1.setLayoutY(990);
 
-            handCard1.setImage(pathFront(card1));
-            handCard2.setImage(pathFront(card2));
-            handCard3.setImage(pathFront(card3));
-            secreteObjective.setImage(pathFront(secretObjectiveCard));
+                        test = contaStruttura;
+                    }
 
-            handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "f.jpg";
-            handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
-            handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
+                    if(contaStruttura == 0){
+                        otherStructuresPane.getChildren().add(initialCard);
+                        otherStructuresPane.getChildren().add(imageView);
+                        if(test == 0)
+                            otherStructuresPane.getChildren().add(imageView1);
 
-            isInitialSetupHand = false;
-        } else {
-            if (currentSelected == currentHandCard1) {
-                currentHandCard1 = hand.getCardsHand().get(0);
-                if (currentSelectedFrontUp) {
-                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                    // handCard1.setImage(new Image(handCard1URL));
-                } else if (!currentSelectedFrontUp) {
-                    handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
-                    // handCard1.setImage(new Image(handCard1URL));
+                    }
+                    else if(contaStruttura == 1){
+                        otherStructuresPane1.getChildren().add(initialCard);
+                        otherStructuresPane1.getChildren().add(imageView);
+                        if(test == 1)
+                            otherStructuresPane1.getChildren().add(imageView1);
+                    }
+                    else if(contaStruttura == 2){
+                        otherStructuresPane2.getChildren().add(initialCard);
+                        otherStructuresPane2.getChildren().add(imageView);
+                        if(test == 2)
+                            otherStructuresPane2.getChildren().add(imageView1);
+                    }
+                    position = 1;
                 }
-            }
+                else {
+                    int x = structure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
+                    int y = structure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
+                    if (card.getValue().toString().equals("true")) {
+                        image = pathFront(card.getKey().toString().substring(6, 9));
+                    } else if (card.getValue().toString().equals("false")) {
+                        image = pathBack(card.getKey().toString().substring(6, 9));
+                    }
 
-            else if (currentSelected == currentHandCard2) {
-                currentHandCard2 = hand.getCardsHand().get(1);
-                if (currentSelectedFrontUp) {
-                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                    // handCard2.setImage(new Image(handCard2URL));
-                } else if (!currentSelectedFrontUp) {
-                    handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
-                    // handCard2.setImage(new Image(handCard2URL));
-                }
-            }
+                    ImageView imageView = new ImageView(image);
 
-            else if (currentSelected == currentHandCard3) {
-                if (currentSelectedFrontUp) {
-                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
-                    // handCard3.setImage(new Image(handCard3URL));
-                } else if (!currentSelectedFrontUp) {
-                    handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
-                            + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
-                    // handCard3.setImage(new Image(handCard3URL));
+                    imageView.setFitWidth(111);
+                    imageView.setFitHeight(74);
+                    imageView.setLayoutX(945 + 82 * (x - 40));
+                    imageView.setLayoutY(1000 - 44 * (y - 40));
+
+                    if(contaStruttura == 0){
+                        otherStructuresPane.getChildren().add(imageView);
+                    }
+                    else if(contaStruttura == 1){
+                        otherStructuresPane1.getChildren().add(imageView);
+                    }
+                    else if(contaStruttura == 2){
+                        otherStructuresPane2.getChildren().add(imageView);
+                    }
                 }
-                currentHandCard3 = hand.getCardsHand().get(2);
-                System.out.println("\ncard 3: " + currentHandCard3 + "URL: " + handCard3URL);
 
             }
-            System.out.println("\nUpdate card1: " + handCard1URL);
-            System.out.println("\nUpdate card2: " + handCard2URL);
-            System.out.println("\nUpdate card3: " + handCard3URL);
-
-            currentSelected = null;
+            contaStruttura++;
 
         }
-        System.out.printf("\nHand: ");
-        for (Card card : hand.getCardsHand())
-            System.out.printf(card.toString().substring(6, 9) + "-");
 
-        // TO DO: problema quando le hand card sono verso il back e ne prendo un'altra
-        // dal deck.. se faccio B o F non va piu.. questo sotto non ha funzionato per
-        // fixxare
-        // KeyEvent simulatedEvent = new KeyEvent(KeyEvent.KEY_PRESSED, null, null,
-        // KeyCode.F, false, false, false, false);
-        // showBack(simulatedEvent);
 
-        // System.out.print("\nHand updated!");
+
 
     }
 
-    // TO DO: Manca la board effettiva... solo la parte delle obj comuni e' stata
-    // trattata
-    public void updateBoard(Board board) {
-        String publicObjectiveOne;
-        String publicObjectiveTwo;
-        int points;
-        String myPlayerColor = myPlayer.getColor().toString();
-        // System.out.printf("My player color: " + myPlayerColor);
-        ImageView pedina;
-        if (board.getActualPoints(myPlayer) == null)
-            points = 1;
-        else
-            points = board.getActualPoints(myPlayer);
-        // int points = board.getActualPoints(myPlayer);
 
-        publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22, 25);
-        publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22, 25);
+
+    public void updateHand(List<Hand> hands) {
+
+        System.out.print("\n (Hand updated) \n");
+
+
+
+        int index = miniModel.getPlayers().indexOf(myPlayer);
+        Hand hand = hands.get(index);
+
+        System.out.print("\nHand dopo update: ");
+        for (Card card : hand.getCardsHand())
+            System.out.print(card.toString().substring(6, 9) + "-");
+        System.out.printf("\n Questa è la current selected: " + currentSelected);
+
+        String secretObjectiveCard;
+        if (hand.getSecretObjective() != null) {
+            secretObjectiveCard = hand.getSecretObjective().toString().substring(22, 25);
+            secreteObjective.setImage(pathFront(secretObjectiveCard));
+        }
+
+
+        //A ogni client arriva l evento di Wait, Place, ecc....
+        if (contatoreHandTurn == 1) {
+
+            if (isInitialSetupHand) {
+                System.out.printf("Siamo nello stato iniziale di updateHand");
+                String card1;
+                String card2;
+                String card3;
+
+
+                currentHandCard1 = hand.getCardsHand().get(0);
+                currentHandCard2 = hand.getCardsHand().get(1);
+                currentHandCard3 = hand.getCardsHand().get(2);
+
+                card1 = hand.getCardsHand().get(0).toString().substring(6, 9);
+                card2 = hand.getCardsHand().get(1).toString().substring(6, 9);
+                card3 = hand.getCardsHand().get(2).toString().substring(6, 9);
+
+
+                handCard1.setImage(pathFront(card1));
+                handCard2.setImage(pathFront(card2));
+                handCard3.setImage(pathFront(card3));
+
+
+                handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "f.jpg";
+                handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
+                handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
+
+
+                isInitialSetupHand = false;
+            }
+            else {
+                System.out.printf("Siamo nello stato secondario di updateHand");
+
+                System.out.printf("Questa è la current selected: " + currentSelected);
+                System.out.printf("Questa è la current hand card1: " + currentHandCard1);
+
+
+
+                if (currentSelected == currentHandCard1 && currentSelectedDeck!=null) {
+                    System.out.printf("\n Hand" + hand);
+                    System.out.printf("\n Carta non aggiornata: " + currentHandCard1);
+                    currentHandCard1 = hand.getCardsHand().getFirst();
+                    System.out.printf("\n Hand" + hand);
+                    System.out.printf("\n Carta aggiornata: " + currentHandCard1);
+
+                    if (currentSelectedFrontUp) {
+                        handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
+                    } else if (!currentSelectedFrontUp) {
+                        handCard1URL = "/it/polimi/ingsw/codexnaturalis/BackCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
+                    }
+
+                } else if (currentSelected == currentHandCard2 && currentSelectedDeck!=null) {
+                    currentHandCard2 = hand.getCardsHand().get(1);
+                    if (currentSelectedFrontUp) {
+                        handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
+                    } else if (!currentSelectedFrontUp) {
+                        handCard2URL = "/it/polimi/ingsw/codexnaturalis/BackCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
+                    }
+
+                } else if (currentSelected == currentHandCard3 && currentSelectedDeck!=null) {
+                    currentHandCard3 = hand.getCardsHand().get(2);
+                    if (currentSelectedFrontUp) {
+                        handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "f.jpg";
+                    } else if (!currentSelectedFrontUp) {
+                        handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/"
+                                + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
+                    }
+
+                }
+                System.out.println("\nUpdate card1: " + handCard1URL);
+                System.out.println("\nUpdate card2: " + handCard2URL);
+                System.out.println("\nUpdate card3: " + handCard3URL);
+
+
+            }
+            System.out.printf("\nHand: ");
+            for (Card card : hand.getCardsHand())
+                System.out.printf(card.toString().substring(6, 9) + "-");
+
+            // TO DO: problema quando le hand card sono verso il back e ne prendo un'altra
+            // dal deck.. se faccio B o F non va piu.. questo sotto non ha funzionato per
+            // fixxare
+            // KeyEvent simulatedEvent = new KeyEvent(KeyEvent.KEY_PRESSED, null, null,
+            // KeyCode.F, false, false, false, false);
+            // showBack(simulatedEvent);
+
+            // System.out.print("\nHand updated!");
+
+        }
+        contatoreHandTurn = 1;
+    }
+
+    public void updateBoard(Board board) {
+
+        //System.out.print("\n (Board updated) \n");
+
+        currentDeckResource1Card = board.getUncoveredCards().get(0);
+        currentDeckResource2Card = board.getUncoveredCards().get(1);
+
+        currentDeckGold1Card = board.getUncoveredCards().get(2);
+        currentDeckGold2Card = board.getUncoveredCards().get(3);
+
+        String resourceCardOne = currentDeckResource1Card.toString().substring(6,9);
+        String resourceCardTwo = currentDeckResource2Card.toString().substring(6,9);
+
+        String goldCardOne = currentDeckGold1Card.toString().substring(6,9);
+        String goldCardTwo = currentDeckGold2Card.toString().substring(6,9);
+
+        resourceCard1.setImage(pathFront(resourceCardOne));
+        resourceCard2.setImage(pathFront(resourceCardTwo));
+
+        goldCard1.setImage(pathFront(goldCardOne));
+        goldCard2.setImage(pathFront(goldCardTwo));
+
+
+        String publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22, 25);
+        String publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22, 25);
 
         publicObjective1.setImage(pathFront(publicObjectiveOne));
         publicObjective2.setImage(pathFront(publicObjectiveTwo));
 
-        switch (points) {
-            case 1:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(399);
-                pedina.setLayoutY(403);
-                setDimension(pedina);
-                break;
-            case 2:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(449);
-                pedina.setLayoutY(403);
-                setDimension(pedina);
-                break;
-            case 3:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(499);
-                pedina.setLayoutY(403);
-                setDimension(pedina);
-                break;
-            case 4:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(358);
-                setDimension(pedina);
-                break;
-            case 5:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(474);
-                pedina.setLayoutY(358);
-                setDimension(pedina);
-                break;
-            case 6:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(424);
-                pedina.setLayoutY(358);
-                setDimension(pedina);
-                break;
-            case 7:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(358);
-                setDimension(pedina);
-                break;
-            case 8:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(313);
-                setDimension(pedina);
-                break;
-            case 9:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(424);
-                pedina.setLayoutY(313);
-                setDimension(pedina);
-                break;
-            case 10:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(474);
-                pedina.setLayoutY(313);
-                setDimension(pedina);
-                break;
-            case 11:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(313);
-                setDimension(pedina);
-                break;
-            case 12:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(267);
-                setDimension(pedina);
-                break;
-            case 13:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(474);
-                pedina.setLayoutY(267);
-                setDimension(pedina);
-                break;
-            case 14:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(424);
-                pedina.setLayoutY(267);
-                setDimension(pedina);
-                break;
-            case 15:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(267);
-                setDimension(pedina);
-                break;
-            case 16:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(222);
-                setDimension(pedina);
-                break;
-            case 17:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(424);
-                pedina.setLayoutY(222);
-                setDimension(pedina);
-                break;
-            case 18:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(474);
-                pedina.setLayoutY(222);
-                setDimension(pedina);
-                break;
-            case 19:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(222);
-                setDimension(pedina);
-                break;
-            case 20:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(176);
-                setDimension(pedina);
-                break;
-            case 21:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(449);
-                pedina.setLayoutY(152);
-                setDimension(pedina);
-                break;
-            case 22:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(176);
-                setDimension(pedina);
-                break;
-            case 23:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(129);
-                setDimension(pedina);
-                break;
-            case 24:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(374);
-                pedina.setLayoutY(83);
-                setDimension(pedina);
-                break;
-            case 25:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(403);
-                pedina.setLayoutY(45);
-                setDimension(pedina);
-                break;
-            case 26:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(449);
-                pedina.setLayoutY(38);
-                setDimension(pedina);
-                break;
-            case 27:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(495);
-                pedina.setLayoutY(46);
-                setDimension(pedina);
-                break;
-            case 28:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(83);
-                setDimension(pedina);
-                break;
-            case 29:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(524);
-                pedina.setLayoutY(129);
-                setDimension(pedina);
-                break;
-            case 30:
-                pedina = new ImageView(symbolPath(myPlayerColor));
-                pedina.setLayoutX(449);
-                pedina.setLayoutY(93);
-                setDimension(pedina);
-                break;
+
+        String myPlayerColor = myPlayer.getColor().toString();
+
+
+        int points = 0;
+        List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
+
+        int index = miniModel.getPlayers().indexOf(myPlayer);
+        for(var entry : board.getActualScores().entrySet()){
+            if(entry.getKey().getNickname().equals(myPlayer.getNickname())){
+                points = entry.getValue();
+                addPoint(points, pedina);
+            }
+
+            if(entry.getKey().getNickname().equals(otherPlayers.get(0).getNickname())){
+                pedina1.setImage(symbolPath(otherPlayers.get(0).getColor().toString()));
+                if(c==0)
+                    boardPane.getChildren().add(pedina1);
+                addPoint(entry.getValue(), pedina1);
+            }
+
+            else if(otherPlayers.size() == 2 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())){
+                pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
+                if(c==0)
+                    boardPane.getChildren().add(pedina2);
+                addPoint(entry.getValue(), pedina2);
+                
+            }
+
+            else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())) {
+                pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
+                pedina3.setImage(symbolPath(otherPlayers.get(2).getColor().toString()));
+                if(c==0){
+                    boardPane.getChildren().add(pedina3);
+                    boardPane.getChildren().add(pedina2);
+                }
+                addPoint(entry.getValue(), pedina2);
+
+            }
+
+            else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(2).getNickname())) {
+                addPoint(entry.getValue(), pedina3);
+            }
 
         }
+        c++;
+
 
         handCard.setFocusTraversable(true);
         handCard.requestFocus();
-        // System.out.print("\nDeck updated!");
     }
 
-    public void setDimension(ImageView pedina) {
-        pedina.setFitWidth(40);
-        pedina.setFitHeight(40);
-        boardPane.getChildren().add(pedina);
+    public void addPoint(int points, ImageView posto){
+        switch (points) {
+            case 0:
+                posto.setLayoutX(399);
+                posto.setLayoutY(403);
+                setDimension(posto);
+                break;
+            case 1:
+                posto.setLayoutX(449);
+                posto.setLayoutY(403);
+                setDimension(posto);
+                break;
+            case 2:
+                posto.setLayoutX(499);
+                posto.setLayoutY(403);
+                setDimension(posto);
+                break;
+            case 3:
+                posto.setLayoutX(524);
+                posto.setLayoutY(358);
+                setDimension(posto);
+                break;
+            case 4:
+                posto.setLayoutX(474);
+                posto.setLayoutY(358);
+                setDimension(posto);
+                break;
+            case 5:
+                posto.setLayoutX(424);
+                posto.setLayoutY(358);
+                setDimension(posto);
+                break;
+            case 6:
+                posto.setLayoutX(374);
+                posto.setLayoutY(358);
+                setDimension(posto);
+                break;
+            case 7:
+                posto.setLayoutX(374);
+                posto.setLayoutY(313);
+                setDimension(posto);
+                break;
+            case 8:
+                posto.setLayoutX(424);
+                posto.setLayoutY(313);
+                setDimension(posto);
+                break;
+            case 9:
+                posto.setLayoutX(474);
+                posto.setLayoutY(313);
+                setDimension(posto);
+                break;
+            case 10:
+                posto.setLayoutX(524);
+                posto.setLayoutY(313);
+                setDimension(posto);
+                break;
+            case 11:
+                posto.setLayoutX(524);
+                posto.setLayoutY(267);
+                setDimension(posto);
+                break;
+            case 12:
+                posto.setLayoutX(474);
+                posto.setLayoutY(267);
+                setDimension(posto);
+                break;
+            case 13:
+                posto.setLayoutX(424);
+                posto.setLayoutY(267);
+                setDimension(posto);
+                break;
+            case 14:
+                posto.setLayoutX(374);
+                posto.setLayoutY(267);
+                setDimension(posto);
+                break;
+            case 15:
+                posto.setLayoutX(374);
+                posto.setLayoutY(222);
+                setDimension(posto);
+                break;
+            case 16:
+                posto.setLayoutX(424);
+                posto.setLayoutY(222);
+                setDimension(posto);
+                break;
+            case 17:
+                posto.setLayoutX(474);
+                posto.setLayoutY(222);
+                setDimension(posto);
+                break;
+            case 18:
+                posto.setLayoutX(524);
+                posto.setLayoutY(222);
+                setDimension(posto);
+                break;
+            case 19:
+                posto.setLayoutX(524);
+                posto.setLayoutY(176);
+                setDimension(posto);
+                break;
+            case 20:
+                posto.setLayoutX(449);
+                posto.setLayoutY(152);
+                setDimension(posto);
+                break;
+            case 21:
+                posto.setLayoutX(374);
+                posto.setLayoutY(176);
+                setDimension(posto);
+                break;
+            case 22:
+                posto.setLayoutX(374);
+                posto.setLayoutY(129);
+                setDimension(posto);
+                break;
+            case 23:
+                posto.setLayoutX(374);
+                posto.setLayoutY(83);
+                setDimension(posto);
+                break;
+            case 24:
+                posto.setLayoutX(403);
+                posto.setLayoutY(45);
+                setDimension(posto);
+                break;
+            case 25:
+                posto.setLayoutX(449);
+                posto.setLayoutY(38);
+                setDimension(posto);
+                break;
+            case 26:
+                posto.setLayoutX(495);
+                posto.setLayoutY(46);
+                setDimension(posto);
+                break;
+            case 27:
+                posto.setLayoutX(524);
+                posto.setLayoutY(83);
+                setDimension(posto);
+                break;
+            case 28:
+                posto.setLayoutX(524);
+                posto.setLayoutY(129);
+                setDimension(posto);
+                break;
+            case 29:
+                posto.setLayoutX(449);
+                posto.setLayoutY(93);
+                setDimension(posto);
+                break;
+        }
+
+    }
+
+    public void setDimension(ImageView posto) {
+        posto.setFitWidth(40);
+        posto.setFitHeight(40);
     }
 
     public void updateDeck(Deck deck) {
 
-        if (isInitialSetupDeck) {
-            Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
-            Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
+        //System.out.print("\n (Deck updated) \n");
 
-            currentDeckGold1Card = deck.getGoldDeck().get(deck.getGoldDeck().size() - 1);
-            currentDeckGold2Card = deck.getGoldDeck().get(deck.getGoldDeck().size() - 2);
-            currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size() - 3);
+        Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
+        Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
-            currentDeckResource1Card = deck.getResourceDeck().get(deck.getResourceDeck().size() - 1);
-            currentDeckResource2Card = deck.getResourceDeck().get(deck.getResourceDeck().size() - 2);
-            currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
+        currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size() - 1);
+        String goldDeckCardOne = currentDeckGoldCard.toString().substring(6, 9);
+        goldDeckCard.setImage(pathBack(goldDeckCardOne));
 
-            String goldDeckCardOne = currentDeckGoldCard.toString().substring(6, 9);
-            String goldCardOne = currentDeckGold1Card.toString().substring(6, 9);
-            String goldCardTwo = currentDeckGold2Card.toString().substring(6, 9);
-
-            String resourceDeckCardOne = currentDeckResourceCard.toString().substring(6, 9);
-            String resourceCardOne = currentDeckResource1Card.toString().substring(6, 9);
-            String resourceCardTwo = currentDeckResource2Card.toString().substring(6, 9);
-
-            goldDeckCard.setImage(pathBack(goldDeckCardOne));
-            goldCard1.setImage(pathFront(goldCardOne));
-            goldCard2.setImage(pathFront(goldCardTwo));
-
-            resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
-            resourceCard1.setImage(pathFront(resourceCardOne));
-            resourceCard2.setImage(pathFront(resourceCardTwo));
-            isInitialSetupDeck = false;
-        } else {
-
-            if (currentSelectedDeck == currentDeckResourceCard) {
-                currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
-                String changeImage = currentDeckResourceCard.toString().substring(6, 9);
-                resourceDeckCard.setImage(pathBack(changeImage));
-            }
-
-            else if (currentSelectedDeck == currentDeckResource1Card) {
-                currentDeckResource1Card = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
-                String changeImage = currentDeckResource1Card.toString().substring(6, 9);
-                resourceCard1.setImage(pathFront(changeImage));
-            }
-
-            else if (currentSelectedDeck == currentDeckResource2Card) {
-                currentDeckResource2Card = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
-                String changeImage = currentDeckResource2Card.toString().substring(6, 9);
-                resourceCard2.setImage(pathFront(changeImage));
-            }
-
-            else if (currentSelectedDeck == currentDeckGoldCard) {
-                currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size() - 3);
-                String changeImage = currentDeckGoldCard.toString().substring(6, 9);
-                goldDeckCard.setImage(pathBack(changeImage));
-            }
-
-            else if (currentSelectedDeck == currentDeckGold1Card) {
-                currentDeckGold1Card = deck.getGoldDeck().get(deck.getGoldDeck().size() - 3);
-                String changeImage = currentDeckGold1Card.toString().substring(6, 9);
-                goldCard1.setImage(pathFront(changeImage));
-            }
-
-            else if (currentSelectedDeck == currentDeckGold2Card) {
-                currentDeckGold2Card = deck.getGoldDeck().get(deck.getGoldDeck().size() - 3);
-                String changeImage = currentDeckGold2Card.toString().substring(6, 9);
-                goldCard2.setImage(pathFront(changeImage));
-            }
-
-        }
-
-        // .print("\nDeck updated!");
-
-        System.out.print("\n\nResource Deck:");
-        for (Card card : deck.getResourceDeck())
-            System.out.printf(card.toString().substring(6, 9) + "-");
-        System.out.print("\nGold Deck: ");
-        for (Card card : deck.getGoldDeck())
-            System.out.printf(card.toString().substring(6, 9) + "-");
+        currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
+        String resourceDeckCardOne = currentDeckResourceCard.toString().substring(6, 9);
+        resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
     }
 
     public void updateError(String error) {
-
+        errore = true;
+        showAlert(error);
     }
 
     public void showAlert(String message) {
@@ -1099,6 +1458,32 @@ public class Game extends Application implements Initializable {
         }
     }
 
+    private void checkErrorOrElse(Runnable onError, Runnable success, Runnable finallyCallback)
+    {
+        Thread checker = new Thread(()->{
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (errore)
+            {
+                errore = false;
+                Platform.runLater(()->onError.run());
+            }
+            else
+                Platform.runLater(()->success.run());
+
+            Platform.runLater(()->finallyCallback.run());
+
+        });
+
+        checker.start();
+
+    }
+
     public void setInitialCard(InitialCard initialCard1) {
         int x, y;
         int width = 29;
@@ -1120,7 +1505,7 @@ public class Game extends Application implements Initializable {
 
         initialCard.setOnMouseClicked(event -> {
 
-            if (isCardPlaced == false) {
+            if (!isCardPlaced && isHandCardSelected) {
                 double currentAngleSelectedX = event.getX();
                 double currentAngleSelectedY = event.getY();
 
@@ -1136,49 +1521,58 @@ public class Game extends Application implements Initializable {
                         currentAngle = "BR";
                 }
 
-                // .println("1: \n" + initialCard1 + "2: \n" + currentSelected + " 3: \n" +
-                // currentAngle + "4: \n" + currentSelectedFrontUp);
-                // testMain.placeCommand(initialCard1, currentSelected, currentAngle,
-                // currentSelectedFrontUp);
 
-                currentSelectedImage.setVisible(false);
+                try {
+                    virtualClient.sendCommand(new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, initialCard1, currentSelected, currentAngle, currentSelectedFrontUp));
 
-                isCardPlaced = true;
-                cardDrawn = false;
+
+                    checkErrorOrElse(()->{
+                        Platform.runLater(()->{
+                            currentSelectedImage = null;
+                            isHandCardSelected = false;
+                        });
+                    }, ()->{
+                        Platform.runLater(()->currentSelectedImage.setVisible(false));
+
+                        isCardPlaced = true;
+                        cardDrawn = false;
+                    }, ()->{
+                        handCard1.setOpacity(1);
+                        handCard2.setOpacity(1);
+                        handCard3.setOpacity(1);
+                    });
+
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
 
             }
 
         });
 
-        cardPlaced.add(initialCard);
         structurePane.getChildren().add(initialCard);
 
-        for (String s : initialCardCard.getFrontCenterResources()) {
-            addPoints(s);
-        }
 
         for (String s : initialCardCard.getFrontCorners()) {
-            // System.out.println("\nCorner corrente: \n" + s);
             if (!Objects.equals(s, "NULL") && position == 0) { // TOP LEFT
                 Rectangle rectangle = new Rectangle(x, y, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                // structurePane.getChildren().add(rectangle);
             } else if (!Objects.equals(s, "NULL") && position == 1) { // TOP RIGHT
                 Rectangle rectangle = new Rectangle(x + 82, y, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                // structurePane.getChildren().add(rectangle);
             } else if (!Objects.equals(s, "NULL") && position == 2) { // BOTTOM RIGHT
                 Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                // structurePane.getChildren().add(rectangle);
             } else if (!Objects.equals(s, "NULL") && position == 3) { // BOTTOM LEFT
                 Rectangle rectangle = new Rectangle(x, y + 44, width, height);
                 rectangleList.add(rectangle);
                 rectangle.setFill(Color.web("#808080", 0.2));
-                // structurePane.getChildren().add(rectangle);
             }
 
             position++;
@@ -1321,18 +1715,34 @@ public class Game extends Application implements Initializable {
         assert imageStream != null;
         return new Image(imageStream);
     }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        // do nothing
+ 
+    public void showInitialStage(Game game) {
+        viewFactory.showInitialStage(this.miniModel, this.virtualClient, game);
     }
 
-    public void showInitialStage() {
-        viewFactory.showInitialStage(this.miniModel, this.virtualClient);
+    public void showStartGame(){
+        viewFactory.showStartGame(miniModel, virtualClient, this);
     }
+
+    public void showJoinGame(){
+        viewFactory.showJoinGame(miniModel, virtualClient, this);
+    }
+
+    public void showWait(){
+        viewFactory.showWait();
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        pedina = new ImageView();
+        pedina1 = new ImageView();
+        pedina2 = new ImageView();
+        pedina3 = new ImageView();
+
+        ChooseSender.setValue("All");
+        boardPane.getChildren().add(pedina);
 
         scrollPaneOthers.setVisible(false);
         chatPane.setVisible(false);
@@ -1345,15 +1755,7 @@ public class Game extends Application implements Initializable {
         manuscriptPoints.setText("0");
         potionPoints.setText("0");
 
-        // resourceDeckCard.setDisable(true);
-        // resourceCard1.setDisable(true);
-        // resourceCard2.setDisable(true);
-        // goldDeckCard.setDisable(true);
-        // goldCard1.setDisable(true);
-        // goldCard2.setDisable(true);
 
-        // handCard.setFocusTraversable(true);
-        // handCard.requestFocus();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -1363,6 +1765,16 @@ public class Game extends Application implements Initializable {
                 / structurePane.getPrefHeight();
         scrollPane.setHvalue(hCenter);
         scrollPane.setVvalue(vCenter);
+
+        scrollPaneOthers.setHvalue(hCenter);
+        scrollPaneOthers.setVvalue(vCenter);
+
+        scrollPaneOthers1.setHvalue(hCenter);
+        scrollPaneOthers1.setVvalue(vCenter);
+
+        scrollPaneOthers2.setHvalue(hCenter);
+        scrollPaneOthers2.setVvalue(vCenter);
+
 
         structurePane.setOnMousePressed(event -> {
             lastX = event.getX();
@@ -1383,6 +1795,8 @@ public class Game extends Application implements Initializable {
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
         });
+
+
 
     }
 }

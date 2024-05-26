@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 
 public class Settings {
 
-    ViewFactory viewFactory = new ViewFactory();
+    ViewFactory viewFactory;
 
     @FXML
     private Button goBack;

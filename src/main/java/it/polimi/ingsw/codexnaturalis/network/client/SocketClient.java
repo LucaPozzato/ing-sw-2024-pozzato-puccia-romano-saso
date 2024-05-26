@@ -13,6 +13,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
+import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
 
 public class SocketClient implements VirtualClient, Runnable {
@@ -223,8 +224,9 @@ public class SocketClient implements VirtualClient, Runnable {
      * @throws RemoteException
      */
     private void runGui() throws RemoteException {
-        // this.view = new GameGui();
-        // [...]
+        this.view = new GuiApp(this, miniModel);
+        miniModel.setView(view);
+        view.run();
     }
 
     private String createClientId() {

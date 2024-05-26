@@ -69,7 +69,7 @@ public class GameInizializer implements Initializable {
     GoldParser goldParser = new GoldParser();
     ResourceParser resourceParser = new ResourceParser();
     Deck deck = new Deck(goldParser.parse(), resourceParser.parse());
-    ViewFactory viewFactory = new ViewFactory();
+    ViewFactory viewFactory;
 
     public void setUp(String username, String password, int numOfPlayers) {
 
@@ -109,7 +109,7 @@ public class GameInizializer implements Initializable {
 
             player = new Player(nickname, "");
             // No "OP1f" ma fai funzione per carte obiettivo..
-            viewFactory.showGame();
+            //viewFactory.showGame();
         }
 
     }

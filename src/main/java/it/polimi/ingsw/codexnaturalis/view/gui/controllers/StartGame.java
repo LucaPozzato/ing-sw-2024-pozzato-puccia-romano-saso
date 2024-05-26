@@ -5,6 +5,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,7 +25,7 @@ public class StartGame implements Initializable{
 
     @FXML
     private Button goBack;
-    ViewFactory viewFactory = new ViewFactory();
+    ViewFactory viewFactory;
 
 
     @FXML
@@ -62,6 +63,7 @@ public class StartGame implements Initializable{
     Color color;
     MiniModel miniModel;
     VirtualClient virtualClient;
+    Game game;
 
 
     @FXML
@@ -70,24 +72,48 @@ public class StartGame implements Initializable{
     int cambiamentoTestoPassword = 0;
 
 
-    public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
-        this.miniModel = miniModel;
-        this.virtualClient = virtualClient;
+    public void setUP(MiniModel miniModel, VirtualClient virtualClient, Game game) {
+        //this.miniModel = miniModel;
+        //this.virtualClient = virtualClient;
+        this.game = game;
+    }
+
+    public void setUp(ViewFactory viewFactory){
+        this.viewFactory = viewFactory;
     }
 
     @FXML
     void CreateGameFunct(MouseEvent event) throws RemoteException {
-        virtualClient.sendCommand(new CreateGameCommand(virtualClient.getClientId(), Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color,Integer.parseInt(ChoosePlayers.getValue()) ));
+        System.out.println("FUnziona: " + viewFactory.getVirtualClient().getClientId());
+        System.out.printf("\n");
+        String clientId = viewFactory.getVirtualClient().getClientId();
+        viewFactory.getVirtualClient().sendCommand(new CreateGameCommand(clientId, Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color,Integer.parseInt(ChoosePlayers.getValue()) ));
+        Platform.runLater(()-> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
         Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
+        viewFactory.setNickname(EnterNickname.getText());
         viewFactory.closeStage(stage);
-        viewFactory.showGameInizializer(miniModel, virtualClient); //EnterNickname.getText()
+        //viewFactory.showGame();
+
     }
 
     @FXML
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showInitialStage(miniModel, virtualClient);
+        viewFactory.showGame(miniModel, virtualClient, game);
+        Platform.runLater(()->{
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @FXML

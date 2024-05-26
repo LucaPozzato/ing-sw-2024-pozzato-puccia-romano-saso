@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class InitialStage{
 
-    ViewFactory viewFactory = new ViewFactory();
+    ViewFactory viewFactory;
 
     @FXML
     private Button startGame;
@@ -27,23 +27,32 @@ public class InitialStage{
 
     MiniModel miniModel;
     VirtualClient virtualClient;
+    Game game;
 
-    public void setUP(MiniModel miniModel, VirtualClient virtualClient){
+
+    public void setUP(MiniModel miniModel, VirtualClient virtualClient, Game game){
         this.miniModel = miniModel;
         this.virtualClient = virtualClient;
+        this.game = game;
+    }
+
+    public void setUp(ViewFactory viewFactory){
+        this.viewFactory = viewFactory;
     }
 
     @FXML
     void startGameFunct(MouseEvent event) {
         Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showStartGame(miniModel, virtualClient);
+        viewFactory.showStartGame();
+        //viewFactory.showStartGame(miniModel, virtualClient, game);
     }
     @FXML
     void joinGameFunct(MouseEvent event) {
         Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
         viewFactory.showJoinGame();
+        //viewFactory.showJoinGame(miniModel, virtualClient, game);
     }
 
     @FXML

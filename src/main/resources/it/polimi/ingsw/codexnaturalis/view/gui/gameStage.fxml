@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -336,6 +337,10 @@
                         </HBox>
                         <HBox alignment="CENTER" layoutY="453.0" prefHeight="32.0" prefWidth="938.0">
                            <children>
+                              <ChoiceBox fx:id="ChooseSender" prefHeight="26.0" prefWidth="58.0">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin></ChoiceBox>
                               <TextField fx:id="inputText" onKeyPressed="#sendMessageByEnter" prefHeight="25.0" prefWidth="478.0">
                                  <HBox.margin>
                                     <Insets bottom="2.0" />
@@ -368,13 +373,19 @@
                         <Button layoutX="19.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="goBack" />
                      </children>
                   </Pane>
-                  <ScrollPane fx:id="scrollPaneOthers" prefHeight="483.0" prefWidth="937.0">
+                  <ScrollPane fx:id="scrollPaneOthers" prefHeight="483.0" prefWidth="937.0" visible="false">
                      <content>
-                        <Pane fx:id="otherStructuresPane" prefHeight="2000.0" prefWidth="2000.0" visible="false">
-                           <children>
-                              <Text layoutX="401.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prova" />
-                           </children>
-                        </Pane>
+                        <Pane fx:id="otherStructuresPane" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="scrollPaneOthers1" layoutX="10.0" layoutY="10.0" prefHeight="483.0" prefWidth="937.0" visible="false">
+                     <content>
+                        <Pane fx:id="otherStructuresPane1" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="scrollPaneOthers2" layoutX="10.0" layoutY="10.0" prefHeight="483.0" prefWidth="937.0" visible="false">
+                     <content>
+                        <Pane fx:id="otherStructuresPane2" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
                      </content>
                   </ScrollPane>
                </children>

@@ -2,20 +2,21 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.JoinGame">
    <children>
       <VBox alignment="TOP_CENTER" fillWidth="false" layoutX="360.0" layoutY="62.0" prefHeight="568.0" prefWidth="500.0">
          <children>
-            <Label text="Choose your nickname:">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Choose your nickname:" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
@@ -30,30 +31,61 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="EnterPassword" prefHeight="25.0" prefWidth="178.0" promptText="****">
+            <TextField fx:id="EnterPassword" prefHeight="25.0" prefWidth="178.0" promptText="******">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Choose your color:">
+            <Label text="Select game ID:">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
             </Label>
-            <ChoiceBox fx:id="ChooseColor" prefWidth="150.0">
+            <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter game ID...">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
-            </ChoiceBox>
+            </TextField>
+            <Label text="Choose a color:">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="383.0" spacing="20.0">
+               <children>
+                  <ImageView fx:id="blue" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#blueSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/BLUE.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="yellow" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#yellowSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/YELLOW.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="red" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#redSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/RED.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="green" fitHeight="45.0" fitWidth="41.0" onMouseClicked="#greenSelected" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/GREEN.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
             <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Error:" visible="false">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Come si connette a una partita?" />
             <Button fx:id="JoinGame" mnemonicParsing="false" onMouseClicked="#JoinGameFunct" prefHeight="38.0" prefWidth="105.0" text="Join game">
                <VBox.margin>
-                  <Insets top="60.0" />
+                  <Insets top="50.0" />
                </VBox.margin>
                <font>
                   <Font size="15.0" />
