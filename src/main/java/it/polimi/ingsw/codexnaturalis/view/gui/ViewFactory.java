@@ -24,6 +24,9 @@ public class ViewFactory {
     private String nickname;
     private Scene gameScene;
 
+
+    public static Stage staticJoinGame;
+
     public ViewFactory(MiniModel miniModel, VirtualClient virtualClient) {
         this.miniModel = miniModel;
         this.virtualClient = virtualClient;
@@ -76,11 +79,17 @@ public class ViewFactory {
 
     public void showJoinGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("joinGame.fxml"));
-        createStage(loader);
+        staticJoinGame = createStage(loader);
         JoinGame joinGame = loader.getController();
         joinGame.setUp(this);
     }
 
+    public void showRejoinGame(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("rejoinGame.fxml"));
+        createStage(loader);
+        RejoinGame rejoinGame = loader.getController();
+        rejoinGame.setUp(this);
+    }
     //Show Game
 
     public void showGame(MiniModel miniModel, VirtualClient virtualClient, Game game){
@@ -136,14 +145,8 @@ public class ViewFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("endGameStage.fxml"));
         createStage(loader);
         EndGameController endGameController = loader.getController();
-        endGameController.setVincitore(miniModel.getWinner().get(0).getNickname());
+        endGameController.setVincitore(miniModel.getWinner());
 
-    }
-
-
-    public void showSettings(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("settingsStage.fxml"));
-        createStage(loader);
     }
 
 

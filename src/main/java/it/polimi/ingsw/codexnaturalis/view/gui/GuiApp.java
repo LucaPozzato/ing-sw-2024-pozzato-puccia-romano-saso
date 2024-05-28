@@ -53,6 +53,7 @@ public class GuiApp implements View {
     public void run() {
         viewFactory = new ViewFactory(miniModel,virtualClient);
 
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -74,7 +75,6 @@ public class GuiApp implements View {
 
     @Override
     public void updateState(String state) {
-        System.out.printf("\n\nLo state corrente risulta : " + state + "\n\n");
 
         game.updateState(state);
 
@@ -88,6 +88,9 @@ public class GuiApp implements View {
         else if (Objects.equals(state, "Choose")){
             Platform.runLater(()-> {
                 waitingStage.hide();
+
+                if (ViewFactory.staticJoinGame != null)
+                    ViewFactory.staticJoinGame.close();
 
                 try {
                     chooseStage = viewFactory.showChoose();
@@ -110,9 +113,10 @@ public class GuiApp implements View {
             Platform.runLater(()-> {
 
                 mainStage.show();
-                chooseStage.hide();
-                waitingStage.hide();
-
+                if (chooseStage != null)
+                    chooseStage.hide();
+                if (waitingStage != null)
+                 waitingStage.hide();
 
             });
 
@@ -135,7 +139,6 @@ public class GuiApp implements View {
 
         game = gameFxmlLoader.getController();
         game.setUP(miniModel, virtualClient);
-
 
 
     }

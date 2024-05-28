@@ -222,7 +222,7 @@ public class DrawnCardState extends ControllerState {
                         }
                         if (tempPlayer != null) {
                             event1 = new ErrorEvent(null, game.getGameId(),
-                                    tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                                    tempPlayer.getNickname() + " has disconnected, skipping his turn");
                             super.rmiServer.sendEvent(event1);
                             try {
                                 super.socketServer.sendEvent(event1);

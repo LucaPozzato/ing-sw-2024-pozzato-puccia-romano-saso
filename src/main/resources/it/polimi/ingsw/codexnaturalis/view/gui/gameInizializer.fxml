@@ -71,7 +71,7 @@
                   </ImageView>
                   <ImageView fx:id="res2Element" fitHeight="98.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../FrontCards/R14f.jpg" />
+                        <Image url="@../../FrontCards/R15f.jpg" />
                      </image>
                   </ImageView>
                </children>

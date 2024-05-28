@@ -18,12 +18,12 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="joinGame" layoutX="510.0" layoutY="417.0" mnemonicParsing="false" onMouseClicked="#joinGameFunct" prefHeight="38.0" prefWidth="180.0" style="-fx-background-color: #001e41;" text="JOIN GAME" textFill="WHITE">
+      <Button layoutX="510.0" layoutY="417.0" mnemonicParsing="false" onMouseClicked="#joinGameFunct" prefHeight="38.0" prefWidth="180.0" style="-fx-background-color: #001e41;" text="JOIN GAME" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="settings" layoutX="510.0" layoutY="465.0" mnemonicParsing="false" onMouseClicked="#settingsFunct" prefHeight="38.0" prefWidth="180.0" style="-fx-background-color: #001e41;" text="SETTINGS" textFill="WHITE">
+      <Button layoutX="510.0" layoutY="465.0" mnemonicParsing="false" onMouseClicked="#rejoinGameFunct" prefHeight="38.0" prefWidth="180.0" style="-fx-background-color: #001e41;" text="REJOIN GAME" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>

@@ -20,9 +20,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
-import it.polimi.ingsw.codexnaturalis.network.commands.ChatCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
-import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.*;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -50,17 +48,16 @@ public class Game implements Initializable {
             potionPoints;
 
     @FXML
-    private Text connectionType;
-
-    @FXML
     private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2,
             secreteObjective, publicObjective1, publicObjective2;
 
-    @FXML
-    private Text nickname1 = new Text(), nickname2 = new Text(), nickname3, nickname4;
+
 
     @FXML
-    private ImageView nickname3Visibility, nickname4Visibility;
+    private Text nickname1 , myStructure, nickname2, nickname3, nickname4;
+
+    @FXML
+    private ImageView nickname1Visibility, nickname2Visibility, nickname3Visibility, nickname4Visibility;
 
     @FXML
     private ImageView handCard1, handCard2, handCard3;
@@ -95,7 +92,23 @@ public class Game implements Initializable {
     @FXML
     private ChoiceBox<String> ChooseSender;
 
+    @FXML
+    private Text player1Points;
+
+    @FXML
+    private Text player2Points;
+
+    @FXML
+    private Text player3Points;
+
+    @FXML
+    private Text player4Points;
+
     private final List<String> gamePlayers = new ArrayList<>();;
+
+
+    private Command currentCommand;
+    private Image   currentImageNew;
 
 
     String handCard1URL, handCard2URL, handCard3URL;
@@ -129,6 +142,8 @@ public class Game implements Initializable {
     FXMLLoader loader;
     ImageView pedina;
 
+    private Boolean initialCardSide;
+
     //Pedine da far vedere nella board per gli altri player
     ImageView pedina1;
     ImageView pedina2;
@@ -159,7 +174,6 @@ public class Game implements Initializable {
             currentSelected = currentHandCard1;
             currentSelectedImage = handCard1;
             isHandCardSelected = true;
-            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
         }
 
     }
@@ -175,7 +189,6 @@ public class Game implements Initializable {
             currentSelected = currentHandCard2;
             currentSelectedImage = handCard2;
             isHandCardSelected = true;
-            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
         }
 
     }
@@ -190,7 +203,6 @@ public class Game implements Initializable {
             currentSelected = currentHandCard3;
             currentSelectedImage = handCard3;
             isHandCardSelected = true;
-            System.out.printf("\nHai selezionato questa carta dalla hand: " + currentSelected);
         }
 
     }
@@ -208,16 +220,16 @@ public class Game implements Initializable {
 
             isHandCardSelected = false;
 
-            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold1Card);
-
             currentSelectedDeck = currentDeckGold1Card;
 
-            Image currentImage = goldCard1.getImage();
+            currentImageNew = goldCard1.getImage();
 
-            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, ""));
+            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, "");
+
+            virtualClient.sendCommand(currentCommand);
 
 
-            checkErrorOrElse(()->{
+           /* checkErrorOrElse(()->{
 
             }, ()->{
                 cardDrawn = true;
@@ -236,7 +248,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-            });
+            }); */
 
 
         }
@@ -258,14 +270,18 @@ public class Game implements Initializable {
 
             isHandCardSelected = false;
 
-            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGold2Card);
             currentSelectedDeck = currentDeckGold2Card;
 
-            Image currentImage = goldCard2.getImage();
+            currentImageNew = goldCard2.getImage();
 
-            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, ""));
+            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, "");
 
-            checkErrorOrElse(()->{
+            virtualClient.sendCommand(currentCommand);
+
+            /*checkErrorOrElse(()->{
+
+
+
             }, ()->{
                 cardDrawn = true;
                 isCardPlaced = false;
@@ -274,7 +290,10 @@ public class Game implements Initializable {
                 currentSelectedImage.setImage(currentImage);
                 currentSelectedImage.setVisible(true);
 
+
+
             },()->{
+
 
                 currentSelectedDeck = null;
                 goldDeckCard.setOpacity(1);
@@ -283,7 +302,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-            });
+            });*/
 
 
         }
@@ -304,16 +323,18 @@ public class Game implements Initializable {
 
             isHandCardSelected = false;
 
-            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckGoldCard);
             currentSelectedDeck = currentDeckGoldCard;
 
-            Image currentImage = goldDeckCard.getImage();
 
-            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD"));
+            currentImageNew = pathFront(currentDeckGoldCard.getIdCard());
+
+            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD");
+
+            virtualClient.sendCommand(currentCommand);
             // testMain.drawCommand(currentDeckGoldCard);
 
 
-            checkErrorOrElse(()->{
+           /* checkErrorOrElse(()->{
 
             }, ()->{
                 cardDrawn = true;
@@ -332,7 +353,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-            });
+            });*/
 
         }
 
@@ -354,13 +375,15 @@ public class Game implements Initializable {
 
                 currentSelectedDeck = currentDeckResource1Card;
 
-                Image currentImage = resourceCard1.getImage();
+                currentImageNew = resourceCard1.getImage();
 
-                virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, ""));
+                currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, "");
+
+                virtualClient.sendCommand(currentCommand);
                 // testMain.drawCommand(currentDeckResource1Card);
 
 
-                checkErrorOrElse(()->{
+                /*checkErrorOrElse(()->{
 
                 }, ()->{
                     cardDrawn = true;
@@ -379,7 +402,7 @@ public class Game implements Initializable {
                     resourceDeckCard.setOpacity(1);
                     resourceCard1.setOpacity(1);
                     resourceCard2.setOpacity(1);
-                });
+                });*/
             }
 
     }
@@ -400,13 +423,15 @@ public class Game implements Initializable {
 
             currentSelectedDeck = currentDeckResource2Card;
 
-            Image currentImage = resourceCard2.getImage();
+            currentImageNew = resourceCard2.getImage();
 
-            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, ""));
+
+            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, "");
+            virtualClient.sendCommand(currentCommand);
 
             // testMain.drawCommand(currentDeckResource2Card);
 
-            checkErrorOrElse(()->{
+            /*checkErrorOrElse(()->{
 
             }, ()->{
                 cardDrawn = true;
@@ -425,7 +450,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-            });
+            });*/
 
         }
 
@@ -445,15 +470,16 @@ public class Game implements Initializable {
 
             isHandCardSelected = false;
 
-            //System.out.printf("\nHai selezionato questa carta dal deck: " + currentDeckResourceCard);
             currentSelectedDeck = currentDeckResourceCard;
 
-            Image currentImage = resourceDeckCard.getImage();
+            currentImageNew = pathFront(currentDeckResourceCard.getIdCard());
 
-            virtualClient.sendCommand(new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE"));
+            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE");
+
+            virtualClient.sendCommand(currentCommand);
 
             // testMain.drawCommand(currentDeckResourceCard);
-            checkErrorOrElse(()->{
+            /*checkErrorOrElse(()->{
 
             }, ()->{
                 cardDrawn = true;
@@ -472,7 +498,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-            });
+            });*/
         }
 
     }
@@ -544,6 +570,21 @@ public class Game implements Initializable {
     }
 
     @FXML
+    void nickname1VisibilityFunct(MouseEvent event) {
+        borderPane.setCenter(scrollPane);
+
+        nickname1Visibility.setOpacity(0);
+        nickname2Visibility.setOpacity(1);
+        nickname3Visibility.setOpacity(1);
+        nickname4Visibility.setOpacity(1);
+
+        myStructure.setUnderline(true);
+        nickname2.setUnderline(false);
+        nickname3.setUnderline(false);
+        nickname4.setUnderline(false);
+    }
+
+    @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
          scrollPaneOthers1.setVisible(false);
          otherStructuresPane1.setVisible(false);
@@ -553,6 +594,16 @@ public class Game implements Initializable {
          scrollPaneOthers.setVisible(true);
          otherStructuresPane.setVisible(true);
          borderPane.setCenter(scrollPaneOthers);
+
+        nickname1Visibility.setOpacity(1);
+        nickname2Visibility.setOpacity(0);
+        nickname3Visibility.setOpacity(1);
+        nickname4Visibility.setOpacity(1);
+
+        myStructure.setUnderline(false);
+        nickname2.setUnderline(true);
+        nickname3.setUnderline(false);
+        nickname4.setUnderline(false);
 
     }
 
@@ -566,6 +617,16 @@ public class Game implements Initializable {
         scrollPaneOthers1.setVisible(true);
         otherStructuresPane1.setVisible(true);
         borderPane.setCenter(scrollPaneOthers1);
+
+        nickname1Visibility.setOpacity(1);
+        nickname2Visibility.setOpacity(1);
+        nickname3Visibility.setOpacity(0);
+        nickname4Visibility.setOpacity(1);
+
+        myStructure.setUnderline(false);
+        nickname2.setUnderline(false);
+        nickname3.setUnderline(true);
+        nickname4.setUnderline(false);
     }
 
     @FXML
@@ -578,6 +639,16 @@ public class Game implements Initializable {
         scrollPaneOthers2.setVisible(true);
         otherStructuresPane2.setVisible(true);
         borderPane.setCenter(scrollPaneOthers2);
+
+        nickname1Visibility.setOpacity(1);
+        nickname2Visibility.setOpacity(1);
+        nickname3Visibility.setOpacity(1);
+        nickname4Visibility.setOpacity(0);
+
+        myStructure.setUnderline(false);
+        nickname2.setUnderline(false);
+        nickname3.setUnderline(false);
+        nickname4.setUnderline(true);
 
     }
 
@@ -594,11 +665,14 @@ public class Game implements Initializable {
                 textArea.appendText("Private message from: " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
 
+           else if(chatMessage.getReceiver() != null && chatMessage.getSender().getNickname().equals(myPlayer.getNickname())){
+                textArea.appendText("Private message from " + chatMessage.getSender().getNickname() + " to " + chatMessage.getReceiver().getNickname() + " :" + chatMessage.getMessage() + "\n\n");
+            }
+
         }
     }
 
     public void updateState(String state) {
-        //System.out.println("\n\nLo stato corrente è: " + state);
         switch (state) {
             case "Wait":
                 currentState = "Wait";
@@ -618,7 +692,6 @@ public class Game implements Initializable {
 
     public void updateMyPlayer(Player player) {
 
-        //System.out.print("\n (My player updated) \n");
         this.myPlayer = player;
 
         pedina.setImage(symbolPath(myPlayer.getColor().toString()));
@@ -630,7 +703,6 @@ public class Game implements Initializable {
     }
 
     public void updateCurrentPlayer(Player player) {
-        //System.out.print("\n (Current player updated) \n");
 
         nickname1.setFill(Color.BLACK);
         nickname2.setFill(Color.BLACK);
@@ -646,18 +718,12 @@ public class Game implements Initializable {
         else if (Objects.equals(nickname4.getText(), player.getNickname()))
             nickname4.setFill(Color.BLUE);
         else {
-            System.out.println("Player not matching" + player.getNickname()); // Metti un alert in caso...
+            System.out.println("Player not matching" + player.getNickname());
         }
-        // System.out.print("\nCurrent Player updated!");
 
     }
 
     public void updatePlayers(List<Player> players) {
-
-
-
-        //System.out.print("\n (Players updated) \n");
-
 
         List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).collect(Collectors.toList());
 
@@ -692,19 +758,18 @@ public class Game implements Initializable {
         nickname2.setText(otherPlayers.get(0).getNickname());
 
         if (players.size() == 3) {
-            nickname3.setText(players.get(1).getNickname());
+            nickname3.setText(otherPlayers.get(1).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
         }
         if (players.size() == 4) {
-            nickname3.setText(players.get(1).getNickname());
+            nickname3.setText(otherPlayers.get(1).getNickname());
             nickname3.setVisible(true);
             nickname3Visibility.setVisible(true);
-            nickname4.setText(players.get(2).getNickname());
+            nickname4.setText(otherPlayers.get(2).getNickname());
             nickname4.setVisible(true);
             nickname4Visibility.setVisible(true);
         }
-        // System.out.print("\nPlayers updated!");
 
     }
 
@@ -743,7 +808,6 @@ public class Game implements Initializable {
 
     public void updateStructures(List<Structure> structures) {
 
-        //System.out.printf("\n (Structures updated) \n");
 
         int index = miniModel.getPlayers().indexOf(myPlayer);
 
@@ -759,30 +823,14 @@ public class Game implements Initializable {
         Image pawnImage;
 
 
-        // Aggiungo punti in base alle risorse
-        points = Integer.parseInt(myStructure.getVisibleResources().substring(11, 12));
-        addPoints("VEGETABLE", points);
+        for (Map.Entry<String, Integer> entry : myStructure.getvisibleSymbols().entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            if(key != "NULL")
+                addPoints(key, value);
+        }
 
-        points = Integer.parseInt(myStructure.getVisibleResources().substring(21, 22));
-        addPoints("ANIMAL", points);
-
-        points = Integer.parseInt(myStructure.getVisibleResources().substring(31, 32));
-        addPoints("INSECT", points);
-
-        points = Integer.parseInt(myStructure.getVisibleResources().substring(41, 42));
-        addPoints("SHROOM", points);
-
-        points = Integer.parseInt(myStructure.getVisibleObjects().substring(9, 10));
-        addPoints("FEATHER", points);
-
-        points = Integer.parseInt(myStructure.getVisibleObjects().substring(16, 17));
-        addPoints("INK", points);
-
-        points = Integer.parseInt(myStructure.getVisibleObjects().substring(26, 27));
-        addPoints("SCROLL", points);
-
-        // TO DO: Capisci se quando la funzione viene creata una seconda volta le carte
-        // precedenti vengono eliminate?
+        initialCardSide = myStructure.getPlacedCards().get(0).getValue();
 
         pawnImage = symbolPath("BLACK");
         ImageView imageView1 = new ImageView(pawnImage);
@@ -849,10 +897,11 @@ public class Game implements Initializable {
                         }
 
                         try {
-                            virtualClient.sendCommand(new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp));
+                            currentCommand = new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
 
+                            virtualClient.sendCommand(currentCommand);
 
-                            checkErrorOrElse(()->{
+                            /*checkErrorOrElse(()->{
                                 currentSelectedImage = null;
                                 isHandCardSelected = false;
 
@@ -863,11 +912,10 @@ public class Game implements Initializable {
                                 cardDrawn = false;
 
                             },()->{
-
                                 handCard1.setOpacity(1);
                                 handCard2.setOpacity(1);
                                 handCard3.setOpacity(1);
-                            });
+                            });*/
 
 
 
@@ -993,17 +1041,53 @@ public class Game implements Initializable {
 
     public void updateHand(List<Hand> hands) {
 
-        System.out.print("\n (Hand updated) \n");
+
+        if (currentCommand != null && currentCommand instanceof PlaceCommand)
+        {
+
+            Platform.runLater(()->{
+                currentSelectedImage.setVisible(false);
+
+                isCardPlaced = true;
+                cardDrawn = false;
+
+                handCard1.setOpacity(1);
+                handCard2.setOpacity(1);
+                handCard3.setOpacity(1);
+            });
 
 
+        }
+        else
+        if (currentCommand != null && currentCommand instanceof DrawCommand)
+        {
+
+            Platform.runLater(()->{
+
+
+                cardDrawn = true;
+                isCardPlaced = false;
+                currentSelected = null;
+
+                currentSelectedImage.setImage(currentImageNew);
+                currentSelectedImage.setVisible(true);
+
+
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+            });
+
+        }
 
         int index = miniModel.getPlayers().indexOf(myPlayer);
         Hand hand = hands.get(index);
 
-        System.out.print("\nHand dopo update: ");
-        for (Card card : hand.getCardsHand())
-            System.out.print(card.toString().substring(6, 9) + "-");
-        System.out.printf("\n Questa è la current selected: " + currentSelected);
 
         String secretObjectiveCard;
         if (hand.getSecretObjective() != null) {
@@ -1016,7 +1100,6 @@ public class Game implements Initializable {
         if (contatoreHandTurn == 1) {
 
             if (isInitialSetupHand) {
-                System.out.printf("Siamo nello stato iniziale di updateHand");
                 String card1;
                 String card2;
                 String card3;
@@ -1044,19 +1127,11 @@ public class Game implements Initializable {
                 isInitialSetupHand = false;
             }
             else {
-                System.out.printf("Siamo nello stato secondario di updateHand");
-
-                System.out.printf("Questa è la current selected: " + currentSelected);
-                System.out.printf("Questa è la current hand card1: " + currentHandCard1);
-
 
 
                 if (currentSelected == currentHandCard1 && currentSelectedDeck!=null) {
-                    System.out.printf("\n Hand" + hand);
-                    System.out.printf("\n Carta non aggiornata: " + currentHandCard1);
                     currentHandCard1 = hand.getCardsHand().getFirst();
-                    System.out.printf("\n Hand" + hand);
-                    System.out.printf("\n Carta aggiornata: " + currentHandCard1);
+
 
                     if (currentSelectedFrontUp) {
                         handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
@@ -1087,24 +1162,20 @@ public class Game implements Initializable {
                     }
 
                 }
-                System.out.println("\nUpdate card1: " + handCard1URL);
-                System.out.println("\nUpdate card2: " + handCard2URL);
-                System.out.println("\nUpdate card3: " + handCard3URL);
+
+
+                if(isCardPlaced){
+                    KeyEvent simulatedEvent1 = new KeyEvent(KeyEvent.KEY_PRESSED, null, null,
+                            KeyCode.F, false, false, false, false);
+                    showBack(simulatedEvent1);
+                }
+
+
+
 
 
             }
-            System.out.printf("\nHand: ");
-            for (Card card : hand.getCardsHand())
-                System.out.printf(card.toString().substring(6, 9) + "-");
 
-            // TO DO: problema quando le hand card sono verso il back e ne prendo un'altra
-            // dal deck.. se faccio B o F non va piu.. questo sotto non ha funzionato per
-            // fixxare
-            // KeyEvent simulatedEvent = new KeyEvent(KeyEvent.KEY_PRESSED, null, null,
-            // KeyCode.F, false, false, false, false);
-            // showBack(simulatedEvent);
-
-            // System.out.print("\nHand updated!");
 
         }
         contatoreHandTurn = 1;
@@ -1112,7 +1183,6 @@ public class Game implements Initializable {
 
     public void updateBoard(Board board) {
 
-        //System.out.print("\n (Board updated) \n");
 
         currentDeckResource1Card = board.getUncoveredCards().get(0);
         currentDeckResource2Card = board.getUncoveredCards().get(1);
@@ -1150,11 +1220,13 @@ public class Game implements Initializable {
         for(var entry : board.getActualScores().entrySet()){
             if(entry.getKey().getNickname().equals(myPlayer.getNickname())){
                 points = entry.getValue();
+                player1Points.setText(myPlayer.getNickname() + ": "  + entry.getValue().toString());
                 addPoint(points, pedina);
             }
 
             if(entry.getKey().getNickname().equals(otherPlayers.get(0).getNickname())){
-                pedina1.setImage(symbolPath(otherPlayers.get(0).getColor().toString()));
+                pedina1.setImage(symbolPath(otherPlayers.getFirst().getColor().toString()));
+                player2Points.setText(otherPlayers.getFirst().getNickname() + ": "  + entry.getValue().toString());
                 if(c==0)
                     boardPane.getChildren().add(pedina1);
                 addPoint(entry.getValue(), pedina1);
@@ -1162,6 +1234,8 @@ public class Game implements Initializable {
 
             else if(otherPlayers.size() == 2 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())){
                 pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
+                player3Points.setText(otherPlayers.get(1).getNickname() + ": "  + entry.getValue().toString());
+                player3Points.setVisible(true);
                 if(c==0)
                     boardPane.getChildren().add(pedina2);
                 addPoint(entry.getValue(), pedina2);
@@ -1171,6 +1245,8 @@ public class Game implements Initializable {
             else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())) {
                 pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
                 pedina3.setImage(symbolPath(otherPlayers.get(2).getColor().toString()));
+                player3Points.setText(otherPlayers.get(1).getNickname() + ": "  + entry.getValue().toString());
+                player3Points.setVisible(true);
                 if(c==0){
                     boardPane.getChildren().add(pedina3);
                     boardPane.getChildren().add(pedina2);
@@ -1180,6 +1256,8 @@ public class Game implements Initializable {
             }
 
             else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(2).getNickname())) {
+                player4Points.setText(otherPlayers.get(2).getNickname() + ": "  + entry.getValue().toString());
+                player4Points.setVisible(true);
                 addPoint(entry.getValue(), pedina3);
             }
 
@@ -1192,6 +1270,7 @@ public class Game implements Initializable {
     }
 
     public void addPoint(int points, ImageView posto){
+
         switch (points) {
             case 0:
                 posto.setLayoutX(399);
@@ -1345,6 +1424,9 @@ public class Game implements Initializable {
                 break;
         }
 
+
+
+
     }
 
     public void setDimension(ImageView posto) {
@@ -1354,21 +1436,47 @@ public class Game implements Initializable {
 
     public void updateDeck(Deck deck) {
 
-        //System.out.print("\n (Deck updated) \n");
-
         Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
         Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
-        currentDeckGoldCard = deck.getGoldDeck().get(deck.getGoldDeck().size() - 1);
+        currentDeckGoldCard = deck.getGoldDeck().peek();
         String goldDeckCardOne = currentDeckGoldCard.toString().substring(6, 9);
         goldDeckCard.setImage(pathBack(goldDeckCardOne));
 
-        currentDeckResourceCard = deck.getResourceDeck().get(deck.getResourceDeck().size() - 3);
+        currentDeckResourceCard = deck.getResourceDeck().peek();
         String resourceDeckCardOne = currentDeckResourceCard.toString().substring(6, 9);
         resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
     }
 
     public void updateError(String error) {
+
+        if (currentCommand != null && currentCommand instanceof PlaceCommand)
+        {
+            Platform.runLater(()->{
+                currentSelectedImage = null;
+                isHandCardSelected = false;
+
+                handCard1.setOpacity(1);
+                handCard2.setOpacity(1);
+                handCard3.setOpacity(1);
+            });
+        }
+
+        if (currentCommand != null && currentCommand instanceof DrawCommand)
+        {
+            Platform.runLater(()->{
+
+                currentSelectedDeck = null;
+                goldDeckCard.setOpacity(1);
+                goldCard1.setOpacity(1);
+                goldCard2.setOpacity(1);
+                resourceDeckCard.setOpacity(1);
+                resourceCard1.setOpacity(1);
+                resourceCard2.setOpacity(1);
+
+            });
+        }
+
         errore = true;
         showAlert(error);
     }
@@ -1427,9 +1535,6 @@ public class Game implements Initializable {
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card3 + "b.jpg";
 
-            System.out.println("\nFront1: " + handCard1URL);
-            System.out.println("\nFront2: " + handCard2URL);
-            System.out.println("\nFront3: " + handCard3URL);
 
         } else if (event.getCode() == KeyCode.F && fPressed == 0) {
 
@@ -1452,18 +1557,15 @@ public class Game implements Initializable {
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "b.jpg";
 
-            System.out.println("\nBack: " + handCard1URL);
-            System.out.println("\nBack: " + handCard2URL);
-            System.out.println("\nBack: " + handCard3URL);
         }
     }
 
-    private void checkErrorOrElse(Runnable onError, Runnable success, Runnable finallyCallback)
+    /*private void checkErrorOrElse(Runnable onError, Runnable success, Runnable finallyCallback)
     {
         Thread checker = new Thread(()->{
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -1482,7 +1584,7 @@ public class Game implements Initializable {
 
         checker.start();
 
-    }
+    }*/
 
     public void setInitialCard(InitialCard initialCard1) {
         int x, y;
@@ -1490,8 +1592,13 @@ public class Game implements Initializable {
         int height = 30;
         int position = 0; // 0=up left, 1=up right, 2=bottom left, 3=bottom right
         this.initialCardCard = initialCard1;
+        String imagePath;
 
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + initialCard1.getIdCard() + "f.jpg";
+        if(initialCardSide)
+            imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + initialCard1.getIdCard() + "f.jpg";
+        else
+            imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + initialCard1.getIdCard() + "b.jpg";
+
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         Image initialCardImage = new Image(imageStream);
@@ -1523,10 +1630,11 @@ public class Game implements Initializable {
 
 
                 try {
-                    virtualClient.sendCommand(new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, initialCard1, currentSelected, currentAngle, currentSelectedFrontUp));
 
+                    currentCommand = new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
+                    virtualClient.sendCommand(currentCommand);
 
-                    checkErrorOrElse(()->{
+                    /*checkErrorOrElse(()->{
                         Platform.runLater(()->{
                             currentSelectedImage = null;
                             isHandCardSelected = false;
@@ -1540,15 +1648,11 @@ public class Game implements Initializable {
                         handCard1.setOpacity(1);
                         handCard2.setOpacity(1);
                         handCard3.setOpacity(1);
-                    });
+                    }); */
 
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
-
-
-
-
             }
 
         });
@@ -1691,9 +1795,6 @@ public class Game implements Initializable {
         }
     }
 
-    public void setConnectionType(String tipoDiConnessione) {
-        connectionType.setText(tipoDiConnessione);
-    }
 
     public Image pathFront(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
@@ -1740,6 +1841,16 @@ public class Game implements Initializable {
         pedina1 = new ImageView();
         pedina2 = new ImageView();
         pedina3 = new ImageView();
+
+        nickname1Visibility.setOpacity(0);
+        nickname2Visibility.setOpacity(1);
+        nickname3Visibility.setOpacity(1);
+        nickname4Visibility.setOpacity(1);
+
+        myStructure.setUnderline(true);
+        nickname2.setUnderline(false);
+        nickname3.setUnderline(false);
+        nickname4.setUnderline(false);
 
         ChooseSender.setValue("All");
         boardPane.getChildren().add(pedina);

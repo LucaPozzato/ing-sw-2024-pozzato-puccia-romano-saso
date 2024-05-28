@@ -122,8 +122,6 @@
                         <Insets left="20.0" right="40.0" />
                      </HBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connection type:" />
-                  <Text fx:id="connectionType" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;type&quot;" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -218,12 +216,29 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
                <children>
+                  <Text fx:id="myStructure" strokeType="OUTSIDE" strokeWidth="0.0" text="My structure">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fx:id="nickname1Visibility" fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname1VisibilityFunct" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/visibility.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="118.0">
+               <children>
                   <Text fx:id="nickname2" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname2">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Text>
-                  <ImageView fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname2VisibilityFunct" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="nickname2Visibility" fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname2VisibilityFunct" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../SymbolsPng/visibility.png" />
                      </image>
@@ -268,18 +283,6 @@
                </padding>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="264.0" prefWidth="109.0">
-               <children>
-                  <Text fx:id="nickname41" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname4" visible="false">
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <ImageView fx:id="nickname4Visibility1" fitHeight="24.0" fitWidth="124.0" onMouseClicked="#nickname4VisibilityFunct" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../../SymbolsPng/visibility.png" />
-                     </image>
-                  </ImageView>
-               </children>
                <padding>
                   <Insets left="20.0" />
                </padding>
@@ -371,6 +374,11 @@
                            </image>
                         </ImageView>
                         <Button layoutX="19.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="goBack" />
+                        <Text layoutX="59.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Points:" />
+                        <Text fx:id="player1Points" layoutX="59.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player1" />
+                        <Text fx:id="player2Points" layoutX="59.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player2" />
+                        <Text fx:id="player3Points" layoutX="59.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player3" visible="false" />
+                        <Text fx:id="player4Points" layoutX="59.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player4" visible="false" />
                      </children>
                   </Pane>
                   <ScrollPane fx:id="scrollPaneOthers" prefHeight="483.0" prefWidth="937.0" visible="false">

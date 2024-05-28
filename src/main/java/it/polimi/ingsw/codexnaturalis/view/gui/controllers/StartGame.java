@@ -19,7 +19,14 @@ import javafx.scene.image.ImageView;
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+/**
+ * La classe "StartGame" è un controller utilizzato per creare le partite.
+ * I
+ * È possibile includere dettagli aggiuntivi sulla classe.
+ */
 
 public class StartGame implements Initializable{
 
@@ -57,13 +64,12 @@ public class StartGame implements Initializable{
     @FXML
     private ImageView yellow;
 
-    @FXML
-    ToggleGroup toggleGroup = new ToggleGroup();
+
 
     Color color;
     MiniModel miniModel;
     VirtualClient virtualClient;
-    Game game;
+    Game game; //DA LEVARE
 
 
     @FXML
@@ -78,27 +84,33 @@ public class StartGame implements Initializable{
         this.game = game;
     }
 
+
     public void setUp(ViewFactory viewFactory){
         this.viewFactory = viewFactory;
     }
 
     @FXML
     void CreateGameFunct(MouseEvent event) throws RemoteException {
-        System.out.println("FUnziona: " + viewFactory.getVirtualClient().getClientId());
-        System.out.printf("\n");
-        String clientId = viewFactory.getVirtualClient().getClientId();
-        viewFactory.getVirtualClient().sendCommand(new CreateGameCommand(clientId, Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color,Integer.parseInt(ChoosePlayers.getValue()) ));
-        Platform.runLater(()-> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
-        viewFactory.setNickname(EnterNickname.getText());
-        viewFactory.closeStage(stage);
-        //viewFactory.showGame();
+        if(EnterNickname.getText().isEmpty() || EnterPassword.getText().isEmpty() || EnterGameID.getText().isEmpty() || ChoosePlayers.getValue().isEmpty() || color == null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("What's happening?");
+            alert.setContentText("Fields cannot be null");
+            Optional<ButtonType> result = alert.showAndWait();
+        }
+        else {
+            String clientId = viewFactory.getVirtualClient().getClientId();
+            viewFactory.getVirtualClient().sendCommand(new CreateGameCommand(clientId, Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color,Integer.parseInt(ChoosePlayers.getValue()) ));
+            Platform.runLater(()-> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
+            viewFactory.setNickname(EnterNickname.getText());
+            viewFactory.closeStage(stage);
+        }
 
     }
 
@@ -106,14 +118,7 @@ public class StartGame implements Initializable{
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
         viewFactory.closeStage(stage);
-        viewFactory.showGame(miniModel, virtualClient, game);
-        Platform.runLater(()->{
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        viewFactory.showInitialStage();
     }
 
     @FXML
@@ -123,7 +128,6 @@ public class StartGame implements Initializable{
         red.setOpacity(0.3);
         yellow.setOpacity(0.3);
         green.setOpacity(0.3);
-        System.out.println("pedina Blu" + "\n");
     }
 
     @FXML
@@ -133,8 +137,6 @@ public class StartGame implements Initializable{
         red.setOpacity(0.3);
         yellow.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println("pedinaVerde" + "\n");
-
     }
 
     @FXML
@@ -144,7 +146,6 @@ public class StartGame implements Initializable{
         green.setOpacity(0.3);
         yellow.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println("pedinaRossa" + "\n");
     }
 
     @FXML
@@ -154,13 +155,10 @@ public class StartGame implements Initializable{
         red.setOpacity(0.3);
         green.setOpacity(0.3);
         blue.setOpacity(0.3);
-        System.out.println("pedinaGialla" + "\n");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
         ChoosePlayers.setValue("2");
         ChoosePlayers.getItems().addAll(playersNum);
 

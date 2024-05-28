@@ -19,7 +19,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-public class ChooseStage implements Initializable {
+public class ChooseStage  {
 
     @FXML
     private ImageView initialCardBack;
@@ -81,16 +81,14 @@ public class ChooseStage implements Initializable {
     @FXML
     void objectiveCard2Clicked(MouseEvent event) {
 
-        objectiveCard1.setOpacity(1);
-        objectiveCard2.setOpacity(.5);
+        objectiveCard1.setOpacity(.5);
+        objectiveCard2.setOpacity(1);
         objectiveCard = (ObjectiveCard) viewFactory.getMinimodel().getPlayerHands().get(index).getChooseBetweenObj().get(1);
     }
 
     @FXML
     void play(MouseEvent event) throws RemoteException {
         viewFactory.getVirtualClient().sendCommand(new ChooseCommand(viewFactory.getVirtualClient().getClientId(), viewFactory.getMinimodel().getGameId(), player, side, objectiveCard ));
-        Stage stage = (Stage) initialCardBack.getScene().getWindow();
-        //stage.hide();
     }
 
     public void inizializza(){
@@ -138,9 +136,4 @@ public class ChooseStage implements Initializable {
         return new Image(imageStream);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-    }
 }
