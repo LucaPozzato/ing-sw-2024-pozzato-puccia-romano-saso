@@ -44,6 +44,7 @@ public class Game implements Serializable {
     private Map<Player, Boolean> connected;
     private Structure backUpStructure;
     private Hand backUpHand;
+    private int backUpPoints;
     private boolean skip;
     public final Object controllerLock;
 
@@ -59,6 +60,7 @@ public class Game implements Serializable {
         this.connected = new HashMap<>();
         this.backUpStructure = null;
         this.backUpHand = null;
+        this.backUpPoints = 0;
         this.skip = false;
         this.controllerLock = new Object();
     }
@@ -156,6 +158,10 @@ public class Game implements Serializable {
         return this.backUpHand;
     }
 
+    public int getBackUpPoints() {
+        return this.backUpPoints;
+    }
+
     public boolean getSkip() {
         return this.skip;
     }
@@ -224,6 +230,11 @@ public class Game implements Serializable {
         this.backUpHand = backUpHand;
     }
 
+    public void setBackUpPoints(int points) {
+        System.out.println("setting backup points");
+        this.backUpPoints = points;
+    }
+
     public void setSkip(boolean skip) {
         this.skip = skip;
     }
@@ -290,5 +301,10 @@ public class Game implements Serializable {
         playerStructure.set(players.indexOf(currentPlayer), backUpStructure);
         System.out.println("restored " + playerStructure.get(players.indexOf(currentPlayer)));
         playerHand.set(players.indexOf(currentPlayer), backUpHand);
+        try {
+            this.board.updateActualScore(currentPlayer, -backUpPoints);
+        } catch (IllegalCommandException e) {
+            e.printStackTrace();
+        }
     }
 }

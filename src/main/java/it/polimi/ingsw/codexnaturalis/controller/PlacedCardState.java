@@ -202,6 +202,7 @@ public class PlacedCardState extends ControllerState {
     }
 
     private void updateActualPoints(int points) throws IllegalCommandException {
+        super.game.setBackUpPoints(points);
         super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
     }
 
