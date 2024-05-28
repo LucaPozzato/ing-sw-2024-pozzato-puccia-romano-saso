@@ -22,6 +22,9 @@ public class ServerMain {
             System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
             System.setProperty("java.rmi.server.port", Integer.toString(DefaultValue.port_RMI));
             System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2500");
+            System.setProperty("sun.rmi.transport.tcp.readTimeout", "2500");
+            System.setProperty("sun.rmi.transport.connectionTimeout", "2500");
+            System.setProperty("sun.rmi.transport.tcp.handshakeTimeout", "2500");
 
             RmiServer rmiServer = new RmiServer();
             VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(rmiServer, 0);

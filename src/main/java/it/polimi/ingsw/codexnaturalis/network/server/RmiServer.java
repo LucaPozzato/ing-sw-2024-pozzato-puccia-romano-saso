@@ -1,6 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.network.server;
 
 import java.rmi.ConnectException;
+import java.rmi.ConnectIOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -279,7 +280,7 @@ public class RmiServer implements VirtualServer {
                 try {
                     client.ping();
                     System.out.println("pinging clienttt ");
-                } catch (ConnectException e) {
+                } catch (ConnectException | ConnectIOException e) {
                     System.out.println("client disconnected");
 
                     for (var gameId : players.keySet()) {
