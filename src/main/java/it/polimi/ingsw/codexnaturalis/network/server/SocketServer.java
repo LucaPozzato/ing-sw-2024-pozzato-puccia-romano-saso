@@ -10,12 +10,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.network.events.InLobbyEvent;
@@ -28,6 +31,7 @@ public class SocketServer implements VirtualServer, Runnable {
     private final Map<Integer, List<VirtualClient>> players;
     private final Map<VirtualClient, String> clientIds;
     private final List<VirtualClient> clients;
+    private final Map<String, Timer> timers;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
     private RmiServer rmiServer;
@@ -35,6 +39,7 @@ public class SocketServer implements VirtualServer, Runnable {
     public SocketServer() throws IOException {
         this.clients = new ArrayList<>();
         this.clientIds = new HashMap<>();
+        this.timers = new HashMap<>();
         this.commandEntryQueue = new LinkedList<Command>();
         this.eventExitQueue = new LinkedList<Event>();
         this.players = new HashMap<>();
@@ -114,7 +119,11 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                 }
 
-                if (games.containsKey(gameId))
+                if (command instanceof Ping) {
+                    PingTask timerTask = new PingTask(command.getClientId());
+                    timers.get(command.getClientId()).cancel();
+                    timers.get(command.getClientId()).schedule(timerTask, 6000);
+                } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
                     }
@@ -229,28 +238,28 @@ public class SocketServer implements VirtualServer, Runnable {
         }
     }
 
-    public synchronized void disconnectSocket(SocketSkeleton client) {
-        boolean exit;
-        Integer gId = null;
+    // public synchronized void disconnectSocket(SocketSkeleton client) {
+    // boolean exit;
+    // Integer gId = null;
 
-        for (var gameId : players.keySet()) {
-            exit = false;
-            for (var client1 : players.get(gameId)) {
-                if (client.equals(client1)) {
+    // for (var gameId : players.keySet()) {
+    // exit = false;
+    // for (var client1 : players.get(gameId)) {
+    // if (client.equals(client1)) {
 
-                    players.get(gameId).remove(client);
-                    gId = gameId;
-                    exit = true;
-                    break;
-                }
-            }
-            if (exit)
-                break;
-        }
-        clients.remove(client);
-        clientIds.remove(client);
-        games.get(gId).getState().disconnect(client.getClientId());
-    }
+    // players.get(gameId).remove(client);
+    // gId = gameId;
+    // exit = true;
+    // break;
+    // }
+    // }
+    // if (exit)
+    // break;
+    // }
+    // clients.remove(client);
+    // clientIds.remove(client);
+    // games.get(gId).getState().disconnect(client.getClientId());
+    // }
 
     /**
      * TODO
@@ -283,9 +292,64 @@ public class SocketServer implements VirtualServer, Runnable {
                 this.clientIds.put(client, client.getClientId());
                 System.out.println("clients: " + clients.size());
                 System.out.println("clients: " + clientIds.size());
+                synchronized (this.timers) {
+                    try {
+                        this.timers.put(client.getClientId(), new Timer());
+                        PingTask timerTask = new PingTask(client.getClientId());
+                        timers.get(client.getClientId()).schedule(timerTask, 6000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class PingTask extends TimerTask {
+        private final String clientId;
+
+        public PingTask(String clientId) {
+            this.clientId = clientId;
+        }
+
+        @Override
+        public void run() {
+            VirtualClient client = null;
+            boolean exit = false;
+            Integer gId = null;
+
+            // troviamo il client
+            for (var c : clientIds.keySet()) {
+                if (clientIds.get(c).equals(clientId)) {
+                    client = c;
+                    break;
+                }
+            }
+
+            // vediamo se è in partita e in caso lo rimuovimao
+            for (
+
+            var gameId : players.keySet()) {
+                exit = false;
+                for (var client1 : players.get(gameId))
+                    if (client.equals(client1)) {
+
+                        players.get(gameId).remove(client);
+                        gId = gameId;
+                        exit = true;
+                        break;
+                    }
+
+                if (exit)
+                    break;
+            }
+
+            // rimuoviamo dalle liste e chiamiamo
+            clients.remove(client);
+            clientIds.remove(client);
+            games.get(gId).getState().disconnect(clientId);
         }
     }
 }

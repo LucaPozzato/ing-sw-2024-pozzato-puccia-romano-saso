@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
@@ -68,6 +69,7 @@ public class SocketClient implements VirtualClient, Runnable {
 
             processEventThread();
             processCommandThread();
+            pingThread();
 
             if (isCli)
                 runCli();
@@ -239,9 +241,20 @@ public class SocketClient implements VirtualClient, Runnable {
         return this.clientId;
     }
 
+    public void pingThread() {
+        new Thread(this::ping).start();
+    }
+
     @Override
-    public void ping() throws RemoteException {
-        // do nothing
+    public void ping() {
+        while (true) {
+            try {
+                sendCommand(new Ping(clientId));
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

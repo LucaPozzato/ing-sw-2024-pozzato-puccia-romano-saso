@@ -17,10 +17,6 @@ import javafx.application.Platform;
 
 public class ClientMain {
     public static void main(String[] args) {
-
-        Platform.startup(() -> {
-        });
-
         System.out.println("\033[2J\033[1;1H");
         String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
 
@@ -84,6 +80,13 @@ public class ClientMain {
     }
 
     private static Boolean startClient(boolean isCli, boolean isRmi) {
+        if (isCli) {
+            System.out.println("Starting CLI client...");
+        } else {
+            System.out.println("Starting GUI client...");
+            Platform.startup(() -> {
+            });
+        }
         if (isRmi) {
             return startRmiClient(isCli);
         } else {

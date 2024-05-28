@@ -9,6 +9,7 @@ import java.util.UUID;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
@@ -55,6 +56,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         this.server.connect(this);
         processEventThread();
         processCommandThread();
+        pingThread();
 
         if (isCli)
             runCli();
@@ -179,8 +181,19 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         view.run();
     }
 
-    public void ping() throws RemoteException {
-        // do nothing
+    public void pingThread() {
+        new Thread(this::ping).start();
+    }
+
+    public void ping() {
+        while (true) {
+            try {
+                sendCommand(new Ping(clientId));
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -203,6 +216,5 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     public String getClientId() {
         return this.clientId;
     }
-
 
 }
