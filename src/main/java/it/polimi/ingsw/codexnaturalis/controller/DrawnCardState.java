@@ -222,7 +222,7 @@ public class DrawnCardState extends ControllerState {
                         }
                         if (tempPlayer != null) {
                             event1 = new ErrorEvent(null, game.getGameId(),
-                                    tempPlayer.getNickname() + " has disconnected, skipping his turn");
+                                    tempPlayer.getNickname() + " has rejoined");
                             super.rmiServer.sendEvent(event1);
                             try {
                                 super.socketServer.sendEvent(event1);
@@ -313,7 +313,7 @@ public class DrawnCardState extends ControllerState {
             }
             if (tempPlayer != null) {
                 event = new ErrorEvent(null, game.getGameId(),
-                        tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                        tempPlayer.getNickname() + " has disconnected");
                 super.rmiServer.sendEvent(event);
                 try {
                     super.socketServer.sendEvent(event);
@@ -329,6 +329,8 @@ public class DrawnCardState extends ControllerState {
                 System.out.println("restoring the structure and hand pre disconnection");
                 super.game.revert();
             }
+
+            Player oldCurrentPlayer = game.getCurrentPlayer();
 
             boolean matchEnded = nextTurn();
 
@@ -353,6 +355,15 @@ public class DrawnCardState extends ControllerState {
                 e.printStackTrace();
             }
 
+            event = new ErrorEvent(null, game.getGameId(),
+                    oldCurrentPlayer.getNickname() + " has disconnected");
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (matchEnded)
                 super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
             else
@@ -366,6 +377,8 @@ public class DrawnCardState extends ControllerState {
             System.out.println("skipping the turn");
             game.setSkip(false);
             System.out.println(game.getSkip());
+
+            Player oldCurrentPlayer = game.getCurrentPlayer();
 
             boolean matchEnded = nextTurn();
 
@@ -381,6 +394,16 @@ public class DrawnCardState extends ControllerState {
 
             event = new DrawEvent(game.getGameId(), "Place", game.getHands(), game.getCurrentPlayer(), game.getDeck(),
                     game.getBoard(), game.getTurnCounter(), game.isLastTurn());
+
+            super.rmiServer.sendEvent(event);
+            try {
+                super.socketServer.sendEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            event = new ErrorEvent(null, game.getGameId(),
+                    oldCurrentPlayer.getNickname() + " has disconnected, turn skipped");
 
             super.rmiServer.sendEvent(event);
             try {

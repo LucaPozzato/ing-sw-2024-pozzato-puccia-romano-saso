@@ -230,7 +230,7 @@ public class PlacedCardState extends ControllerState {
                         }
                         if (tempPlayer != null) {
                             event1 = new ErrorEvent(null, game.getGameId(),
-                                    tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                                    tempPlayer.getNickname() + " has rejoined");
                             super.rmiServer.sendEvent(event1);
                             try {
                                 super.socketServer.sendEvent(event1);
@@ -276,6 +276,7 @@ public class PlacedCardState extends ControllerState {
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
         System.out.println("disconnect being called");
+
         if (game.onePlayerLeft()) {
             Event event = new ErrorEvent(null, game.getGameId(),
                     "You are the only player left, waiting for others to rejoin the game...");
@@ -319,7 +320,7 @@ public class PlacedCardState extends ControllerState {
             }
             if (tempPlayer != null) {
                 event = new ErrorEvent(null, game.getGameId(),
-                        tempPlayer.getNickname() + "has disconnected, skipping his turn");
+                        tempPlayer.getNickname() + " has disconnected"); // generic player has disconnected
                 super.rmiServer.sendEvent(event);
                 try {
                     super.socketServer.sendEvent(event);
@@ -329,7 +330,7 @@ public class PlacedCardState extends ControllerState {
             }
         }
 
-        if (keepOn && player.equals((game.getCurrentPlayer()))) {
+        if (keepOn && player.equals((game.getCurrentPlayer()))) { // currentPlayer has disconnected
             if (placed) { // dovrebbe non entrare mai
                 super.game.revert();
             }

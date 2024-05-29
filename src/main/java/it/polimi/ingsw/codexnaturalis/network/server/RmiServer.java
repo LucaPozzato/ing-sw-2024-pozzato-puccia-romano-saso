@@ -141,12 +141,12 @@ public class RmiServer implements VirtualServer {
                     this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(),
                             "Already created or joined a game"));
                 } else if (command instanceof Ping && timers.containsKey(command.getClientId())) {
-                    System.out.println("rmi server received ping");
+                    // System.out.println("rmi server received ping");
                     timers.get(command.getClientId()).cancel();
-                    System.out.println("rmi server ping timer cancelled");
+                    // System.out.println("rmi server ping timer cancelled");
                     timers.put(command.getClientId(), new Timer());
                     timers.get(command.getClientId()).schedule(new PingTask(command.getClientId()), 6000);
-                    System.out.println("rmi server ping timer scheduled");
+                    // System.out.println("rmi server ping timer scheduled");
                 } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());

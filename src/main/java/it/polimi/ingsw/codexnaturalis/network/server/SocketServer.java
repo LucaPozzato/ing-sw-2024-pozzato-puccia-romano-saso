@@ -130,12 +130,12 @@ public class SocketServer implements VirtualServer, Runnable {
                         clientIds.put(client, command.getClientId());
 
                     if (timers.keySet().contains(client)) {
-                        System.out.println("socket server received ping");
+                        // System.out.println("socket server received ping");
                         timers.get(client).cancel();
-                        System.out.println("socket server timer cancelled");
+                        // System.out.println("socket server timer cancelled");
                         timers.put(client, new Timer());
                         timers.get(client).schedule(new PingTask(client), 6000);
-                        System.out.println("socket server timer scheduled");
+                        // System.out.println("socket server timer scheduled");
                     } else
                         try {
                             this.timers.put(client, new Timer());

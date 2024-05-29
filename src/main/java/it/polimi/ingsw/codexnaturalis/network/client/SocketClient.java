@@ -13,7 +13,9 @@ import java.util.UUID;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
+import it.polimi.ingsw.codexnaturalis.network.events.EndGameEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
+import it.polimi.ingsw.codexnaturalis.network.events.ForcedEndEvent;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import it.polimi.ingsw.codexnaturalis.view.gui.GuiApp;
 import it.polimi.ingsw.codexnaturalis.view.tui.Tui;
@@ -81,10 +83,12 @@ public class SocketClient implements VirtualClient, Runnable {
                 try {
                     Event event = (Event) input.readObject();
                     receiveEvent(event);
+
                 } catch (IOException e) {
                     System.err.println("Server disconnected");
                     System.exit(0);
                 }
+
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error while running socket client: " + e.getMessage());
@@ -148,6 +152,11 @@ public class SocketClient implements VirtualClient, Runnable {
                 }
                 synchronized (this.miniModel) {
                     event.doJob(miniModel);
+                }
+
+                if (event instanceof ForcedEndEvent || event instanceof EndGameEvent) {
+                    Thread.sleep(5000);
+                    System.exit(0);
                 }
 
             } catch (Exception e) {
