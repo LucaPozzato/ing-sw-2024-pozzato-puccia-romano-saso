@@ -17,19 +17,14 @@ public class ServerMain {
 
     public static void main(String[] args) throws Exception {
         System.out.println("\033[2J\033[1;1H");
+        System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
+        System.setProperty("java.rmi.server.port", Integer.toString(DefaultValue.port_RMI));
 
         try {
-            System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
-            System.setProperty("java.rmi.server.port", Integer.toString(DefaultValue.port_RMI));
-            System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2500");
-            System.setProperty("sun.rmi.transport.tcp.readTimeout", "2500");
-            System.setProperty("sun.rmi.transport.connectionTimeout", "2500");
-            System.setProperty("sun.rmi.transport.tcp.handshakeTimeout", "2500");
-
             RmiServer rmiServer = new RmiServer();
             VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(rmiServer, 0);
             Registry registry = LocateRegistry.createRegistry(DefaultValue.port_RMI);
-            registry.rebind(DefaultValue.servername_RMI, stub);
+            registry.bind(DefaultValue.servername_RMI, stub);
 
             SocketServer socketServer = new SocketServer();
             new Thread(socketServer).start();

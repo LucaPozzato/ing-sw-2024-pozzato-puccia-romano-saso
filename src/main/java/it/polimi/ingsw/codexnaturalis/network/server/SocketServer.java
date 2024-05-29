@@ -31,7 +31,7 @@ public class SocketServer implements VirtualServer, Runnable {
     private final Map<Integer, List<VirtualClient>> players;
     private final Map<VirtualClient, String> clientIds;
     private final List<VirtualClient> clients;
-    private final Map<String, Timer> timers;
+    private final Map<VirtualClient, Timer> timers;
     private final Queue<Command> commandEntryQueue;
     private final Queue<Event> eventExitQueue;
     private RmiServer rmiServer;
@@ -120,9 +120,23 @@ public class SocketServer implements VirtualServer, Runnable {
                 }
 
                 if (command instanceof Ping) {
-                    PingTask timerTask = new PingTask(command.getClientId());
-                    timers.get(command.getClientId()).cancel();
-                    timers.get(command.getClientId()).schedule(timerTask, 6000);
+                    VirtualClient client = null;
+                    for (var c : clients) {
+                        if (c.getClientId().equals(command.getClientId())) {
+                            client = c;
+                            break;
+                        }
+                    }
+
+                    if (timers.keySet().contains(client)) {
+                        System.out.println("socket server received ping");
+                        timers.get(client).cancel();
+                        System.out.println("socket server timer cancelled");
+                        timers.put(client, new Timer());
+                        timers.get(client).schedule(new PingTask(client), 6000);
+                        System.out.println("socket server timer scheduled");
+                    }
+
                 } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
@@ -294,9 +308,8 @@ public class SocketServer implements VirtualServer, Runnable {
                 System.out.println("clients: " + clientIds.size());
                 synchronized (this.timers) {
                     try {
-                        this.timers.put(client.getClientId(), new Timer());
-                        PingTask timerTask = new PingTask(client.getClientId());
-                        timers.get(client.getClientId()).schedule(timerTask, 6000);
+                        this.timers.put(client, new Timer());
+                        timers.get(client).schedule(new PingTask(client), 6000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -308,32 +321,21 @@ public class SocketServer implements VirtualServer, Runnable {
     }
 
     class PingTask extends TimerTask {
-        private final String clientId;
+        private final VirtualClient client;
 
-        public PingTask(String clientId) {
-            this.clientId = clientId;
+        public PingTask(VirtualClient client) {
+            this.client = client;
         }
 
         @Override
         public void run() {
-            VirtualClient client = null;
-            boolean exit = false;
+
+            boolean exit;
             Integer gId = null;
 
-            // troviamo il client
-            for (var c : clientIds.keySet()) {
-                if (clientIds.get(c).equals(clientId)) {
-                    client = c;
-                    break;
-                }
-            }
-
-            // vediamo se è in partita e in caso lo rimuovimao
-            for (
-
-            var gameId : players.keySet()) {
+            for (var gameId : players.keySet()) {
                 exit = false;
-                for (var client1 : players.get(gameId))
+                for (var client1 : players.get(gameId)) {
                     if (client.equals(client1)) {
 
                         players.get(gameId).remove(client);
@@ -341,15 +343,20 @@ public class SocketServer implements VirtualServer, Runnable {
                         exit = true;
                         break;
                     }
-
+                }
                 if (exit)
                     break;
             }
 
-            // rimuoviamo dalle liste e chiamiamo
+            if (gId != null && games.containsKey(gId))
+                try {
+                    games.get(gId).getState().disconnect(client.getClientId());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             clients.remove(client);
             clientIds.remove(client);
-            games.get(gId).getState().disconnect(clientId);
         }
+
     }
 }

@@ -118,11 +118,7 @@ public class RmiServer implements VirtualServer {
                 System.out.println("rmi server received command with gameIdd: " + gameId);
                 System.out.println("rmi server command received: " + command.getClass().getName());
 
-                if (command instanceof Ping) {
-                    PingTask timerTask = new PingTask(command.getClientId());
-                    timers.get(command.getClientId()).cancel();
-                    timers.get(command.getClientId()).schedule(timerTask, 6000);
-                } else if (command instanceof CreateGameCommand) {
+                if (command instanceof CreateGameCommand) {
                     if (!games.containsKey(gameId)) {
                         System.out.println("rmi server creating a new game");
                         games.put(gameId, new Game(gameId, this, socketServer));
@@ -137,6 +133,15 @@ public class RmiServer implements VirtualServer {
                         client.receiveEvent(
                                 new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
+                }
+
+                if (command instanceof Ping && timers.containsKey(command.getClientId())) {
+                    System.out.println("rmi server received ping");
+                    timers.get(command.getClientId()).cancel();
+                    System.out.println("rmi server ping timer cancelled");
+                    timers.put(command.getClientId(), new Timer());
+                    timers.get(command.getClientId()).schedule(new PingTask(command.getClientId()), 6000);
+                    System.out.println("rmi server ping timer scheduled");
                 } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
@@ -266,8 +271,7 @@ public class RmiServer implements VirtualServer {
         synchronized (this.timers) {
             try {
                 this.timers.put(client.getClientId(), new Timer());
-                PingTask timerTask = new PingTask(client.getClientId());
-                timers.get(client.getClientId()).schedule(timerTask, 6000);
+                timers.get(client.getClientId()).schedule(new PingTask(client.getClientId()), 6000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -296,19 +300,16 @@ public class RmiServer implements VirtualServer {
             }
 
             // vediamo se è in partita e in caso lo rimuovimao
-            for (
-
-            var gameId : players.keySet()) {
+            for (var gameId : players.keySet()) {
                 exit = false;
                 for (var client1 : players.get(gameId))
+                    // BUG: throws exception
                     if (client.equals(client1)) {
-
                         players.get(gameId).remove(client);
                         gId = gameId;
                         exit = true;
                         break;
                     }
-
                 if (exit)
                     break;
             }
@@ -316,7 +317,8 @@ public class RmiServer implements VirtualServer {
             // rimuoviamo dalle liste e chiamiamo
             clients.remove(client);
             clientIds.remove(client);
-            games.get(gId).getState().disconnect(clientId);
+            if (gId != null && games.containsKey(gId))
+                games.get(gId).getState().disconnect(clientId);
         }
     }
 }

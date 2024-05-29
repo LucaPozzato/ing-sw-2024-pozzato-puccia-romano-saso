@@ -12,6 +12,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.commands.RejoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
 
@@ -61,7 +62,7 @@ public class SocketSkeleton implements VirtualClient, Runnable {
                 if (command != null) {
                     System.out.println("skeleton received command: " + command.getClass().getSimpleName());
                     if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)
-                            || command instanceof RejoinGameCommand) {
+                            || command instanceof RejoinGameCommand || command instanceof Ping) {
                         this.clientId = command.getClientId();
                         System.out.println("skeleton client id: " + this.clientId);
                     }
@@ -69,8 +70,8 @@ public class SocketSkeleton implements VirtualClient, Runnable {
                 }
             }
         } catch (EOFException e) {
-            System.out.println("Client disconnected");
-            ((SocketServer) server).disconnectSocket(this);
+            System.out.println("Client disconnected EOF");
+            // ((SocketServer) server).disconnectSocket(this);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {

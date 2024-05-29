@@ -1,6 +1,8 @@
 package it.polimi.ingsw.codexnaturalis.network.client;
 
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
+import java.rmi.UnmarshalException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -164,6 +166,9 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
                 }
                 this.server.receiveCommand(command);
 
+            } catch (UnmarshalException | ConnectException ex) {
+                System.out.println("Server disconnected");
+                System.exit(0);
             } catch (Exception e) {
                 e.printStackTrace();
             }

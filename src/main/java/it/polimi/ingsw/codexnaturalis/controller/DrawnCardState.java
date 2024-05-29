@@ -265,6 +265,7 @@ public class DrawnCardState extends ControllerState {
 
     @Override
     public synchronized void disconnect(String clientId) {
+        boolean keepOn = true;
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(player, false);
         System.out.println("disconnect being called");
@@ -291,6 +292,7 @@ public class DrawnCardState extends ControllerState {
             }
             System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
             if (game.onePlayerLeft()) {
+                keepOn = false;
                 event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
                 super.rmiServer.sendEvent(event);
                 try {
@@ -321,7 +323,7 @@ public class DrawnCardState extends ControllerState {
             }
         }
 
-        if (player.equals((game.getCurrentPlayer()))) {
+        if (keepOn && player.equals((game.getCurrentPlayer()))) {
             System.out.println("value of drawn = " + drawn);
             if (!drawn) { // dovrebbe entrare sempre
                 System.out.println("restoring the structure and hand pre disconnection");
