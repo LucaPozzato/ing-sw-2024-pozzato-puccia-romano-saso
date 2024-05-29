@@ -331,7 +331,7 @@ public class PlacedCardState extends ControllerState {
         }
 
         if (keepOn && player.equals((game.getCurrentPlayer()))) { // currentPlayer has disconnected
-            if (placed) { // dovrebbe non entrare mai
+            if (placed) { // should never get in
                 super.game.revert();
             }
             game.setSkip(true);
