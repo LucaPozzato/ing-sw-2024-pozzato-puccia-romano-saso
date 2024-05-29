@@ -82,11 +82,10 @@ public class SocketClient implements VirtualClient, Runnable {
                     Event event = (Event) input.readObject();
                     receiveEvent(event);
                 } catch (IOException e) {
-                    System.err.println("Error while reading event from socket: " + e.getMessage());
-                    break;
+                    System.err.println("Server disconnected");
+                    System.exit(0);
                 }
             }
-
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error while running socket client: " + e.getMessage());
         } finally {
@@ -200,17 +199,14 @@ public class SocketClient implements VirtualClient, Runnable {
                     output.writeObject(command);
                     output.flush();
                     output.reset();
+                } catch (SocketException e) {
+                    System.err.println("Server disconnected");
+                    System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                if (e instanceof SocketException) {
-                    System.err.println("Server disconnected");
-                    System.exit(0);
-                    break;
-                } else
-                    e.printStackTrace();
-                break;
+                e.printStackTrace();
             }
         }
     }

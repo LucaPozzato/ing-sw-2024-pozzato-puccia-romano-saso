@@ -18,6 +18,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
@@ -102,31 +103,31 @@ public class SocketServer implements VirtualServer, Runnable {
                 System.out.println("socket server received command with gameIdd: " + gameId);
                 System.out.println("socket server command received: " + command.getClass().getName());
 
+                VirtualClient client = null;
+                for (var c : clients) {
+                    if (c.getClientId().equals(command.getClientId())) {
+                        client = c;
+                        break;
+                    }
+                }
+
                 if (command instanceof CreateGameCommand) {
                     if (!games.containsKey(gameId)) {
                         System.out.println("socket server creating a new game");
                         games.put(gameId, new Game(gameId, rmiServer, this));
                     } else {
-                        VirtualClient client = null;
-                        for (var c : clients) {
-                            if (c.getClientId().equals(command.getClientId())) {
-                                client = c;
-                                break;
-                            }
-                        }
                         client.receiveEvent(
                                 new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
-                if (command instanceof Ping) {
-                    VirtualClient client = null;
-                    for (var c : clients) {
-                        if (c.getClientId().equals(command.getClientId())) {
-                            client = c;
-                            break;
-                        }
-                    }
+                if (command instanceof JoinGameCommand && players.get(command.getGameId()).contains(client)) {
+                    this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(),
+                            "Already created or joined a game"));
+                } else if (command instanceof Ping) {
+
+                    if (!clientIds.containsKey(client))
+                        clientIds.put(client, command.getClientId());
 
                     if (timers.keySet().contains(client)) {
                         System.out.println("socket server received ping");
@@ -135,7 +136,13 @@ public class SocketServer implements VirtualServer, Runnable {
                         timers.put(client, new Timer());
                         timers.get(client).schedule(new PingTask(client), 6000);
                         System.out.println("socket server timer scheduled");
-                    }
+                    } else
+                        try {
+                            this.timers.put(client, new Timer());
+                            timers.get(client).schedule(new PingTask(client), 6000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                 } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
@@ -236,44 +243,10 @@ public class SocketServer implements VirtualServer, Runnable {
 
     }
 
-    // never used
+    // nevers used [yet it could be used to clean the code]
     @Override
     public void connect(VirtualClient client) {
-        System.out.println("socket client connected");
-        synchronized (this.clients) {
-            this.clients.add(client);
-        }
-        synchronized (this.clientIds) {
-            try {
-                this.clientIds.put(client, client.getClientId());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
     }
-
-    // public synchronized void disconnectSocket(SocketSkeleton client) {
-    // boolean exit;
-    // Integer gId = null;
-
-    // for (var gameId : players.keySet()) {
-    // exit = false;
-    // for (var client1 : players.get(gameId)) {
-    // if (client.equals(client1)) {
-
-    // players.get(gameId).remove(client);
-    // gId = gameId;
-    // exit = true;
-    // break;
-    // }
-    // }
-    // if (exit)
-    // break;
-    // }
-    // clients.remove(client);
-    // clientIds.remove(client);
-    // games.get(gId).getState().disconnect(client.getClientId());
-    // }
 
     /**
      * TODO
@@ -303,17 +276,17 @@ public class SocketServer implements VirtualServer, Runnable {
                 client = new SocketSkeleton(this, socket);
                 new Thread(client).start();
                 clients.add(client);
-                this.clientIds.put(client, client.getClientId());
+                // this.clientIds.put(client, client.getClientId());
                 System.out.println("clients: " + clients.size());
-                System.out.println("clients: " + clientIds.size());
-                synchronized (this.timers) {
-                    try {
-                        this.timers.put(client, new Timer());
-                        timers.get(client).schedule(new PingTask(client), 6000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                // System.out.println("clients: " + clientIds.size());
+                // synchronized (this.timers) {
+                // try {
+                // this.timers.put(client, new Timer());
+                // timers.get(client).schedule(new PingTask(client), 6000);
+                // } catch (Exception e) {
+                // e.printStackTrace();
+                // }
+                // }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -15,6 +15,7 @@ import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.VirtualServer;
 import it.polimi.ingsw.codexnaturalis.network.commands.Command;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
 import it.polimi.ingsw.codexnaturalis.network.commands.Ping;
 import it.polimi.ingsw.codexnaturalis.network.events.ErrorEvent;
 import it.polimi.ingsw.codexnaturalis.network.events.Event;
@@ -118,24 +119,28 @@ public class RmiServer implements VirtualServer {
                 System.out.println("rmi server received command with gameIdd: " + gameId);
                 System.out.println("rmi server command received: " + command.getClass().getName());
 
+                VirtualClient client = null;
+                for (var c : clients) {
+                    if (clientIds.get(c).equals(command.getClientId())) {
+                        client = c;
+                        break;
+                    }
+                }
+
                 if (command instanceof CreateGameCommand) {
                     if (!games.containsKey(gameId)) {
                         System.out.println("rmi server creating a new game");
                         games.put(gameId, new Game(gameId, this, socketServer));
                     } else {
-                        VirtualClient client = null;
-                        for (var c : clients) {
-                            if (clientIds.get(c).equals(command.getClientId())) {
-                                client = c;
-                                break;
-                            }
-                        }
                         client.receiveEvent(
                                 new ErrorEvent(command.getClientId(), command.getGameId(), "gameId already taken"));
                     }
                 }
 
-                if (command instanceof Ping && timers.containsKey(command.getClientId())) {
+                if (command instanceof JoinGameCommand && players.get(command.getGameId()).contains(client)) {
+                    this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(),
+                            "Already created or joined a game"));
+                } else if (command instanceof Ping && timers.containsKey(command.getClientId())) {
                     System.out.println("rmi server received ping");
                     timers.get(command.getClientId()).cancel();
                     System.out.println("rmi server ping timer cancelled");

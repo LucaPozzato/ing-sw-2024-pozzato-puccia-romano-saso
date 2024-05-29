@@ -24,7 +24,7 @@ public class ServerMain {
             RmiServer rmiServer = new RmiServer();
             VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(rmiServer, 0);
             Registry registry = LocateRegistry.createRegistry(DefaultValue.port_RMI);
-            registry.bind(DefaultValue.servername_RMI, stub);
+            registry.rebind(DefaultValue.servername_RMI, stub);
 
             SocketServer socketServer = new SocketServer();
             new Thread(socketServer).start();
