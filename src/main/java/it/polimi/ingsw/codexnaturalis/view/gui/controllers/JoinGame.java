@@ -21,48 +21,39 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/**
+ * JoinGame class is a javaFx controller used to manage joinGame stage
+ */
 public class JoinGame implements Initializable {
-
-    ViewFactory viewFactory;
 
     @FXML
     private TextField EnterNickname, EnterPassword, EnterGameID;
 
     @FXML
-    private ImageView blue, green, yellow, red;
-
-    @FXML
-    private Button JoinGame;
+    private ImageView blue, green, yellow, red, passwordVisibility;
 
     @FXML
     private Button goBack;
 
-    @FXML
-    private ImageView passwordVisibility;
-
-    private MiniModel miniModel;
-    private VirtualClient virtualClient;
-    private Game game;
+    private ViewFactory viewFactory;
     private Color color;
+    private int changingText = 0;
 
-    int cambiamentoTestoPassword = 0;
 
-
-    public void setUP(MiniModel miniModel, VirtualClient virtualClient, Game game) {
-        this.miniModel = miniModel;
-        this.virtualClient = virtualClient;
-        this.game = game;
-
-        Set<Color> allColors = EnumSet.allOf(Color.class);
-        Color[] allColorsArray = allColors.toArray(new Color[0]);
-
+    public void setUp(ViewFactory viewFactory){
+        this.viewFactory = viewFactory;
     }
 
+    /**
+     * Used for blur effect on password
+     * @param event
+     */
     @FXML
     void changePasswordText(MouseEvent event) {
-        if (cambiamentoTestoPassword %2 == 0){
+        if (changingText %2 == 0){
             EnterPassword.setEffect(null);
             InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
+            assert imageStream != null;
             Image image = new Image(imageStream);
             passwordVisibility.setImage(image);
         }
@@ -71,18 +62,17 @@ public class JoinGame implements Initializable {
             blur.setRadius(7.5);
             EnterPassword.setEffect(blur);
             InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
+            assert imageStream != null;
             Image image = new Image(imageStream);
             passwordVisibility.setImage(image);
-
         }
-        cambiamentoTestoPassword++;
-
+        changingText++;
     }
 
-    public void setUp(ViewFactory viewFactory){
-        this.viewFactory = viewFactory;
-    }
-
+    /**
+     * Selecting blue color and changing the button visually
+     * @param event
+     */
     @FXML
     void blueSelected(MouseEvent event) {
         color = Color.BLUE;
@@ -92,6 +82,10 @@ public class JoinGame implements Initializable {
         green.setOpacity(0.3);
     }
 
+    /**
+     * Selecting green color and changing the button visually
+     * @param event
+     */
     @FXML
     void greenSelected(MouseEvent event) {
         color = Color.GREEN;
@@ -101,6 +95,10 @@ public class JoinGame implements Initializable {
         blue.setOpacity(0.3);
     }
 
+    /**
+     * Selecting red color and changing the button visually
+     * @param event
+     */
     @FXML
     void redSelected(MouseEvent event) {
         color = Color.RED;
@@ -110,6 +108,10 @@ public class JoinGame implements Initializable {
         blue.setOpacity(0.3);
     }
 
+    /**
+     * Selecting yellow color and changing the button visually
+     * @param event
+     */
     @FXML
     void yellowSelected(MouseEvent event) {
         color = Color.YELLOW;
@@ -119,12 +121,15 @@ public class JoinGame implements Initializable {
         blue.setOpacity(0.3);
     }
 
+    /**
+     * Used to join an existing game using a JoinGameCommand
+     * @param event
+     * @throws RemoteException
+     */
     @FXML
     void JoinGameFunct(MouseEvent event) throws RemoteException {
         if (color != null && EnterGameID.getText() != null && EnterPassword.getText() != null && EnterNickname.getText() != null) {
             viewFactory.getVirtualClient().sendCommand(new JoinGameCommand(viewFactory.getVirtualClient().getClientId(), Integer.parseInt(EnterGameID.getText()), EnterNickname.getText(), EnterPassword.getText(), color));
-            //Stage stage = (Stage) JoinGame.getScene().getWindow();
-            //stage.close();
             viewFactory.setNickname(EnterNickname.getText());
             Platform.runLater(()->{
                 try {
@@ -138,11 +143,13 @@ public class JoinGame implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("What's happening?");
             alert.setContentText("Fields cannot be null");
-            Optional<ButtonType> result = alert.showAndWait();
         }
-
     }
 
+    /**
+     * Used to go back if a player wants to select another option from the initialStage stage
+     * @param event
+     */
     @FXML
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
@@ -150,6 +157,12 @@ public class JoinGame implements Initializable {
         viewFactory.showInitialStage();
     }
 
+    /**
+     * Initialized the controller class
+     * Used to set up the blur effect on password TextField
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         GaussianBlur blur = new GaussianBlur();

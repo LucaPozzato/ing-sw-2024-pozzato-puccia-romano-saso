@@ -21,42 +21,56 @@ import java.rmi.RemoteException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * RejoinGame class is a javaFx controller used to manage rejoinGame stage
+ */
 public class RejoinGame implements Initializable {
 
     @FXML
-    private TextField EnterGameID;
+    private TextField EnterNickname, EnterPassword, EnterGameID;
 
     @FXML
-    private TextField EnterNickname;
-
-    @FXML
-    private TextField EnterPassword;
-
-    @FXML
-    private Button JoinGame;
-
-    @FXML
-    private Button goBack;
-
-    private ViewFactory viewFactory;
-
+    private Button goBack, JoinGame;
+    
     @FXML
     private ImageView passwordVisibility;
 
-    int cambiamentoTestoPassword = 0;
+    private ViewFactory viewFactory;
+    private int changingText = 0;
 
 
     public void setUp(ViewFactory viewFactory) {
         this.viewFactory = viewFactory;
     }
 
+    /**
+     * Used for blur effect on password
+     * @param event
+     */
     @FXML
-    void goBackFunct(MouseEvent event) {
-        Stage stage = (Stage) goBack.getScene().getWindow();
-        stage.close();
-        viewFactory.showInitialStage();
+    void changePasswordText(MouseEvent event) {
+        if (changingText %2 == 0){
+            EnterPassword.setEffect(null);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+        }
+        else{
+            GaussianBlur blur = new GaussianBlur();
+            blur.setRadius(7.5);
+            EnterPassword.setEffect(blur);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+        }
+        changingText++;
     }
 
+    /**
+     * Used to rejoin a game using a RejoinGameCommand
+     * @param event
+     * @throws RemoteException
+     */
     @FXML
     void rejoinGameFunct(MouseEvent event) throws RemoteException {
         if(EnterGameID.getText().isEmpty() || EnterNickname.getText().isEmpty() || EnterPassword.getText().isEmpty()) {
@@ -78,29 +92,25 @@ public class RejoinGame implements Initializable {
             Stage stage = (Stage) JoinGame.getScene().getWindow();
             viewFactory.closeStage(stage);
         }
-
     }
+
+    /**
+     * Used to go back if a player wants to select another option from the initialStage stage
+     * @param event
+     */
     @FXML
-    void changePasswordText(MouseEvent event) {
-        if (cambiamentoTestoPassword %2 == 0){
-            EnterPassword.setEffect(null);
-            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
-            Image image = new Image(imageStream);
-            passwordVisibility.setImage(image);
-        }
-        else{
-            GaussianBlur blur = new GaussianBlur();
-            blur.setRadius(7.5);
-            EnterPassword.setEffect(blur);
-            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
-            Image image = new Image(imageStream);
-            passwordVisibility.setImage(image);
-
-        }
-        cambiamentoTestoPassword++;
-
+    void goBackFunct(MouseEvent event) {
+        Stage stage = (Stage) goBack.getScene().getWindow();
+        stage.close();
+        viewFactory.showInitialStage();
     }
 
+    /**
+     * Initialized the controller class
+     * Used to set up the blur effect on password TextField
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         GaussianBlur blur = new GaussianBlur();

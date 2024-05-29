@@ -17,36 +17,39 @@ public class InitialStage{
     @FXML
     private Button startGame;
 
-    ViewFactory viewFactory;
-    MiniModel miniModel;
-    VirtualClient virtualClient;
-    Game game;
-
-
-    public void setUP(MiniModel miniModel, VirtualClient virtualClient, Game game){
-        this.miniModel = miniModel;
-        this.virtualClient = virtualClient;
-        this.game = game;
-    }
+    private ViewFactory viewFactory;
 
     public void setUp(ViewFactory viewFactory){
         this.viewFactory = viewFactory;
     }
 
+
+    /**
+     * Calls Viewfactory class to open startGame stage and closes initialStage stage
+     * @param event
+     */
     @FXML
     void startGameFunct(MouseEvent event) {
-        Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
+        Stage stage = (Stage) startGame.getScene().getWindow();
         viewFactory.closeStage(stage);
         viewFactory.showStartGame();
     }
+
+    /**
+     * Calls Viewfactory class to open joinGame stage and closes initialStage stage
+     * @param event
+     */
     @FXML
     void joinGameFunct(MouseEvent event) {
-        Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage
+        Stage stage = (Stage) startGame.getScene().getWindow();
         viewFactory.closeStage(stage);
         viewFactory.showJoinGame();
-        //viewFactory.showJoinGame(miniModel, virtualClient, game);
     }
 
+    /**
+     * Calls Viewfactory class to open rejoinGame stage and closes initialStage stage
+     * @param event
+     */
     @FXML
     void rejoinGameFunct(MouseEvent event) {
         Stage stage = (Stage) startGame.getScene().getWindow(); //trick for getting current stage

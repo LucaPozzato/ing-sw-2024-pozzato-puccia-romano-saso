@@ -23,72 +23,114 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * La classe "StartGame" è un controller utilizzato per creare le partite.
- * I
- * È possibile includere dettagli aggiuntivi sulla classe.
+ * StartGame class is a javaFx controller used to manage joinGame stage
  */
-
 public class StartGame implements Initializable{
 
     @FXML
-    private Button goBack;
-    ViewFactory viewFactory;
-
+    private Button goBack, CreateGame;
 
     @FXML
     private ChoiceBox<String> ChoosePlayers;
 
-    private String[] playersNum = {"2", "3", "4"};
+    @FXML
+    private TextField EnterNickname, EnterPassword, EnterGameID;
 
     @FXML
-    private Button CreateGame;
+    private ImageView blue, green, red, yellow, passwordVisibility;
 
-    @FXML
-    private TextField EnterNickname;
-
-    @FXML
-    private TextField EnterPassword;
-
-    @FXML
-    private TextField EnterGameID;
-
-    @FXML
-    private ImageView blue;
-
-    @FXML
-    private ImageView green;
-
-    @FXML
-    private ImageView red;
-
-    @FXML
-    private ImageView yellow;
-
-
-
-    Color color;
-    MiniModel miniModel;
-    VirtualClient virtualClient;
-    Game game; //DA LEVARE
-
-
-    @FXML
-    private ImageView passwordVisibility;
-
-    int cambiamentoTestoPassword = 0;
-
-
-    public void setUP(MiniModel miniModel, VirtualClient virtualClient, Game game) {
-        //this.miniModel = miniModel;
-        //this.virtualClient = virtualClient;
-        this.game = game;
-    }
+    private ViewFactory viewFactory;
+    private Color color;
+    private final String[] playersNum = {"2", "3", "4"};
+    private int changingText = 0;
 
 
     public void setUp(ViewFactory viewFactory){
         this.viewFactory = viewFactory;
     }
 
+    /**
+     * Used for blur effect on password
+     * @param event
+     */
+    @FXML
+    void changePasswordText(MouseEvent event) {
+        if (changingText %2 == 0){
+            EnterPassword.setEffect(null);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
+            assert imageStream != null;
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+        }
+        else{
+            GaussianBlur blur = new GaussianBlur();
+            blur.setRadius(7.5);
+            EnterPassword.setEffect(blur);
+            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
+            assert imageStream != null;
+            Image image = new Image(imageStream);
+            passwordVisibility.setImage(image);
+        }
+        changingText++;
+    }
+
+    /**
+     * Selecting blue color and changing the button visually
+     * @param event
+     */
+    @FXML
+    void blueSelected(MouseEvent event) {
+        color = Color.BLUE;
+        blue.setOpacity(1);
+        red.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        green.setOpacity(0.3);
+    }
+
+    /**
+     * Selecting green color and changing the button visually
+     * @param event
+     */
+    @FXML
+    void greenSelected(MouseEvent event) {
+        color = Color.GREEN;
+        green.setOpacity(1);
+        red.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        blue.setOpacity(0.3);
+    }
+
+    /**
+     * Selecting red color and changing the button visually
+     * @param event
+     */
+    @FXML
+    void redSelected(MouseEvent event) {
+        color = Color.RED;
+        red.setOpacity(1);
+        green.setOpacity(0.3);
+        yellow.setOpacity(0.3);
+        blue.setOpacity(0.3);
+    }
+
+    /**
+     * Selecting yellow color and changing the button visually
+     * @param event
+     */
+    @FXML
+    void yellowSelected(MouseEvent event) {
+        color = Color.YELLOW;
+        yellow.setOpacity(1);
+        red.setOpacity(0.3);
+        green.setOpacity(0.3);
+        blue.setOpacity(0.3);
+    }
+
+    /**
+     * Used to start a game using a CreateGameCommand
+     * @param event
+     * @throws RemoteException
+     */
     @FXML
     void CreateGameFunct(MouseEvent event) throws RemoteException {
         if(EnterNickname.getText().isEmpty() || EnterPassword.getText().isEmpty() || EnterGameID.getText().isEmpty() || ChoosePlayers.getValue().isEmpty() || color == null){
@@ -111,9 +153,12 @@ public class StartGame implements Initializable{
             viewFactory.setNickname(EnterNickname.getText());
             viewFactory.closeStage(stage);
         }
-
     }
 
+    /**
+     * Used to go back if a player wants to select another option from the initialStage stage
+     * @param event
+     */
     @FXML
     void goBackFunct(MouseEvent event) {
         Stage stage = (Stage) goBack.getScene().getWindow(); //trick for getting current stage
@@ -121,42 +166,12 @@ public class StartGame implements Initializable{
         viewFactory.showInitialStage();
     }
 
-    @FXML
-    void blueSelected(MouseEvent event) {
-        color = Color.BLUE;
-        blue.setOpacity(1);
-        red.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        green.setOpacity(0.3);
-    }
-
-    @FXML
-    void greenSelected(MouseEvent event) {
-        color = Color.GREEN;
-        green.setOpacity(1);
-        red.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        blue.setOpacity(0.3);
-    }
-
-    @FXML
-    void redSelected(MouseEvent event) {
-        color = Color.RED;
-        red.setOpacity(1);
-        green.setOpacity(0.3);
-        yellow.setOpacity(0.3);
-        blue.setOpacity(0.3);
-    }
-
-    @FXML
-    void yellowSelected(MouseEvent event) {
-        color = Color.YELLOW;
-        yellow.setOpacity(1);
-        red.setOpacity(0.3);
-        green.setOpacity(0.3);
-        blue.setOpacity(0.3);
-    }
-
+    /**
+     * Initialized the controller class
+     * Used to set up the blur effect on password TextField and ChoosePlayer values
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ChoosePlayers.setValue("2");
@@ -165,27 +180,5 @@ public class StartGame implements Initializable{
         GaussianBlur blur = new GaussianBlur();
         blur.setRadius(7.5);
         EnterPassword.setEffect(blur);
-
     }
-
-    @FXML
-    void changePasswordText(MouseEvent event) {
-        if (cambiamentoTestoPassword %2 == 0){
-            EnterPassword.setEffect(null);
-            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
-            Image image = new Image(imageStream);
-            passwordVisibility.setImage(image);
-        }
-        else{
-            GaussianBlur blur = new GaussianBlur();
-            blur.setRadius(7.5);
-            EnterPassword.setEffect(blur);
-            InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
-            Image image = new Image(imageStream);
-            passwordVisibility.setImage(image);
-
-        }
-        cambiamentoTestoPassword++;
-    }
-
 }

@@ -21,7 +21,6 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.*;
-import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,8 +50,6 @@ public class Game implements Initializable {
     private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2,
             secreteObjective, publicObjective1, publicObjective2;
 
-
-
     @FXML
     private Text nickname1 , myStructure, nickname2, nickname3, nickname4;
 
@@ -63,28 +60,19 @@ public class Game implements Initializable {
     private ImageView handCard1, handCard2, handCard3;
 
     @FXML
-    private List<Rectangle> rectangleList = new ArrayList<Rectangle>();
+    private BorderPane borderPane;
 
     @FXML
-    private BorderPane borderPane ;
+    private Pane structurePane, otherStructuresPane, chatPane, boardPane, otherStructuresPane1, otherStructuresPane2;
 
     @FXML
-    private Pane structurePane, otherStructuresPane, chatPane, boardPane,
-                                otherStructuresPane1,
-                                otherStructuresPane2;
-
-    @FXML
-    private ScrollPane scrollPane, scrollPaneOthers,
-                        scrollPaneOthers1,
-                        scrollPaneOthers2;
+    private ScrollPane scrollPane, scrollPaneOthers, scrollPaneOthers1, scrollPaneOthers2;
 
     @FXML
     private TextArea textArea;
 
     @FXML
     private TextField inputText;
-
-
 
     @FXML
     private HBox handCard;
@@ -93,65 +81,29 @@ public class Game implements Initializable {
     private ChoiceBox<String> ChooseSender;
 
     @FXML
-    private Text player1Points;
-
-    @FXML
-    private Text player2Points;
-
-    @FXML
-    private Text player3Points;
-
-    @FXML
-    private Text player4Points;
-
-    private final List<String> gamePlayers = new ArrayList<>();;
+    private Text player1Points, player2Points, player3Points, player4Points;
 
 
     private Command currentCommand;
     private Image   currentImageNew;
-
-
-    String handCard1URL, handCard2URL, handCard3URL;
-    Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card,
-            currentDeckGoldCard, currentDeckResource1Card, currentDeckResource2Card, currentDeckResourceCard;
-    private ImageView structureCardSelected;
-
+    private String handCard1URL;
+    private String handCard2URL;
+    private String handCard3URL;
+    private String currentAngle;
+    private Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card,
+            currentDeckGoldCard, currentDeckResource1Card, currentDeckResource2Card, currentDeckResourceCard,
+            currentSelected = null, currentSelectedDeck;
     private Player myPlayer;
-    private InitialCard initialCardCard;
     private double lastX, lastY; // Memorizza le coordinate dell'ultimo evento
-    int rPressed = 0;
-    int fPressed = 1;
-
-    private boolean errore = false;
-
-    ViewFactory viewFactory;
-
+    private int rPressed = 0;
+    private int fPressed = 1;
     private MiniModel miniModel;
     private VirtualClient virtualClient;
-
-    // Gestione evento di placeCard
-
-    Card currentSelected = null, currentSelectedDeck;
-    String currentAngle;
-    boolean currentSelectedFrontUp = true;
-    private ImageView currentSelectedImage;
-    boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true,
-            isHandCardSelected;
-
-    String currentState;
-    FXMLLoader loader;
-    ImageView pedina;
-
-    private Boolean initialCardSide;
-
-    //Pedine da far vedere nella board per gli altri player
-    ImageView pedina1;
-    ImageView pedina2;
-    ImageView pedina3;
-
-    int c = 0; //Usato per aggiungere le pedine al pane se esistono.. 1 sola volta (mettere apposto??)
-    int contatoreHandTurn = 0;
-
+    private ImageView currentSelectedImage, pedina, pedina1, pedina2, pedina3;
+    private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true,
+            isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
+    private int c = 0;
+    private int handTurnCounter = 0;
 
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
@@ -159,13 +111,8 @@ public class Game implements Initializable {
         this.virtualClient = virtualClient;
     }
 
-    public void setUp(ViewFactory viewFactory) {
-        this.viewFactory = viewFactory;
-    }
-
     @FXML
     void handCard1Clicked(MouseEvent event) {
-
         if (!isCardPlaced) {
             handCard1.setOpacity(1);
             handCard2.setOpacity(.5);
@@ -175,12 +122,10 @@ public class Game implements Initializable {
             currentSelectedImage = handCard1;
             isHandCardSelected = true;
         }
-
     }
 
     @FXML
     void handCard2Clicked(MouseEvent event) {
-
         if (!isCardPlaced) {
             handCard1.setOpacity(.5);
             handCard2.setOpacity(1);
@@ -190,7 +135,6 @@ public class Game implements Initializable {
             currentSelectedImage = handCard2;
             isHandCardSelected = true;
         }
-
     }
 
     @FXML
@@ -204,12 +148,10 @@ public class Game implements Initializable {
             currentSelectedImage = handCard3;
             isHandCardSelected = true;
         }
-
     }
 
     @FXML
     void goldCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-
         if (!cardDrawn) {
             goldDeckCard.setOpacity(.5);
             goldCard1.setOpacity(1);
@@ -219,43 +161,12 @@ public class Game implements Initializable {
             resourceCard2.setOpacity(.5);
 
             isHandCardSelected = false;
-
             currentSelectedDeck = currentDeckGold1Card;
-
             currentImageNew = goldCard1.getImage();
-
             currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, "");
-
             virtualClient.sendCommand(currentCommand);
-
-
-           /* checkErrorOrElse(()->{
-
-            }, ()->{
-                cardDrawn = true;
-                isCardPlaced = false;
-                currentSelected = null;
-
-                currentSelectedImage.setImage(currentImage);
-                currentSelectedImage.setVisible(true);
-
-            },()->{
-
-                currentSelectedDeck = null;
-                goldDeckCard.setOpacity(1);
-                goldCard1.setOpacity(1);
-                goldCard2.setOpacity(1);
-                resourceDeckCard.setOpacity(1);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(1);
-            }); */
-
-
         }
-
     }
-
-
 
     @FXML
     void goldCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
@@ -267,46 +178,12 @@ public class Game implements Initializable {
             resourceCard1.setOpacity(.5);
             resourceCard2.setOpacity(.5);
 
-
             isHandCardSelected = false;
-
             currentSelectedDeck = currentDeckGold2Card;
-
             currentImageNew = goldCard2.getImage();
-
             currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, "");
-
             virtualClient.sendCommand(currentCommand);
-
-            /*checkErrorOrElse(()->{
-
-
-
-            }, ()->{
-                cardDrawn = true;
-                isCardPlaced = false;
-                currentSelected = null;
-
-                currentSelectedImage.setImage(currentImage);
-                currentSelectedImage.setVisible(true);
-
-
-
-            },()->{
-
-
-                currentSelectedDeck = null;
-                goldDeckCard.setOpacity(1);
-                goldCard1.setOpacity(1);
-                goldCard2.setOpacity(1);
-                resourceDeckCard.setOpacity(1);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(1);
-            });*/
-
-
         }
-
     }
 
     @FXML
@@ -320,48 +197,16 @@ public class Game implements Initializable {
             resourceCard1.setOpacity(.5);
             resourceCard2.setOpacity(.5);
 
-
             isHandCardSelected = false;
-
             currentSelectedDeck = currentDeckGoldCard;
-
-
             currentImageNew = pathFront(currentDeckGoldCard.getIdCard());
-
             currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD");
-
             virtualClient.sendCommand(currentCommand);
-            // testMain.drawCommand(currentDeckGoldCard);
-
-
-           /* checkErrorOrElse(()->{
-
-            }, ()->{
-                cardDrawn = true;
-                isCardPlaced = false;
-                currentSelected = null;
-
-                currentSelectedImage.setImage(currentImage);
-                currentSelectedImage.setVisible(true);
-
-            },()->{
-
-                currentSelectedDeck = null;
-                goldDeckCard.setOpacity(1);
-                goldCard1.setOpacity(1);
-                goldCard2.setOpacity(1);
-                resourceDeckCard.setOpacity(1);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(1);
-            });*/
-
         }
-
     }
 
     @FXML
     void resourceCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-
             if (!cardDrawn) {
                 resourceDeckCard.setOpacity(.5);
                 resourceCard1.setOpacity(1);
@@ -370,46 +215,16 @@ public class Game implements Initializable {
                 goldCard1.setOpacity(.5);
                 goldCard2.setOpacity(.5);
 
-
                 isHandCardSelected = false;
-
                 currentSelectedDeck = currentDeckResource1Card;
-
                 currentImageNew = resourceCard1.getImage();
-
                 currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, "");
-
                 virtualClient.sendCommand(currentCommand);
-                // testMain.drawCommand(currentDeckResource1Card);
-
-
-                /*checkErrorOrElse(()->{
-
-                }, ()->{
-                    cardDrawn = true;
-                    isCardPlaced = false;
-                    currentSelected = null;
-
-                    currentSelectedImage.setImage(currentImage);
-                    currentSelectedImage.setVisible(true);
-
-                },()->{
-
-                    currentSelectedDeck = null;
-                    goldDeckCard.setOpacity(1);
-                    goldCard1.setOpacity(1);
-                    goldCard2.setOpacity(1);
-                    resourceDeckCard.setOpacity(1);
-                    resourceCard1.setOpacity(1);
-                    resourceCard2.setOpacity(1);
-                });*/
             }
-
     }
 
     @FXML
     void resourceCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(.5);
             resourceCard1.setOpacity(.5);
@@ -418,47 +233,16 @@ public class Game implements Initializable {
             goldCard1.setOpacity(.5);
             goldCard2.setOpacity(.5);
 
-
             isHandCardSelected = false;
-
             currentSelectedDeck = currentDeckResource2Card;
-
             currentImageNew = resourceCard2.getImage();
-
-
             currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, "");
             virtualClient.sendCommand(currentCommand);
-
-            // testMain.drawCommand(currentDeckResource2Card);
-
-            /*checkErrorOrElse(()->{
-
-            }, ()->{
-                cardDrawn = true;
-                isCardPlaced = false;
-                currentSelected = null;
-
-                currentSelectedImage.setImage(currentImage);
-                currentSelectedImage.setVisible(true);
-
-            },()->{
-
-                currentSelectedDeck = null;
-                goldDeckCard.setOpacity(1);
-                goldCard1.setOpacity(1);
-                goldCard2.setOpacity(1);
-                resourceDeckCard.setOpacity(1);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(1);
-            });*/
-
         }
-
     }
 
     @FXML
     void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
-
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(1);
             resourceCard1.setOpacity(.5);
@@ -467,40 +251,12 @@ public class Game implements Initializable {
             goldCard1.setOpacity(.5);
             goldCard2.setOpacity(.5);
 
-
             isHandCardSelected = false;
-
             currentSelectedDeck = currentDeckResourceCard;
-
             currentImageNew = pathFront(currentDeckResourceCard.getIdCard());
-
             currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE");
-
             virtualClient.sendCommand(currentCommand);
-
-            // testMain.drawCommand(currentDeckResourceCard);
-            /*checkErrorOrElse(()->{
-
-            }, ()->{
-                cardDrawn = true;
-                isCardPlaced = false;
-                currentSelected = null;
-
-                currentSelectedImage.setImage(currentImage);
-                currentSelectedImage.setVisible(true);
-
-            },()->{
-
-                currentSelectedDeck = null;
-                goldDeckCard.setOpacity(1);
-                goldCard1.setOpacity(1);
-                goldCard2.setOpacity(1);
-                resourceDeckCard.setOpacity(1);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(1);
-            });*/
         }
-
     }
 
     @FXML
@@ -509,10 +265,20 @@ public class Game implements Initializable {
         borderPane.setCenter(boardPane);
     }
 
-    @FXML // TO DO: vai a capo se string lunga tot
+    @FXML
     void sendMessage(MouseEvent event) {
-        String message = inputText.getText();
+        textMessageFunct();
+    }
 
+    @FXML
+    void sendMessageByEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            textMessageFunct();
+        }
+    }
+
+    private void textMessageFunct() {
+        String message = inputText.getText();
         Player messageReceiver = null;
         for(Player player: miniModel.getPlayers()){
             if(ChooseSender.getValue() == null){
@@ -526,7 +292,6 @@ public class Game implements Initializable {
                     virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
                 }
                 else{
-
                     virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, messageReceiver));
                 }
             } catch (RemoteException e) {
@@ -534,38 +299,6 @@ public class Game implements Initializable {
             }
             inputText.clear();
             ChooseSender.setValue("All");
-        }
-
-    }
-
-    @FXML // TO DO: vai a capo se string lunga tot
-    void sendMessageByEnter(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            String message = inputText.getText();
-
-
-            Player messageReceiver = null;
-            for(Player player: miniModel.getPlayers()){
-                if(ChooseSender.getValue() == null){
-                }
-                else if(ChooseSender.getValue().equals(player.getNickname()))
-                    messageReceiver = player;
-            }
-            if (!Objects.equals(message, "")) {
-                try {
-                    if(messageReceiver == null) {
-                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
-                    }
-                    else{
-
-                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, messageReceiver));
-                    }
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-                inputText.clear();
-                ChooseSender.setValue("All");
-            }
         }
     }
 
@@ -586,14 +319,13 @@ public class Game implements Initializable {
 
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
-         scrollPaneOthers1.setVisible(false);
-         otherStructuresPane1.setVisible(false);
-         scrollPaneOthers2.setVisible(false);
-         otherStructuresPane2.setVisible(false);
-
-         scrollPaneOthers.setVisible(true);
-         otherStructuresPane.setVisible(true);
-         borderPane.setCenter(scrollPaneOthers);
+        scrollPaneOthers1.setVisible(false);
+        otherStructuresPane1.setVisible(false);
+        scrollPaneOthers2.setVisible(false);
+        otherStructuresPane2.setVisible(false);
+        scrollPaneOthers.setVisible(true);
+        otherStructuresPane.setVisible(true);
+        borderPane.setCenter(scrollPaneOthers);
 
         nickname1Visibility.setOpacity(1);
         nickname2Visibility.setOpacity(0);
@@ -613,7 +345,6 @@ public class Game implements Initializable {
         otherStructuresPane.setVisible(false);
         scrollPaneOthers2.setVisible(false);
         otherStructuresPane2.setVisible(false);
-
         scrollPaneOthers1.setVisible(true);
         otherStructuresPane1.setVisible(true);
         borderPane.setCenter(scrollPaneOthers1);
@@ -635,7 +366,6 @@ public class Game implements Initializable {
         otherStructuresPane.setVisible(false);
         scrollPaneOthers1.setVisible(false);
         otherStructuresPane1.setVisible(false);
-
         scrollPaneOthers2.setVisible(true);
         otherStructuresPane2.setVisible(true);
         borderPane.setCenter(scrollPaneOthers2);
@@ -654,56 +384,25 @@ public class Game implements Initializable {
 
     public void updateChat(Chat chat) {
         textArea.clear();
-
-
         for(ChatMessage chatMessage: chat.getChatMessages()){
-
             if(chatMessage.getReceiver() == null){
                 textArea.appendText("From " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
            else if(chatMessage.getReceiver().getNickname().equals(myPlayer.getNickname())){
                 textArea.appendText("Private message from: " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
-
            else if(chatMessage.getReceiver() != null && chatMessage.getSender().getNickname().equals(myPlayer.getNickname())){
                 textArea.appendText("Private message from " + chatMessage.getSender().getNickname() + " to " + chatMessage.getReceiver().getNickname() + " :" + chatMessage.getMessage() + "\n\n");
             }
-
         }
     }
-
-    public void updateState(String state) {
-        switch (state) {
-            case "Wait":
-                currentState = "Wait";
-                break;
-            case "Choose":
-                currentState = "Choose";
-                break;
-            case "End":
-                currentState = "End";
-                break;
-            default:
-                break;
-        }
-    }
-
-
 
     public void updateMyPlayer(Player player) {
-
         this.myPlayer = player;
-
         pedina.setImage(symbolPath(myPlayer.getColor().toString()));
-
-    }
-
-    public void updateWinners(List<Player> winners) {
-
     }
 
     public void updateCurrentPlayer(Player player) {
-
         nickname1.setFill(Color.BLACK);
         nickname2.setFill(Color.BLACK);
         nickname3.setFill(Color.BLACK);
@@ -720,17 +419,12 @@ public class Game implements Initializable {
         else {
             System.out.println("Player not matching" + player.getNickname());
         }
-
     }
 
     public void updatePlayers(List<Player> players) {
-
         List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).collect(Collectors.toList());
-
         if(isInitialChooseSetup){
-
             pedina1 = new ImageView(symbolPath(otherPlayers.get(0).getColor().toString()));
-
             if(otherPlayers.size() == 2 && otherPlayers.get(1) != null)
                 pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
             else
@@ -739,24 +433,12 @@ public class Game implements Initializable {
                     pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
                     pedina3 = new ImageView(symbolPath(otherPlayers.get(2).getColor().toString()));
                 }
-
-
             otherPlayers.forEach(p->ChooseSender.getItems().add(p.getNickname()));
-
             ChooseSender.getItems().add("All");
             isInitialChooseSetup = false;
-
         }
-
-
-
-
-
         nickname1.setText(miniModel.getMyPlayer().getNickname());
-
-
         nickname2.setText(otherPlayers.get(0).getNickname());
-
         if (players.size() == 3) {
             nickname3.setText(otherPlayers.get(1).getNickname());
             nickname3.setVisible(true);
@@ -770,58 +452,15 @@ public class Game implements Initializable {
             nickname4.setVisible(true);
             nickname4Visibility.setVisible(true);
         }
-
     }
-
-    public void createGhostRectangles(Card card, double x, double y) throws IllegalCommandException {
-        int position = 0;
-        int width = 111;
-        int height = 74;
-        for (String s : card.getFrontCorners()) {
-            if (s != null && position == 0) {
-                Rectangle rectangle = new Rectangle(x - 82, y - 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 1) {
-                Rectangle rectangle = new Rectangle(x + 82, y - 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 2) {
-                Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            } else if (s != null && position == 3) {
-                Rectangle rectangle = new Rectangle(x - 82, y + 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-                structurePane.getChildren().add(rectangle);
-            }
-            position++;
-        }
-    }
-
-    // TO DO: metti l'inserimento della initialCard da qui.. e poi leva metodo
-    // sotto..
 
     public void updateStructures(List<Structure> structures) {
-
-
         int index = miniModel.getPlayers().indexOf(myPlayer);
-
         Structure myStructure = structures.get(index);
-
         structures.remove(myStructure);
-
         int position = 0;
-        int points;
-
-
         Image image = null;
         Image pawnImage;
-
 
         for (Map.Entry<String, Integer> entry : myStructure.getvisibleSymbols().entrySet()) {
             String key = entry.getKey();
@@ -831,15 +470,11 @@ public class Game implements Initializable {
         }
 
         initialCardSide = myStructure.getPlacedCards().get(0).getValue();
-
         pawnImage = symbolPath("BLACK");
         ImageView imageView1 = new ImageView(pawnImage);
         ImageView imageView2 = new ImageView(pawnImage);
 
-
         for (Pair<Card, Boolean> card : myStructure.getPlacedCards()) {
-
-
             if(position == 0){
                 setInitialCard((InitialCard) card.getKey());
                 pawnImage = symbolPath(myPlayer.getColor().toString());
@@ -860,8 +495,7 @@ public class Game implements Initializable {
                 }
             }
 
-
-            else if (position == 1) {
+            else {
                 int x = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() / 100;
                 int y = myStructure.getCardToCoordinate().get(card.getKey()).getFirst() % 100;
                 if (card.getValue().toString().equals("true")) {
@@ -877,9 +511,7 @@ public class Game implements Initializable {
                 imageView.setLayoutX(945 + 82 * (x - 40));
                 imageView.setLayoutY(1000 - 44 * (y - 40));
 
-                // Inizio
                 imageView.setOnMouseClicked(event -> {
-
                     if (!isCardPlaced && isHandCardSelected) {
                         double currentAngleSelectedX = event.getX();
                         double currentAngleSelectedY = event.getY();
@@ -898,53 +530,23 @@ public class Game implements Initializable {
 
                         try {
                             currentCommand = new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, card.getKey(), currentSelected, currentAngle, currentSelectedFrontUp);
-
                             virtualClient.sendCommand(currentCommand);
-
-                            /*checkErrorOrElse(()->{
-                                currentSelectedImage = null;
-                                isHandCardSelected = false;
-
-                            }, ()->{
-                                currentSelectedImage.setVisible(false);
-
-                                isCardPlaced = true;
-                                cardDrawn = false;
-
-                            },()->{
-                                handCard1.setOpacity(1);
-                                handCard2.setOpacity(1);
-                                handCard3.setOpacity(1);
-                            });*/
-
-
-
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
-
-
                     }
-
                 });
-
                 structurePane.getChildren().add(imageView);
             }
-
-
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
-
         }
 
         int contaStruttura = 0;
         int test = 0;
         List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
-
         for(Structure structure: structures){
-
             position = 0;
-
             for (Pair<Card, Boolean> card : structure.getPlacedCards()) {
                 if(position == 0){
                     int x, y;
@@ -984,7 +586,6 @@ public class Game implements Initializable {
                         otherStructuresPane.getChildren().add(imageView);
                         if(test == 0)
                             otherStructuresPane.getChildren().add(imageView1);
-
                     }
                     else if(contaStruttura == 1){
                         otherStructuresPane1.getChildren().add(initialCard);
@@ -1029,22 +630,12 @@ public class Game implements Initializable {
 
             }
             contaStruttura++;
-
         }
-
-
-
-
     }
 
-
-
     public void updateHand(List<Hand> hands) {
-
-
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
-
             Platform.runLater(()->{
                 currentSelectedImage.setVisible(false);
 
@@ -1055,26 +646,18 @@ public class Game implements Initializable {
                 handCard2.setOpacity(1);
                 handCard3.setOpacity(1);
             });
-
-
         }
         else
         if (currentCommand != null && currentCommand instanceof DrawCommand)
         {
-
             Platform.runLater(()->{
-
-
                 cardDrawn = true;
                 isCardPlaced = false;
                 currentSelected = null;
-
                 currentSelectedImage.setImage(currentImageNew);
                 currentSelectedImage.setVisible(true);
-
-
-
                 currentSelectedDeck = null;
+
                 goldDeckCard.setOpacity(1);
                 goldCard1.setOpacity(1);
                 goldCard2.setOpacity(1);
@@ -1082,29 +665,21 @@ public class Game implements Initializable {
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
             });
-
         }
 
         int index = miniModel.getPlayers().indexOf(myPlayer);
         Hand hand = hands.get(index);
-
-
         String secretObjectiveCard;
+
         if (hand.getSecretObjective() != null) {
             secretObjectiveCard = hand.getSecretObjective().toString().substring(22, 25);
             secreteObjective.setImage(pathFront(secretObjectiveCard));
         }
-
-
-        //A ogni client arriva l evento di Wait, Place, ecc....
-        if (contatoreHandTurn == 1) {
-
+        if (handTurnCounter == 1) {
             if (isInitialSetupHand) {
                 String card1;
                 String card2;
                 String card3;
-
-
                 currentHandCard1 = hand.getCardsHand().get(0);
                 currentHandCard2 = hand.getCardsHand().get(1);
                 currentHandCard3 = hand.getCardsHand().get(2);
@@ -1113,25 +688,19 @@ public class Game implements Initializable {
                 card2 = hand.getCardsHand().get(1).toString().substring(6, 9);
                 card3 = hand.getCardsHand().get(2).toString().substring(6, 9);
 
-
                 handCard1.setImage(pathFront(card1));
                 handCard2.setImage(pathFront(card2));
                 handCard3.setImage(pathFront(card3));
-
 
                 handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card1 + "f.jpg";
                 handCard2URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card2 + "f.jpg";
                 handCard3URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + card3 + "f.jpg";
 
-
                 isInitialSetupHand = false;
             }
             else {
-
-
                 if (currentSelected == currentHandCard1 && currentSelectedDeck!=null) {
                     currentHandCard1 = hand.getCardsHand().getFirst();
-
 
                     if (currentSelectedFrontUp) {
                         handCard1URL = "/it/polimi/ingsw/codexnaturalis/FrontCards/"
@@ -1160,30 +729,20 @@ public class Game implements Initializable {
                         handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/"
                                 + currentSelectedDeck.toString().substring(6, 9) + "b.jpg";
                     }
-
                 }
-
 
                 if(isCardPlaced){
                     KeyEvent simulatedEvent1 = new KeyEvent(KeyEvent.KEY_PRESSED, null, null,
                             KeyCode.F, false, false, false, false);
                     showBack(simulatedEvent1);
                 }
-
-
-
-
-
             }
 
-
         }
-        contatoreHandTurn = 1;
+        handTurnCounter = 1;
     }
 
     public void updateBoard(Board board) {
-
-
         currentDeckResource1Card = board.getUncoveredCards().get(0);
         currentDeckResource2Card = board.getUncoveredCards().get(1);
 
@@ -1202,21 +761,15 @@ public class Game implements Initializable {
         goldCard1.setImage(pathFront(goldCardOne));
         goldCard2.setImage(pathFront(goldCardTwo));
 
-
         String publicObjectiveOne = board.getCommonObjectives().get(0).toString().substring(22, 25);
         String publicObjectiveTwo = board.getCommonObjectives().get(1).toString().substring(22, 25);
 
         publicObjective1.setImage(pathFront(publicObjectiveOne));
         publicObjective2.setImage(pathFront(publicObjectiveTwo));
 
-
-        String myPlayerColor = myPlayer.getColor().toString();
-
-
-        int points = 0;
+        int points;
         List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
 
-        int index = miniModel.getPlayers().indexOf(myPlayer);
         for(var entry : board.getActualScores().entrySet()){
             if(entry.getKey().getNickname().equals(myPlayer.getNickname())){
                 points = entry.getValue();
@@ -1239,7 +792,6 @@ public class Game implements Initializable {
                 if(c==0)
                     boardPane.getChildren().add(pedina2);
                 addPoint(entry.getValue(), pedina2);
-                
             }
 
             else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())) {
@@ -1260,17 +812,14 @@ public class Game implements Initializable {
                 player4Points.setVisible(true);
                 addPoint(entry.getValue(), pedina3);
             }
-
         }
         c++;
-
 
         handCard.setFocusTraversable(true);
         handCard.requestFocus();
     }
 
     public void addPoint(int points, ImageView posto){
-
         switch (points) {
             case 0:
                 posto.setLayoutX(399);
@@ -1423,10 +972,6 @@ public class Game implements Initializable {
                 setDimension(posto);
                 break;
         }
-
-
-
-
     }
 
     public void setDimension(ImageView posto) {
@@ -1435,7 +980,6 @@ public class Game implements Initializable {
     }
 
     public void updateDeck(Deck deck) {
-
         Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
         Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
@@ -1449,7 +993,6 @@ public class Game implements Initializable {
     }
 
     public void updateError(String error) {
-
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
             Platform.runLater(()->{
@@ -1465,7 +1008,6 @@ public class Game implements Initializable {
         if (currentCommand != null && currentCommand instanceof DrawCommand)
         {
             Platform.runLater(()->{
-
                 currentSelectedDeck = null;
                 goldDeckCard.setOpacity(1);
                 goldCard1.setOpacity(1);
@@ -1476,8 +1018,6 @@ public class Game implements Initializable {
 
             });
         }
-
-        errore = true;
         showAlert(error);
     }
 
@@ -1535,10 +1075,7 @@ public class Game implements Initializable {
             handCard2URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card2 + "b.jpg";
             handCard3URL = "/it/polimi/ingsw/codexnaturalis/BackCards/" + card3 + "b.jpg";
 
-
         } else if (event.getCode() == KeyCode.F && fPressed == 0) {
-
-            // if (currentSelected != null)
             currentSelectedFrontUp = true;
 
             fPressed = 1;
@@ -1560,38 +1097,8 @@ public class Game implements Initializable {
         }
     }
 
-    /*private void checkErrorOrElse(Runnable onError, Runnable success, Runnable finallyCallback)
-    {
-        Thread checker = new Thread(()->{
-
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            if (errore)
-            {
-                errore = false;
-                Platform.runLater(()->onError.run());
-            }
-            else
-                Platform.runLater(()->success.run());
-
-            Platform.runLater(()->finallyCallback.run());
-
-        });
-
-        checker.start();
-
-    }*/
-
     public void setInitialCard(InitialCard initialCard1) {
         int x, y;
-        int width = 29;
-        int height = 30;
-        int position = 0; // 0=up left, 1=up right, 2=bottom left, 3=bottom right
-        this.initialCardCard = initialCard1;
         String imagePath;
 
         if(initialCardSide)
@@ -1628,128 +1135,16 @@ public class Game implements Initializable {
                         currentAngle = "BR";
                 }
 
-
                 try {
 
                     currentCommand = new PlaceCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, initialCard1, currentSelected, currentAngle, currentSelectedFrontUp);
                     virtualClient.sendCommand(currentCommand);
-
-                    /*checkErrorOrElse(()->{
-                        Platform.runLater(()->{
-                            currentSelectedImage = null;
-                            isHandCardSelected = false;
-                        });
-                    }, ()->{
-                        Platform.runLater(()->currentSelectedImage.setVisible(false));
-
-                        isCardPlaced = true;
-                        cardDrawn = false;
-                    }, ()->{
-                        handCard1.setOpacity(1);
-                        handCard2.setOpacity(1);
-                        handCard3.setOpacity(1);
-                    }); */
-
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
             }
-
         });
-
         structurePane.getChildren().add(initialCard);
-
-
-        for (String s : initialCardCard.getFrontCorners()) {
-            if (!Objects.equals(s, "NULL") && position == 0) { // TOP LEFT
-                Rectangle rectangle = new Rectangle(x, y, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-            } else if (!Objects.equals(s, "NULL") && position == 1) { // TOP RIGHT
-                Rectangle rectangle = new Rectangle(x + 82, y, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-            } else if (!Objects.equals(s, "NULL") && position == 2) { // BOTTOM RIGHT
-                Rectangle rectangle = new Rectangle(x + 82, y + 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-            } else if (!Objects.equals(s, "NULL") && position == 3) { // BOTTOM LEFT
-                Rectangle rectangle = new Rectangle(x, y + 44, width, height);
-                rectangleList.add(rectangle);
-                rectangle.setFill(Color.web("#808080", 0.2));
-            }
-
-            position++;
-
-        }
-
-        for (Rectangle rectangle : rectangleList) {
-            rectangle.setOnMouseEntered(event -> {
-                rectangle.setFill(Color.web("#808080", 0.8));
-            });
-
-            // Gestore per quando il mouse esce dal rettangolo
-            rectangle.setOnMouseExited(event -> {
-                rectangle.setFill(Color.web("#808080", 0.2));
-            });
-            rectangle.setOnMouseClicked(event -> {
-
-            });
-
-        }
-
-    }
-
-    // mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints,
-    // manuscriptPoints, potionPoints
-    public void addPoints(String obj) {
-        int valueInteger = 0;
-        String valueString;
-        switch (obj) {
-            case "SHROOM":
-                valueInteger = Integer.parseInt(mushroomsPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                mushroomsPoints.setText(valueString);
-                break;
-            case "VEGETABLE":
-                valueInteger = Integer.parseInt(leafPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                leafPoints.setText(valueString);
-                break;
-            case "ANIMAL":
-                valueInteger = Integer.parseInt(wolfPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                wolfPoints.setText(valueString);
-                break;
-            case "INSECT":
-                valueInteger = Integer.parseInt(butterflyPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                butterflyPoints.setText(valueString);
-                break;
-            case "FEATHER":
-                valueInteger = Integer.parseInt(featherPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                featherPoints.setText(valueString);
-                break;
-            case "SCROLL":
-                valueInteger = Integer.parseInt(manuscriptPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                manuscriptPoints.setText(valueString);
-                break;
-            case "INK":
-                valueInteger = Integer.parseInt(potionPoints.getText());
-                valueInteger++;
-                valueString = String.valueOf(valueInteger);
-                potionPoints.setText(valueString);
-                break;
-
-        }
     }
 
     public void addPoints(String obj, int points) {
@@ -1791,10 +1186,8 @@ public class Game implements Initializable {
                 valueString = String.valueOf(valueInteger);
                 potionPoints.setText(valueString);
                 break;
-
         }
     }
-
 
     public Image pathFront(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
@@ -1816,27 +1209,9 @@ public class Game implements Initializable {
         assert imageStream != null;
         return new Image(imageStream);
     }
- 
-    public void showInitialStage(Game game) {
-        viewFactory.showInitialStage(this.miniModel, this.virtualClient, game);
-    }
-
-    public void showStartGame(){
-        viewFactory.showStartGame(miniModel, virtualClient, this);
-    }
-
-    public void showJoinGame(){
-        viewFactory.showJoinGame(miniModel, virtualClient, this);
-    }
-
-    public void showWait(){
-        viewFactory.showWait();
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         pedina = new ImageView();
         pedina1 = new ImageView();
         pedina2 = new ImageView();
@@ -1866,7 +1241,6 @@ public class Game implements Initializable {
         manuscriptPoints.setText("0");
         potionPoints.setText("0");
 
-
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -1886,7 +1260,6 @@ public class Game implements Initializable {
         scrollPaneOthers2.setHvalue(hCenter);
         scrollPaneOthers2.setVvalue(vCenter);
 
-
         structurePane.setOnMousePressed(event -> {
             lastX = event.getX();
             lastY = event.getY();
@@ -1896,18 +1269,14 @@ public class Game implements Initializable {
             double deltaX = event.getX() - lastX;
             double deltaY = event.getY() - lastY;
 
-            // Aggiorna la posizione dello scroll
             scrollPane.setHvalue(scrollPane.getHvalue() - deltaX / structurePane.getWidth());
             scrollPane.setVvalue(scrollPane.getVvalue() - deltaY / structurePane.getHeight());
         });
 
         scrollPane.setOnMouseReleased(event -> {
-            // focus per funzione di back
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
         });
-
-
 
     }
 }

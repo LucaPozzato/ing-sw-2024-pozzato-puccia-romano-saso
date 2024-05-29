@@ -25,34 +25,27 @@ import javafx.stage.Stage;
 
 public class GuiApp implements View {
 
-    private VirtualClient virtualClient;
-    private MiniModel miniModel;
-
-
+    private final VirtualClient virtualClient;
+    private final MiniModel miniModel;
     private Game game;
-    private FXMLLoader gameFxmlLoader;
     private Stage mainStage;
     private Stage waitingStage;
     private Stage chooseStage;
-    private Stage endGameStage;
+    private ViewFactory viewFactory;
 
-    int p = 0;
-
-
-    private String currentState;
-    ViewFactory viewFactory;
-    private static final CountDownLatch latch = new CountDownLatch(1);
 
     public GuiApp(VirtualClient virtualClient, MiniModel miniModel) {
         this.virtualClient = virtualClient;
         this.miniModel = miniModel;
-
     }
 
+    /**
+     * It's called when client starts the game with GUI option.
+     * It is used to set up viewFactory and displays the initialStage stage
+     */
     @Override
     public void run() {
         viewFactory = new ViewFactory(miniModel,virtualClient);
-
 
         try {
             Thread.sleep(1000);
@@ -63,9 +56,7 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             createGameStage();
             viewFactory.showInitialStage();
-
         });
-
     }
 
     @Override
@@ -73,20 +64,20 @@ public class GuiApp implements View {
         game.updateChat(chat);
     }
 
+    /**
+     * Based on current stage it is used to manage the opening and closing of stages
+     * @param state
+     */
     @Override
     public void updateState(String state) {
 
-        game.updateState(state);
-
-        if (Objects.equals(state, "Wait")){
-            Platform.runLater(()-> {
+        switch (state) {
+            case "Wait" -> Platform.runLater(() -> {
                 if (chooseStage != null)
                     chooseStage.hide();
                 waitingStage = viewFactory.showWait();
             });
-        }
-        else if (Objects.equals(state, "Choose")){
-            Platform.runLater(()-> {
+            case "Choose" -> Platform.runLater(() -> {
                 waitingStage.hide();
 
                 if (ViewFactory.staticJoinGame != null)
@@ -97,35 +88,26 @@ public class GuiApp implements View {
                 } catch (IOException e) {
                 }
             });
-
-        }
-        //RIVEDILO per bene
-        else if (Objects.equals(state, "End")){
-            Platform.runLater(()-> {
+            case "End" -> Platform.runLater(() -> {
                 waitingStage.hide();
-
                 viewFactory.showEndGame();
             });
-
-        }
-
-        else{
-            Platform.runLater(()-> {
-
+            default -> Platform.runLater(() -> {
                 mainStage.show();
                 if (chooseStage != null)
                     chooseStage.hide();
                 if (waitingStage != null)
-                 waitingStage.hide();
-
+                    waitingStage.hide();
             });
-
         }
     }
 
+    /**
+     * Used to create the gameStage stage, the one that clients are going to use to play the game
+     */
     private void createGameStage()
     {
-        gameFxmlLoader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
+        FXMLLoader gameFxmlLoader = new FXMLLoader(getClass().getResource("gameStage.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(gameFxmlLoader.load());
@@ -139,8 +121,6 @@ public class GuiApp implements View {
 
         game = gameFxmlLoader.getController();
         game.setUP(miniModel, virtualClient);
-
-
     }
 
     @Override
@@ -148,16 +128,10 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateMyPlayer(player);
         });
-
-
     }
 
     @Override
     public void updateWinners(List<Player> winners) {
-        Platform.runLater(() -> {
-            game.updateWinners(winners);
-        });
-
     }
 
     @Override
@@ -165,7 +139,6 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateCurrentPlayer(player);
         });
-
     }
 
     @Override
@@ -173,7 +146,6 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updatePlayers(players);
         });
-
     }
 
     @Override
@@ -181,17 +153,13 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateStructures(structures);
         });
-
     }
 
     @Override
     public void updateHand(List<Hand> hands) {
-
         Platform.runLater(() -> {
             game.updateHand(hands);
         });
-
-
     }
 
     @Override
@@ -199,8 +167,6 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateBoard(board);
         });
-
-
     }
 
     @Override
@@ -208,7 +174,6 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateDeck(deck);
         });
-
     }
 
     @Override
@@ -216,7 +181,5 @@ public class GuiApp implements View {
         Platform.runLater(() -> {
             game.updateError(error);
         });
-
     }
-
 }
