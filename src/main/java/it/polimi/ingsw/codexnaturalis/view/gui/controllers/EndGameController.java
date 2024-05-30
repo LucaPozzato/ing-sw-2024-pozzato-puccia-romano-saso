@@ -3,10 +3,13 @@ package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * EndGameController class is a javaFx controller used to manage endGame stage
@@ -16,8 +19,6 @@ public class EndGameController {
 
     @FXML
     private Text winnerText;
-
-    private String winnerString = "";
 
 
     /**
@@ -35,8 +36,8 @@ public class EndGameController {
      */
     public void setWinner(List<Player> winners) {
         for(Player player : winners) {
-            winnerString = winnerString + player.getNickname() + " ";
+            winnerText.setText(winnerText.getText() + player.getNickname() + " ");
         }
-        winnerText.setText(winnerString);
     }
+
 }

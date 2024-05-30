@@ -25,6 +25,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -104,6 +105,7 @@ public class Game implements Initializable {
             isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
     private int c = 0;
     private int handTurnCounter = 0;
+    private List<Node> nodes;
 
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
@@ -455,6 +457,18 @@ public class Game implements Initializable {
     }
 
     public void updateStructures(List<Structure> structures) {
+
+        if(!nodes.isEmpty()){
+            structurePane.getChildren().removeAll(nodes);
+            nodes.clear();
+        }
+        //System.out.print("\n\nNodes in the structure: \n\n");
+
+//        for(Node node: structurePane.getChildren()){
+//            System.out.println(node);
+//        }
+
+
         int index = miniModel.getPlayers().indexOf(myPlayer);
         Structure myStructure = structures.get(index);
         structures.remove(myStructure);
@@ -484,6 +498,7 @@ public class Game implements Initializable {
                 imageView.setLayoutX(990);
                 imageView.setLayoutY(1062);
                 structurePane.getChildren().add(imageView);
+
                 position = 1;
 
                 if (miniModel.getPlayers().getFirst() == myPlayer){
@@ -505,7 +520,6 @@ public class Game implements Initializable {
                 }
 
                 ImageView imageView = new ImageView(image);
-
                 imageView.setFitWidth(111);
                 imageView.setFitHeight(74);
                 imageView.setLayoutX(945 + 82 * (x - 40));
@@ -537,9 +551,11 @@ public class Game implements Initializable {
                     }
                 });
                 structurePane.getChildren().add(imageView);
+                nodes.add(imageView);
             }
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
+
         }
 
         int contaStruttura = 0;
@@ -558,6 +574,7 @@ public class Game implements Initializable {
                     assert imageStream != null;
                     Image initialCardImage = new Image(imageStream);
                     ImageView initialCard = new ImageView(initialCardImage);
+                    nodes.add(initialCard);
                     initialCard.setFitWidth(111);
                     initialCard.setFitHeight(74);
                     initialCard.setLayoutX(945);
@@ -611,7 +628,7 @@ public class Game implements Initializable {
                     }
 
                     ImageView imageView = new ImageView(image);
-
+                    nodes.add(imageView);
                     imageView.setFitWidth(111);
                     imageView.setFitHeight(74);
                     imageView.setLayoutX(945 + 82 * (x - 40));
@@ -630,6 +647,7 @@ public class Game implements Initializable {
 
             }
             contaStruttura++;
+
         }
     }
 
@@ -1144,6 +1162,7 @@ public class Game implements Initializable {
                 }
             }
         });
+        nodes.add(initialCard);
         structurePane.getChildren().add(initialCard);
     }
 
@@ -1212,6 +1231,8 @@ public class Game implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        nodes = new ArrayList<>();
         pedina = new ImageView();
         pedina1 = new ImageView();
         pedina2 = new ImageView();

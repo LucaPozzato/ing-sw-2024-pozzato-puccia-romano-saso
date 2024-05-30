@@ -5,12 +5,15 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.Optional;
 
 /**
  * ChooseStage class is a javaFx controller used to manage chooseStage stage
@@ -24,7 +27,7 @@ public class ChooseStage  {
     private Player player;
     private int index = 0;
     private ViewFactory viewFactory;
-    private Boolean side;
+    private Boolean side, objectiveCardSelected = false;
     private ObjectiveCard objectiveCard; //da levare?
 
 
@@ -60,6 +63,7 @@ public class ChooseStage  {
      */
     @FXML
     void objectiveCard1Clicked(MouseEvent event) {
+        objectiveCardSelected = true;
         objectiveCard1.setOpacity(1);
         objectiveCard2.setOpacity(.5);
         objectiveCard = (ObjectiveCard) viewFactory.getMinimodel().getPlayerHands().get(index).getChooseBetweenObj().getFirst();
@@ -71,6 +75,7 @@ public class ChooseStage  {
      */
     @FXML
     void objectiveCard2Clicked(MouseEvent event) {
+        objectiveCardSelected = true;
         objectiveCard1.setOpacity(.5);
         objectiveCard2.setOpacity(1);
         objectiveCard = (ObjectiveCard) viewFactory.getMinimodel().getPlayerHands().get(index).getChooseBetweenObj().get(1);
@@ -83,7 +88,15 @@ public class ChooseStage  {
      */
     @FXML
     void play(MouseEvent event) throws RemoteException {
-        viewFactory.getVirtualClient().sendCommand(new ChooseCommand(viewFactory.getVirtualClient().getClientId(), viewFactory.getMinimodel().getGameId(), player, side, objectiveCard ));
+        if(side == null || !objectiveCardSelected) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("What's happening?");
+            alert.setContentText("Make sure to select both the options");
+            Optional<ButtonType> result = alert.showAndWait();
+        }
+        else {
+            viewFactory.getVirtualClient().sendCommand(new ChooseCommand(viewFactory.getVirtualClient().getClientId(), viewFactory.getMinimodel().getGameId(), player, side, objectiveCard ));
+        }
     }
 
     /**
