@@ -458,15 +458,15 @@ public class Game implements Initializable {
 
     public void updateStructures(List<Structure> structures) {
 
-        if(!nodes.isEmpty()){
-            structurePane.getChildren().removeAll(nodes);
-            nodes.clear();
-        }
-        //System.out.print("\n\nNodes in the structure: \n\n");
-
-//        for(Node node: structurePane.getChildren()){
-//            System.out.println(node);
+//        if(!nodes.isEmpty()){
+//            structurePane.getChildren().removeAll(nodes);
+//            nodes.clear();
 //        }
+        System.out.print("\n\nNodes in the structure: \n\n");
+
+        for(Node node: structurePane.getChildren()){
+            System.out.println(node);
+        }
 
 
         int index = miniModel.getPlayers().indexOf(myPlayer);
@@ -551,7 +551,15 @@ public class Game implements Initializable {
                     }
                 });
                 structurePane.getChildren().add(imageView);
-                nodes.add(imageView);
+                int check=0;
+                for(Node node: structurePane.getChildren()){
+                    if(node == imageView)
+                        check = 1;
+                    else if (check == 1){
+                        structurePane.getChildren().remove(node);
+                    }
+                }
+                //nodes.add(imageView);
             }
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
