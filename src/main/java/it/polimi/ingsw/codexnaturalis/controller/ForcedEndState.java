@@ -74,8 +74,6 @@ public class ForcedEndState extends ControllerState {
 
     @Override
     public void disconnect(String clientId) {
-        // terminare la partita
-        super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
     }
 
     @Override

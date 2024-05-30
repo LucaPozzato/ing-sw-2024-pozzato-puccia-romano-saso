@@ -311,7 +311,7 @@ public class DrawnCardState extends ControllerState {
                     break;
                 }
             }
-            if (tempPlayer != null) {
+            if (tempPlayer != null && !tempPlayer.equals((game.getCurrentPlayer()))) {
                 event = new ErrorEvent(null, game.getGameId(),
                         tempPlayer.getNickname() + " has disconnected");
                 super.rmiServer.sendEvent(event);
@@ -325,7 +325,7 @@ public class DrawnCardState extends ControllerState {
 
         if (keepOn && player.equals((game.getCurrentPlayer()))) {
             System.out.println("value of drawn = " + drawn);
-            if (!drawn) { // dovrebbe entrare sempre
+            if (!drawn) { // should always get in
                 System.out.println("restoring the structure and hand pre disconnection");
                 super.game.revert();
             }
@@ -402,15 +402,15 @@ public class DrawnCardState extends ControllerState {
                 e.printStackTrace();
             }
 
-            event = new ErrorEvent(null, game.getGameId(),
-                    oldCurrentPlayer.getNickname() + " has disconnected, turn skipped");
+            // event = new ErrorEvent(null, game.getGameId(),
+            // oldCurrentPlayer.getNickname() + " has disconnected, turn skipped");
 
-            super.rmiServer.sendEvent(event);
-            try {
-                super.socketServer.sendEvent(event);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // super.rmiServer.sendEvent(event);
+            // try {
+            // super.socketServer.sendEvent(event);
+            // } catch (Exception e) {
+            // e.printStackTrace();
+            // }
 
             if (matchEnded)
                 super.game.setState(new EndGameState(super.game, super.rmiServer, super.socketServer));
