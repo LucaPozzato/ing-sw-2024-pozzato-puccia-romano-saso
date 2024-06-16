@@ -14,22 +14,33 @@
 
 <AnchorPane prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.RejoinGame">
    <children>
-      <VBox alignment="TOP_CENTER" fillWidth="false" layoutX="360.0" layoutY="62.0" prefHeight="568.0" prefWidth="500.0">
+      <ImageView fitHeight="671.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../Backgrounds/background2.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="671.0" prefWidth="1200.0">
          <children>
-            <Label text="Insert nickname:">
+            <Label text="ENTER NICKNAME:">
                <VBox.margin>
-                  <Insets top="60.0" />
+                  <Insets top="140.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <TextField fx:id="EnterNickname" prefHeight="25.0" prefWidth="178.0" promptText="Enter your nickname...">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Insert password">
+            <Label text="ENTER PASSWORD:">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <HBox alignment="CENTER" fillHeight="false" prefHeight="18.0" prefWidth="200.0">
                <children>
@@ -47,10 +58,13 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <Label text="Select game ID:">
+            <Label text="SELECT GAME ID:">
                <VBox.margin>
-                  <Insets top="30.0" />
+                  <Insets top="25.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter game ID...">
                <VBox.margin>
@@ -62,9 +76,9 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="JoinGame" mnemonicParsing="false" onMouseClicked="#rejoinGameFunct" prefHeight="38.0" prefWidth="105.0" text="Rejoin">
+            <Button fx:id="JoinGame" mnemonicParsing="false" onMouseClicked="#rejoinGameFunct" prefHeight="18.0" prefWidth="71.0" style="-fx-background-color: #ec9f19;" text="REJOIN">
                <VBox.margin>
-                  <Insets top="60.0" />
+                  <Insets top="94.0" />
                </VBox.margin>
                <font>
                   <Font size="15.0" />
@@ -75,6 +89,6 @@
             <Insets top="40.0" />
          </padding>
       </VBox>
-      <Button fx:id="goBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="Go back" />
+      <Button fx:id="goBack" layoutX="13.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="Go back" />
    </children>
 </AnchorPane>

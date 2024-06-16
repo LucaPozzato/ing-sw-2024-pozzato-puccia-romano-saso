@@ -15,22 +15,33 @@
 
 <AnchorPane prefHeight="671.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.codexnaturalis.view.gui.controllers.StartGame">
    <children>
-      <VBox alignment="CENTER" fillWidth="false" layoutX="350.0" layoutY="52.0" prefHeight="568.0" prefWidth="500.0">
+      <ImageView fitHeight="671.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../Backgrounds/background2.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" fillWidth="false" prefHeight="671.0" prefWidth="1200.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Choose your nickname:">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="CHOOSE NICKNAME:">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <TextField fx:id="EnterNickname" prefHeight="25.0" prefWidth="178.0" promptText="Enter your nickname...">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Choose your password:">
+            <Label text="CHOOSE PASSWORD:">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <HBox alignment="CENTER" fillHeight="false" prefHeight="18.0" prefWidth="200.0">
                <VBox.margin>
@@ -45,20 +56,26 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Choose game id:">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="CHOOSE GAME ID:">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter your nickname...">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Choose a color:">
+            <Label text="CHOOSE COLOR:">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <HBox alignment="CENTER" prefHeight="33.0" prefWidth="383.0" spacing="20.0">
                <children>
@@ -87,10 +104,13 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <Label text="How many players">
+            <Label text="HOW MANY PLAYERS?">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Apple LiGothic Medium" size="15.0" />
+               </font>
             </Label>
             <ChoiceBox fx:id="ChoosePlayers" prefHeight="25.0" prefWidth="56.0">
                <VBox.margin>
@@ -102,9 +122,9 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="CreateGame" mnemonicParsing="false" onMouseClicked="#CreateGameFunct" prefHeight="38.0" prefWidth="105.0" text="Create game">
+            <Button fx:id="CreateGame" mnemonicParsing="false" onMouseClicked="#CreateGameFunct" prefHeight="24.0" prefWidth="75.0" style="-fx-background-color: #ec9f19;" text="CREATE">
                <VBox.margin>
-                  <Insets top="26.0" />
+                  <Insets bottom="26.0" />
                </VBox.margin>
                <font>
                   <Font size="15.0" />
@@ -118,6 +138,6 @@
             <Insets />
          </opaqueInsets>
       </VBox>
-      <Button fx:id="goBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="Go back" />
+      <Button fx:id="goBack" layoutX="13.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#goBackFunct" text="Go back" />
    </children>
 </AnchorPane>

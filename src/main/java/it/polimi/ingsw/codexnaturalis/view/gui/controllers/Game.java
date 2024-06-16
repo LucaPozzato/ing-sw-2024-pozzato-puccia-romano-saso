@@ -44,46 +44,31 @@ import javafx.util.Pair;
 public class Game implements Initializable {
 
     @FXML
-    private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints,
-            potionPoints;
-
+    private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints, potionPoints;
     @FXML
-    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2,
-            secreteObjective, publicObjective1, publicObjective2;
-
+    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2, secreteObjective, publicObjective1, publicObjective2;
     @FXML
     private Text nickname1 , myStructure, nickname2, nickname3, nickname4;
-
     @FXML
     private ImageView nickname1Visibility, nickname2Visibility, nickname3Visibility, nickname4Visibility;
-
     @FXML
     private ImageView handCard1, handCard2, handCard3;
-
     @FXML
     private BorderPane borderPane;
-
     @FXML
     private Pane structurePane, otherStructuresPane, chatPane, boardPane, otherStructuresPane1, otherStructuresPane2;
-
     @FXML
     private ScrollPane scrollPane, scrollPaneOthers, scrollPaneOthers1, scrollPaneOthers2;
-
     @FXML
     private TextArea textArea;
-
     @FXML
     private TextField inputText;
-
-    @FXML
-    private HBox handCard;
-
     @FXML
     private ChoiceBox<String> ChooseSender;
-
+    @FXML
+    private HBox handCard;
     @FXML
     private Text player1Points, player2Points, player3Points, player4Points;
-
 
     private Command currentCommand;
     private Image   currentImageNew;
@@ -91,18 +76,15 @@ public class Game implements Initializable {
     private String handCard2URL;
     private String handCard3URL;
     private String currentAngle;
-    private Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card,
-            currentDeckGoldCard, currentDeckResource1Card, currentDeckResource2Card, currentDeckResourceCard,
-            currentSelected = null, currentSelectedDeck;
+    private Card currentHandCard1, currentHandCard2, currentHandCard3, currentDeckGold1Card, currentDeckGold2Card, currentDeckGoldCard, currentDeckResource1Card, currentDeckResource2Card, currentDeckResourceCard, currentSelected = null, currentSelectedDeck;
     private Player myPlayer;
-    private double lastX, lastY; // Memorizza le coordinate dell'ultimo evento
+    private double lastX, lastY;
     private int rPressed = 0;
     private int fPressed = 1;
     private MiniModel miniModel;
     private VirtualClient virtualClient;
     private ImageView currentSelectedImage, pedina, pedina1, pedina2, pedina3;
-    private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true,
-            isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
+    private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
     private int c = 0;
     private int handTurnCounter = 0;
     private List<Node> nodes;
@@ -381,7 +363,6 @@ public class Game implements Initializable {
         nickname2.setUnderline(false);
         nickname3.setUnderline(false);
         nickname4.setUnderline(true);
-
     }
 
     public void updateChat(Chat chat) {
@@ -457,18 +438,6 @@ public class Game implements Initializable {
     }
 
     public void updateStructures(List<Structure> structures) {
-
-//        if(!nodes.isEmpty()){
-//            structurePane.getChildren().removeAll(nodes);
-//            nodes.clear();
-//        }
-        System.out.print("\n\nNodes in the structure: \n\n");
-
-        for(Node node: structurePane.getChildren()){
-            System.out.println(node);
-        }
-
-
         int index = miniModel.getPlayers().indexOf(myPlayer);
         Structure myStructure = structures.get(index);
         structures.remove(myStructure);
@@ -559,13 +528,10 @@ public class Game implements Initializable {
                         structurePane.getChildren().remove(node);
                     }
                 }
-                //nodes.add(imageView);
             }
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
-
         }
-
         int contaStruttura = 0;
         int test = 0;
         List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
@@ -652,10 +618,8 @@ public class Game implements Initializable {
                         otherStructuresPane2.getChildren().add(imageView);
                     }
                 }
-
             }
             contaStruttura++;
-
         }
     }
 
@@ -664,7 +628,6 @@ public class Game implements Initializable {
         {
             Platform.runLater(()->{
                 currentSelectedImage.setVisible(false);
-
                 isCardPlaced = true;
                 cardDrawn = false;
 
@@ -1041,7 +1004,6 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
-
             });
         }
         showAlert(error);
@@ -1306,6 +1268,5 @@ public class Game implements Initializable {
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
         });
-
     }
 }
