@@ -5,6 +5,10 @@ import java.io.Serializable;
 
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
+/**
+ * Represents a message in the game chat.
+ * Each message contains content, sender, receiver (optional), and timestamp.
+ */
 public class ChatMessage implements Serializable {
     @Serial
     private static final long serialVersionUID = 109283746501143L;

@@ -4,6 +4,10 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a Resource Card in the game, extending the abstract class Card.
+ * Contains specific properties and methods related to Resource Cards.
+ */
 public class ResourceCard extends Card {
     @Serial
     private static final long serialVersionUID = 629038475109384L;
@@ -13,6 +17,15 @@ public class ResourceCard extends Card {
     private List<String> frontCorners;
     private List<String> backCorners;
 
+    /**
+     * Constructs a Resource Card with the specified properties.
+     *
+     * @param idCard       The identifier of the card.
+     * @param symbol       The symbol associated with the Resource Card.
+     * @param points       The points associated with the Resource Card.
+     * @param frontCorners The list of front corners associated with the Resource
+     *                     Card.
+     */
     public ResourceCard(String idCard, String symbol, int points, List<String> frontCorners) {
         super(idCard);
         this.symbol = symbol;
@@ -44,6 +57,10 @@ public class ResourceCard extends Card {
         return backCorners;
     }
 
+    /**
+     * Prints detailed information of the Resource Card.
+     * Includes id, symbol, points, and front corners.
+     */
     @Override
     public void print() {
         System.out.println(

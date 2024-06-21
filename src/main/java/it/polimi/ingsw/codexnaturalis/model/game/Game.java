@@ -19,6 +19,12 @@ import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
 
+/**
+ * Represents a game session of CodexNaturalis, collecting and managing all the
+ * components and all the necessaries pieces of information related to the
+ * current state of the game
+ */
+
 public class Game implements Serializable {
     @Serial
     private static final long serialVersionUID = 621094738562930L;
@@ -46,6 +52,13 @@ public class Game implements Serializable {
     public final Object controllerLock;
     public Stack<String> eventTracker;
 
+    /**
+     * Constructs a new game instance.
+     *
+     * @param gameId       the unique identifier for the game
+     * @param rmiServer    the RMI server instance
+     * @param socketServer the socket server instance
+     */
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
         this.gameState = new InitState(this, rmiServer, socketServer);
@@ -63,6 +76,12 @@ public class Game implements Serializable {
         this.controllerLock = new Object();
         this.eventTracker = new Stack<>();
     }
+
+    /**
+     * Adds a player to the game.
+     *
+     * @param player the player to add
+     */
 
     public void addPlayer(Player player) {
         players.add(player);
@@ -124,10 +143,18 @@ public class Game implements Serializable {
         return playerStructure.get(players.indexOf(player));
     }
 
+    /**
+     * Checks if it is the last turn of the game.
+     *
+     * @return true if it is the last turn, false otherwise
+     */
     public Boolean isLastTurn() {
         return lastTurn;
     }
 
+    /**
+     * Decrements the turn counter by one.
+     */
     public void removeTurn() {
         this.turnCounter--;
     }
@@ -139,7 +166,6 @@ public class Game implements Serializable {
     public Map<Player, List<Pair<Strategy, Card>>> getStrategyMap() {
         return strategyMap;
     }
-    // public Chat getChat(){return this.chat};
 
     public Map<Player, String> getFromPlayerToId() {
         return this.fromPlayerToId;
@@ -162,6 +188,13 @@ public class Game implements Serializable {
         this.gameState = state;
     }
 
+    /**
+     * Sets the number of players in the game and populates the list of players
+     *
+     * @param numPlayers the number of players
+     * @throws IllegalCommandException if the number of players is not between 2 and
+     *                                 4
+     */
     public void setNumPlayers(int numPlayers) throws IllegalCommandException {
         // FIXME: do this in initState
         if (numPlayers < 2 || numPlayers > 4)
@@ -230,6 +263,14 @@ public class Game implements Serializable {
         this.numParticipants++;
     }
 
+    /**
+     * Computes the total points for the patterns and totems for a player.
+     *
+     * @param player      the player
+     * @param strategyMap the strategy map
+     * @return the total points
+     * @throws IllegalCommandException if an illegal command occurs
+     */
     public int getPatternsTotemPoints(Player player, Map<Player, List<Pair<Strategy, Card>>> strategyMap)
             throws IllegalCommandException {
         int points = 0;
@@ -260,6 +301,12 @@ public class Game implements Serializable {
         // client.updateError(message);
     }
 
+    /**
+     * Gets a player by their clientId.
+     *
+     * @param clientId the client ID
+     * @return the player, or null if not found
+     */
     public Player PlayerFromId(String clientId) {
         for (var player : fromPlayerToId.keySet()) {
             if (clientId.equals(fromPlayerToId.get(player))) {
@@ -269,6 +316,11 @@ public class Game implements Serializable {
         return null;
     }
 
+    /**
+     * Checks if only one connected player is left in the game.
+     *
+     * @return true if only one player is left, false otherwise
+     */
     public boolean onePlayerLeft() {
         int counter = 0;
         System.out.println("counting players: " + counter);
@@ -283,6 +335,11 @@ public class Game implements Serializable {
         return true;
     }
 
+    /**
+     * Reverts the state of the player's structure and hand in case a disconnection
+     * occurs
+     * just after a card placement but before drawing a new card.
+     */
     public void revert() {
         System.out.println("restoring " + playerStructure.get(players.indexOf(currentPlayer)));
         playerStructure.set(players.indexOf(currentPlayer), backUpStructure);

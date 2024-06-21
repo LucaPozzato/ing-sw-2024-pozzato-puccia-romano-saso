@@ -23,10 +23,20 @@ import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
 
+/**
+ * Represents the state of the game where a card has been placed by a player.
+ */
 public class PlacedCardState extends ControllerState {
     // TODO: remove regionMatches and use equals -> code more readable
     private boolean placed;
 
+    /**
+     * Constructs a new PlacedCardState.
+     *
+     * @param game         The game instance.
+     * @param rmiServer    The RMI server instance.
+     * @param socketServer The socket server instance.
+     */
     public PlacedCardState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
 
@@ -55,6 +65,16 @@ public class PlacedCardState extends ControllerState {
         placed = false;
     }
 
+    /**
+     * Sends an error event indicating that the game has already been initialized,
+     * preventing redundant initialization attempts.
+     *
+     * @param clientId   The client ID initiating the action.
+     * @param nick       The nickname of the player attempting to initialize.
+     * @param password   The password provided by the player.
+     * @param color      The color chosen by the player.
+     * @param numPlayers The number of players in the game.
+     */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
@@ -66,6 +86,15 @@ public class PlacedCardState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the player has already joined the game,
+     * preventing redundant join attempts.
+     *
+     * @param clientId The client ID attempting to join.
+     * @param nickname The nickname of the player attempting to join.
+     * @param password The password provided by the player.
+     * @param color    The color chosen by the player.
+     */
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
@@ -77,6 +106,16 @@ public class PlacedCardState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the game setup has already been
+     * completed,
+     * preventing redundant setup attempts.
+     *
+     * @param clientId The client ID attempting to set up the game.
+     * @param nickname The player initiating the setup.
+     * @param side     The side chosen by the player.
+     * @param objCard  The objective card chosen by the player.
+     */
     @Override
     public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Game already set up");
@@ -88,6 +127,16 @@ public class PlacedCardState extends ControllerState {
         }
     }
 
+    /**
+     * Handles the placement of a card by a player.
+     *
+     * @param clientId  The client ID attempting to place the card.
+     * @param player    The player attempting to place the card.
+     * @param father    The card where the placement is initiated.
+     * @param placeThis The card being placed.
+     * @param position  The position where the card is placed.
+     * @param frontUp   The orientation of the card.
+     */
     @Override
     public synchronized void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
             Boolean frontUp) {
@@ -128,7 +177,6 @@ public class PlacedCardState extends ControllerState {
             // BUG: exceptions are lost
 
             Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
-            // game.setBackUpStructure(structure);
             structure.placeCard(father, placeThis, position, frontUp);
             removeFromHand(placeThis);
 
@@ -168,6 +216,17 @@ public class PlacedCardState extends ControllerState {
         placed = true;
     }
 
+    /**
+     * Sends an error event indicating that the player cannot draw a card at the
+     * current moment.
+     *
+     * @param clientId  The client ID attempting to place the card.
+     * @param player    The player attempting to place the card.
+     * @param father    The card where the placement is initiated.
+     * @param placeThis The card being placed.
+     * @param position  The position where the card is placed.
+     * @param frontUp   The orientation of the card.
+     */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
         Event event = null;
@@ -188,7 +247,6 @@ public class PlacedCardState extends ControllerState {
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
-        // game.setBackUpHand(hand);
         // iterate over list of cards in the hand of the player to find the card with
         // the same id and then add it to the structure and remove it from the hand
         for (Card card : hand.getCardsHand()) {
@@ -206,12 +264,24 @@ public class PlacedCardState extends ControllerState {
         super.game.getBoard().updateActualScore(super.game.getCurrentPlayer(), points);
     }
 
+    /**
+     * Handles a player's attempt to rejoin the game.
+     * 
+     * @param clientId The client identifier.
+     * @param nickname The nickname of the client.
+     * @param password The password of the client.
+     */
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
 
         Event event = null;
-
         boolean foundNickname = false;
+
+        // Checks if the nickname is correct
+        // Checks if the player results disconnected
+        // Checks if the password is correct
+        // Hence proceedes to send all the information about the game to the rejoined
+        // client with a RejoinGameEvent
         for (var player : game.getPlayers()) {
             if (nickname.equals(player.getNickname())) {
                 foundNickname = true;
@@ -270,6 +340,11 @@ public class PlacedCardState extends ControllerState {
         }
     }
 
+    /**
+     * Handles disconnection of a client from the game.
+     * 
+     * @param clientId The client identifier.
+     */
     @Override
     public synchronized void disconnect(String clientId) {
         boolean keepOn = true;
@@ -277,6 +352,9 @@ public class PlacedCardState extends ControllerState {
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
         System.out.println("disconnect being called");
 
+        // cheks if there is only one player left
+        // in this case waits for 30 seconds before shutting down the game
+        // if a player reconnects proceeds to continue with the game
         if (game.onePlayerLeft()) {
             Event event = new ErrorEvent(null, game.getGameId(),
                     "You are the only player left, waiting for others to rejoin the game...");

@@ -131,7 +131,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     /**
-     * this method is called by the [view?] to send to the server a command taken by
+     * this method is called by the view to send to the server a command taken by
      * input.
      * it adds the command to a queue in order to return immediately
      * the event will later be processed by another thread
@@ -183,7 +183,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     /**
-     * this creates a Cli view and runs it
+     * creates a Cli view and runs it
      * 
      * @throws RemoteException
      */
@@ -191,21 +191,6 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         this.view = new Tui(miniModel, this);
         miniModel.setView(view);
         view.run();
-    }
-
-    public void pingThread() {
-        new Thread(this::ping).start();
-    }
-
-    public void ping() {
-        while (true) {
-            try {
-                sendCommand(new Ping(clientId));
-                Thread.sleep(2000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -219,6 +204,9 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
         view.run();
     }
 
+    /**
+     * generates a clientId which will uniquely dinstinuish a client
+     */
     private String createClientId() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
@@ -227,6 +215,27 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public String getClientId() {
         return this.clientId;
+    }
+
+    /**
+     * creates a Thread to start sending pingCommands
+     */
+    public void pingThread() {
+        new Thread(this::ping).start();
+    }
+
+    /**
+     * creates and sends a pingCommand every two seconds
+     */
+    public void ping() {
+        while (true) {
+            try {
+                sendCommand(new Ping(clientId));
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

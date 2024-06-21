@@ -8,7 +8,7 @@ import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
 /**
  * Commands are created by the view according to the clients' input
- * they are later passed to the client, sent through the network to the server
+ * they are later passed to the client, sent to the server through the network
  * which will call the execute method, passing the controller
  */
 public abstract class Command implements Serializable {
@@ -28,7 +28,8 @@ public abstract class Command implements Serializable {
     public String getClientId() {
         return null;
     }
-    public String getPassword(){
+
+    public String getPassword() {
         return null;
     }
 }

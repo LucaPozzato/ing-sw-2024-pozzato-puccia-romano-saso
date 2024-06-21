@@ -30,6 +30,12 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         this.input = new ObjectInputStream(socket.getInputStream());
     }
 
+    /**
+     * Sends an Event to the client over the socket connection
+     *
+     * @param event The Event to be sent
+     * @throws RemoteException If there is a communication-related exception
+     */
     @Override
     public void receiveEvent(Event event) throws RemoteException {
         try {
@@ -41,10 +47,20 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         }
     }
 
+    /**
+     * Sends a Command to the server
+     *
+     * @param command The Command to be sent to the server
+     * @throws RemoteException If there is a communication-related exception
+     */
     public void sendCommand(Command command) throws RemoteException {
         this.server.receiveCommand(command);
     }
 
+    /**
+     * Stops the execution of the SocketSkeleton instance by interrupting its thread
+     * and closing input stream.
+     */
     public void stop() {
         Thread.currentThread().interrupt();
         try {
@@ -54,6 +70,13 @@ public class SocketSkeleton implements VirtualClient, Runnable {
         }
     }
 
+    /**
+     * Continuously listens for incoming Commands from the client,
+     * processes them, and forwards them to the server
+     * Handles special Commands like CreateGameCommand, JoinGameCommand,
+     * RejoinGameCommand, and Ping
+     * to manage client identification.
+     */
     @Override
     public void run() {
         try {
@@ -71,7 +94,6 @@ public class SocketSkeleton implements VirtualClient, Runnable {
             }
         } catch (EOFException e) {
             System.out.println("Client disconnected EOF");
-            // ((SocketServer) server).disconnectSocket(this);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {

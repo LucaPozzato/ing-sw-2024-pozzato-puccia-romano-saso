@@ -7,12 +7,22 @@ import java.util.Map;
 
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 
+/**
+ * Represents an abstract card in the game, providing common methods and
+ * properties for all card types.
+ * Extends Serializable to support object serialization.
+ */
 public abstract class Card implements Serializable {
     @Serial
     private static final long serialVersionUID = 817463925078346L;
 
     protected String idCard;
 
+    /**
+     * Constructs a card with a specified identifier.
+     *
+     * @param idCard The identifier of the card.
+     */
     public Card(String idCard) {
         this.idCard = idCard;
     };
@@ -65,10 +75,16 @@ public abstract class Card implements Serializable {
         throw new IllegalCommandException("This card does not have points type");
     }
 
+    /**
+     * Prints the representation of the card.
+     */
     public void print() {
         System.out.println("Card: " + idCard);
     }
 
+    /**
+     * Returns a string representation of the card.
+     */
     @Override
     public String toString() {
         return "Card: " + idCard;

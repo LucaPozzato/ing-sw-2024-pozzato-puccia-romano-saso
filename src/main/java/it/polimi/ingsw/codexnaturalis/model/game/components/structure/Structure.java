@@ -19,6 +19,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import javafx.util.Pair;
 
+/**
+ * Represents the structure where cards are placed in the game.
+ * Provides methods for managing and interacting with the structure,
+ * including placing cards, calculating points, and checking placements.
+ */
 public class Structure implements Serializable {
     @Serial
     private static final long serialVersionUID = 109283746501928L;
@@ -29,6 +34,10 @@ public class Structure implements Serializable {
     private Card[][] cardMatrix = new Card[80][80];
     private int satisfiedPatterns;
 
+    /**
+     * Constructs a new Structure with initial settings.
+     * Initializes lists, maps, and counters.
+     */
     public Structure() {
         this.placedCards = new ArrayList<>();
         this.cardToCoordinate = new HashMap<>();
@@ -292,6 +301,15 @@ public class Structure implements Serializable {
             // checks for suitable arguments
         }
     }
+
+    /**
+     * Updates the visibility of symbols on the structure based on the placement of
+     * the last card.
+     *
+     * @throws IllegalCommandException if there is an issue with the visibility
+     *                                 calculation
+     *                                 based on the structure's current state
+     */
 
     private void calcVisibleSymbols() throws IllegalCommandException {
         Card card = placedCards.getLast().getKey();

@@ -13,8 +13,19 @@ import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 
+/**
+ * Entry point for the server application. It initializes the RMI and socket
+ * servers
+ * and binds the necessary objects for remote communication.
+ */
 public class ServerMain {
 
+    /**
+     * Main method to start the server application.
+     *
+     * @param args command-line arguments (not used)
+     * @throws Exception if an error occurs during server startup
+     */
     public static void main(String[] args) throws Exception {
         System.out.println("\033[2J\033[1;1H");
         System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
@@ -31,7 +42,6 @@ public class ServerMain {
             rmiServer.run();
 
             Map<Integer, Game> games = new HashMap<>();
-            // Game game = new Game(0, (RmiServer) rmiServer, socketServer);
             rmiServer.setGames(games);
             rmiServer.setSocketServer(socketServer);
             socketServer.setGames(games);

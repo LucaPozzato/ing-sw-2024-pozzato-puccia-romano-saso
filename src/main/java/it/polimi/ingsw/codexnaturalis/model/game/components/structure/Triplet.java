@@ -3,6 +3,12 @@ package it.polimi.ingsw.codexnaturalis.model.game.components.structure;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Represents a Triplet of three generic objects.
+ * It is used as an elements of the maps that keep track of the corrispondence
+ * between coordinate and cards in the matrix representing the structure of the
+ * player.
+ */
 public class Triplet<X, Y, Z> implements Serializable {
     @Serial
     private static final long serialVersionUID = 198312934098263L;

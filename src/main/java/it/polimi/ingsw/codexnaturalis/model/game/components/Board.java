@@ -13,6 +13,11 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 
+/**
+ * Represents the board of the game, including scores, objectives, and uncovered
+ * cards.
+ * Implements Serializable to support object serialization.
+ */
 public class Board implements Serializable {
     @Serial
     private static final long serialVersionUID = 709863251847392L;
@@ -22,6 +27,9 @@ public class Board implements Serializable {
     private List<Card> uncoveredCards;
     private int emptyIndex = 0;
 
+    /**
+     * Constructs a new Board with initial values.
+     */
     public Board() {
         this.actualScores = new HashMap<>();
         this.virtualScores = new HashMap<>();
@@ -53,6 +61,14 @@ public class Board implements Serializable {
         this.commonObjectives = commonObjectives;
     }
 
+    /**
+     * Updates the actual score of a player.
+     *
+     * @param player    The player whose score is to be updated.
+     * @param newPoints The points to add to the player's actual score.
+     * @throws IllegalCommandException If an attempt is made to exceed the maximum
+     *                                 number of players.
+     */
     public void updateActualScore(Player player, Integer newPoints) throws IllegalCommandException {
         if (!actualScores.containsKey(player)) {
             if (actualScores.size() < 4)
@@ -63,6 +79,14 @@ public class Board implements Serializable {
             actualScores.put(player, actualScores.get(player) + newPoints);
     }
 
+    /**
+     * Updates the virtual score of a player.
+     *
+     * @param player    The player whose score is to be updated.
+     * @param newPoints The points to add to the player's virtual score.
+     * @throws IllegalCommandException If an attempt is made to exceed the maximum
+     *                                 number of players.
+     */
     public void updateVirtualScore(Player player, Integer newPoints) throws IllegalCommandException {
         if (!virtualScores.containsKey(player)) {
             if (virtualScores.size() < 4)
@@ -72,6 +96,14 @@ public class Board implements Serializable {
         } else
             virtualScores.put(player, virtualScores.get(player) + newPoints);
     }
+
+    /**
+     * Adds an uncovered card to the board.
+     *
+     * @param card The card to be added to the uncovered cards list.
+     * @throws IllegalCommandException If an attempt is made to add an invalid card
+     *                                 type or if the board is full.
+     */
 
     public void addUncoveredCard(Card card) throws IllegalCommandException {
         if (card instanceof InitialCard || card instanceof ObjectiveCard)
@@ -92,6 +124,13 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Removes an uncovered card from the board.
+     *
+     * @param card The card to be removed from the uncovered cards list.
+     * @throws IllegalCommandException If an attempt is made to remove more than one
+     *                                 card or if the card is not on the board.
+     */
     public void removeUncoveredCard(Card card) throws IllegalCommandException {
         if (uncoveredCards.size() < 4)
             throw new IllegalCommandException("Cannot remove more than one card");

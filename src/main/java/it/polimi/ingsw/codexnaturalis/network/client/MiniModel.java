@@ -13,9 +13,9 @@ import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.view.View;
 
 /**
- * this clas serves as a local copy of the model on the client side that
- * contains only the needed pieces of information and none of the model logic
- * it is updated to by the events, sent from the server, and for every update
+ * this clas serves as a local copy of the model on the client side
+ * it contains only the needed pieces of information and none of the model logic
+ * it is updated by the events, sent from the server, and for every update
  * it calls the viewUpdate methods to modify the view
  */
 public class MiniModel {
@@ -48,7 +48,6 @@ public class MiniModel {
         this.playerStructures = new ArrayList<>();
     }
 
-    // might be handy for the interface
     public boolean isMyTurn() {
         return currentPlayer.equals(myPlayer);
     }
@@ -123,7 +122,6 @@ public class MiniModel {
     }
 
     // setter
-
     public void setView(View view) {
         this.view = view;
     }

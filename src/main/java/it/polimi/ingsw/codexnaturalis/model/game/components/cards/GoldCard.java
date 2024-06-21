@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a Gold Card in the game, extending the abstract class Card.
+ * Contains specific properties and methods related to Gold Cards.
+ */
 public class GoldCard extends Card {
     @Serial
     private static final long serialVersionUID = 284719356018473L;
@@ -15,6 +19,16 @@ public class GoldCard extends Card {
     private List<String> backCorners;
     private Map<String, Integer> requirements;
 
+    /**
+     * Constructs a Gold Card with the specified properties.
+     *
+     * @param idCard       The identifier of the card.
+     * @param symbol       The symbol associated with the card.
+     * @param points       The points value of the card.
+     * @param pointsType   The type of points.
+     * @param frontCorners The list of front corners associated with the card.
+     * @param requirements The requirements associated with the card.
+     */
     public GoldCard(String idCard, String symbol, int points, String pointsType, List<String> frontCorners,
             Map<String, Integer> requirements) {
         super(idCard);
@@ -59,6 +73,12 @@ public class GoldCard extends Card {
         return requirements;
     }
 
+    /**
+     * Returns a string representation of the Gold Card.
+     *
+     * @return A string representation including the identifier and lists of corners
+     *         and resources.
+     */
     @Override
     public void print() {
         System.out.println(

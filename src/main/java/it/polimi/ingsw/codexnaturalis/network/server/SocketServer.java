@@ -249,7 +249,12 @@ public class SocketServer implements VirtualServer, Runnable {
     }
 
     /**
-     * TODO
+     * starts the server by initializing processing threads for commands and events,
+     * establishes a socket connection to accept incoming client connections
+     * each incoming connection is handled by creating a new socket client instance
+     * and starting it in a separate thread.
+     * If an IOException occurs while accepting a new connection, the stack trace
+     * is printed, and the server continues to run.
      */
     public void run() {
         processCommandThread();
@@ -276,30 +281,36 @@ public class SocketServer implements VirtualServer, Runnable {
                 client = new SocketSkeleton(this, socket);
                 new Thread(client).start();
                 clients.add(client);
-                // this.clientIds.put(client, client.getClientId());
                 System.out.println("clients: " + clients.size());
-                // System.out.println("clients: " + clientIds.size());
-                // synchronized (this.timers) {
-                // try {
-                // this.timers.put(client, new Timer());
-                // timers.get(client).schedule(new PingTask(client), 6000);
-                // } catch (Exception e) {
-                // e.printStackTrace();
-                // }
-                // }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Task class to handle periodic ping tasks for clients
+     */
     class PingTask extends TimerTask {
         private final VirtualClient client;
 
+        /**
+         * Constructs a new PingTask for the specified client
+         * 
+         * @param client
+         */
         public PingTask(VirtualClient client) {
             this.client = client;
         }
 
+        /**
+         * executes the ping task to disconnect clients by
+         * finding the game in which the client is playing
+         * calling the disconnect method from the controller of that game, passing the
+         * clientId
+         * removes the client from the list of clients
+         * removes the clientId from the list of clientIds
+         */
         @Override
         public void run() {
 

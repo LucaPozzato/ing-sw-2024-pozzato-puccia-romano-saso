@@ -7,6 +7,10 @@ import java.util.List;
 
 import javafx.util.Pair;
 
+/**
+ * Represents the chat of the game storaging the messages.
+ * Each message is associated with a unique identifier.
+ */
 public class Chat implements Serializable {
     @Serial
     private static final long serialVersionUID = 109283746501965L;
@@ -15,6 +19,9 @@ public class Chat implements Serializable {
 
     private List<Pair<Integer, ChatMessage>> chatMessages;
 
+    /**
+     * Constructs a new Chat instance with an empty list of messages.
+     */
     public Chat() {
         chatMessages = new ArrayList<Pair<Integer, ChatMessage>>();
     }

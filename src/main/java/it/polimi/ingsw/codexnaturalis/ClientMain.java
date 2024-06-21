@@ -15,7 +15,19 @@ import it.polimi.ingsw.codexnaturalis.network.client.SocketClient;
 import it.polimi.ingsw.codexnaturalis.utils.DefaultValue;
 import javafx.application.Platform;
 
+/**
+ * Entry point for the client application. It handles the user interface
+ * selection and the connection type selection, hence starts the client
+ * accordingly.
+ */
+
 public class ClientMain {
+
+    /**
+     * Main method to start the client application.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         System.out.println("\033[2J\033[1;1H");
         String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
@@ -43,6 +55,13 @@ public class ClientMain {
             }
     }
 
+    /**
+     * Prompts the user to choose the type of user interface.
+     *
+     * @param input BufferedReader to read user input
+     * @return true if CLI is chosen, false if GUI is chosen
+     * @throws IOException if an I/O error occurs
+     */
     private static boolean chooseUserInterface(BufferedReader input) throws IOException {
 
         System.out.print("Please insert the type of user interface you would like to play with [cli/gui]:   ");
@@ -61,6 +80,13 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Prompts the user to choose the type of connection.
+     *
+     * @param input BufferedReader to read user input
+     * @return true if RMI is chosen, false if socket is chosen
+     * @throws IOException if an I/O error occurs
+     */
     private static boolean chooseConnectionType(BufferedReader input) throws IOException {
 
         System.out.print("Please insert the type of connection you would like to use [rmi/socket]:   ");
@@ -79,6 +105,13 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Starts the client with the specified user interface and connection type.
+     *
+     * @param isCli true if CLI is chosen, false if GUI is chosen
+     * @param isRmi true if RMI is chosen, false if socket is chosen
+     * @return true if the client started successfully, false otherwise
+     */
     private static Boolean startClient(boolean isCli, boolean isRmi) {
         if (isCli) {
             System.out.println("Starting CLI client...");
@@ -94,6 +127,12 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Starts the client using RMI.
+     *
+     * @param isCli true if CLI is chosen, false if GUI is chosen
+     * @return true if the client started successfully, false otherwise
+     */
     private static Boolean startRmiClient(boolean isCli) {
         try {
             VirtualServer server = null;
@@ -113,6 +152,13 @@ public class ClientMain {
             return false;
         }
     }
+
+    /**
+     * Starts the client using a socket connection.
+     *
+     * @param isCli true if CLI is chosen, false if GUI is chosen
+     * @return true if the client started successfully, false otherwise
+     */
 
     private static Boolean startSocketClient(boolean isCli) {
         Socket socket = null;

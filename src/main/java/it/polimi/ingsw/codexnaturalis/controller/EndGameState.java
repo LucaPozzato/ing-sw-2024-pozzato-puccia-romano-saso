@@ -19,8 +19,23 @@ import it.polimi.ingsw.codexnaturalis.network.server.RmiServer;
 import it.polimi.ingsw.codexnaturalis.network.server.SocketServer;
 import javafx.util.Pair;
 
+/**
+ * Represents the state of the game when it has ended.
+ * This state handles the necessary finalization tasks such as calculating the
+ * points gathered from the objectives and declaring the
+ * winner.
+ */
 public class EndGameState extends ControllerState {
 
+    /**
+     * Constructs an EndGameState with the specified game, RMI server, and socket
+     * server.
+     * This constructor calls methods to finalize the match and declare the winner.
+     *
+     * @param game         The game instance that this state is associated with.
+     * @param rmiServer    The RMI server used for remote method invocation.
+     * @param socketServer The socket server used for socket communication.
+     */
     public EndGameState(Game game, RmiServer rmiServer, SocketServer socketServer) {
         super(game, rmiServer, socketServer);
         // BUG: metodo di terminazione partita che sia valido per tutti gli stati
@@ -28,6 +43,16 @@ public class EndGameState extends ControllerState {
         declareWinner();
     }
 
+    /**
+     * Sends an error event indicating that the game has already been initialized,
+     * preventing redundant initialization attempts.
+     *
+     * @param clientId   The client ID initiating the action.
+     * @param nick       The nickname of the player attempting to initialize.
+     * @param password   The password provided by the player.
+     * @param color      The color chosen by the player.
+     * @param numPlayers The number of players in the game.
+     */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
@@ -39,6 +64,15 @@ public class EndGameState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the player has already joined the game,
+     * preventing redundant join attempts.
+     *
+     * @param clientId The client ID attempting to join.
+     * @param nickname The nickname of the player attempting to join.
+     * @param password The password provided by the player.
+     * @param color    The color chosen by the player.
+     */
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
@@ -50,6 +84,16 @@ public class EndGameState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the game setup has already been
+     * completed,
+     * preventing redundant setup attempts.
+     *
+     * @param clientId The client ID attempting to set up the game.
+     * @param nickname The player initiating the setup.
+     * @param side     The side chosen by the player.
+     * @param objCard  The objective card chosen by the player.
+     */
     @Override
     public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
@@ -61,6 +105,17 @@ public class EndGameState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the player cannot place a card at the
+     * current moment.
+     * 
+     * @param clientId  The client ID attempting to place the card.
+     * @param player    The player attempting to place the card.
+     * @param father    The card where the placement is initiated.
+     * @param placeThis The card being placed.
+     * @param position  The position where the card is placed.
+     * @param frontUp   The orientation of the card.
+     */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
             Boolean frontUp) {
@@ -73,6 +128,17 @@ public class EndGameState extends ControllerState {
         }
     }
 
+    /**
+     * Sends an error event indicating that the player cannot draw a card at the
+     * current moment.
+     *
+     * @param clientId  The client ID attempting to place the card.
+     * @param player    The player attempting to place the card.
+     * @param father    The card where the placement is initiated.
+     * @param placeThis The card being placed.
+     * @param position  The position where the card is placed.
+     * @param frontUp   The orientation of the card.
+     */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
@@ -84,10 +150,22 @@ public class EndGameState extends ControllerState {
         }
     }
 
+    /**
+     * Handles disconnection of a client.
+     * 
+     * @param clientId The client identifier.
+     */
     @Override
     public void disconnect(String clientId) {
     }
 
+    /**
+     * Handles a player's attempt to rejoin the game.
+     * 
+     * @param clientId The client identifier.
+     * @param nickname The nickname of the client.
+     * @param password The password of the client.
+     */
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
         Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");

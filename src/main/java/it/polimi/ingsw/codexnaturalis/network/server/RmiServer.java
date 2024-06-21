@@ -32,13 +32,6 @@ public class RmiServer implements VirtualServer {
     private final Queue<Event> eventExitQueue;
     private SocketServer socketServer;
 
-    /**
-     * constructor of the RmiServer, it instantiates the list of the clients
-     * connected and
-     * the queues that will manage the events and the commands
-     * 
-     * @throws Exception
-     */
     public RmiServer() throws Exception {
         this.clients = new ArrayList<>();
         this.clientIds = new HashMap<>();
@@ -49,7 +42,7 @@ public class RmiServer implements VirtualServer {
     }
 
     /**
-     * starts two threads to process events and commands
+     * starts the server by initializing processing threads for commands and events,
      */
     public void run() {
         System.out.println("rmi server running");
@@ -64,10 +57,6 @@ public class RmiServer implements VirtualServer {
     public void setSocketServer(SocketServer socketServer) {
         this.socketServer = socketServer;
     }
-
-    // public Map<SocketSkeleton, Boolean> getConnected() {
-    // return connected;
-    // }
 
     /**
      * this method is called by the client to send a command taken by input
@@ -141,12 +130,9 @@ public class RmiServer implements VirtualServer {
                     this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(),
                             "Already created or joined a game"));
                 } else if (command instanceof Ping && timers.containsKey(command.getClientId())) {
-                    // System.out.println("rmi server received ping");
                     timers.get(command.getClientId()).cancel();
-                    // System.out.println("rmi server ping timer cancelled");
                     timers.put(command.getClientId(), new Timer());
                     timers.get(command.getClientId()).schedule(new PingTask(command.getClientId()), 6000);
-                    // System.out.println("rmi server ping timer scheduled");
                 } else if (games.containsKey(gameId))
                     synchronized (games.get(gameId).controllerLock) {
                         command.execute(games.get(gameId).getState());
@@ -198,7 +184,6 @@ public class RmiServer implements VirtualServer {
      * passing the event
      */
     public void processEvent() {
-        // TODO: gestione eccezioni
         while (true) {
             try {
                 Event event = null;
@@ -283,13 +268,29 @@ public class RmiServer implements VirtualServer {
         }
     }
 
+    /**
+     * Task class to handle periodic ping tasks for clients
+     */
     class PingTask extends TimerTask {
         private final String clientId;
 
+        /**
+         * Constructs a new PingTask for the specified client
+         * 
+         * @param client
+         */
         public PingTask(String clientId) {
             this.clientId = clientId;
         }
 
+        /**
+         * executes the ping task to disconnect clients by
+         * finding the game in which the client is playing
+         * calling the disconnect method from the controller of that game, passing the
+         * clientId
+         * removes the client from the list of clients
+         * removes the clientId from the list of clientIds
+         */
         @Override
         public void run() {
             VirtualClient client = null;
@@ -304,11 +305,9 @@ public class RmiServer implements VirtualServer {
                 }
             }
 
-            // vediamo se è in partita e in caso lo rimuovimao
             for (var gameId : players.keySet()) {
                 exit = false;
                 for (var client1 : players.get(gameId))
-                    // BUG: throws exception
                     if (client.equals(client1)) {
                         players.get(gameId).remove(client);
                         gId = gameId;
@@ -319,7 +318,6 @@ public class RmiServer implements VirtualServer {
                     break;
             }
 
-            // rimuoviamo dalle liste e chiamiamo
             clients.remove(client);
             clientIds.remove(client);
             if (gId != null && games.containsKey(gId))

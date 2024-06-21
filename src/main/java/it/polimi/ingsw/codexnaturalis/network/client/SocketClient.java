@@ -105,7 +105,7 @@ public class SocketClient implements VirtualClient, Runnable {
 
     /**
      * this method is called by the RmiServer to send an event, which is an update
-     * in the model.
+     * in the model
      * it adds the event to a queue in order to return immediately
      * the event will later be processed by another thread
      * 
@@ -167,8 +167,8 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     /**
-     * this method is called by the [view?] to send to the server a command taken by
-     * input.
+     * this method is called by the View in order to send a command taken by input
+     * to the server
      * it adds the command to a queue in order to return immediately
      * the event will later be processed by another thread
      * 
@@ -221,7 +221,7 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     /**
-     * this creates a Cli view and runs it
+     * creates a Cli view and runs it
      * 
      * @throws RemoteException
      */
@@ -232,7 +232,7 @@ public class SocketClient implements VirtualClient, Runnable {
     }
 
     /**
-     * this creates a Gui view and runs it
+     * creates a Gui view and runs it
      * 
      * @throws RemoteException
      */
@@ -242,6 +242,9 @@ public class SocketClient implements VirtualClient, Runnable {
         view.run();
     }
 
+    /**
+     * generates a clientId which will uniquely dinstinuish a client
+     */
     private String createClientId() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
@@ -252,10 +255,16 @@ public class SocketClient implements VirtualClient, Runnable {
         return this.clientId;
     }
 
+    /**
+     * creates a Thread to start sending pingCommands
+     */
     public void pingThread() {
         new Thread(this::ping).start();
     }
 
+    /**
+     * creates and sends a pingCommand every two seconds
+     */
     @Override
     public void ping() {
         while (true) {
