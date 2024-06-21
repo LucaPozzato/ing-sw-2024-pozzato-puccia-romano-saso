@@ -61,6 +61,7 @@ public class InitState extends ControllerState {
      */
     private void createDecks() {
         // Creates instances of the needed parser
+        //FIXME: since they are attributes altready present when the state in born we can avoid to create new parser (use this.)
         resPar = new ResourceParser();
         goldPar = new GoldParser();
         // Creates an instance of deck and assigns it to the Game
@@ -80,8 +81,7 @@ public class InitState extends ControllerState {
      */
     private void createFirstPlayer(String nick, String password, Color color, int numPlayers, String clientId)
             throws IllegalCommandException {
-        // TODO togliere dal costruttore di Players il nickname e il colore e istituire
-        // dei setter specifici
+        // TODO: togliere dal costruttore di Players il nickname e il colore e istituire dei setter specifici
         Player player = new Player(nick, password, color);
 
         super.game.getPlayers().add(player);

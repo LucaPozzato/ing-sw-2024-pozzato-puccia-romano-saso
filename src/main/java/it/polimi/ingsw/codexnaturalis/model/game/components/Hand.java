@@ -21,7 +21,6 @@ public class Hand implements Serializable {
     private InitialCard initCard;
     private int emptyIndex = 0;
 
-    // costruttore
     public Hand() {
         cardsHand = new ArrayList<>();
         chooseBetweenObj = new ArrayList<>();
@@ -43,15 +42,6 @@ public class Hand implements Serializable {
      */
     public Card getSecretObjective() {
         return this.secretObjective;
-    }
-
-    /**
-     * Sets the objective cards to choose from
-     * 
-     * @param chooseBetweenObj the objective cards to choose from
-     */
-    public void setChooseBetweenObj(List<Card> chooseBetweenObj) {
-        this.chooseBetweenObj = chooseBetweenObj;
     }
 
     /**

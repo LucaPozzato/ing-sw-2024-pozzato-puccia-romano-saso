@@ -51,8 +51,13 @@ public class WaitPlayerState extends ControllerState {
             }
 
             createNewPlayers(clientId, nickname, password, color);
+
         } catch (IllegalCommandException err) {
             System.out.println("> sent error: " + err.getMessage());
+
+            //TODO: understand if keep it
+            super.game.pushEvent(err.getMessage());
+
             Event event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
             super.rmiServer.sendEvent(event);
             try {

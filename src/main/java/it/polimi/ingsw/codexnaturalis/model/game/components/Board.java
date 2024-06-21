@@ -33,10 +33,6 @@ public class Board implements Serializable {
         return actualScores.get(player);
     }
 
-    public Integer getVirtualPoints(Player player) {
-        return virtualScores.get(player);
-    }
-
     public Map<Player, Integer> getActualScores() {
         return actualScores;
     }
@@ -105,10 +101,4 @@ public class Board implements Serializable {
         emptyIndex = uncoveredCards.indexOf(card);
         this.uncoveredCards.remove(card);
     }
-
-    public boolean isLastTurn() {
-        return false;
-        // definire da dove prendere informazione
-    }
-
 }

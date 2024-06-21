@@ -69,6 +69,6 @@ public class ObjectiveCard extends Card {
 
     @Override
     public String getPointsType() throws IllegalCommandException {
-        throw new IllegalCommandException();
+        throw new IllegalCommandException("Can't get points type");
     }
 }

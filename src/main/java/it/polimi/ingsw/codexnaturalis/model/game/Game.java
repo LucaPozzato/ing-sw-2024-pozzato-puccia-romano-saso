@@ -2,10 +2,7 @@ package it.polimi.ingsw.codexnaturalis.model.game;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import it.polimi.ingsw.codexnaturalis.controller.ControllerState;
 import it.polimi.ingsw.codexnaturalis.controller.InitState;
@@ -47,6 +44,7 @@ public class Game implements Serializable {
     private int backUpPoints;
     private boolean skip;
     public final Object controllerLock;
+    public Stack<String> eventTracker;
 
     public Game(int gameId, RmiServer rmiServer, SocketServer socketServer) {
         this.gameId = gameId;
@@ -63,6 +61,7 @@ public class Game implements Serializable {
         this.backUpPoints = 0;
         this.skip = false;
         this.controllerLock = new Object();
+        this.eventTracker = new Stack<>();
     }
 
     public void addPlayer(Player player) {
@@ -148,18 +147,6 @@ public class Game implements Serializable {
 
     public Map<Player, Boolean> getConnected() {
         return this.connected;
-    }
-
-    public Structure getBackUpStructure() {
-        return this.backUpStructure;
-    }
-
-    public Hand getBackUpHand() {
-        return this.backUpHand;
-    }
-
-    public int getBackUpPoints() {
-        return this.backUpPoints;
     }
 
     public boolean getSkip() {
@@ -306,5 +293,13 @@ public class Game implements Serializable {
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }
+    }
+
+    //TODO: discuss if it's an acceptable practice and if keep it here or move it in another class
+    public void pushEvent(String eventMessage){
+        this.eventTracker.push(eventMessage);
+    }
+    public Stack getEventTracker(){
+        return this.eventTracker;
     }
 }

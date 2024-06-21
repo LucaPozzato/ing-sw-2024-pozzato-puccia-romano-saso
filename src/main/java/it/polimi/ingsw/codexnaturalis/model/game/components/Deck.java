@@ -28,14 +28,6 @@ public class Deck implements Serializable {
         return resourceDeck;
     }
 
-    public void addGoldCard(GoldCard card) {
-        this.goldDeck.push(card);
-    }
-
-    public void addResourceCard(ResourceCard card) {
-        this.resourceDeck.push(card);
-    }
-
     public GoldCard drawGoldCard() {
         return goldDeck.pop();
     }
@@ -50,13 +42,5 @@ public class Deck implements Serializable {
 
     public void shuffleResourceDeck() {
         Collections.shuffle(resourceDeck);
-    }
-
-    public boolean emptyGold() {
-        return goldDeck.isEmpty();
-    }
-
-    public boolean emptyRes() {
-        return resourceDeck.isEmpty();
     }
 }
