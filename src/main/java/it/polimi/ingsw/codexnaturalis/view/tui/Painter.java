@@ -23,215 +23,129 @@ public class Painter {
     private static final String ANSI_BG_BLUE = "\u001B[48;5;19m";
     private static final String ANSI_BG_PURPLE = "\u001B[48;5;55m";
 
-    public List<String> paintHand(List<String> hand, List<Card> cardsHand)
+    /**
+     * Paints the list of the strings representing the cards
+     * 
+     * @param stringList the list of strings that contain the cards to be painted
+     * @param cardList   the list of cards to be painted
+     * @return the updated colored list of strings
+     * @throws IllegalCommandException
+     */
+    public List<String> paintListOfCards(List<String> stringList, List<Card> cardList)
             throws IllegalCommandException {
-        List<String> handStringList = new ArrayList<>();
+        List<String> updatedStringList = new ArrayList<>();
         String[] cardLines;
         String card;
 
-        for (int k = 0; k < hand.size(); k++) {
-            card = hand.get(k);
-            handStringList.add("");
-            int pos = handStringList.size() - 1;
+        for (int k = 0; k < stringList.size(); k++) {
+            card = stringList.get(k);
+            updatedStringList.add("");
+            int pos = updatedStringList.size() - 1;
             cardLines = card.split("\n");
             for (String cardLine : cardLines) {
                 for (int i = 0; i < cardLine.length(); i++) {
                     switch (cardLine.charAt(i)) {
                         case 'A':
-                            handStringList.set(pos, handStringList.get(pos) + ANSI_BLUE + cardLine.charAt(i)
+                            updatedStringList.set(pos, updatedStringList.get(pos) + ANSI_BLUE + cardLine.charAt(i)
                                     + ANSI_RESET);
                             break;
                         case 'V':
-                            handStringList.set(pos, handStringList.get(pos) + ANSI_GREEN + cardLine.charAt(i)
+                            updatedStringList.set(pos, updatedStringList.get(pos) + ANSI_GREEN + cardLine.charAt(i)
                                     + ANSI_RESET);
                             break;
                         case 'I', 'І':
                             if (Character.isDigit(cardLine.charAt(i + 1))) {
-                                handStringList.set(pos,
-                                        handStringList.get(pos) + ANSI_BG_YELLOW + cardLine.charAt(i));
-                                handStringList.set(pos, handStringList.get(pos) + cardLine.charAt(i + 1));
-                                handStringList.set(pos,
-                                        handStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
+                                updatedStringList.set(pos,
+                                        updatedStringList.get(pos) + ANSI_BG_YELLOW + cardLine.charAt(i));
+                                updatedStringList.set(pos, updatedStringList.get(pos) + cardLine.charAt(i + 1));
+                                updatedStringList.set(pos,
+                                        updatedStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
                                 i += 2;
                             } else if (cardLine.charAt(i) == 'I')
-                                handStringList.set(pos, handStringList.get(pos) + ANSI_PURPLE + cardLine.charAt(i)
+                                updatedStringList.set(pos, updatedStringList.get(pos) + ANSI_PURPLE + cardLine.charAt(i)
                                         + ANSI_RESET);
                             else {
-                                handStringList.set(pos, handStringList.get(pos) + cardLine.charAt(i));
+                                updatedStringList.set(pos, updatedStringList.get(pos) + cardLine.charAt(i));
                             }
                             break;
                         case 'R', 'G':
                             // Calculates the coordinates given the index of the matrix
-                            switch (cardsHand.get(k).getSymbol()) {
+                            switch (cardList.get(k).getSymbol()) {
                                 case "SHROOM":
-                                    handStringList.set(pos,
-                                            handStringList.get(pos) + ANSI_BG_RED + cardLine.charAt(i));
+                                    updatedStringList.set(pos,
+                                            updatedStringList.get(pos) + ANSI_BG_RED + cardLine.charAt(i));
                                     break;
                                 case "ANIMAL":
-                                    handStringList.set(pos,
-                                            handStringList.get(pos) + ANSI_BG_BLUE + cardLine.charAt(i));
+                                    updatedStringList.set(pos,
+                                            updatedStringList.get(pos) + ANSI_BG_BLUE + cardLine.charAt(i));
                                     break;
                                 case "VEGETABLE":
-                                    handStringList.set(pos,
-                                            handStringList.get(pos) + ANSI_BG_GREEN + cardLine.charAt(i));
+                                    updatedStringList.set(pos,
+                                            updatedStringList.get(pos) + ANSI_BG_GREEN + cardLine.charAt(i));
                                     break;
                                 case "INSECT":
-                                    handStringList.set(pos,
-                                            handStringList.get(pos) + ANSI_BG_PURPLE + cardLine.charAt(i));
+                                    updatedStringList.set(pos,
+                                            updatedStringList.get(pos) + ANSI_BG_PURPLE + cardLine.charAt(i));
                                     break;
                                 default:
                                     break;
                             }
-                            handStringList.set(pos, handStringList.get(pos) + cardLine.charAt(i + 1));
-                            handStringList.set(pos, handStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
+                            updatedStringList.set(pos, updatedStringList.get(pos) + cardLine.charAt(i + 1));
+                            updatedStringList.set(pos,
+                                    updatedStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
                             i += 2;
                             break;
                         case 'S':
-                            handStringList.set(pos, handStringList.get(pos) + ANSI_RED + cardLine.charAt(i)
+                            updatedStringList.set(pos, updatedStringList.get(pos) + ANSI_RED + cardLine.charAt(i)
                                     + ANSI_RESET);
                             break;
                         case 's':
-                            handStringList.set(pos,
-                                    handStringList.get(pos) + ANSI_YELLOW
+                            updatedStringList.set(pos,
+                                    updatedStringList.get(pos) + ANSI_YELLOW
                                             + Character.toUpperCase(cardLine.charAt(i))
                                             + ANSI_RESET);
                             break;
                         case 'i':
-                            handStringList.set(pos,
-                                    handStringList.get(pos) + ANSI_YELLOW
+                            updatedStringList.set(pos,
+                                    updatedStringList.get(pos) + ANSI_YELLOW
                                             + Character.toUpperCase(cardLine.charAt(i))
                                             + ANSI_RESET);
                             break;
                         case 'f':
-                            handStringList.set(pos,
-                                    handStringList.get(pos) + ANSI_YELLOW
+                            updatedStringList.set(pos,
+                                    updatedStringList.get(pos) + ANSI_YELLOW
                                             + Character.toUpperCase(cardLine.charAt(i))
                                             + ANSI_RESET);
                             break;
                         case 'N':
-                            handStringList.set(pos,
-                                    handStringList.get(pos) + ANSI_BG_BRIGHT_RED + 'X' + ANSI_RESET);
+                            updatedStringList.set(pos,
+                                    updatedStringList.get(pos) + ANSI_BG_BRIGHT_RED + 'X' + ANSI_RESET);
                             break;
                         case 'E':
-                            handStringList.set(pos, handStringList.get(pos) + ANSI_DARK_GRAY + '░' + ANSI_RESET);
+                            updatedStringList.set(pos, updatedStringList.get(pos) + ANSI_DARK_GRAY + '░' + ANSI_RESET);
                             break;
                         default:
-                            handStringList.set(pos, handStringList.get(pos) + cardLine.charAt(i));
+                            updatedStringList.set(pos, updatedStringList.get(pos) + cardLine.charAt(i));
                             break;
                     }
                 }
-                handStringList.set(pos, handStringList.get(pos) + "\n");
+                updatedStringList.set(pos, updatedStringList.get(pos) + "\n");
             }
             pos++;
         }
 
-        return handStringList;
+        return updatedStringList;
     }
 
-    public List<String> paintBoard(List<String> board, List<Card> uncoveredCards) throws IllegalCommandException {
-        List<String> boardStringList = new ArrayList<>();
-        String[] cardLines;
-        String card;
-
-        for (int k = 0; k < board.size(); k++) {
-            card = board.get(k);
-            boardStringList.add("");
-            int pos = boardStringList.size() - 1;
-            cardLines = card.split("\n");
-            for (String cardLine : cardLines) {
-                for (int i = 0; i < cardLine.length(); i++) {
-                    switch (cardLine.charAt(i)) {
-                        case 'A':
-                            boardStringList.set(pos, boardStringList.get(pos) + ANSI_BLUE + cardLine.charAt(i)
-                                    + ANSI_RESET);
-                            break;
-                        case 'V':
-                            boardStringList.set(pos, boardStringList.get(pos) + ANSI_GREEN + cardLine.charAt(i)
-                                    + ANSI_RESET);
-                            break;
-                        case 'I', 'І':
-                            if (Character.isDigit(cardLine.charAt(i + 1))) {
-                                boardStringList.set(pos,
-                                        boardStringList.get(pos) + ANSI_BG_YELLOW + cardLine.charAt(i));
-                                boardStringList.set(pos, boardStringList.get(pos) + cardLine.charAt(i + 1));
-                                boardStringList.set(pos,
-                                        boardStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
-                                i += 2;
-                            } else if (cardLine.charAt(i) == 'I')
-                                boardStringList.set(pos, boardStringList.get(pos) + ANSI_PURPLE + cardLine.charAt(i)
-                                        + ANSI_RESET);
-                            else {
-                                boardStringList.set(pos, boardStringList.get(pos) + cardLine.charAt(i));
-                            }
-                            break;
-                        case 'R', 'G':
-                            // Calculates the coordinates given the index of the matrix
-                            switch (uncoveredCards.get(k).getSymbol()) {
-                                case "SHROOM":
-                                    boardStringList.set(pos,
-                                            boardStringList.get(pos) + ANSI_BG_RED + cardLine.charAt(i));
-                                    break;
-                                case "ANIMAL":
-                                    boardStringList.set(pos,
-                                            boardStringList.get(pos) + ANSI_BG_BLUE + cardLine.charAt(i));
-                                    break;
-                                case "VEGETABLE":
-                                    boardStringList.set(pos,
-                                            boardStringList.get(pos) + ANSI_BG_GREEN + cardLine.charAt(i));
-                                    break;
-                                case "INSECT":
-                                    boardStringList.set(pos,
-                                            boardStringList.get(pos) + ANSI_BG_PURPLE + cardLine.charAt(i));
-                                    break;
-                                default:
-                                    break;
-                            }
-                            boardStringList.set(pos, boardStringList.get(pos) + cardLine.charAt(i + 1));
-                            boardStringList.set(pos,
-                                    boardStringList.get(pos) + cardLine.charAt(i + 2) + ANSI_RESET);
-                            i += 2;
-                            break;
-                        case 'S':
-                            boardStringList.set(pos, boardStringList.get(pos) + ANSI_RED + cardLine.charAt(i)
-                                    + ANSI_RESET);
-                            break;
-                        case 's':
-                            boardStringList.set(pos,
-                                    boardStringList.get(pos) + ANSI_YELLOW
-                                            + Character.toUpperCase(cardLine.charAt(i))
-                                            + ANSI_RESET);
-                            break;
-                        case 'i':
-                            boardStringList.set(pos,
-                                    boardStringList.get(pos) + ANSI_YELLOW
-                                            + Character.toUpperCase(cardLine.charAt(i))
-                                            + ANSI_RESET);
-                            break;
-                        case 'f':
-                            boardStringList.set(pos,
-                                    boardStringList.get(pos) + ANSI_YELLOW
-                                            + Character.toUpperCase(cardLine.charAt(i))
-                                            + ANSI_RESET);
-                            break;
-                        case 'N':
-                            boardStringList.set(pos,
-                                    boardStringList.get(pos) + ANSI_BG_BRIGHT_RED + 'X' + ANSI_RESET);
-                            break;
-                        case 'E':
-                            boardStringList.set(pos, boardStringList.get(pos) + ANSI_DARK_GRAY + '░' + ANSI_RESET);
-                            break;
-                        default:
-                            boardStringList.set(pos, boardStringList.get(pos) + cardLine.charAt(i));
-                            break;
-                    }
-                }
-                boardStringList.set(pos, boardStringList.get(pos) + "\n");
-            }
-            pos++;
-        }
-        return boardStringList;
-    }
-
+    /**
+     * Paints the structure
+     * 
+     * @param board            the strcuture to be painted as a matrix of characters
+     * @param coordinateToCard the map that contains the coordinates of the cards
+     *                         and how they are placed
+     * @return the string representing the colored/painted board
+     * @throws IllegalCommandException
+     */
     public String paintStructure(char[][] board, Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard)
             throws IllegalCommandException {
         String structureString = "";
@@ -326,6 +240,13 @@ public class Painter {
         return structureString;
     }
 
+    /**
+     * Paints the deck
+     * 
+     * @param decks the list of cards to be painted
+     * @return the list of strings representing the painted deck
+     * @throws IllegalCommandException
+     */
     public List<String> paintDeck(List<Card> decks) throws IllegalCommandException {
         List<String> deckStringList = new ArrayList<>();
         for (int i = 0; i < decks.size(); i++) {
@@ -365,6 +286,12 @@ public class Painter {
         return deckStringList;
     }
 
+    /**
+     * Paints the initial card
+     * 
+     * @param card the card to be painted
+     * @return the list of strings representing the painted card
+     */
     public List<String> paintInitialCard(List<String> card) {
         List<String> fullCard = new ArrayList<>();
         String cardFace = "";

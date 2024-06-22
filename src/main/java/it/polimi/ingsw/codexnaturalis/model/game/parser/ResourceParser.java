@@ -1,8 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -11,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 
 public class ResourceParser {
@@ -21,20 +20,25 @@ public class ResourceParser {
     }
 
     /**
-     * When this method is called resourceDeck is generated extracting the information needed from the JSON file.
+     * When this method is called resourceDeck is generated extracting the
+     * information needed from the JSON file.
      * Note that it extracts :
      * #) the card's id at "id"
-     * #) the information about the type of symbol linked to the card at "symbol"<br>
+     * #) the information about the type of symbol linked to the card at
+     * "symbol"<br>
      * #) the points made when the objective is satisfied at "points" <br>
-     * #) an array of 4 strings which represent the occupation of every corner of the card starting from the TL and going clockwise
+     * #) an array of 4 strings which represent the occupation of every corner of
+     * the card starting from the TL and going clockwise
+     * 
      * @return a unique stack of resource card
      */
     public Stack<ResourceCard> parse() {
-        File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json");
+        InputStreamReader input = new InputStreamReader(
+                getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/JSON/resourceDeck.json"));
         JsonElement fileElement = null;
         try {
-            fileElement = JsonParser.parseReader(new FileReader(input));
-        } catch (FileNotFoundException e) {
+            fileElement = JsonParser.parseReader(input);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         JsonArray fileArray = fileElement.getAsJsonArray();

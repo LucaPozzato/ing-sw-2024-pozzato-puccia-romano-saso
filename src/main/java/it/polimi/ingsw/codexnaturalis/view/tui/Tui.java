@@ -20,6 +20,11 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.view.View;
 import javafx.util.Pair;
 
+/**
+ * This class is used to represent the Text User Interface (TUI) of the game. It
+ * implements the View interface and is used to display the game state and
+ * handle the user input.
+ */
 public class Tui implements View {
     private Drawer drawer;
     private TerminalPrinter terminalPrinter;
@@ -47,6 +52,11 @@ public class Tui implements View {
         helpStage = false;
     }
 
+    /**
+     * This method is used to start the TUI. It clears the terminal and starts
+     * a new thread to read the user input. It also prints the initial stage of the
+     * game (where a players decides to join/create/rejoin a game).
+     */
     @Override
     public void run() {
         terminalPrinter.clear();
@@ -56,12 +66,22 @@ public class Tui implements View {
         terminalPrinter.printInitialStage();
     }
 
+    /**
+     * This method is used to update the chat messages.
+     * 
+     * @param chat The chat object containing the chat messages
+     */
     @Override
     public void updateChat(Chat chat) {
         terminalPrinter.updateChat(drawer.drawChat(chat, myPlayer));
         print();
     }
 
+    /**
+     * This method is used to update the error message.
+     * 
+     * @param error The error message
+     */
     @Override
     public void updateError(String error) {
         System.out.println("got error: " + error);
@@ -69,6 +89,11 @@ public class Tui implements View {
         terminalPrinter.clearInput();
     }
 
+    /**
+     * This method is used to update the state message.
+     * 
+     * @param help The state message
+     */
     @Override
     public void updateState(String state) {
         terminalPrinter.updateCurrentState(state);
@@ -99,6 +124,11 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to update my player.
+     * 
+     * @param nickname My player
+     */
     @Override
     public void updateMyPlayer(Player player) {
         myPlayer = player;
@@ -106,12 +136,22 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to update the current player.
+     * 
+     * @param players The current player
+     */
     @Override
     public void updateCurrentPlayer(Player player) {
         terminalPrinter.updateCurrentPlayer(player.getNickname());
         print();
     }
 
+    /**
+     * This method is used to update the players.
+     * 
+     * @param players The list of players
+     */
     @Override
     public void updatePlayers(List<Player> players) {
         this.players = players;
@@ -123,12 +163,22 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to update the winners.
+     * 
+     * @param winners The list of winners
+     */
     @Override
     public void updateWinners(List<Player> winners) {
         this.winners = winners;
         print();
     }
 
+    /**
+     * This method is used to update the structures of the players.
+     * 
+     * @param structures The list of structures
+     */
     @Override
     public void updateStructures(List<Structure> structures) {
         List<String> structureStrings = new ArrayList<>();
@@ -163,15 +213,18 @@ public class Tui implements View {
             resources.add(drawer.drawVisibleSymbols(structure.getvisibleSymbols()));
         }
 
-        // FIXME: multiple structures
         terminalPrinter.updateStructures(structureStrings);
 
-        // FIXME: multiple resources
         terminalPrinter.updateResources(resources);
 
         print();
     }
 
+    /**
+     * This method is used to update the hands of the players.
+     * 
+     * @param hands The list of hands
+     */
     @Override
     public void updateHand(List<Hand> hands) {
         List<String> visualHand = new ArrayList<>();
@@ -205,7 +258,7 @@ public class Tui implements View {
                             visualHand.add(drawer.drawResourceCard(card, false));
                     }
                 }
-                handsString.add(painter.paintHand(visualHand, hand.getCardsHand()));
+                handsString.add(painter.paintListOfCards(visualHand, hand.getCardsHand()));
             }
         } catch (Exception e) {
             printAlert(e.getMessage());
@@ -219,6 +272,11 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to update the board.
+     * 
+     * @param board The board
+     */
     @Override
     public void updateBoard(Board board) {
         List<String> cards = new ArrayList<>();
@@ -236,7 +294,7 @@ public class Tui implements View {
             }
             scores = drawer.drawActualScores(board.getActualScores());
 
-            terminalPrinter.updateBoard(painter.paintBoard(cards, board.getUncoveredCards()));
+            terminalPrinter.updateBoard(painter.paintListOfCards(cards, board.getUncoveredCards()));
             terminalPrinter.updateCommonObjectives(commonObjectives);
             terminalPrinter.updateScoreBoard(scores);
         } catch (Exception e) {
@@ -246,6 +304,11 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to update the deck.
+     * 
+     * @param deck The deck
+     */
     @Override
     public void updateDeck(Deck deck) {
         List<String> cards = new ArrayList<>();
@@ -261,18 +324,28 @@ public class Tui implements View {
         print();
     }
 
+    /**
+     * This method is used to print the next player details.
+     */
     private void printNextPlayerView() {
         terminalPrinter.clear();
         terminalPrinter.printNext();
         terminalPrinter.printGame();
     }
 
+    /**
+     * This method is used to reset the view to my player's details.
+     */
     private void resetView() {
         terminalPrinter.clear();
         terminalPrinter.resetView();
         terminalPrinter.printGame();
     }
 
+    /**
+     * This method is used to print the current view [help, initial, choose, chat,
+     * game]
+     */
     private void print() {
         terminalPrinter.clear();
         if (helpStage)
@@ -287,11 +360,19 @@ public class Tui implements View {
             terminalPrinter.printGame();
     }
 
+    /**
+     * This method is used to print an alert message.
+     * 
+     * @param alert The alert message
+     */
     private void printAlert(String alert) {
         terminalPrinter.updateAlert(alert);
         print();
     }
 
+    /**
+     * This class is used to read the user input from the terminal.
+     */
     class ReadThread extends Thread {
         public void run() {
             String[] cmd = { "/bin/sh", "-c", "stty raw </dev/tty" };

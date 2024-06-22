@@ -71,6 +71,9 @@ public class Deck implements Serializable {
      * Shuffles the stack of gold cards in the deck.
      */
     public void shuffleGoldDeck() {
+        // For demo purposes
+        // Collections.shuffle(goldDeck, new Random(110110110));
+
         Collections.shuffle(goldDeck);
     }
 
@@ -78,6 +81,9 @@ public class Deck implements Serializable {
      * Shuffles the stack of resource cards in the deck.
      */
     public void shuffleResourceDeck() {
+        // For demo purposes
+        // Collections.shuffle(resourceDeck, new Random(110110110));
+
         Collections.shuffle(resourceDeck);
     }
 }

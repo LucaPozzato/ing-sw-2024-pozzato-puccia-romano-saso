@@ -37,9 +37,9 @@ public class Player implements Serializable {
     /**
      * Constructs a player with a given nickname, password, and color.
      *
-     * @param nickname    The nickname of the player.
-     * @param password    The password associated with the player.
-     * @param colorPlayer The color assigned to the player.
+     * @param nickname The nickname of the player.
+     * @param password The password associated with the player.
+     * @param color    The color assigned to the player.
      */
     public Player(String nickname, String password, Color color) {
         this.nickname = nickname;

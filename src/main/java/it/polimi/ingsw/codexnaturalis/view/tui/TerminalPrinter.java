@@ -12,16 +12,6 @@ public class TerminalPrinter {
     private int width = 175, height = 60, midHeight = 0, midWidth = 0, minX = 0, maxX = 0, delta = 0, indexPlayer = 0,
             indexMyPlayer = 0;
 
-    // [x] Other structures and resources
-    // [ ] FUTURE -> possible color coordinated boxes -> or just other color for
-    // other player
-    // [ ] FUTURE -> see other player's hand
-    // [x] if other player -> box with "viewing plyer's name"
-    // [x] box with current player's name
-    // [x] box with current "state"
-    // [x] alert box in choose phase
-    // [ ] initial phase
-
     public TerminalPrinter() {
         this.structures = new ArrayList<>();
         this.players = new ArrayList<>();
@@ -42,6 +32,12 @@ public class TerminalPrinter {
         this.chat = "";
     }
 
+    /**
+     * Set the size of the terminal window
+     * 
+     * @param width  the width of the terminal window
+     * @param height the height of the terminal window
+     */
     public void setSize(int width, int height) {
         if (width < 10 || height < 10) {
             this.width = 175;
@@ -52,36 +48,70 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Update the chat
+     * 
+     * @param chat the chat to set
+     */
     public void updateChat(String chat) {
         this.chat = chat;
     }
 
-    // TODO: define all other exceptions for bad parameters in update methods
+    /**
+     * Update the structure
+     * 
+     * @param structure the structure to set
+     */
     public void updateStructures(List<String> structures) {
         if (structure != null)
             this.structures = structures;
     }
 
+    /**
+     * Update the hands
+     * 
+     * @param hands the hands to set
+     */
     public void updateHands(List<List<String>> hands) {
         if (hands != null)
             this.hands = hands;
     }
 
+    /**
+     * Update the board
+     * 
+     * @param board the board to set
+     */
     public void updateBoard(List<String> board) {
         if (board != null)
             this.board = board;
     }
 
+    /**
+     * Update the decks
+     * 
+     * @param decks the decks to set
+     */
     public void updateDecks(List<String> decks) {
         if (decks != null)
             this.decks = decks;
     }
 
+    /**
+     * Update the secret objective
+     * 
+     * @param objectives the secret objective to set
+     */
     public void updateSecretObjective(String secretObjective) {
         if (secretObjective != null)
             this.objectives.set(0, secretObjective);
     }
 
+    /**
+     * Update the common objectives
+     * 
+     * @param objectives the common objectives to set
+     */
     public void updateCommonObjectives(List<String> objectives) {
         if (objectives != null) {
             this.objectives.set(1, objectives.get(0));
@@ -89,60 +119,116 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Update the input
+     * 
+     * @param input the input to set
+     */
     public void updateInput(String input) {
         if (input != null)
             this.input = input;
     }
 
+    /**
+     * Update the resources
+     * 
+     * @param resources the resources to set
+     */
     public void updateResources(List<String> resources) {
         if (resources != null)
             this.resourcesList = resources;
     }
 
+    /**
+     * Update the alert
+     * 
+     * @param alert the alert to set
+     */
     public void updateAlert(String alert) {
         if (alert != null)
             this.alert = alert;
     }
 
+    /**
+     * Update the score board
+     * 
+     * @param scoreBoard the score board to set
+     */
     public void updateScoreBoard(String scoreBoard) {
         if (scoreBoard != null)
             this.scoreBoard = scoreBoard;
     }
 
+    /**
+     * Update the initial card
+     * 
+     * @param initialCard the initial card to set
+     */
     public void updateInitialCard(List<String> initialCard) {
         if (initialCard != null)
             this.initialCard = initialCard;
     }
 
+    /**
+     * Update the objectives to choose from
+     * 
+     * @param chooseObjectives the objectives to set
+     */
     public void updateChooseObjectives(List<String> chooseObjectives) {
         if (chooseObjectives != null)
             this.chooseObjectives = chooseObjectives;
     }
 
+    /**
+     * Update the players
+     * 
+     * @param players the players to set
+     */
     public void updatePlayers(List<String> players) {
         if (players != null)
             this.players = players;
     }
 
+    /**
+     * Update the current player
+     * 
+     * @param currentPlayer the current player to set
+     */
     public void updateCurrentPlayer(String currentPlayer) {
         if (currentPlayer != null)
             this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Update the current state
+     * 
+     * @param currentState the current state to set
+     */
     public void updateCurrentState(String currentState) {
         if (currentState != null)
             this.currentState = currentState;
     }
 
+    /**
+     * Update the index of the my player
+     * 
+     * @param index the index of my player
+     */
     public void updateMyPlayer(Integer index) {
         indexMyPlayer = index;
         indexPlayer = index;
     }
 
+    /**
+     * Clear the alert message
+     */
     public void clearAlert() {
         this.alert = "";
     }
 
+    /**
+     * Clear the terminal window
+     */
     public void clear() {
         System.out.println("\033[?7h");
 
@@ -150,6 +236,9 @@ public class TerminalPrinter {
         System.out.println("\033[2J");
     }
 
+    /**
+     * Resets the view to my player
+     */
     public void resetView() {
         alert = "";
         indexPlayer = indexMyPlayer;
@@ -158,10 +247,16 @@ public class TerminalPrinter {
         resources = resourcesList.get(indexPlayer);
     }
 
+    /**
+     * Clear the input field
+     */
     public void clearInput() {
         this.input = "";
     }
 
+    /**
+     * Print the help page on the terminal
+     */
     public void printHelp() {
         String help = "\u001B[1mCommands (case insensitive):\u001B[1m\n"
                 + "\u001B[38;5;242m>\u001B[0m create: <Game ID>, <nick name>, <password>, <color>, <number of players>\n"
@@ -218,6 +313,9 @@ public class TerminalPrinter {
         System.out.print("\u001B[" + (y + 2) + ";" + (x + 1) + "H" + input);
     }
 
+    /**
+     * Print the chat on the terminal
+     */
     public void printChat() {
         // function that prints the chat
         int x;
@@ -266,6 +364,9 @@ public class TerminalPrinter {
         System.out.print("\u001B[" + (y + boxHeight + 2) + ";" + (x + 1) + "H" + input);
     }
 
+    /**
+     * Print the initial stage on the terminal
+     */
     public void printInitialStage() {
         // print input box and error box
 
@@ -278,6 +379,9 @@ public class TerminalPrinter {
         System.out.print("\u001B[" + (midHeight - 1) + ";" + (midWidth - 20) + "H" + input);
     }
 
+    /**
+     * Print the choose phase on the terminal
+     */
     public void printChoosePhase() {
         midHeight = height / 2;
         midWidth = width / 2;
@@ -300,6 +404,9 @@ public class TerminalPrinter {
                         + input);
     }
 
+    /**
+     * Print the game details of the next player on the terminal
+     */
     public void printNext() {
         indexPlayer = (indexPlayer + 1) % players.size();
         if (indexPlayer != indexMyPlayer)
@@ -311,6 +418,9 @@ public class TerminalPrinter {
         resources = resourcesList.get(indexPlayer);
     }
 
+    /**
+     * Print the game (scoreboard, structure, deck, ...) details on the terminal
+     */
     public void printGame() {
         midHeight = height / 2 - 3;
         delta = (maxX + minX) / 2 - width / 2;
@@ -409,6 +519,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the structure on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the structure
+     * @param x the x coordinate of the terminal window where to print the structure
+     */
     private void printStructure(int y, int x) {
         printBox(x, y, structure.split("\n")[0].length() + 2, structure.split("\n").length + 2, "Structure");
         x++;
@@ -419,6 +535,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the hand on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the hand
+     * @param x the x coordinate of the terminal window where to print the hand
+     */
     private void printHand(int y, int x) {
         printBox(x, y, hand.get(0).split("\n")[0].length() * hand.size() + 2, hand.get(0).split("\n").length + 2,
                 "Hand");
@@ -432,6 +554,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the board on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the board
+     * @param x the x coordinate of the terminal window where to print the board
+     */
     private void printBoard(int y, int x) {
         printBox(x, y, board.get(0).split("\n")[0].length() + 2, board.get(0).split("\n").length * board.size() + 2,
                 "Board");
@@ -445,6 +573,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the deck on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the deck
+     * @param x the x coordinate of the terminal window where to print the deck
+     */
     private void printDeck(int y, int x) {
         maxX = x + decks.get(0).split("\n")[0].length() + 2;
         printBox(x, y, decks.get(0).split("\n")[0].length() + 2, board.get(0).split("\n").length * board.size() + 2,
@@ -460,6 +594,14 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the objectives on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the
+     *          objectives
+     * @param x the x coordinate of the terminal window where to print the
+     *          objectives
+     */
     private void printObjectives(int y, int x) {
         minX = x;
         printBox(x, y, objectives.get(0).split("\n")[0].length() + 2,
@@ -474,6 +616,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the resources on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the resources
+     * @param x the x coordinate of the terminal window where to print the resources
+     */
     private void printResources(int y, int x) {
         int maxWidth = 0;
         for (int i = 0; i < resources.split("\n").length; i++) {
@@ -490,6 +638,12 @@ public class TerminalPrinter {
         }
     }
 
+    /**
+     * Print the alert on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the alert
+     * @param x the x coordinate of the terminal window where to print the alert
+     */
     private void printAlert(int y, int x) {
         printBox(x, y, Math.max("Alert".length(), alert.length()) + 2, 3, "Alert");
         x++;
@@ -502,6 +656,14 @@ public class TerminalPrinter {
             System.out.println("\u001B[" + y + ";" + x + "H\u001B[48;5;55m" + alert + "\u001B[0m");
     }
 
+    /**
+     * Print the scoreboard on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the
+     *          scoreboard
+     * @param x the x coordinate of the terminal window where to print the
+     *          scoreboard
+     */
     private void printScoreBoard(int y, int x) {
         printBox(x, y, scoreBoard.length() + 2, 3, "Scoreboard");
         x++;
@@ -509,6 +671,14 @@ public class TerminalPrinter {
         System.out.print("\u001B[" + y + ";" + x + "H" + scoreBoard);
     }
 
+    /**
+     * Print the current player on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the current
+     *          player
+     * @param x the x coordinate of the terminal window where to print the current
+     *          player
+     */
     private void printCurrentPlayer(int y, int x) {
         printBox(x, y, Math.max("Current Player".length(), currentPlayer.length()) + 2, 3, "Current Player");
         x++;
@@ -522,6 +692,14 @@ public class TerminalPrinter {
                             + currentPlayer);
     }
 
+    /**
+     * Print the current state on the terminal
+     * 
+     * @param y the y coordinate of the terminal window where to print the current
+     *          state
+     * @param x the x coordinate of the terminal window where to print the current
+     *          state
+     */
     private void printCurrentState(int y, int x) {
         printBox(x, y, Math.max("State".length(), currentState.length()) + 2, 3, "State");
         x++;
@@ -529,6 +707,18 @@ public class TerminalPrinter {
         System.out.print("\u001B[" + y + ";" + x + "H" + currentState);
     }
 
+    /**
+     * Print the initial card on the terminal
+     * 
+     * @param y           the y coordinate of the terminal window where to print the
+     *                    initial
+     *                    card
+     * @param x           the x coordinate of the terminal window where to print the
+     *                    initial
+     *                    card
+     * @param initialCard the initial card to print in string format [front side &&
+     *                    back side]
+     */
     private void printInitialCard(int y, int x, List<String> initialCard) {
         printBox(x, y, initialCard.get(0).split("\n")[0].length() * initialCard.size() + 2,
                 initialCard.get(0).split("\n").length + 3, "Initial Card");
@@ -552,6 +742,18 @@ public class TerminalPrinter {
                 + "H\u001B[38;5;242mBACK\u001B[0m");
     }
 
+    /**
+     * Print the objectives choose from on the terminal
+     * 
+     * @param y                the y coordinate of the terminal window where to
+     *                         print the
+     *                         objectives
+     * @param x                the x coordinate of the terminal window where to
+     *                         print the
+     *                         objectives
+     * @param chooseObjectives the objectives to print in a string format [objective
+     *                         1, objective 2]
+     */
     private void printChooseObjectives(int y, int x, List<String> chooseObjectives) {
         printBox(x, y, chooseObjectives.get(0).split("\n")[0].length() * chooseObjectives.size() + 2,
                 chooseObjectives.get(0).split("\n").length + 3, "Objectives");
@@ -574,9 +776,18 @@ public class TerminalPrinter {
                 + "H\u001B[38;5;242mObjective 2\u001B[0m");
     }
 
+    /**
+     * Print a box on the terminal
+     * 
+     * @param x         the x coordinate of the terminal window where to print the
+     *                  box
+     * @param y         the y coordinate of the terminal window where to print the
+     *                  box
+     * @param boxWidth  the width of the box
+     * @param boxHeight the height of the box
+     * @param title     the title of the box
+     */
     private void printBox(int x, int y, int boxWidth, int boxHeight, String title) {
-        // function that prints a box with a title in the center
-        // TODO: add color to box considering player
         String boxString = "";
 
         if (indexPlayer != indexMyPlayer

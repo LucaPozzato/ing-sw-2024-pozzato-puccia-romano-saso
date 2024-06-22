@@ -1,8 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
 
 public class InitialParser {
@@ -20,11 +19,12 @@ public class InitialParser {
     }
 
     public List<InitialCard> parse() {
-        File input = new File("src/main/resources/it/polimi/ingsw/codexnaturalis/JSON/initialDeck.json");
+        InputStreamReader input = new InputStreamReader(
+                getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/JSON/initialDeck.json"));
         JsonElement fileElement = null;
         try {
-            fileElement = JsonParser.parseReader(new FileReader(input));
-        } catch (FileNotFoundException e) {
+            fileElement = JsonParser.parseReader(input);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         JsonArray fileArray = fileElement.getAsJsonArray();

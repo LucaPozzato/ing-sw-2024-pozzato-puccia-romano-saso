@@ -60,8 +60,6 @@ public class SocketClient implements VirtualClient, Runnable {
      * connected to the server
      * it then deserializes the information creating an event and calls the
      * receiveEvent method
-     * 
-     * @throws RemoteException
      */
     @Override
     public void run() {
@@ -110,7 +108,7 @@ public class SocketClient implements VirtualClient, Runnable {
      * the event will later be processed by another thread
      * 
      * @param event
-     * @throws RemoteException
+     * @throws IllegalStateException
      */
     @Override
     public synchronized void receiveEvent(Event event) throws IllegalStateException {
@@ -173,7 +171,7 @@ public class SocketClient implements VirtualClient, Runnable {
      * the event will later be processed by another thread
      * 
      * @param command
-     * @throws RemoteException
+     * @throws IllegalStateException
      */
     public synchronized void sendCommand(Command command) throws IllegalStateException {
         commandExitQueue.add(command);

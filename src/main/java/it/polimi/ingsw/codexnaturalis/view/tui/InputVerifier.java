@@ -10,7 +10,14 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
 import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
-import it.polimi.ingsw.codexnaturalis.network.commands.*;
+import it.polimi.ingsw.codexnaturalis.network.commands.ChatCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.ChooseCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.Command;
+import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.DrawCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.JoinGameCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.PlaceCommand;
+import it.polimi.ingsw.codexnaturalis.network.commands.RejoinGameCommand;
 
 public class InputVerifier {
     private MiniModel miniModel;
@@ -21,6 +28,15 @@ public class InputVerifier {
         this.client = client;
     }
 
+    /**
+     * This method is used to parse the input command and create the corresponding
+     * command object
+     * 
+     * @param player  the player that is executing the command
+     * @param command the command string to parse
+     * @return the command object corresponding to the input command string
+     * @throws IllegalCommandException if the command is not valid
+     */
     public Command move(Player player, String command) throws IllegalCommandException {
         for (Player p : miniModel.getPlayers()) {
             if (p.equals(player)) {
@@ -186,7 +202,6 @@ public class InputVerifier {
                     throw new IllegalCommandException("Bottom card not in structure");
                 }
 
-                // TODO: gameid
                 try {
                     return new PlaceCommand(client.getClientId(), miniModel.getGameId(), player, father, placeThis,
                             parameters[2], side);
@@ -229,7 +244,6 @@ public class InputVerifier {
                     throw new IllegalCommandException("Invalid card ID");
                 }
 
-                // TODO: gameid
                 try {
                     return new DrawCommand(client.getClientId(), miniModel.getGameId(), player, card, fromDeck);
                 } catch (Exception e) {

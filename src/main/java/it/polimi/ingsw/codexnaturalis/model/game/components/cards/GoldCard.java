@@ -75,9 +75,6 @@ public class GoldCard extends Card {
 
     /**
      * Returns a string representation of the Gold Card.
-     *
-     * @return A string representation including the identifier and lists of corners
-     *         and resources.
      */
     @Override
     public void print() {

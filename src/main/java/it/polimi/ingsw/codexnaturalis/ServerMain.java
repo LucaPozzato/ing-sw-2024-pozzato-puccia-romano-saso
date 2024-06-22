@@ -1,5 +1,7 @@
 package it.polimi.ingsw.codexnaturalis;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -28,6 +30,20 @@ public class ServerMain {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("\033[2J\033[1;1H");
+        String serverIP = "";
+
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Please insert the server ip address:   ");
+        serverIP = input.readLine();
+        while (!serverIP.matches(
+                "\\b((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\b")) {
+            System.err.print("Invalid IP address, please try again:   ");
+            serverIP = input.readLine();
+        }
+        DefaultValue.serverIP = serverIP;
+
+        System.out.println("\033[2J\033[1;1H");
+
         System.setProperty("java.rmi.server.hostname", DefaultValue.serverIP);
         System.setProperty("java.rmi.server.port", Integer.toString(DefaultValue.port_RMI));
 

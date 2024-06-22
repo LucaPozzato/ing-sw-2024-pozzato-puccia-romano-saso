@@ -27,4 +27,5 @@ module it.polimi.ingsw.codexnaturalis {
     opens it.polimi.ingsw.codexnaturalis.model.game.parser;
     opens it.polimi.ingsw.codexnaturalis.model.game.components.structure;
     opens it.polimi.ingsw.codexnaturalis.model.game;
+    opens it.polimi.ingsw.codexnaturalis.model.game.components;
 }

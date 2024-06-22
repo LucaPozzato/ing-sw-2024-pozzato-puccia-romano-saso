@@ -19,6 +19,17 @@ public class Drawer {
     private static final String ANSI_BLUE = "\u001B[34m";
     private static final String ANSI_PURPLE = "\u001B[35m";
 
+    /**
+     * This method inserts a card in a matrix of characters.
+     * 
+     * @param matrix the matrix of characters
+     * @param card   the card to insert
+     * @param x      the x coordinate of the card
+     * @param y      the y coordinate of the card
+     * @param side   the side of the card
+     * @return the matrix with the card inserted
+     * @throws IllegalCommandException
+     */
     public char[][] insertCardInMatrix(char[][] matrix, Card card, int x, int y, Boolean side)
             throws IllegalCommandException {
 
@@ -193,6 +204,13 @@ public class Drawer {
         return matrix;
     }
 
+    /**
+     * This method draws the initial card.
+     * 
+     * @param card the card to draw
+     * @return the list of strings representing the card [front side && back side]
+     * @throws IllegalCommandException
+     */
     public List<String> drawFullInitialCard(Card card) throws IllegalCommandException {
         char drawingBoard[][] = new char[5][9];
         drawingBoard = insertCardInMatrix(drawingBoard, card, 4, 2, true);
@@ -208,6 +226,13 @@ public class Drawer {
         return new Painter().paintInitialCard(List.of(cardFrontUp, cardBackUp));
     }
 
+    /**
+     * This method draws the resource card.
+     * 
+     * @param card the card to draw
+     * @return the list of strings representing the card [front side || back side]
+     * @throws IllegalCommandException
+     */
     public String drawResourceCard(Card card, Boolean side) throws IllegalCommandException {
         List<String> corners;
         String cardString;
@@ -278,6 +303,13 @@ public class Drawer {
         return cardString;
     }
 
+    /**
+     * This method draws the gold card.
+     * 
+     * @param card the card to draw
+     * @return the list of strings representing the card [front side || back side]
+     * @throws IllegalCommandException
+     */
     public String drawGoldCard(Card card, Boolean side) throws IllegalCommandException {
         List<String> corners;
         String cardString;
@@ -396,6 +428,13 @@ public class Drawer {
         return cardString;
     }
 
+    /**
+     * This method draws the objective card.
+     * 
+     * @param card the card to draw
+     * @return the string representing the card
+     * @throws IllegalCommandException
+     */
     public String drawObjectiveCard(Card card) throws IllegalCommandException {
         String cardString = "";
         switch (card.getShape()) {
@@ -542,6 +581,12 @@ public class Drawer {
         return cardString;
     }
 
+    /**
+     * This method formats the player's resources and objects in a string.
+     * 
+     * @param visibleSymbols the visible symbols
+     * @return the string representing the visible resources and objects
+     */
     public String drawVisibleSymbols(Map<String, Integer> visibleSymbols) {
         String visibleResources = "";
         for (Map.Entry<String, Integer> entry : visibleSymbols.entrySet()) {
@@ -552,6 +597,12 @@ public class Drawer {
         return visibleResources;
     }
 
+    /**
+     * This method formats the scoreboard in a string.
+     * 
+     * @param player the player
+     * @return the string representing the scoreboard
+     */
     public String drawActualScores(Map<Player, Integer> actualScores) {
         String actualScoreString = "";
         for (Map.Entry<Player, Integer> entry : actualScores.entrySet()) {
@@ -561,6 +612,13 @@ public class Drawer {
         return actualScoreString;
     }
 
+    /**
+     * This method formats the chat in a string.
+     * 
+     * @param chat   the chat
+     * @param player the player
+     * @return the string representing the chat
+     */
     public String drawChat(Chat chat, Player player) {
         String chatString = "";
         String receivers = "";

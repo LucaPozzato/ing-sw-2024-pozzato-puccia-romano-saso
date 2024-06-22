@@ -44,6 +44,17 @@ public class ClientMain {
 
         while (!started)
             try {
+                String serverIP = "";
+                System.out.print("Please insert the server ip address:   ");
+                serverIP = input.readLine();
+
+                while (!serverIP.matches(
+                        "\\b((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\b")) {
+                    System.err.print("Invalid IP address, please try again:   ");
+                    serverIP = input.readLine();
+                }
+
+                DefaultValue.serverIP = serverIP;
 
                 boolean isCli = chooseUserInterface(input);
                 boolean isRmi = chooseConnectionType(input);
@@ -137,7 +148,7 @@ public class ClientMain {
         try {
             VirtualServer server = null;
             Registry registry;
-            registry = LocateRegistry.getRegistry(DefaultValue.remoteIP, DefaultValue.port_RMI);
+            registry = LocateRegistry.getRegistry(DefaultValue.serverIP, DefaultValue.port_RMI);
             server = (VirtualServer) registry.lookup(DefaultValue.servername_RMI);
             RmiClient client = new RmiClient(server, isCli);
             System.out.println(
