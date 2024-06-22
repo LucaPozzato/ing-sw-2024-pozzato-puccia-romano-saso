@@ -1,4 +1,4 @@
-![banner 1386x400px](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/src/main/resources/it/polimi/ingsw/codexnaturalis/Backgrounds/github_banner.png)
+![banner](https://m.media-amazon.com/images/I/814qEh0JKdS.jpg)
 
 # Codex Naturalis
 
@@ -26,13 +26,13 @@
 | Client Disconnection (FA 3) | :heavy_check_mark: |
 | Server Persistence (FA 4)   | :x:                |
 
-[Project requirements](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/documents/project_requirements.pdf)
+[Project requirements](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/project_requirements.pdf)
 
-Rule book: [Italian](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/documents/CODEX_Rulebook_IT.pdf), [English](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/documents/CODEX_Rulebook_EN.pdf)
+Rule book: [Italian](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/CODEX_Rulebook_IT.pdf), [English](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/CODEX_Rulebook_EN.pdf)
 
 # Running the application
 
-We suggest to recompile the project and regenerate the jar files, otherwise they are already provided [here](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/deliverables/Jar)
+We suggest to recompile the project and regenerate the jar files, otherwise they are already provided [here](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/deliverables/Jar)
 
 ## Download the project
 
@@ -319,4 +319,4 @@ quit
 | model.game         |       |      |
 | controller         |       |      |
 
-## [Javadocs](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/javadoc)
+## [Javadocs](https://lucapozzato.github.io/ing-sw-2024-pozzato-puccia-romano-saso/javadocs/)
