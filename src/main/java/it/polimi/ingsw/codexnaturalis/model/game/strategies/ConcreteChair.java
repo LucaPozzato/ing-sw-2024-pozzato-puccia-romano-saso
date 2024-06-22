@@ -11,10 +11,16 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Triplet;
 
 public class ConcreteChair implements Strategy {
     /**
-     * The method uses the cardMatrix and the wholeCells card attribute in order to identify the 3 cards which compose the chair pattern in a 2x4 matrix. <b>
-     * Than the reduced matrix computed using radius is visited by letting scroll the 2x4 matrix with the highlighted cells on it and counting the matches in patternFound.
-     * @param structure the player structure to get the cardmatrix and the cardToCoordinates
-     * @param objCard the chair objective we want to look for on the player structure
+     * The method uses the cardMatrix and the wholeCells card attribute in order to
+     * identify the 3 cards which compose the chair pattern in a 2x4 matrix.
+     * Then the reduced matrix computed using radius is visited by letting scroll
+     * the 2x4 matrix with the highlighted cells on it and counting the matches in
+     * patternFound.
+     * 
+     * @param structure the player structure to get the cardmatrix and the
+     *                  cardToCoordinates
+     * @param objCard   the chair objective we want to look for on the player
+     *                  structure
      * @return the number of points made due to objective satisfaction
      * @throws IllegalCommandException
      */
@@ -25,17 +31,15 @@ public class ConcreteChair implements Strategy {
         int radius = structure.getRadius(structure.getCoordinateToCard());
         int[] wholecells = objCard.getWholeCells();
 
-
         String[] decomposedMustHave = objCard.getMustHave().split(", ");
         String[] properColor = new String[3];
         for (int i = 0; i < 3; i++) {
-            if(i!=objCard.getDivideBy_seatColor()){
+            if (i != objCard.getDivideBy_seatColor()) {
                 properColor[i] = decomposedMustHave[0];
-            }else{
+            } else {
                 properColor[i] = decomposedMustHave[1];
             }
         }
-
 
         int patternsFound = 0;
         for (int i = 40 + radius; i >= 40 - radius + 3; i--) {
@@ -43,14 +47,13 @@ public class ConcreteChair implements Strategy {
 
                 Card upper = matrix[j + wholecells[0]][i];
                 Card placedUnder;
-                if(wholecells[1] == 0){
+                if (wholecells[1] == 0) {
                     placedUnder = matrix[j + wholecells[0]][i - 2];
-                }else{
+                } else {
                     placedUnder = matrix[j + wholecells[2]][i - 1];
                 }
 
                 Card lower = matrix[j + wholecells[2]][i - 3];
-
 
                 if ((upper instanceof ResourceCard || upper instanceof GoldCard)
                         && upper.getSymbol().equals(properColor[0])
@@ -61,7 +64,6 @@ public class ConcreteChair implements Strategy {
                         && (lower instanceof ResourceCard || lower instanceof GoldCard)
                         && lower.getSymbol().equals(properColor[2])
                         && cardToCoordinate.get(lower).getVisited().equals(false)) {
-
 
                     cardToCoordinate.get(upper).setVisited(true);
                     cardToCoordinate.get(placedUnder).setVisited(true);

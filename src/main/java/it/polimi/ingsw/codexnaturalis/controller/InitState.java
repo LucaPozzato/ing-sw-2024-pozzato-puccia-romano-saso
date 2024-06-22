@@ -170,8 +170,6 @@ public class InitState extends ControllerState {
      * @param nick       needed to identify the player
      * @param color      needed for GUI's purposes
      * @param numPlayers needed for dealing hands and cards issues
-     * @throws IllegalCommandException propagates above the possibly rising
-     *                                 exceptions
      */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
@@ -278,12 +276,10 @@ public class InitState extends ControllerState {
      * Sends an error event indicating that the player cannot draw a card at the
      * current moment.
      *
-     * @param clientId  The client ID attempting to place the card.
-     * @param player    The player attempting to place the card.
-     * @param father    The card where the placement is initiated.
-     * @param placeThis The card being placed.
-     * @param position  The position where the card is placed.
-     * @param frontUp   The orientation of the card.
+     * @param clientId The client ID attempting to place the card.
+     * @param player   The player attempting to place the card.
+     * @param card     The card to draw.
+     * @param fromDeck The deck from which the card is drawn.
      */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {

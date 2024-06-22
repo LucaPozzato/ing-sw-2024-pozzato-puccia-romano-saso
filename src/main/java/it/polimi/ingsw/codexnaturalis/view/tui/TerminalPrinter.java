@@ -58,9 +58,9 @@ public class TerminalPrinter {
     }
 
     /**
-     * Update the structure
+     * Update the structures
      * 
-     * @param structure the structure to set
+     * @param structures the structures to set
      */
     public void updateStructures(List<String> structures) {
         if (structure != null)
@@ -100,7 +100,7 @@ public class TerminalPrinter {
     /**
      * Update the secret objective
      * 
-     * @param objectives the secret objective to set
+     * @param secretObjective the secret objective to set
      */
     public void updateSecretObjective(String secretObjective) {
         if (secretObjective != null)

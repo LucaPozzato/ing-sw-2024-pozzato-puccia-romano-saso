@@ -64,7 +64,6 @@ public class RmiServer implements VirtualServer {
      * the command will later be processed by another thread
      * 
      * @param command
-     * @throws RemoteException
      */
     @Override
     public void receiveCommand(Command command) throws IllegalStateException {
@@ -157,7 +156,7 @@ public class RmiServer implements VirtualServer {
      * the event will later be processed by another thread
      * 
      * @param event
-     * @throws RemoteException
+     * @throws IllegalStateException
      */
     @Override
     public synchronized void sendEvent(Event event) throws IllegalStateException {

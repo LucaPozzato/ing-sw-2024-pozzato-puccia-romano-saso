@@ -1,4 +1,4 @@
-package it.polimi.ingsw.codexnaturalis.model.game.Chat;
+package it.polimi.ingsw.codexnaturalis.model.chat;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChatTest {
     @Test
-    void FlowChatTest(){
+    void FlowChatTest() {
         Player sender = new Player();
         Player receiver = new Player();
         long l = 109283746501143L;

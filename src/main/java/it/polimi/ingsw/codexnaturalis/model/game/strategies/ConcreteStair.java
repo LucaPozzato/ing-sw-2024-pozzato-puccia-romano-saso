@@ -13,8 +13,8 @@ public class ConcreteStair implements Strategy {
 
     /**
      * The method uses the cardMatrix and the wholeCells card attribute in order to
-     * identify the 3 cards which compose the stair pattern in a 3x3 matrix. <b>
-     * Than the reduced matrix computed using radius is visited by letting scroll
+     * identify the 3 cards which compose the stair pattern in a 3x3 matrix.
+     * Then the reduced matrix computed using radius is visited by letting scroll
      * the 3x3 matrix with the highlighted cells on it and counting the matches in
      * patternFound.
      * 

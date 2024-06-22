@@ -208,7 +208,7 @@ public class Drawer {
      * This method draws the initial card.
      * 
      * @param card the card to draw
-     * @return the list of strings representing the card [front side && back side]
+     * @return the list of strings representing the card [front side and back side]
      * @throws IllegalCommandException
      */
     public List<String> drawFullInitialCard(Card card) throws IllegalCommandException {
@@ -230,7 +230,7 @@ public class Drawer {
      * This method draws the resource card.
      * 
      * @param card the card to draw
-     * @return the list of strings representing the card [front side || back side]
+     * @return the list of strings representing the card [front side or back side]
      * @throws IllegalCommandException
      */
     public String drawResourceCard(Card card, Boolean side) throws IllegalCommandException {
@@ -307,7 +307,7 @@ public class Drawer {
      * This method draws the gold card.
      * 
      * @param card the card to draw
-     * @return the list of strings representing the card [front side || back side]
+     * @return the list of strings representing the card [front side or back side]
      * @throws IllegalCommandException
      */
     public String drawGoldCard(Card card, Boolean side) throws IllegalCommandException {
@@ -600,7 +600,7 @@ public class Drawer {
     /**
      * This method formats the scoreboard in a string.
      * 
-     * @param player the player
+     * @param actualScores the actual scores
      * @return the string representing the scoreboard
      */
     public String drawActualScores(Map<Player, Integer> actualScores) {

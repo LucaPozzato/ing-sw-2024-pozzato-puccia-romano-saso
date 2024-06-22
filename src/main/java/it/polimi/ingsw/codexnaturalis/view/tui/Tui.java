@@ -92,7 +92,7 @@ public class Tui implements View {
     /**
      * This method is used to update the state message.
      * 
-     * @param help The state message
+     * @param state The state message
      */
     @Override
     public void updateState(String state) {
@@ -127,7 +127,7 @@ public class Tui implements View {
     /**
      * This method is used to update my player.
      * 
-     * @param nickname My player
+     * @param player My player
      */
     @Override
     public void updateMyPlayer(Player player) {
@@ -139,7 +139,7 @@ public class Tui implements View {
     /**
      * This method is used to update the current player.
      * 
-     * @param players The current player
+     * @param player The current player
      */
     @Override
     public void updateCurrentPlayer(Player player) {
