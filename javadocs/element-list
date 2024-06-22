@@ -1,0 +1,14 @@
+module:it.polimi.ingsw.codexnaturalis
+it.polimi.ingsw.codexnaturalis
+it.polimi.ingsw.codexnaturalis.model.chat
+it.polimi.ingsw.codexnaturalis.model.enumerations
+it.polimi.ingsw.codexnaturalis.model.game
+it.polimi.ingsw.codexnaturalis.model.game.components
+it.polimi.ingsw.codexnaturalis.model.game.components.cards
+it.polimi.ingsw.codexnaturalis.model.game.components.structure
+it.polimi.ingsw.codexnaturalis.model.game.parser
+it.polimi.ingsw.codexnaturalis.model.game.player
+it.polimi.ingsw.codexnaturalis.network
+it.polimi.ingsw.codexnaturalis.network.client
+it.polimi.ingsw.codexnaturalis.view.gui
+it.polimi.ingsw.codexnaturalis.view.gui.controllers
