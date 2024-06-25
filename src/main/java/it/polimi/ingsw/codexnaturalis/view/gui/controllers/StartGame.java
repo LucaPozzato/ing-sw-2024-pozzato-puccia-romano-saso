@@ -1,8 +1,6 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
-import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
-import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.CreateGameCommand;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.application.Platform;
@@ -12,10 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;

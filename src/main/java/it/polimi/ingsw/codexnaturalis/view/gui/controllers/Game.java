@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.*;
-import java.util.stream.Collectors;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
@@ -13,9 +12,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.InitialCard;
-import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ResourceCard;
 import it.polimi.ingsw.codexnaturalis.model.game.components.structure.Structure;
 import it.polimi.ingsw.codexnaturalis.model.game.player.Player;
 import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
@@ -23,9 +20,7 @@ import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.network.commands.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,11 +31,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
-
+/**
+ * Game is the main GUI class. It manages and displays all the graphic content used while playing.
+ */
 public class Game implements Initializable {
 
     @FXML
@@ -87,7 +83,6 @@ public class Game implements Initializable {
     private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
     private int c = 0;
     private int handTurnCounter = 0;
-    private List<Node> nodes;
 
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
@@ -95,6 +90,10 @@ public class Game implements Initializable {
         this.virtualClient = virtualClient;
     }
 
+    /**
+     * When the first card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
+     * @param event
+     */
     @FXML
     void handCard1Clicked(MouseEvent event) {
         if (!isCardPlaced) {
@@ -108,6 +107,10 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the second card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
+     * @param event
+     */
     @FXML
     void handCard2Clicked(MouseEvent event) {
         if (!isCardPlaced) {
@@ -121,6 +124,10 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the third card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
+     * @param event
+     */
     @FXML
     void handCard3Clicked(MouseEvent event) {
         if (!isCardPlaced) {
@@ -134,6 +141,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the first gold card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void goldCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
         if (!cardDrawn) {
@@ -152,6 +166,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the second gold card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void goldCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
         if (!cardDrawn) {
@@ -170,6 +191,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the gold deck card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void goldDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
 
@@ -189,6 +217,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the first resource card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void resourceCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
             if (!cardDrawn) {
@@ -207,6 +242,13 @@ public class Game implements Initializable {
             }
     }
 
+    /**
+     * When the second resource card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void resourceCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
         if (!cardDrawn) {
@@ -225,6 +267,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * When the resource deck card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * A DrawCommand method is sent.
+     * @param event
+     * @throws IllegalCommandException
+     * @throws RemoteException
+     */
     @FXML
     void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
         if (!cardDrawn) {
@@ -243,17 +292,29 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to select the board view and see the player's points.
+     * @param event
+     */
     @FXML
     void boardVisibility(MouseEvent event) {
         boardPane.setVisible(true);
         borderPane.setCenter(boardPane);
     }
 
+    /**
+     * Used to send a message with the message button.
+     * @param event
+     */
     @FXML
     void sendMessage(MouseEvent event) {
         textMessageFunct();
     }
 
+    /**
+     * Used to send a message by clicking "ENTER" on the keyboard.
+     * @param event
+     */
     @FXML
     void sendMessageByEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -261,6 +322,9 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to send a message. The sender (and eventually receiver) is selected and a ChatCommand is sent.
+     */
     private void textMessageFunct() {
         String message = inputText.getText();
         Player messageReceiver = null;
@@ -271,21 +335,34 @@ public class Game implements Initializable {
                 messageReceiver = player;
         }
         if (!Objects.equals(message, "")) {
-            try {
-                if(messageReceiver == null) {
-                    virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
-                }
-                else{
-                    virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, messageReceiver));
-                }
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+            if(messageReceiver == null) {
+                new Thread(()-> {
+                    try {
+                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, null));
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
+            }
+            else{
+                Player finalMessageReceiver = messageReceiver;
+                new Thread(()-> {
+                    try {
+                        virtualClient.sendCommand(new ChatCommand(virtualClient.getClientId(), miniModel.getGameId(), message, myPlayer, finalMessageReceiver));
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
             }
             inputText.clear();
             ChooseSender.setValue("All");
         }
     }
 
+    /**
+     * When the "eye button" next to the first player is clicked, it shows is structure and underlines the name.
+     * @param event
+     */
     @FXML
     void nickname1VisibilityFunct(MouseEvent event) {
         borderPane.setCenter(scrollPane);
@@ -301,6 +378,10 @@ public class Game implements Initializable {
         nickname4.setUnderline(false);
     }
 
+    /**
+     * When the "eye button" next to the second player is clicked, it shows is structure and underlines the name.
+     * @param event
+     */
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
         scrollPaneOthers1.setVisible(false);
@@ -323,6 +404,10 @@ public class Game implements Initializable {
 
     }
 
+    /**
+     * When the "eye button" next to the third player is clicked, it shows is structure and underlines the name.
+     * @param event
+     */
     @FXML
     void nickname3VisibilityFunct(MouseEvent event) {
         scrollPaneOthers.setVisible(false);
@@ -344,6 +429,10 @@ public class Game implements Initializable {
         nickname4.setUnderline(false);
     }
 
+    /**
+     * When the "eye button" next to the fourth player is clicked, it shows is structure and underlines the name.
+     * @param event
+     */
     @FXML
     void nickname4VisibilityFunct(MouseEvent event) {
         scrollPaneOthers.setVisible(false);
@@ -365,6 +454,10 @@ public class Game implements Initializable {
         nickname4.setUnderline(true);
     }
 
+    /**
+     * Used to display chat messages.
+     * @param chat
+     */
     public void updateChat(Chat chat) {
         textArea.clear();
         for(ChatMessage chatMessage: chat.getChatMessages()){
@@ -380,11 +473,19 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to update client player.
+     * @param player
+     */
     public void updateMyPlayer(Player player) {
         this.myPlayer = player;
         pedina.setImage(symbolPath(myPlayer.getColor().toString()));
     }
 
+    /**
+     * Used to update current player text color to blue.
+     * @param player
+     */
     public void updateCurrentPlayer(Player player) {
         nickname1.setFill(Color.BLACK);
         nickname2.setFill(Color.BLACK);
@@ -404,8 +505,12 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to update players features.
+     * @param players
+     */
     public void updatePlayers(List<Player> players) {
-        List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).collect(Collectors.toList());
+        List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).toList();
         if(isInitialChooseSetup){
             pedina1 = new ImageView(symbolPath(otherPlayers.get(0).getColor().toString()));
             if(otherPlayers.size() == 2 && otherPlayers.get(1) != null)
@@ -437,6 +542,13 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to update structures. When the method is called, every card int a structure is displayed in a specif pane.
+     * On every initial card is displayed the player's pawn.
+     * The method is also used to add points for every visible resource.
+     * If the player is ready to draw, when a structure card's angle is clicked a place command is sent.
+     * @param structures
+     */
     public void updateStructures(List<Structure> structures) {
         int index = miniModel.getPlayers().indexOf(myPlayer);
         Structure myStructure = structures.get(index);
@@ -452,12 +564,14 @@ public class Game implements Initializable {
                 addPoints(key, value);
         }
 
-        initialCardSide = myStructure.getPlacedCards().get(0).getValue();
+        initialCardSide = myStructure.getPlacedCards().getFirst().getValue();
         pawnImage = symbolPath("BLACK");
         ImageView imageView1 = new ImageView(pawnImage);
         ImageView imageView2 = new ImageView(pawnImage);
 
+        structurePane.getChildren().clear();
         for (Pair<Card, Boolean> card : myStructure.getPlacedCards()) {
+
             if(position == 0){
                 setInitialCard((InitialCard) card.getKey());
                 pawnImage = symbolPath(myPlayer.getColor().toString());
@@ -520,14 +634,6 @@ public class Game implements Initializable {
                     }
                 });
                 structurePane.getChildren().add(imageView);
-                int check=0;
-                for(Node node: structurePane.getChildren()){
-                    if(node == imageView)
-                        check = 1;
-                    else if (check == 1){
-                        structurePane.getChildren().remove(node);
-                    }
-                }
             }
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
@@ -535,7 +641,13 @@ public class Game implements Initializable {
         int contaStruttura = 0;
         int test = 0;
         List<Player> otherPlayers = miniModel.getPlayers().stream().filter(p->p != miniModel.getMyPlayer()).toList();
+
+        otherStructuresPane.getChildren().clear();
+        otherStructuresPane1.getChildren().clear();
+        otherStructuresPane2.getChildren().clear();
+
         for(Structure structure: structures){
+
             position = 0;
             for (Pair<Card, Boolean> card : structure.getPlacedCards()) {
                 if(position == 0){
@@ -548,7 +660,6 @@ public class Game implements Initializable {
                     assert imageStream != null;
                     Image initialCardImage = new Image(imageStream);
                     ImageView initialCard = new ImageView(initialCardImage);
-                    nodes.add(initialCard);
                     initialCard.setFitWidth(111);
                     initialCard.setFitHeight(74);
                     initialCard.setLayoutX(945);
@@ -602,7 +713,6 @@ public class Game implements Initializable {
                     }
 
                     ImageView imageView = new ImageView(image);
-                    nodes.add(imageView);
                     imageView.setFitWidth(111);
                     imageView.setFitHeight(74);
                     imageView.setLayoutX(945 + 82 * (x - 40));
@@ -623,6 +733,10 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to update player's hand.
+     * @param hands
+     */
     public void updateHand(List<Hand> hands) {
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
@@ -731,6 +845,11 @@ public class Game implements Initializable {
         handTurnCounter = 1;
     }
 
+    /**
+     * Used to display the board. Paws images are created for every player and displayed in the correct
+     * spot according to points made.
+     * @param board
+     */
     public void updateBoard(Board board) {
         currentDeckResource1Card = board.getUncoveredCards().get(0);
         currentDeckResource2Card = board.getUncoveredCards().get(1);
@@ -808,6 +927,11 @@ public class Game implements Initializable {
         handCard.requestFocus();
     }
 
+    /**
+     * Used to move pawns according to points.
+     * @param points
+     * @param posto
+     */
     public void addPoint(int points, ImageView posto){
         switch (points) {
             case 0:
@@ -968,9 +1092,11 @@ public class Game implements Initializable {
         posto.setFitHeight(40);
     }
 
+    /**
+     * Used to update deck cards.
+     * @param deck
+     */
     public void updateDeck(Deck deck) {
-        Stack<GoldCard> goldCardDeck = deck.getGoldDeck();
-        Stack<ResourceCard> resourceCardDeck = deck.getResourceDeck();
 
         currentDeckGoldCard = deck.getGoldDeck().peek();
         String goldDeckCardOne = currentDeckGoldCard.toString().substring(6, 9);
@@ -981,6 +1107,10 @@ public class Game implements Initializable {
         resourceDeckCard.setImage(pathBack(resourceDeckCardOne));
     }
 
+    /**
+     * used to reset values if errors occur.
+     * @param error
+     */
     public void updateError(String error) {
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
@@ -1009,6 +1139,10 @@ public class Game implements Initializable {
         showAlert(error);
     }
 
+    /**
+     * Used to visually display an error and notify the client.
+     * @param message
+     */
     public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("What's happening?");
@@ -1016,11 +1150,19 @@ public class Game implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
     }
 
+    /**
+     * Used to go back to the client structure.
+     * @param event
+     */
     @FXML
     void goBackFunct(MouseEvent event) {
         borderPane.setCenter(scrollPane);
     }
 
+    /**
+     * Used to "deselect" cards. When the pane is clicked the card opacities go back to one.
+     * @param event
+     */
     @FXML
     void paneClickReset(MouseEvent event) {
         handCard1.setOpacity(1);
@@ -1035,12 +1177,21 @@ public class Game implements Initializable {
         resourceCard2.setOpacity(1);
     }
 
+    /**
+     * Used to open chat pane.
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void openChatFunct(MouseEvent event) throws IOException {
         chatPane.setVisible(true);
         borderPane.setCenter(chatPane);
     }
 
+    /**
+     * Used to display back and front of hand cards by pressing "B" and "F".
+     * @param event
+     */
     @FXML
     void showBack(KeyEvent event) {
         if (event.getCode() == KeyCode.B && rPressed == 0) {
@@ -1085,6 +1236,12 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to display and set initial card for the player structure.
+     * When the player's turn occur and a hand card is selected, if the player click one of the available
+     * borders on the initial card it calls the place command placing the card in the correct spot.
+     * @param initialCard1
+     */
     public void setInitialCard(InitialCard initialCard1) {
         int x, y;
         String imagePath;
@@ -1132,10 +1289,14 @@ public class Game implements Initializable {
                 }
             }
         });
-        nodes.add(initialCard);
         structurePane.getChildren().add(initialCard);
     }
 
+    /**
+     * Used to add points given the obj (e.g. "mushroom") and the points associated.
+     * @param obj
+     * @param points
+     */
     public void addPoints(String obj, int points) {
         int valueInteger = 0;
         String valueString;
@@ -1178,6 +1339,11 @@ public class Game implements Initializable {
         }
     }
 
+    /**
+     * Used to create a front image of a given object.
+     * @param oggetto
+     * @return
+     */
     public Image pathFront(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
@@ -1185,6 +1351,11 @@ public class Game implements Initializable {
         return new Image(imageStream);
     }
 
+    /**
+     * Used to create a back image of a given object.
+     * @param oggetto
+     * @return
+     */
     public Image pathBack(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + oggetto + "b.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
@@ -1192,6 +1363,11 @@ public class Game implements Initializable {
         return new Image(imageStream);
     }
 
+    /**
+     * Used to create an image of a given object.
+     * @param oggetto
+     * @return
+     */
     public Image symbolPath(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
@@ -1199,10 +1375,14 @@ public class Game implements Initializable {
         return new Image(imageStream);
     }
 
+    /**
+     * Used to initialize some visual objects and to enable the mouse drag feature on structure panes.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        nodes = new ArrayList<>();
         pedina = new ImageView();
         pedina1 = new ImageView();
         pedina2 = new ImageView();

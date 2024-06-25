@@ -1,13 +1,7 @@
 package it.polimi.ingsw.codexnaturalis.view.gui;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
@@ -33,7 +27,11 @@ public class GuiApp implements View {
     private Stage chooseStage;
     private ViewFactory viewFactory;
 
-
+    /**
+     * GuiApp class is used to send updates to JavaFx thread.
+     * @param virtualClient
+     * @param miniModel
+     */
     public GuiApp(VirtualClient virtualClient, MiniModel miniModel) {
         this.virtualClient = virtualClient;
         this.miniModel = miniModel;
@@ -61,7 +59,9 @@ public class GuiApp implements View {
 
     @Override
     public void updateChat(Chat chat) {
-        game.updateChat(chat);
+        Platform.runLater(() -> {
+            game.updateChat(chat);
+        });
     }
 
     /**

@@ -122,7 +122,7 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="CreateGame" mnemonicParsing="false" onMouseClicked="#CreateGameFunct" prefHeight="24.0" prefWidth="75.0" style="-fx-background-color: #ec9f19;" text="CREATE">
+            <Button fx:id="CreateGame" mnemonicParsing="false" onMouseClicked="#CreateGameFunct" prefHeight="24.0" prefWidth="75.0" text="CREATE">
                <VBox.margin>
                   <Insets bottom="26.0" />
                </VBox.margin>

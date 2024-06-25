@@ -108,7 +108,7 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="JoinGame" mnemonicParsing="false" onMouseClicked="#JoinGameFunct" prefHeight="26.0" prefWidth="53.0" style="-fx-background-color: #ec9f19;" text="JOIN">
+            <Button fx:id="JoinGame" mnemonicParsing="false" onMouseClicked="#JoinGameFunct" prefHeight="26.0" prefWidth="53.0" text="JOIN">
                <VBox.margin>
                   <Insets top="67.0" />
                </VBox.margin>

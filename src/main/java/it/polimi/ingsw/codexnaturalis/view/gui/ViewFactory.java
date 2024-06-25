@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * ViewFactory class uses the Factory Design Pattern to switch to different Scenes when buttons are clicked.
+ */
 public class ViewFactory {
 
     private final MiniModel miniModel;

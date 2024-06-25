@@ -10,7 +10,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Optional;

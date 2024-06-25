@@ -69,7 +69,7 @@
                   <Insets top="10.0" />
                </padding>
             </HBox>
-            <Button mnemonicParsing="false" onMouseClicked="#play" style="-fx-background-color: #ec9f19;" text="PLAY">
+            <Button mnemonicParsing="false" onMouseClicked="#play" text="PLAY">
                <VBox.margin>
                   <Insets top="80.0" />
                </VBox.margin>

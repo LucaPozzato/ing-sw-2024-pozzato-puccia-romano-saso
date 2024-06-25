@@ -1,7 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.view.gui.controllers;
 
-import it.polimi.ingsw.codexnaturalis.network.VirtualClient;
-import it.polimi.ingsw.codexnaturalis.network.client.MiniModel;
 import it.polimi.ingsw.codexnaturalis.view.gui.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
