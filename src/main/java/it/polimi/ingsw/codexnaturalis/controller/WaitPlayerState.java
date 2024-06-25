@@ -43,11 +43,15 @@ public class WaitPlayerState extends ControllerState {
      */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        String error = "Game already initialized";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -63,7 +67,7 @@ public class WaitPlayerState extends ControllerState {
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
         try {
-            if (nickname.equals("")) {
+            if (nickname.isEmpty()) {
                 throw new IllegalCommandException("Nickname can't be empty");
             }
 
@@ -84,8 +88,6 @@ public class WaitPlayerState extends ControllerState {
 
         } catch (IllegalCommandException err) {
             System.out.println("> sent error: " + err.getMessage());
-
-            // TODO: understand if keep it
             super.game.pushEvent(err.getMessage());
 
             Event event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
@@ -93,6 +95,8 @@ public class WaitPlayerState extends ControllerState {
             try {
                 super.socketServer.sendEvent(event);
             } catch (Exception e) {
+                String noSer = "No server found";
+                super.game.pushEvent(noSer);
                 e.printStackTrace();
             }
         }
@@ -110,11 +114,15 @@ public class WaitPlayerState extends ControllerState {
      */
     @Override
     public void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game not set up yet");
+        String error = "Game not set up yet";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -152,6 +160,8 @@ public class WaitPlayerState extends ControllerState {
             try {
                 super.socketServer.sendEvent(inLobbyEvent);
             } catch (Exception e) {
+                String noSer = "No server found";
+                super.game.pushEvent(noSer);
                 e.printStackTrace();
             }
 
@@ -159,6 +169,8 @@ public class WaitPlayerState extends ControllerState {
             try {
                 super.socketServer.sendEvent(chooseEvent);
             } catch (Exception e) {
+                String noSer = "No server found";
+                super.game.pushEvent(noSer);
                 e.printStackTrace();
             }
 
@@ -169,6 +181,8 @@ public class WaitPlayerState extends ControllerState {
             try {
                 super.socketServer.sendEvent(event);
             } catch (Exception e) {
+                String noSer = "No server found";
+                super.game.pushEvent(noSer);
                 e.printStackTrace();
             }
 
@@ -177,16 +191,13 @@ public class WaitPlayerState extends ControllerState {
     }
 
     private boolean isFull() {
-        if (super.game.getPlayers().size() == super.game.getNumParticipants()) {
-            return true;
-        }
-        return false;
+        return super.game.getPlayers().size() == super.game.getNumParticipants();
     }
 
     /**
      * Sends an error event indicating that the player cannot place a card at the
      * current moment.
-     * 
+     *
      * @param clientId  The client ID attempting to place the card.
      * @param player    The player attempting to place the card.
      * @param father    The card where the placement is initiated.
@@ -196,12 +207,16 @@ public class WaitPlayerState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-            Boolean frontUp) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
+                           Boolean frontUp) {
+        String error = "Can't place card yet";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -212,16 +227,20 @@ public class WaitPlayerState extends ControllerState {
      *
      * @param clientId The client ID attempting to place the card.
      * @param player   The player attempting to place the card.
-     * @param card     The card to draw.
-     * @param fromDeck The deck from which the card is drawn.
+     * @param card     The card to draw
+     * @param fromDeck The deck from where to draw
      */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card yet");
+        String error = "Can't draw card yet";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -229,16 +248,20 @@ public class WaitPlayerState extends ControllerState {
     /**
      * Handles disconnection of a client from the game shutting it down and sending
      * a ForcedEndEvent to the other players
-     * 
+     *
      * @param clientId The client identifier.
      */
     @Override
     public void disconnect(String clientId) {
-        Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+        String error = "Game was shut down due to clients' disconnections";
+        super.game.pushEvent(error);
+        Event event = new ForcedEndEvent(game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
         super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
@@ -246,18 +269,22 @@ public class WaitPlayerState extends ControllerState {
 
     /**
      * Handles a player's attempt to rejoin the game.
-     * 
+     *
      * @param clientId The client identifier.
      * @param nickname The nickname of the client.
      * @param password The password of the client.
      */
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
+        String error = "Can't rejoin game now";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }

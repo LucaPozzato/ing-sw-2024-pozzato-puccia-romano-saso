@@ -32,11 +32,15 @@ public class ForcedEndState extends ControllerState {
      */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -52,11 +56,15 @@ public class ForcedEndState extends ControllerState {
      */
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -73,11 +81,15 @@ public class ForcedEndState extends ControllerState {
      */
     @Override
     public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -95,12 +107,16 @@ public class ForcedEndState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-            Boolean frontUp) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+                           Boolean frontUp) {
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -111,23 +127,27 @@ public class ForcedEndState extends ControllerState {
      *
      * @param clientId The client ID attempting to place the card.
      * @param player   The player attempting to place the card.
-     * @param card     The card to draw.
-     * @param fromDeck The deck from which the card is drawn.
+     * @param card     The card to draw
+     * @param fromDeck The card to draw from
      */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
 
     /**
      * Handles disconnection of a client.
-     * 
+     *
      * @param clientId The client identifier.
      */
     @Override
@@ -136,18 +156,22 @@ public class ForcedEndState extends ControllerState {
 
     /**
      * Handles a player's attempt to rejoin the game.
-     * 
+     *
      * @param clientId The client identifier.
      * @param nickname The nickname of the client.
      * @param password The password of the client.
      */
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Match Ended");
+        String error = "Match Ended";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }

@@ -57,13 +57,4 @@ public class ResourceCard extends Card {
         return backCorners;
     }
 
-    /**
-     * Prints detailed information of the Resource Card.
-     * Includes id, symbol, points, and front corners.
-     */
-    @Override
-    public void print() {
-        System.out.println(
-                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tcorners: " + frontCorners);
-    }
 }

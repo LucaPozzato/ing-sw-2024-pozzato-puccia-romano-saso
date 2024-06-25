@@ -1,7 +1,11 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Stack;
+
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import org.junit.jupiter.api.Test;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.CornerType;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.GoldCardPointType;
@@ -10,7 +14,7 @@ import it.polimi.ingsw.codexnaturalis.model.game.components.cards.GoldCard;
 
 public class GoldParserTest {
     @Test
-    void testParse() {
+    void testParser() {
         Stack<GoldCard> deck = new GoldParser().parse();
         assertTrue(deck.size() == 40);
         int i = 1;

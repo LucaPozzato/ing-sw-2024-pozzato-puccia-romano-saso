@@ -1,16 +1,24 @@
 package it.polimi.ingsw.codexnaturalis.model.game.parser;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
+
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
+import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import org.junit.jupiter.api.Test;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.ObjectiveCardType;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ObjectiveParserTest {
     @Test
     void testParse() {
-        List<ObjectiveCard> objDeck = new ObjectiveParser().parse();
+        ObjectiveParser parser = new ObjectiveParser();
+        List<ObjectiveCard> objDeck = parser.parse();
+        Card cards = objDeck.getFirst();
+        System.out.println(cards);
         assertTrue(objDeck.size() == 16);
+        assertThrows(IllegalCommandException.class, cards::getPointsType);
         int i = 1;
         for (ObjectiveCard card : objDeck) {
             if (i <= 8)

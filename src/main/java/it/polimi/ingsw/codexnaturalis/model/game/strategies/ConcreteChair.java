@@ -16,7 +16,7 @@ public class ConcreteChair implements Strategy {
      * Then the reduced matrix computed using radius is visited by letting scroll
      * the 2x4 matrix with the highlighted cells on it and counting the matches in
      * patternFound.
-     * 
+     *
      * @param structure the player structure to get the cardmatrix and the
      *                  cardToCoordinates
      * @param objCard   the chair objective we want to look for on the player

@@ -50,13 +50,6 @@ public class Structure implements Serializable {
 
     public Map<Card, Triplet<Integer, Boolean, Boolean>> getCardToCoordinate() {
         return cardToCoordinate;
-        /*
-         * TO PRINT:
-         * for(Card card : structure.getCardToCoordinate().keySet()){
-         * System.out.println( "id card: " + card.getIdCard() + "coordinate: " +
-         * structure.getCardToCoordinate().get(card).getFirst());
-         * }
-         */
     }
 
     public Map<Integer, Triplet<Card, Boolean, Boolean>> getCoordinateToCard() {
@@ -65,6 +58,10 @@ public class Structure implements Serializable {
 
     public Card[][] getCardMatrix() {
         return cardMatrix;
+    }
+
+    public void setSatisfiedPatterns() {
+        this.satisfiedPatterns++;
     }
 
     public int getSatisfiedPatterns() {
@@ -76,22 +73,22 @@ public class Structure implements Serializable {
     }
 
     public String getVisibleResources() {
-        String visibleResources = "";
+        StringBuilder visibleResources = new StringBuilder();
         for (Resource resource : Resource.values()) {
             if (!(resource.name().equals("EMPTY")) && !(resource.name().equals("NULL")))
-                visibleResources += resource.name() + ": " + visibleSymbols.get(resource.name()) + "\n";
+                visibleResources.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name())).append("\n");
         }
-        visibleResources = visibleResources.substring(0, visibleResources.length() - 1);
-        return visibleResources;
+        visibleResources = new StringBuilder(visibleResources.substring(0, visibleResources.length() - 1));
+        return visibleResources.toString();
     }
 
     public String getVisibleObjects() {
-        String visibleObjects = "";
+        StringBuilder visibleObjects = new StringBuilder();
         for (Objects resource : Objects.values()) {
-            visibleObjects += resource.name() + ": " + visibleSymbols.get(resource.name()) + "\n";
+            visibleObjects.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name())).append("\n");
         }
-        visibleObjects = visibleObjects.substring(0, visibleObjects.length() - 1);
-        return visibleObjects;
+        visibleObjects = new StringBuilder(visibleObjects.substring(0, visibleObjects.length() - 1));
+        return visibleObjects.toString();
     }
 
     public List<Pair<Card, Boolean>> getPlacedCards() {
@@ -145,9 +142,6 @@ public class Structure implements Serializable {
         return 0;
     }
 
-    public void increaseSatisfiedPatterns() {
-        this.satisfiedPatterns++;
-    }
 
     /**
      * This method acts differently according to the type of card the user want to
@@ -164,7 +158,7 @@ public class Structure implements Serializable {
      * neighbour cards <br>
      * If the placed card is a Gold one checks if the player's structure satisfies
      * card's requirement <br>
-     * 
+     *
      * @param father     the card under the placed one
      * @param card       the card user want to place
      * @param coordinate the coordinate on the matrix where the card is placed
@@ -172,7 +166,7 @@ public class Structure implements Serializable {
      *                   string passed
      * @param frontUp    the side choose for the placement
      * @return true is the card is placeable, exception otherwise. The method never
-     *         returns false.
+     * returns false.
      * @throws IllegalCommandException thrown when a card is not placeable. A proper
      *                                 description message is linked to the
      *                                 exception.
@@ -298,7 +292,7 @@ public class Structure implements Serializable {
                 return fatherCoordinate + 99;
             default:
                 throw new IllegalArgumentException("Invalid position"); // -> maybe function that calls calcCoordinates
-            // checks for suitable arguments
+                // checks for suitable arguments
         }
     }
 
@@ -425,21 +419,4 @@ public class Structure implements Serializable {
             System.out.print("\n");
         }
     }
-
-    /*
-     * Tested methods:
-     * 
-     * [x] getVisibleResources
-     * [x] getVisibleObjects
-     * [x] getPointsFromPlayableCard
-     * [x] placeCard
-     * [x] getRadius
-     * [x] printReducedMatrix
-     * [] isPlaceable
-     * [] calcCoordinate
-     * [] calcVisibleSymbols
-     * [] increaseSatisfiedPatterns
-     * [] getPlacedCards
-     * 
-     */
 }

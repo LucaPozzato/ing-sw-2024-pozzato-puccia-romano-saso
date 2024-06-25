@@ -73,17 +73,4 @@ public class GoldCard extends Card {
         return requirements;
     }
 
-    /**
-     * Returns a string representation of the Gold Card.
-     */
-    @Override
-    public void print() {
-        System.out.println(
-                "id: " + idCard + "\n\tsymbol: " + symbol + "\n\tpoints: " + points + "\n\tpointsType: " + pointsType
-                        + "\n\tcorners: " + frontCorners + "\n\trequirements: ");
-        for (Map.Entry<String, Integer> entry : requirements.entrySet()) {
-            System.out.println("\t\t" + entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
 }

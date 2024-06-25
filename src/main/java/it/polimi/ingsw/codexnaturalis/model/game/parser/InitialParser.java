@@ -53,7 +53,6 @@ public class InitialParser {
 
             InitialCard initCard = new InitialCard(id, frontCornRes, frontCentRes, backCornRes);
             collection.add(initCard);
-            // Collections.shuffle(collection);
         }
         return collection;
     }

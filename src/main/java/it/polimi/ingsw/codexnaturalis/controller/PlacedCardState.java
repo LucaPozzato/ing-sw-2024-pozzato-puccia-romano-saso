@@ -27,7 +27,6 @@ import javafx.util.Pair;
  * Represents the state of the game where a card has been placed by a player.
  */
 public class PlacedCardState extends ControllerState {
-    // TODO: remove regionMatches and use equals -> code more readable
     private boolean placed;
 
     /**
@@ -77,11 +76,15 @@ public class PlacedCardState extends ControllerState {
      */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        String error = "Game already initialized";
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
+        super.game.pushEvent(error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -97,11 +100,15 @@ public class PlacedCardState extends ControllerState {
      */
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
+        String error = "Game already joined";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -118,11 +125,15 @@ public class PlacedCardState extends ControllerState {
      */
     @Override
     public void chooseSetUp(String clientId, Player nickname, Boolean side, ObjectiveCard objCard) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already set up");
+        String error = "Game already set up";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -139,7 +150,7 @@ public class PlacedCardState extends ControllerState {
      */
     @Override
     public synchronized void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-            Boolean frontUp) {
+                                        Boolean frontUp) {
 
         Event event = null;
 
@@ -151,8 +162,10 @@ public class PlacedCardState extends ControllerState {
                 }
             }
 
-            if (!player.equals(game.getCurrentPlayer()))
+            if (!player.equals(game.getCurrentPlayer())) {
                 throw new IllegalCommandException("Not your turn");
+            }
+
 
             // FIXME: throw all necessary exceptions
 
@@ -181,18 +194,16 @@ public class PlacedCardState extends ControllerState {
             removeFromHand(placeThis);
 
             // Compute the points which are direct consequence of card's placement:
-
             // Points assigned because the placed card is a gold card or a resource card
             // with bonus points (these are actual points,
             // immediately assigned to the player who placed the card and which determines a
             // movement of his pawn on the board)
+
             int pointFromCard = structure.getPointsFromPlayableCard(placeThis, frontUp);
             updateActualPoints(pointFromCard);
 
             if (game.getBoard().getActualPoints(player) >= 20 && !game.isLastTurn()) {
-                System.out.println("before setting last turn");
                 game.setLastTurn();
-                System.out.println("after setting last turn: " + game.isLastTurn());
             }
 
             event = new PlaceEvent(game.getGameId(), "Draw", game.getStructures(), game.getHands(), game.getBoard());
@@ -201,12 +212,15 @@ public class PlacedCardState extends ControllerState {
 
         } catch (IllegalCommandException e) {
             event = new ErrorEvent(clientId, game.getGameId(), e.getMessage());
+            super.game.pushEvent(e.getMessage());
         }
 
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
 
@@ -222,15 +236,18 @@ public class PlacedCardState extends ControllerState {
      *
      * @param clientId The client ID attempting to place the card.
      * @param player   The player attempting to place the card.
-     * @param card     The card to draw.
-     * @param fromDeck The deck from which the card is drawn.
+     * @param card     The card to draw
+     * @param fromDeck The deck from which to draw
      */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
+        String error = "Error while drawing";
         Event event = null;
         if (!player.equals(super.game.getCurrentPlayer())) {
+            super.game.pushEvent(error);
             event = new ErrorEvent(clientId, game.getGameId(), "Not your turn");
         } else {
+            super.game.pushEvent(error);
             event = new ErrorEvent(clientId, game.getGameId(), "Can't draw card now");
         }
 
@@ -238,6 +255,8 @@ public class PlacedCardState extends ControllerState {
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -245,12 +264,10 @@ public class PlacedCardState extends ControllerState {
     private void removeFromHand(Card placeThis) throws IllegalCommandException {
         // Card bottomCard;
         Hand hand = super.game.getHandByPlayer(super.game.getCurrentPlayer());
-        // iterate over list of cards in the hand of the player to find the card with
+        // Iterate over list of cards in the hand of the player to find the card with
         // the same id and then add it to the structure and remove it from the hand
         for (Card card : hand.getCardsHand()) {
             if (card.equals(placeThis)) {
-                // bottomCard = structure.getCard(idBottomCard);
-                // structure.insertCard(bottomCard, card, position);
                 hand.removeCard(card);
                 break;
             }
@@ -264,7 +281,7 @@ public class PlacedCardState extends ControllerState {
 
     /**
      * Handles a player's attempt to rejoin the game.
-     * 
+     *
      * @param clientId The client identifier.
      * @param nickname The nickname of the client.
      * @param password The password of the client.
@@ -278,8 +295,9 @@ public class PlacedCardState extends ControllerState {
         // Checks if the nickname is correct
         // Checks if the player results disconnected
         // Checks if the password is correct
-        // Hence proceedes to send all the information about the game to the rejoined
+        // Hence proceeds to send all the information about the game to the rejoined
         // client with a RejoinGameEvent
+
         for (var player : game.getPlayers()) {
             if (nickname.equals(player.getNickname())) {
                 foundNickname = true;
@@ -310,37 +328,45 @@ public class PlacedCardState extends ControllerState {
                         event = new RejoinGameEvent(clientId, nickname, game.getGameId(), "Place", game.getPlayers(),
                                 game.getStructures(),
                                 game.getHands(), game.getBoard(), game.getDeck(), game.getCurrentPlayer(), null);
-                        System.out.println("trying to reconnect client");
+                        System.out.println("Trying to reconnect client");
                         System.out.println(clientId + " " + nickname + " " + game.getGameId() + " " + "Place" + " "
                                 + game.getPlayers() + " " + game.getStructures() + " " +
                                 game.getHands() + " " + game.getBoard() + " " + game.getDeck() + " "
                                 + game.getCurrentPlayer());
                     } else {
-                        event = new ErrorEvent(clientId, game.getGameId(), "the player is already connected");
+                        String error = "the player is already connected";
+                        super.game.pushEvent(error);
+                        event = new ErrorEvent(clientId, game.getGameId(), error);
                     }
                 } else {
-                    event = new ErrorEvent(clientId, game.getGameId(), "wrong password");
+                    String error = "wrong password";
+                    super.game.pushEvent(error);
+                    event = new ErrorEvent(clientId, game.getGameId(), error);
                 }
                 break;
             }
         }
 
         if (!foundNickname) {
+            String error = "no player with this nickname in the game " + game.getGameId();
+            super.game.pushEvent(error);
             event = new ErrorEvent(clientId, game.getGameId(),
-                    "no player with this nickname in the game " + game.getGameId());
+                    error);
         }
 
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
 
     /**
      * Handles disconnection of a client from the game.
-     * 
+     *
      * @param clientId The client identifier.
      */
     @Override
@@ -348,24 +374,27 @@ public class PlacedCardState extends ControllerState {
         boolean keepOn = true;
         Player player = game.PlayerFromId(clientId);
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
-        System.out.println("disconnect being called");
+        System.out.println("Disconnect being called");
 
-        // cheks if there is only one player left
-        // in this case waits for 30 seconds before shutting down the game
-        // if a player reconnects proceeds to continue with the game
+        //Let's examine the case in which there's only one player connected
         if (game.onePlayerLeft()) {
+            String error = "You are the only player left, waiting for others to rejoin the game...";
+            super.game.pushEvent(error);
             Event event = new ErrorEvent(null, game.getGameId(),
-                    "You are the only player left, waiting for others to rejoin the game...");
+                    error);
             super.rmiServer.sendEvent(event);
             try {
                 super.socketServer.sendEvent(event);
             } catch (Exception e) {
+                String noSer = "No server found";
+                super.game.pushEvent(noSer);
                 e.printStackTrace();
             }
-            System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
+
+            //The system waits for 30 * 1000 millis for the other player reconnection
             for (int i = 0; i < 30; i++) {
                 try {
-                    System.out.println("waiting for the client ot come back");
+                    System.out.println("Waiting for the client to come back");
                     Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -373,21 +402,26 @@ public class PlacedCardState extends ControllerState {
                 if (!game.onePlayerLeft())
                     break;
             }
-            System.out.println("onePlayerLeft returns: " + game.onePlayerLeft());
+            //If the player is still the only one connected the game is shut down
             if (game.onePlayerLeft()) {
+                String error1 = "Game was shut down due to clients' disconnections";
+                super.game.pushEvent(error1);
                 keepOn = false;
-                event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+                event = new ForcedEndEvent(game.getGameId(), error1);
                 super.rmiServer.sendEvent(event);
                 try {
                     super.socketServer.sendEvent(event);
                 } catch (Exception e) {
+                    String noSer = "No server found";
+                    super.game.pushEvent(noSer);
                     e.printStackTrace();
                 }
                 super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
             }
         } else {
+            // If a generic player gets disconnected and there are at least two other players online
             Player tempPlayer = null;
-            Event event = null;
+            Event event;
             for (Player p : game.getFromPlayerToId().keySet()) {
                 if (game.getFromPlayerToId().get(p).equals(clientId)) {
                     tempPlayer = p;
@@ -395,19 +429,23 @@ public class PlacedCardState extends ControllerState {
                 }
             }
             if (tempPlayer != null) {
-                event = new ErrorEvent(null, game.getGameId(),
-                        tempPlayer.getNickname() + " has disconnected"); // generic player has disconnected
+                String error = tempPlayer.getNickname() + " has disconnected";
+                super.game.pushEvent(error);
+                event = new ErrorEvent(null, game.getGameId(), error);
                 super.rmiServer.sendEvent(event);
                 try {
                     super.socketServer.sendEvent(event);
                 } catch (Exception e) {
+                    String noSer = "No server found";
+                    super.game.pushEvent(noSer);
                     e.printStackTrace();
                 }
             }
         }
 
+        //Manage the case in which the current player gets disconnected and there are at least other two players online, then his turn is skipped and the game goes on
         if (keepOn && player.equals((game.getCurrentPlayer()))) { // currentPlayer has disconnected
-            if (placed) { // should never get in
+            if (placed) {
                 super.game.revert();
             }
             game.setSkip(true);

@@ -76,13 +76,6 @@ public abstract class Card implements Serializable {
     }
 
     /**
-     * Prints the representation of the card.
-     */
-    public void print() {
-        System.out.println("Card: " + idCard);
-    }
-
-    /**
      * Returns a string representation of the card.
      */
     @Override

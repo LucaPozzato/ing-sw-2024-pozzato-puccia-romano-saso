@@ -40,14 +40,6 @@ public class Deck implements Serializable {
         return resourceDeck;
     }
 
-    public void addGoldCard(GoldCard card) {
-        this.goldDeck.push(card);
-    }
-
-    public void addResourceCard(ResourceCard card) {
-        this.resourceDeck.push(card);
-    }
-
     /**
      * Draws (removes and returns) a gold card from the top of the deck.
      *

@@ -28,7 +28,7 @@ public class Hand implements Serializable {
 
     /**
      * Sets the secret objective card
-     * 
+     *
      * @param secretObjective the secret objective card
      */
     public void setSecretObjective(Card secretObjective) {
@@ -37,7 +37,7 @@ public class Hand implements Serializable {
 
     /**
      * Returns the secret objective card
-     * 
+     *
      * @return the secret objective card
      */
     public Card getSecretObjective() {
@@ -46,7 +46,7 @@ public class Hand implements Serializable {
 
     /**
      * Returns the objective cards to choose from
-     * 
+     *
      * @return the objective cards to choose from
      */
     public List<Card> getChooseBetweenObj() {
@@ -55,7 +55,7 @@ public class Hand implements Serializable {
 
     /**
      * Returns the cards in the hand
-     * 
+     *
      * @return the cards in the hand
      */
     public List<Card> getCardsHand() {
@@ -68,7 +68,7 @@ public class Hand implements Serializable {
 
     /**
      * Sets the initial card
-     * 
+     *
      * @param initCard the initial card
      */
     public void setInitCard(InitialCard initCard) {
@@ -77,7 +77,7 @@ public class Hand implements Serializable {
 
     /**
      * Returns the initial card
-     * 
+     *
      * @return the initial card
      */
     public InitialCard getInitCard() {
@@ -86,7 +86,7 @@ public class Hand implements Serializable {
 
     /**
      * Adds a card to the hand
-     * 
+     *
      * @param card the card to add
      * @throws IllegalCommandException if the card is not of the right type or the
      *                                 hand is full
@@ -114,7 +114,7 @@ public class Hand implements Serializable {
 
     /**
      * Removes a card from the hand
-     * 
+     *
      * @param card the card to remove
      * @throws IllegalCommandException if the card is not in the hand
      */

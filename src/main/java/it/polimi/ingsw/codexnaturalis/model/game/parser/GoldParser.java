@@ -35,7 +35,7 @@ public class GoldParser {
      * the card starting from the TL and going clockwise<br>
      * #) a map which represent the resource that the player needs to have on his
      * structure in order to place the goldCard at "resources required" <br>
-     * 
+     *
      * @return a unique stack of resource card
      */
     public Stack<GoldCard> parse() {
@@ -68,7 +68,7 @@ public class GoldParser {
                 listReq.put(type, amount);
             }
 
-            // Creazione dell'oggetto goldCard
+            // goldCard object creation
             GoldCard goldCard = new GoldCard(idCard, symbol, points, pointsType, listCorner, listReq);
             goldDeck.push(goldCard);
         }

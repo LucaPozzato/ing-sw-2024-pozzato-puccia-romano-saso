@@ -29,7 +29,7 @@ public class ResourceParser {
      * #) the points made when the objective is satisfied at "points" <br>
      * #) an array of 4 strings which represent the occupation of every corner of
      * the card starting from the TL and going clockwise
-     * 
+     *
      * @return a unique stack of resource card
      */
     public Stack<ResourceCard> parse() {

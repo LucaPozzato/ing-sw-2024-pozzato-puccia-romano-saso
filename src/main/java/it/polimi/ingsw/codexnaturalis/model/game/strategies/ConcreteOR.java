@@ -11,8 +11,9 @@ public class ConcreteOR implements Strategy {
     /**
      * The method gets an objective card and, by looking at the visible resources related to the specific player structure, it computes the points made satisfying that objective. <br>
      * Note that visibleSymbol is computed every placedCard, so it has the updated resource and symbol count each moment of the match
+     *
      * @param structure the player structure used to get the visibleSymbols structure's attribute
-     * @param objCard the objective we want to look for on the player structure
+     * @param objCard   the objective we want to look for on the player structure
      * @return the number of points made thanks to objective satisfaction
      * @throws IllegalCommandException
      */

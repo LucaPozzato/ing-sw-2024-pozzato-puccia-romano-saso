@@ -80,16 +80,6 @@ public class ObjectiveCard extends Card {
                 '}';
     }
 
-    /**
-     * Prints detailed information of the Objective Card.
-     * Includes id, points, shape, and must-have.
-     */
-    @Override
-    public void print() {
-        System.out.println(
-                "id: " + idCard + "\n\tpoints: " + points + "\n\tshape: " + shape + "\n\tmustHave: " + mustHave);
-    }
-
     @Override
     public String getPointsType() throws IllegalCommandException {
         throw new IllegalCommandException("Can't get points type");

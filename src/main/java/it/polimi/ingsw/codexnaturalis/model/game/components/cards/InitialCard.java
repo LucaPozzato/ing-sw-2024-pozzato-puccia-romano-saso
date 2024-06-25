@@ -25,7 +25,7 @@ public class InitialCard extends Card {
      * @param backCornerRes  The list of back corners associated with the card.
      */
     public InitialCard(String idCard, List<String> frontCornerRes, List<String> frontCenterRes,
-            List<String> backCornerRes) {
+                       List<String> backCornerRes) {
         super(idCard);
         this.frontCorners = frontCornerRes;
         this.frontCenterResources = frontCenterRes;
@@ -51,7 +51,7 @@ public class InitialCard extends Card {
      * Returns a string representation of the Initial Card.
      *
      * @return A string representation including the identifier and lists of corners
-     *         and resources.
+     * and resources.
      */
     public String toString() {
         return "InitialCard{" +
@@ -60,11 +60,5 @@ public class InitialCard extends Card {
                 ", frontCenterRes=" + frontCenterResources +
                 ", backCornerRes=" + backCorners +
                 '}';
-    }
-
-    @Override
-    public void print() {
-        System.out.println("id: " + idCard + "\n\tfrontCornerRes: " + frontCorners + "\n\tfrontCentreRes: "
-                + frontCenterResources + "\n\tbackCornerRes: " + backCorners);
     }
 }

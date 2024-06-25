@@ -29,7 +29,7 @@ public class ChooseSetUpState extends ControllerState {
 
     /**
      * Constructs a new ChooseSetUpState.
-     * 
+     *
      * @param game         The current game instance.
      * @param rmiServer    The RMI server handling communication.
      * @param socketServer The Socket server handling communication.
@@ -53,11 +53,15 @@ public class ChooseSetUpState extends ControllerState {
      */
     @Override
     public void initialized(String clientId, String nick, String password, Color color, int numPlayers) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already initialized");
+        String error = "Game already initialized";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -73,11 +77,15 @@ public class ChooseSetUpState extends ControllerState {
      */
     @Override
     public void joinGame(String clientId, String nickname, String password, Color color) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Game already joined");
+        String error = "Game already joined";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -85,7 +93,7 @@ public class ChooseSetUpState extends ControllerState {
     /**
      * Sends an error event indicating that the player cannot place a card at the
      * current moment.
-     * 
+     *
      * @param clientId  The client ID attempting to place the card.
      * @param player    The player attempting to place the card.
      * @param father    The card where the placement is initiated.
@@ -95,12 +103,16 @@ public class ChooseSetUpState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-            Boolean frontUp) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't place card yet");
+                           Boolean frontUp) {
+        String error = "Can't place card yet";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
@@ -111,23 +123,27 @@ public class ChooseSetUpState extends ControllerState {
      *
      * @param clientId The client ID attempting to place the card.
      * @param player   The player attempting to place the card.
-     * @param card     The card to draw.
-     * @param fromDeck The deck from which the card is drawn.
+     * @param card     The card to draw
+     * @param fromDeck The deck from which to draw
      */
     @Override
     public void drawnCard(String clientId, Player player, Card card, String fromDeck) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can`t draw card yet");
+        String error = "Can't draw card yet";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }
 
     /**
      * Handles the event when a player chooses their setup options.
-     * 
+     *
      * @param clientId The client identifier.
      * @param player   The player making the setup choice.
      * @param side     The chosen side for placement.
@@ -137,10 +153,9 @@ public class ChooseSetUpState extends ControllerState {
     public void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard) {
 
         Event event = null;
-
         try {
             // Check if player has already made a choice
-            if (setUpMap.keySet().size() > 0 && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
+            if (!setUpMap.keySet().isEmpty() && setUpMap.containsKey(player) && setUpMap.get(player).equals(true)) {
                 throw new IllegalCommandException("Player already made his choice");
             } else {
                 for (Player p : super.game.getPlayers()) {
@@ -159,7 +174,6 @@ public class ChooseSetUpState extends ControllerState {
                         break;
                     }
                 }
-
                 hand.setSecretObjective(objCard);
                 setUpMap.put(player, true);
             }
@@ -176,8 +190,8 @@ public class ChooseSetUpState extends ControllerState {
 
                 super.game.setState(new ChooseSetUpState(super.game, super.rmiServer, super.socketServer, setUpMap));
             }
-
         } catch (IllegalCommandException err) {
+            super.game.pushEvent(err.getMessage());
             event = new ErrorEvent(clientId, game.getGameId(), err.getMessage());
         }
 
@@ -186,6 +200,8 @@ public class ChooseSetUpState extends ControllerState {
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
 
@@ -194,16 +210,20 @@ public class ChooseSetUpState extends ControllerState {
     /**
      * Handles disconnection of a client from the game shutting it down and sending
      * a ForcedEndEvent to the other players
-     * 
+     *
      * @param clientId The client identifier.
      */
     @Override
     public void disconnect(String clientId) {
-        Event event = new ForcedEndEvent(game.getGameId(), "Game was shut down due to clients' disconnections");
+        String error = "Game was shut down due to clients' disconnections";
+        super.game.pushEvent(error);
+        Event event = new ForcedEndEvent(game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
         super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
@@ -211,18 +231,22 @@ public class ChooseSetUpState extends ControllerState {
 
     /**
      * Handles a player's attempt to rejoin the game.
-     * 
+     *
      * @param clientId The client identifier.
      * @param nickname The nickname of the client.
      * @param password The password of the client.
      */
     @Override
     public void rejoinGame(String clientId, String nickname, String password) {
-        Event event = new ErrorEvent(clientId, game.getGameId(), "Can't rejoin game now");
+        String error = "Can't rejoin game now";
+        super.game.pushEvent(error);
+        Event event = new ErrorEvent(clientId, game.getGameId(), error);
         super.rmiServer.sendEvent(event);
         try {
             super.socketServer.sendEvent(event);
         } catch (Exception e) {
+            String noSer = "No server found";
+            super.game.pushEvent(noSer);
             e.printStackTrace();
         }
     }

@@ -37,9 +37,9 @@ public class ObjectiveParser {
      * the list of int which represent the whole cells of a 2x4 matrix in case of
      * chair pattern,
      * a null value in case of resourceObj at wholeCells""<br>
-     * 
+     *
      * @return a unique list of objective card, firstly the patternObjective and
-     *         then the resureObjective
+     * then the resureObjective
      */
     public List<ObjectiveCard> parse() {
         InputStreamReader input = new InputStreamReader(

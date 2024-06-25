@@ -39,7 +39,6 @@ public class Game implements Serializable {
     private int numPlayers;
     private int numParticipants;
     private Player currentPlayer;
-    private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
     private final Map<Player, String> fromPlayerToId;
@@ -89,10 +88,6 @@ public class Game implements Serializable {
 
     public Chat getChat() {
         return this.chat;
-    }
-
-    public Player getNextPlayer() {
-        return nextPlayer;
     }
 
     public ControllerState getState() {
@@ -192,14 +187,8 @@ public class Game implements Serializable {
      * Sets the number of players in the game and populates the list of players
      *
      * @param numPlayers the number of players
-     * @throws IllegalCommandException if the number of players is not between 2 and
-     *                                 4
      */
-    public void setNumPlayers(int numPlayers) throws IllegalCommandException {
-        // FIXME: do this in initState
-        if (numPlayers < 2 || numPlayers > 4)
-            throw new IllegalCommandException("Number of players has to be between 2 and 4!");
-
+    public void setNumPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers - 1; i++) {
             Player newPlayer = new Player("", "");
             this.players.add(newPlayer);
@@ -207,10 +196,6 @@ public class Game implements Serializable {
             System.out.println("connected size = " + this.connected.size());
         }
         this.numPlayers = numPlayers;
-    }
-
-    public void setNumParticipants(int numParticipants) {
-        this.numParticipants = numParticipants;
     }
 
     public void setDeck(Deck deck) {
@@ -231,13 +216,6 @@ public class Game implements Serializable {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
-    }
-
-    // FIXME: quick fix for now
-    public void setNextPlayer(Player nextPlayer) {
-        this.nextPlayer = nextPlayer;
-        // currentPlayer = players.get((players.indexOf(currentPlayer) + 1) %
-        // players.size());
     }
 
     public void setBackUpStructure(Structure backUpStructure) {
@@ -353,10 +331,11 @@ public class Game implements Serializable {
     }
 
     //TODO: discuss if it's an acceptable practice and if keep it here or move it in another class
-    public void pushEvent(String eventMessage){
+    public void pushEvent(String eventMessage) {
         this.eventTracker.push(eventMessage);
     }
-    public Stack getEventTracker(){
+
+    public Stack<String> getEventTracker() {
         return this.eventTracker;
     }
 }
