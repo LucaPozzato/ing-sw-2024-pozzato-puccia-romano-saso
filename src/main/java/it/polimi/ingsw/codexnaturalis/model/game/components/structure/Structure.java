@@ -32,7 +32,7 @@ public class Structure implements Serializable {
     private Map<Integer, Triplet<Card, Boolean, Boolean>> coordinateToCard; // <Coordinates , <Card, Side, Visited> >
     private Map<String, Integer> visibleSymbols;
     private Card[][] cardMatrix = new Card[80][80];
-    private int satisfiedPatterns;
+    private int satisfiedObj;
 
     /**
      * Constructs a new Structure with initial settings.
@@ -45,7 +45,7 @@ public class Structure implements Serializable {
         this.visibleSymbols = new HashMap<>(
                 Map.of("VEGETABLE", 0, "ANIMAL", 0, "INSECT", 0, "SHROOM", 0, "INK", 0, "SCROLL", 0,
                         "FEATHER", 0, "EMPTY", 0, "NULL", 0));
-        this.satisfiedPatterns = 0;
+        this.satisfiedObj = 0;
     }
 
     public Map<Card, Triplet<Integer, Boolean, Boolean>> getCardToCoordinate() {
@@ -60,12 +60,12 @@ public class Structure implements Serializable {
         return cardMatrix;
     }
 
-    public void setSatisfiedPatterns() {
-        this.satisfiedPatterns++;
+    public void setSatisfiedObj() {
+        this.satisfiedObj++;
     }
 
-    public int getSatisfiedPatterns() {
-        return satisfiedPatterns;
+    public int getSatisfiedObj() {
+        return satisfiedObj;
     }
 
     public Map<String, Integer> getvisibleSymbols() {

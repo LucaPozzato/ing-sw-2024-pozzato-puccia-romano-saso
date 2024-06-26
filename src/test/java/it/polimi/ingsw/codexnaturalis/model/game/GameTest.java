@@ -321,6 +321,8 @@ public class GameTest {
         try {
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(3, game.getBoard().getActualPoints(player));
+            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
+
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -372,6 +374,7 @@ public class GameTest {
         try {
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(2, game.getBoard().getActualPoints(player));
+            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -423,6 +426,7 @@ public class GameTest {
         try {
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(2, game.getBoard().getActualPoints(player));
+            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -479,6 +483,63 @@ public class GameTest {
             structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(3, game.getBoard().getActualPoints(player));
+            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void SatObjRecognition(){
+        Game game = new Game(1, null, null);
+        Player player = new Player();
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().getFirst(); // IC1
+        ResourceCard GreenTest1 = parser.parse().get(12); //R11
+        ResourceCard GreenTest2 = parser.parse().get(11); // R02
+        ResourceCard GreenTest3 = parser.parse().get(10); // R19
+        ResourceCard RedTest1 = parser.parse().getFirst(); // R01
+
+        // Setto l'obiettivo segreto
+        Hand hand = new Hand();
+        game.addPlayer(player);
+        game.setPlayerHand(player, hand);
+        hand = game.getHandByPlayer(player);
+        hand.setSecretObjective(objPars.parse().get(8)); // OR1
+
+        game.setPlayerStructure(player, structure);
+
+        // Setto gli obiettivi comuni
+        List<Card> commonObjective = new ArrayList<>();
+        commonObjective.add(objPars.parse().get(1)); // OP2
+        commonObjective.add(objPars.parse().get(2)); // OP3
+
+        Board board = new Board();
+        game.setBoard(board);
+        board = game.getBoard();
+        board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
+
+        // Piazzo le carte sulla board
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, GreenTest1, "BR", true);
+            structure.placeCard(GreenTest1, GreenTest2, "BR", true);
+            structure.placeCard(GreenTest2, GreenTest3, "BR", true);
+            structure.placeCard(GreenTest3, RedTest1, "BL", true);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
+            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -492,8 +553,6 @@ public class GameTest {
     // [x] resource requirement check
     // [x] object requirement check
     // [x] foldedhandWiseman requirement check
-
-
-    // [] Test the declare winner in strange situations
+    // [x] Test the recognition of satisfiedObjective
 
 }

@@ -254,17 +254,17 @@ public class Game implements Serializable {
         int points = 0;
 
         for (Pair<Strategy, Card> pair : strategyMap.get(player)) {
-            // TODO: find a better way than compute twice the test also fails if I delete
-            // the comment
-            // Computes the number of objective satisfied by a player
-            // if (pair.getKey().compute(getStructureByPlayer(player), pair.getValue()) > 0)
-            // {
-            // getStructureByPlayer(player).increaseSatisfiedPatterns();
-            // }
 
             // Points will contain the times an objective is satisfied * the number of
             // points linked to that objective
+            int oldPoints = points;
             points += pair.getKey().compute(getStructureByPlayer(player), pair.getValue());
+
+            // Computes the number of objective satisfied by a player
+            if(points > oldPoints){
+                getStructureByPlayer(player).setSatisfiedObj();
+            }
+
             // Clears the set visited attribute in the map and prepares for another search
             for (Card card : getStructureByPlayer(player).getCardToCoordinate().keySet()) {
                 getStructureByPlayer(player).getCardToCoordinate().get(card).setVisited(false);
@@ -330,7 +330,6 @@ public class Game implements Serializable {
         }
     }
 
-    //TODO: discuss if it's an acceptable practice and if keep it here or move it in another class
     public void pushEvent(String eventMessage) {
         this.eventTracker.push(eventMessage);
     }

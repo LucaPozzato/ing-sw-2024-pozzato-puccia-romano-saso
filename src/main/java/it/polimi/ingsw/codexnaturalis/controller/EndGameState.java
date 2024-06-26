@@ -351,12 +351,12 @@ public class EndGameState extends ControllerState {
                 currentWinner.clear();
                 currentWinner.add(player);
             } else if (pointsByPlayerX.equals(max)) {
-                if (super.game.getStructureByPlayer(player).getSatisfiedPatterns() > super.game
-                        .getStructureByPlayer(currentWinner.getFirst()).getSatisfiedPatterns()) {
+                if (super.game.getStructureByPlayer(player).getSatisfiedObj() > super.game
+                        .getStructureByPlayer(currentWinner.getFirst()).getSatisfiedObj()) {
                     currentWinner.clear();
                     currentWinner.add(player);
-                } else if (super.game.getStructureByPlayer(player).getSatisfiedPatterns() == super.game
-                        .getStructureByPlayer(currentWinner.getFirst()).getSatisfiedPatterns()) {
+                } else if (super.game.getStructureByPlayer(player).getSatisfiedObj() == super.game
+                        .getStructureByPlayer(currentWinner.getFirst()).getSatisfiedObj()) {
                     currentWinner.add(player);
                 }
             }
@@ -378,7 +378,6 @@ public class EndGameState extends ControllerState {
                 message.append(player.getNickname());
                 message.append(" ");
             }
-
             super.game.pushEvent(message.toString());
         }
 
