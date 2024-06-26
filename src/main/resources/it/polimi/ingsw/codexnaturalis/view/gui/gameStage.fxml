@@ -145,6 +145,12 @@
                         <Insets left="20.0" right="40.0" />
                      </HBox.margin>
                   </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="My points:">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Text fx:id="myPoints" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -305,7 +311,7 @@
                   <Insets left="20.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="264.0" prefWidth="109.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="239.0" prefWidth="109.0">
                <padding>
                   <Insets left="20.0" />
                </padding>
@@ -335,6 +341,23 @@
                      <image>
                         <Image url="@../../SymbolsPng/chat.png" />
                      </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="133.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exit game:">
+                     <HBox.margin>
+                        <Insets left="14.0" right="15.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ImageView fitHeight="24.0" fitWidth="124.0" onMouseClicked="#exitGame" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../SymbolsPng/exit.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="6.0" />
+                     </HBox.margin>
                   </ImageView>
                </children>
             </HBox>
@@ -406,17 +429,17 @@
                   </Pane>
                   <ScrollPane fx:id="scrollPaneOthers" prefHeight="483.0" prefWidth="937.0" visible="false">
                      <content>
-                        <Pane fx:id="otherStructuresPane" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
+                        <Pane fx:id="otherStructuresPane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #FFF0DC;" />
                      </content>
                   </ScrollPane>
                   <ScrollPane fx:id="scrollPaneOthers1" layoutX="10.0" layoutY="10.0" prefHeight="483.0" prefWidth="937.0" visible="false">
                      <content>
-                        <Pane fx:id="otherStructuresPane1" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
+                        <Pane fx:id="otherStructuresPane1" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #FFF0F5;" visible="false" />
                      </content>
                   </ScrollPane>
                   <ScrollPane fx:id="scrollPaneOthers2" layoutX="10.0" layoutY="10.0" prefHeight="483.0" prefWidth="937.0" visible="false">
                      <content>
-                        <Pane fx:id="otherStructuresPane2" prefHeight="2000.0" prefWidth="2000.0" visible="false" />
+                        <Pane fx:id="otherStructuresPane2" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFF0;" visible="false" />
                      </content>
                   </ScrollPane>
                </children>

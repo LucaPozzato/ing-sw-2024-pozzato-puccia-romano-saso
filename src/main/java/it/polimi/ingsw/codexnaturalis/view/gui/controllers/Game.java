@@ -64,7 +64,7 @@ public class Game implements Initializable {
     @FXML
     private HBox handCard;
     @FXML
-    private Text player1Points, player2Points, player3Points, player4Points;
+    private Text player1Points, player2Points, player3Points, player4Points, myPoints;
 
     private Command currentCommand;
     private Image   currentImageNew;
@@ -465,10 +465,10 @@ public class Game implements Initializable {
                 textArea.appendText("From " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
            else if(chatMessage.getReceiver().getNickname().equals(myPlayer.getNickname())){
-                textArea.appendText("Private message from: " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
+                textArea.appendText("Private message from " + chatMessage.getSender().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
            else if(chatMessage.getReceiver() != null && chatMessage.getSender().getNickname().equals(myPlayer.getNickname())){
-                textArea.appendText("Private message from " + chatMessage.getSender().getNickname() + " to " + chatMessage.getReceiver().getNickname() + " :" + chatMessage.getMessage() + "\n\n");
+                textArea.appendText("Private message to " + chatMessage.getReceiver().getNickname() + ": " + chatMessage.getMessage() + "\n\n");
             }
         }
     }
@@ -543,7 +543,7 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update structures. When the method is called, every card int a structure is displayed in a specif pane.
+     * Used to update structures. When the method is called, every card in a structure is displayed in a specif pane.
      * On every initial card is displayed the player's pawn.
      * The method is also used to add points for every visible resource.
      * If the player is ready to draw, when a structure card's angle is clicked a place command is sent.
@@ -741,7 +741,7 @@ public class Game implements Initializable {
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
             Platform.runLater(()->{
-                currentSelectedImage.setVisible(false);
+                currentSelectedImage.setVisible(false); //errore
                 isCardPlaced = true;
                 cardDrawn = false;
 
@@ -757,7 +757,7 @@ public class Game implements Initializable {
                 cardDrawn = true;
                 isCardPlaced = false;
                 currentSelected = null;
-                currentSelectedImage.setImage(currentImageNew);
+                currentSelectedImage.setImage(currentImageNew); //FIXME
                 currentSelectedImage.setVisible(true);
                 currentSelectedDeck = null;
 
@@ -881,6 +881,7 @@ public class Game implements Initializable {
         for(var entry : board.getActualScores().entrySet()){
             if(entry.getKey().getNickname().equals(myPlayer.getNickname())){
                 points = entry.getValue();
+                myPoints.setText(entry.getValue().toString());
                 player1Points.setText(myPlayer.getNickname() + ": "  + entry.getValue().toString());
                 addPoint(points, pedina);
             }
@@ -1376,6 +1377,16 @@ public class Game implements Initializable {
     }
 
     /**
+     * Used when a player wants to quit the game.
+     * @param event
+     */
+    @FXML
+    void exitGame(MouseEvent event) {
+        Platform.runLater(Platform::exit);
+        System.exit(0);
+    }
+
+    /**
      * Used to initialize some visual objects and to enable the mouse drag feature on structure panes.
      * @param url
      * @param resourceBundle
@@ -1425,11 +1436,20 @@ public class Game implements Initializable {
         scrollPaneOthers.setHvalue(hCenter);
         scrollPaneOthers.setVvalue(vCenter);
 
+        scrollPaneOthers.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneOthers.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         scrollPaneOthers1.setHvalue(hCenter);
         scrollPaneOthers1.setVvalue(vCenter);
 
+        scrollPaneOthers1.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneOthers1.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         scrollPaneOthers2.setHvalue(hCenter);
         scrollPaneOthers2.setVvalue(vCenter);
+
+        scrollPaneOthers2.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneOthers2.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         structurePane.setOnMousePressed(event -> {
             lastX = event.getX();
@@ -1445,6 +1465,60 @@ public class Game implements Initializable {
         });
 
         scrollPane.setOnMouseReleased(event -> {
+            handCard.setFocusTraversable(true);
+            handCard.requestFocus();
+        });
+
+        otherStructuresPane.setOnMousePressed(event -> {
+            lastX = event.getX();
+            lastY = event.getY();
+        });
+
+        otherStructuresPane.setOnMouseDragged(event -> {
+            double deltaX = event.getX() - lastX;
+            double deltaY = event.getY() - lastY;
+
+            scrollPaneOthers.setHvalue(scrollPaneOthers.getHvalue() - deltaX / otherStructuresPane.getWidth());
+            scrollPaneOthers.setVvalue(scrollPaneOthers.getVvalue() - deltaY / otherStructuresPane.getHeight());
+        });
+
+        otherStructuresPane.setOnMouseReleased(event -> {
+            handCard.setFocusTraversable(true);
+            handCard.requestFocus();
+        });
+
+        otherStructuresPane1.setOnMousePressed(event -> {
+            lastX = event.getX();
+            lastY = event.getY();
+        });
+
+        otherStructuresPane1.setOnMouseDragged(event -> {
+            double deltaX = event.getX() - lastX;
+            double deltaY = event.getY() - lastY;
+
+            scrollPaneOthers1.setHvalue(scrollPaneOthers1.getHvalue() - deltaX / otherStructuresPane1.getWidth());
+            scrollPaneOthers1.setVvalue(scrollPaneOthers1.getVvalue() - deltaY / otherStructuresPane1.getHeight());
+        });
+
+        otherStructuresPane1.setOnMouseReleased(event -> {
+            handCard.setFocusTraversable(true);
+            handCard.requestFocus();
+        });
+
+        otherStructuresPane2.setOnMousePressed(event -> {
+            lastX = event.getX();
+            lastY = event.getY();
+        });
+
+        otherStructuresPane2.setOnMouseDragged(event -> {
+            double deltaX = event.getX() - lastX;
+            double deltaY = event.getY() - lastY;
+
+            scrollPaneOthers2.setHvalue(scrollPaneOthers2.getHvalue() - deltaX / otherStructuresPane2.getWidth());
+            scrollPaneOthers2.setVvalue(scrollPaneOthers2.getVvalue() - deltaY / otherStructuresPane2.getHeight());
+        });
+
+        otherStructuresPane2.setOnMouseReleased(event -> {
             handCard.setFocusTraversable(true);
             handCard.requestFocus();
         });

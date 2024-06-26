@@ -24,6 +24,7 @@ public class EndGameController {
     @FXML
     void exitGameFunction(MouseEvent event) {
         Platform.runLater(Platform::exit);
+        System.exit(0);
     }
 
     /**
