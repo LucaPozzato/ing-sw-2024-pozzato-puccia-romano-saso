@@ -311,11 +311,13 @@
                   <Insets left="20.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="239.0" prefWidth="109.0">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
+            <VBox alignment="CENTER" prefHeight="239.0" prefWidth="109.0">
+               <children>
+                  <ImageView fx:id="showHand1" fitHeight="54.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="showHand2" fitHeight="54.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="showHand3" fitHeight="54.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
             <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="133.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Open board:">
@@ -412,7 +414,7 @@
                         </ScrollPane>
                      </children>
                   </Pane>
-                  <Pane fx:id="boardPane" layoutX="-1.0" layoutY="-1.0" prefHeight="481.0" prefWidth="938.0" visible="false">
+                  <Pane fx:id="boardPane" layoutX="-1.0" layoutY="-1.0" prefHeight="481.0" prefWidth="938.0">
                      <children>
                         <ImageView fitHeight="433.0" fitWidth="224.0" layoutX="359.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>

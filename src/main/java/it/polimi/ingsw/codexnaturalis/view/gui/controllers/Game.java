@@ -48,7 +48,7 @@ public class Game implements Initializable {
     @FXML
     private ImageView nickname1Visibility, nickname2Visibility, nickname3Visibility, nickname4Visibility;
     @FXML
-    private ImageView handCard1, handCard2, handCard3;
+    private ImageView handCard1, handCard2, handCard3, showHand1, showHand2, showHand3;
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -150,20 +150,32 @@ public class Game implements Initializable {
      */
     @FXML
     void goldCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-        if (!cardDrawn) {
-            goldDeckCard.setOpacity(.5);
-            goldCard1.setOpacity(1);
-            goldCard2.setOpacity(.5);
-            resourceDeckCard.setOpacity(.5);
-            resourceCard1.setOpacity(.5);
-            resourceCard2.setOpacity(.5);
+//        if (!cardDrawn) {
+//            goldDeckCard.setOpacity(.5);
+//            goldCard1.setOpacity(1);
+//            goldCard2.setOpacity(.5);
+//            resourceDeckCard.setOpacity(.5);
+//            resourceCard1.setOpacity(.5);
+//            resourceCard2.setOpacity(.5);
+//
+//            isHandCardSelected = false;
+//            currentSelectedDeck = currentDeckGold1Card;
+//            currentImageNew = goldCard1.getImage();
+//            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, "");
+//            virtualClient.sendCommand(currentCommand);
+//        }
+        goldDeckCard.setOpacity(.5);
+        goldCard1.setOpacity(1);
+        goldCard2.setOpacity(.5);
+        resourceDeckCard.setOpacity(.5);
+        resourceCard1.setOpacity(.5);
+        resourceCard2.setOpacity(.5);
 
-            isHandCardSelected = false;
-            currentSelectedDeck = currentDeckGold1Card;
-            currentImageNew = goldCard1.getImage();
-            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, "");
-            virtualClient.sendCommand(currentCommand);
-        }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckGold1Card;
+        currentImageNew = goldCard1.getImage();
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold1Card, "");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -175,20 +187,32 @@ public class Game implements Initializable {
      */
     @FXML
     void goldCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-        if (!cardDrawn) {
-            goldDeckCard.setOpacity(.5);
-            goldCard1.setOpacity(.5);
-            goldCard2.setOpacity(1);
-            resourceDeckCard.setOpacity(.5);
-            resourceCard1.setOpacity(.5);
-            resourceCard2.setOpacity(.5);
+//        if (!cardDrawn) {
+//            goldDeckCard.setOpacity(.5);
+//            goldCard1.setOpacity(.5);
+//            goldCard2.setOpacity(1);
+//            resourceDeckCard.setOpacity(.5);
+//            resourceCard1.setOpacity(.5);
+//            resourceCard2.setOpacity(.5);
+//
+//            isHandCardSelected = false;
+//            currentSelectedDeck = currentDeckGold2Card;
+//            currentImageNew = goldCard2.getImage();
+//            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, "");
+//            virtualClient.sendCommand(currentCommand);
+//        }
+        goldDeckCard.setOpacity(.5);
+        goldCard1.setOpacity(.5);
+        goldCard2.setOpacity(1);
+        resourceDeckCard.setOpacity(.5);
+        resourceCard1.setOpacity(.5);
+        resourceCard2.setOpacity(.5);
 
-            isHandCardSelected = false;
-            currentSelectedDeck = currentDeckGold2Card;
-            currentImageNew = goldCard2.getImage();
-            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, "");
-            virtualClient.sendCommand(currentCommand);
-        }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckGold2Card;
+        currentImageNew = goldCard2.getImage();
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGold2Card, "");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -201,20 +225,32 @@ public class Game implements Initializable {
     @FXML
     void goldDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
 
-        if (!cardDrawn) {
-            goldDeckCard.setOpacity(1);
-            goldCard1.setOpacity(.5);
-            goldCard2.setOpacity(.5);
-            resourceDeckCard.setOpacity(.5);
-            resourceCard1.setOpacity(.5);
-            resourceCard2.setOpacity(.5);
+//        if (!cardDrawn) {
+//            goldDeckCard.setOpacity(1);
+//            goldCard1.setOpacity(.5);
+//            goldCard2.setOpacity(.5);
+//            resourceDeckCard.setOpacity(.5);
+//            resourceCard1.setOpacity(.5);
+//            resourceCard2.setOpacity(.5);
+//
+//            isHandCardSelected = false;
+//            currentSelectedDeck = currentDeckGoldCard;
+//            currentImageNew = pathFront(currentDeckGoldCard.getIdCard());
+//            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD");
+//            virtualClient.sendCommand(currentCommand);
+//        }
+        goldDeckCard.setOpacity(1);
+        goldCard1.setOpacity(.5);
+        goldCard2.setOpacity(.5);
+        resourceDeckCard.setOpacity(.5);
+        resourceCard1.setOpacity(.5);
+        resourceCard2.setOpacity(.5);
 
-            isHandCardSelected = false;
-            currentSelectedDeck = currentDeckGoldCard;
-            currentImageNew = pathFront(currentDeckGoldCard.getIdCard());
-            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD");
-            virtualClient.sendCommand(currentCommand);
-        }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckGoldCard;
+        currentImageNew = pathFront(currentDeckGoldCard.getIdCard());
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckGoldCard, "GOLD");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -226,20 +262,32 @@ public class Game implements Initializable {
      */
     @FXML
     void resourceCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-            if (!cardDrawn) {
-                resourceDeckCard.setOpacity(.5);
-                resourceCard1.setOpacity(1);
-                resourceCard2.setOpacity(.5);
-                goldDeckCard.setOpacity(.5);
-                goldCard1.setOpacity(.5);
-                goldCard2.setOpacity(.5);
+//            if (!cardDrawn) {
+//                resourceDeckCard.setOpacity(.5);
+//                resourceCard1.setOpacity(1);
+//                resourceCard2.setOpacity(.5);
+//                goldDeckCard.setOpacity(.5);
+//                goldCard1.setOpacity(.5);
+//                goldCard2.setOpacity(.5);
+//
+//                isHandCardSelected = false;
+//                currentSelectedDeck = currentDeckResource1Card;
+//                currentImageNew = resourceCard1.getImage();
+//                currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, "");
+//                virtualClient.sendCommand(currentCommand);
+//            }
+        resourceDeckCard.setOpacity(.5);
+        resourceCard1.setOpacity(1);
+        resourceCard2.setOpacity(.5);
+        goldDeckCard.setOpacity(.5);
+        goldCard1.setOpacity(.5);
+        goldCard2.setOpacity(.5);
 
-                isHandCardSelected = false;
-                currentSelectedDeck = currentDeckResource1Card;
-                currentImageNew = resourceCard1.getImage();
-                currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, "");
-                virtualClient.sendCommand(currentCommand);
-            }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckResource1Card;
+        currentImageNew = resourceCard1.getImage();
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource1Card, "");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -251,20 +299,32 @@ public class Game implements Initializable {
      */
     @FXML
     void resourceCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
-        if (!cardDrawn) {
-            resourceDeckCard.setOpacity(.5);
-            resourceCard1.setOpacity(.5);
-            resourceCard2.setOpacity(1);
-            goldDeckCard.setOpacity(.5);
-            goldCard1.setOpacity(.5);
-            goldCard2.setOpacity(.5);
+//        if (!cardDrawn) {
+//            resourceDeckCard.setOpacity(.5);
+//            resourceCard1.setOpacity(.5);
+//            resourceCard2.setOpacity(1);
+//            goldDeckCard.setOpacity(.5);
+//            goldCard1.setOpacity(.5);
+//            goldCard2.setOpacity(.5);
+//
+//            isHandCardSelected = false;
+//            currentSelectedDeck = currentDeckResource2Card;
+//            currentImageNew = resourceCard2.getImage();
+//            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, "");
+//            virtualClient.sendCommand(currentCommand);
+//        }
+        resourceDeckCard.setOpacity(.5);
+        resourceCard1.setOpacity(.5);
+        resourceCard2.setOpacity(1);
+        goldDeckCard.setOpacity(.5);
+        goldCard1.setOpacity(.5);
+        goldCard2.setOpacity(.5);
 
-            isHandCardSelected = false;
-            currentSelectedDeck = currentDeckResource2Card;
-            currentImageNew = resourceCard2.getImage();
-            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, "");
-            virtualClient.sendCommand(currentCommand);
-        }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckResource2Card;
+        currentImageNew = resourceCard2.getImage();
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResource2Card, "");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -276,20 +336,32 @@ public class Game implements Initializable {
      */
     @FXML
     void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
-        if (!cardDrawn) {
-            resourceDeckCard.setOpacity(1);
-            resourceCard1.setOpacity(.5);
-            resourceCard2.setOpacity(.5);
-            goldDeckCard.setOpacity(.5);
-            goldCard1.setOpacity(.5);
-            goldCard2.setOpacity(.5);
+//        if (!cardDrawn) {
+//            resourceDeckCard.setOpacity(1);
+//            resourceCard1.setOpacity(.5);
+//            resourceCard2.setOpacity(.5);
+//            goldDeckCard.setOpacity(.5);
+//            goldCard1.setOpacity(.5);
+//            goldCard2.setOpacity(.5);
+//
+//            isHandCardSelected = false;
+//            currentSelectedDeck = currentDeckResourceCard;
+//            currentImageNew = pathFront(currentDeckResourceCard.getIdCard());
+//            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE");
+//            virtualClient.sendCommand(currentCommand);
+//        }
+        resourceDeckCard.setOpacity(1);
+        resourceCard1.setOpacity(.5);
+        resourceCard2.setOpacity(.5);
+        goldDeckCard.setOpacity(.5);
+        goldCard1.setOpacity(.5);
+        goldCard2.setOpacity(.5);
 
-            isHandCardSelected = false;
-            currentSelectedDeck = currentDeckResourceCard;
-            currentImageNew = pathFront(currentDeckResourceCard.getIdCard());
-            currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE");
-            virtualClient.sendCommand(currentCommand);
-        }
+        isHandCardSelected = false;
+        currentSelectedDeck = currentDeckResourceCard;
+        currentImageNew = pathFront(currentDeckResourceCard.getIdCard());
+        currentCommand = new DrawCommand(virtualClient.getClientId(), miniModel.getGameId(), myPlayer, currentDeckResourceCard, "RESOURCE");
+        virtualClient.sendCommand(currentCommand);
     }
 
     /**
@@ -367,6 +439,10 @@ public class Game implements Initializable {
     void nickname1VisibilityFunct(MouseEvent event) {
         borderPane.setCenter(scrollPane);
 
+        showHand1.setVisible(false);
+        showHand2.setVisible(false);
+        showHand3.setVisible(false);
+
         nickname1Visibility.setOpacity(0);
         nickname2Visibility.setOpacity(1);
         nickname3Visibility.setOpacity(1);
@@ -391,6 +467,21 @@ public class Game implements Initializable {
         scrollPaneOthers.setVisible(true);
         otherStructuresPane.setVisible(true);
         borderPane.setCenter(scrollPaneOthers);
+
+        int index = 0;
+        for(Player player: miniModel.getPlayers()){
+
+            if(Objects.equals(nickname2.getText(), player.getNickname())){
+                showHand1.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(0).toString().substring(6,9)));
+                showHand2.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(1).toString().substring(6,9)));
+                showHand3.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(2).toString().substring(6,9)));
+            }
+            index++;
+        }
+
+        showHand1.setVisible(true);
+        showHand2.setVisible(true);
+        showHand3.setVisible(true);
 
         nickname1Visibility.setOpacity(1);
         nickname2Visibility.setOpacity(0);
@@ -418,6 +509,21 @@ public class Game implements Initializable {
         otherStructuresPane1.setVisible(true);
         borderPane.setCenter(scrollPaneOthers1);
 
+        int index = 0;
+        for(Player player: miniModel.getPlayers()){
+
+            if(Objects.equals(nickname3.getText(), player.getNickname())){
+                showHand1.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(0).toString().substring(6,9)));
+                showHand2.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(1).toString().substring(6,9)));
+                showHand3.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(2).toString().substring(6,9)));
+            }
+            index++;
+        }
+
+        showHand1.setVisible(true);
+        showHand2.setVisible(true);
+        showHand3.setVisible(true);
+
         nickname1Visibility.setOpacity(1);
         nickname2Visibility.setOpacity(1);
         nickname3Visibility.setOpacity(0);
@@ -442,6 +548,21 @@ public class Game implements Initializable {
         scrollPaneOthers2.setVisible(true);
         otherStructuresPane2.setVisible(true);
         borderPane.setCenter(scrollPaneOthers2);
+
+        int index = 0;
+        for(Player player: miniModel.getPlayers()){
+
+            if(Objects.equals(nickname4.getText(), player.getNickname())){
+                showHand1.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(0).toString().substring(6,9)));
+                showHand2.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(1).toString().substring(6,9)));
+                showHand3.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(2).toString().substring(6,9)));
+            }
+            index++;
+        }
+
+        showHand1.setVisible(true);
+        showHand2.setVisible(true);
+        showHand3.setVisible(true);
 
         nickname1Visibility.setOpacity(1);
         nickname2Visibility.setOpacity(1);
@@ -738,6 +859,7 @@ public class Game implements Initializable {
      * @param hands
      */
     public void updateHand(List<Hand> hands) {
+
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
             Platform.runLater(()->{
@@ -748,6 +870,7 @@ public class Game implements Initializable {
                 handCard1.setOpacity(1);
                 handCard2.setOpacity(1);
                 handCard3.setOpacity(1);
+                currentCommand = null;
             });
         }
         else
@@ -767,6 +890,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
+                currentCommand = null;
             });
         }
 
@@ -1122,6 +1246,7 @@ public class Game implements Initializable {
                 handCard1.setOpacity(1);
                 handCard2.setOpacity(1);
                 handCard3.setOpacity(1);
+                currentCommand = null;
             });
         }
 
@@ -1135,6 +1260,7 @@ public class Game implements Initializable {
                 resourceDeckCard.setOpacity(1);
                 resourceCard1.setOpacity(1);
                 resourceCard2.setOpacity(1);
+                currentCommand = null;
             });
         }
         showAlert(error);
