@@ -120,7 +120,7 @@ public class RmiClient extends UnicastRemoteObject implements VirtualClient {
                 }
 
                 if (event instanceof ForcedEndEvent || event instanceof EndGameEvent) {
-                    Thread.sleep(5000);
+                    Thread.sleep(15000);
                     System.exit(0);
                 }
 
