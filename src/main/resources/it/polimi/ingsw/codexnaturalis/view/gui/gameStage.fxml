@@ -339,7 +339,7 @@
                         <Insets left="14.0" right="15.0" />
                      </HBox.margin>
                   </Text>
-                  <ImageView fitHeight="24.0" fitWidth="27.0" onMouseClicked="#openChatFunct" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="chatNotification" fitHeight="24.0" fitWidth="27.0" onMouseClicked="#openChatFunct" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../SymbolsPng/chat.png" />
                      </image>
@@ -368,7 +368,7 @@
    <center>
       <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
-            <Pane fx:id="structurePane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #EAEAEA;">
+            <Pane fx:id="structurePane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFFF;">
                <children>
                   <Pane fx:id="chatPane" layoutY="-3.0" prefHeight="488.0" prefWidth="938.0" visible="false">
                      <children>
@@ -414,7 +414,7 @@
                         </ScrollPane>
                      </children>
                   </Pane>
-                  <Pane fx:id="boardPane" layoutX="-1.0" layoutY="-1.0" prefHeight="481.0" prefWidth="938.0">
+                  <Pane fx:id="boardPane" layoutX="-1.0" layoutY="-1.0" prefHeight="481.0" prefWidth="938.0" visible="false">
                      <children>
                         <ImageView fitHeight="433.0" fitWidth="224.0" layoutX="359.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>

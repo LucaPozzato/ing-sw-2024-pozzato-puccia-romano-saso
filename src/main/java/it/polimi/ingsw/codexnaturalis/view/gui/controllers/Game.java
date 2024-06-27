@@ -42,7 +42,7 @@ public class Game implements Initializable {
     @FXML
     private Text mushroomsPoints, leafPoints, wolfPoints, butterflyPoints, featherPoints, manuscriptPoints, potionPoints;
     @FXML
-    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2, secreteObjective, publicObjective1, publicObjective2;
+    private ImageView goldDeckCard, goldCard1, goldCard2, resourceDeckCard, resourceCard1, resourceCard2, secreteObjective, publicObjective1, publicObjective2, chatNotification;
     @FXML
     private Text nickname1 , myStructure, nickname2, nickname3, nickname4;
     @FXML
@@ -80,7 +80,7 @@ public class Game implements Initializable {
     private MiniModel miniModel;
     private VirtualClient virtualClient;
     private ImageView currentSelectedImage, pedina, pedina1, pedina2, pedina3;
-    private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide;
+    private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide, inChat = false;
     private int c = 0;
     private int handTurnCounter = 0;
 
@@ -370,6 +370,7 @@ public class Game implements Initializable {
      */
     @FXML
     void boardVisibility(MouseEvent event) {
+        inChat = false;
         boardPane.setVisible(true);
         borderPane.setCenter(boardPane);
     }
@@ -452,6 +453,7 @@ public class Game implements Initializable {
         nickname2.setUnderline(false);
         nickname3.setUnderline(false);
         nickname4.setUnderline(false);
+        inChat = false;
     }
 
     /**
@@ -492,6 +494,7 @@ public class Game implements Initializable {
         nickname2.setUnderline(true);
         nickname3.setUnderline(false);
         nickname4.setUnderline(false);
+        inChat = false;
 
     }
 
@@ -532,6 +535,7 @@ public class Game implements Initializable {
         nickname2.setUnderline(false);
         nickname3.setUnderline(true);
         nickname4.setUnderline(false);
+        inChat = false;
     }
 
     /**
@@ -572,6 +576,7 @@ public class Game implements Initializable {
         nickname2.setUnderline(false);
         nickname3.setUnderline(false);
         nickname4.setUnderline(true);
+        inChat = false;
     }
 
     /**
@@ -579,6 +584,8 @@ public class Game implements Initializable {
      * @param chat
      */
     public void updateChat(Chat chat) {
+        if(!inChat)
+            chatNotification.setImage(symbolPath("notification"));
         textArea.clear();
         for(ChatMessage chatMessage: chat.getChatMessages()){
             if(chatMessage.getReceiver() == null){
@@ -1314,6 +1321,8 @@ public class Game implements Initializable {
      */
     @FXML
     void openChatFunct(MouseEvent event) throws IOException {
+        inChat = true;
+        chatNotification.setImage(symbolPath("chat"));
         chatPane.setVisible(true);
         borderPane.setCenter(chatPane);
     }
