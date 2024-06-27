@@ -67,7 +67,7 @@ public class Game implements Initializable {
     private Text player1Points, player2Points, player3Points, player4Points, myPoints;
 
     private Command currentCommand;
-    private Image   currentImageNew;
+    private Image currentImageNew;
     private String handCard1URL;
     private String handCard2URL;
     private String handCard3URL;
@@ -79,7 +79,7 @@ public class Game implements Initializable {
     private int fPressed = 1;
     private MiniModel miniModel;
     private VirtualClient virtualClient;
-    private ImageView currentSelectedImage, pedina, pedina1, pedina2, pedina3;
+    private ImageView currentSelectedImage, pPawn, pPawn1, pPawn2, pPawn3;
     private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide, inChat = false;
     private int c = 0;
     private int handTurnCounter = 0;
@@ -606,7 +606,7 @@ public class Game implements Initializable {
      */
     public void updateMyPlayer(Player player) {
         this.myPlayer = player;
-        pedina.setImage(symbolPath(myPlayer.getColor().toString()));
+        pPawn.setImage(symbolPath(myPlayer.getColor().toString()));
     }
 
     /**
@@ -639,14 +639,14 @@ public class Game implements Initializable {
     public void updatePlayers(List<Player> players) {
         List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).toList();
         if(isInitialChooseSetup){
-            pedina1 = new ImageView(symbolPath(otherPlayers.get(0).getColor().toString()));
+            pPawn1 = new ImageView(symbolPath(otherPlayers.get(0).getColor().toString()));
             if(otherPlayers.size() == 2 && otherPlayers.get(1) != null)
-                pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
+                pPawn2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
             else
                 if(otherPlayers.size() == 3 && otherPlayers.get(2) != null)
                 {
-                    pedina2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
-                    pedina3 = new ImageView(symbolPath(otherPlayers.get(2).getColor().toString()));
+                    pPawn2 = new ImageView(symbolPath(otherPlayers.get(1).getColor().toString()));
+                    pPawn3 = new ImageView(symbolPath(otherPlayers.get(2).getColor().toString()));
                 }
             otherPlayers.forEach(p->ChooseSender.getItems().add(p.getNickname()));
             ChooseSender.getItems().add("All");
@@ -1013,43 +1013,43 @@ public class Game implements Initializable {
                 points = entry.getValue();
                 myPoints.setText(entry.getValue().toString());
                 player1Points.setText(myPlayer.getNickname() + ": "  + entry.getValue().toString());
-                addPoint(points, pedina);
+                addPoint(points, pPawn);
             }
 
             if(entry.getKey().getNickname().equals(otherPlayers.get(0).getNickname())){
-                pedina1.setImage(symbolPath(otherPlayers.getFirst().getColor().toString()));
+                pPawn1.setImage(symbolPath(otherPlayers.getFirst().getColor().toString()));
                 player2Points.setText(otherPlayers.getFirst().getNickname() + ": "  + entry.getValue().toString());
                 if(c==0)
-                    boardPane.getChildren().add(pedina1);
-                addPoint(entry.getValue(), pedina1);
+                    boardPane.getChildren().add(pPawn1);
+                addPoint(entry.getValue(), pPawn1);
             }
 
             else if(otherPlayers.size() == 2 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())){
-                pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
+                pPawn2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
                 player3Points.setText(otherPlayers.get(1).getNickname() + ": "  + entry.getValue().toString());
                 player3Points.setVisible(true);
                 if(c==0)
-                    boardPane.getChildren().add(pedina2);
-                addPoint(entry.getValue(), pedina2);
+                    boardPane.getChildren().add(pPawn2);
+                addPoint(entry.getValue(), pPawn2);
             }
 
             else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(1).getNickname())) {
-                pedina2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
-                pedina3.setImage(symbolPath(otherPlayers.get(2).getColor().toString()));
+                pPawn2.setImage(symbolPath(otherPlayers.get(1).getColor().toString()));
+                pPawn3.setImage(symbolPath(otherPlayers.get(2).getColor().toString()));
                 player3Points.setText(otherPlayers.get(1).getNickname() + ": "  + entry.getValue().toString());
                 player3Points.setVisible(true);
                 if(c==0){
-                    boardPane.getChildren().add(pedina3);
-                    boardPane.getChildren().add(pedina2);
+                    boardPane.getChildren().add(pPawn3);
+                    boardPane.getChildren().add(pPawn2);
                 }
-                addPoint(entry.getValue(), pedina2);
+                addPoint(entry.getValue(), pPawn2);
 
             }
 
             else if(otherPlayers.size() == 3 && entry.getKey().getNickname().equals(otherPlayers.get(2).getNickname())) {
                 player4Points.setText(otherPlayers.get(2).getNickname() + ": "  + entry.getValue().toString());
                 player4Points.setVisible(true);
-                addPoint(entry.getValue(), pedina3);
+                addPoint(entry.getValue(), pPawn3);
             }
         }
         c++;
@@ -1532,10 +1532,10 @@ public class Game implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        pedina = new ImageView();
-        pedina1 = new ImageView();
-        pedina2 = new ImageView();
-        pedina3 = new ImageView();
+        pPawn = new ImageView();
+        pPawn1 = new ImageView();
+        pPawn2 = new ImageView();
+        pPawn3 = new ImageView();
 
         nickname1Visibility.setOpacity(0);
         nickname2Visibility.setOpacity(1);
@@ -1548,7 +1548,7 @@ public class Game implements Initializable {
         nickname4.setUnderline(false);
 
         ChooseSender.setValue("All");
-        boardPane.getChildren().add(pedina);
+        boardPane.getChildren().add(pPawn);
 
         scrollPaneOthers.setVisible(false);
         chatPane.setVisible(false);
