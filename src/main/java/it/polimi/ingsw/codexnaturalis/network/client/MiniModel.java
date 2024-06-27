@@ -25,14 +25,10 @@ public class MiniModel {
     private String nickname;
     private List<Player> players;
     private List<Hand> playerHands;
-    // private List<Hand> playerHands; //BUG: if I pass playerHands to the client, a
-    // "bad" client could see the cards and cheat
     private List<Structure> playerStructures;
     private Board board;
     private Player currentPlayer;
     private Deck deck;
-    // Deck deck -> //BUG: if I pass deck to the client, a "bad" client could see
-    // all the cards and cheat
     private Player nextPlayer;
     private Boolean lastTurn = false;
     private Integer turnCounter = 0;
@@ -146,14 +142,12 @@ public class MiniModel {
     }
 
     public void setNickName(String nickname) {
-        // BUG: everyone is gonna get the same nickname when joining simultaneously
         this.nickname = nickname;
     }
 
     public void setPlayers(List<Player> players) {
         this.players = players;
         view.updatePlayers(players);
-        // BUG: players should not have nickname == null
         for (Player p : players) {
             if (p != null && p.getNickname() != null && p.getNickname().equals(nickname)) {
                 this.myPlayer = p;

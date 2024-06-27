@@ -30,6 +30,7 @@ public class TerminalPrinter {
         this.alert = "";
         this.input = "";
         this.chat = "";
+        System.out.println("\033[8;" + height + ";" + width + "t");
     }
 
     /**

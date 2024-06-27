@@ -150,7 +150,7 @@ public class PlacedCardState extends ControllerState {
      */
     @Override
     public synchronized void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-                                        Boolean frontUp) {
+            Boolean frontUp) {
 
         Event event = null;
 
@@ -165,9 +165,6 @@ public class PlacedCardState extends ControllerState {
             if (!player.equals(game.getCurrentPlayer())) {
                 throw new IllegalCommandException("Not your turn");
             }
-
-
-            // FIXME: throw all necessary exceptions
 
             if (father.getIdCard().equals(super.game.getHandByPlayer(player).getInitCard().getIdCard()))
                 father = super.game.getHandByPlayer(player).getInitCard();
@@ -186,8 +183,6 @@ public class PlacedCardState extends ControllerState {
                     break;
                 }
             }
-
-            // BUG: exceptions are lost
 
             Structure structure = super.game.getStructureByPlayer(super.game.getCurrentPlayer());
             structure.placeCard(father, placeThis, position, frontUp);
@@ -376,7 +371,7 @@ public class PlacedCardState extends ControllerState {
         super.game.getConnected().put(game.PlayerFromId(clientId), false);
         System.out.println("Disconnect being called");
 
-        //Let's examine the case in which there's only one player connected
+        // Let's examine the case in which there's only one player connected
         if (game.onePlayerLeft()) {
             String error = "You are the only player left, waiting for others to rejoin the game...";
             super.game.pushEvent(error);
@@ -391,7 +386,7 @@ public class PlacedCardState extends ControllerState {
                 e.printStackTrace();
             }
 
-            //The system waits for 30 * 1000 millis for the other player reconnection
+            // The system waits for 30 * 1000 millis for the other player reconnection
             for (int i = 0; i < 30; i++) {
                 try {
                     System.out.println("Waiting for the client to come back");
@@ -402,7 +397,7 @@ public class PlacedCardState extends ControllerState {
                 if (!game.onePlayerLeft())
                     break;
             }
-            //If the player is still the only one connected the game is shut down
+            // If the player is still the only one connected the game is shut down
             if (game.onePlayerLeft()) {
                 String error1 = "Game was shut down due to clients' disconnections";
                 super.game.pushEvent(error1);
@@ -419,7 +414,8 @@ public class PlacedCardState extends ControllerState {
                 super.game.setState(new ForcedEndState(super.game, super.rmiServer, super.socketServer));
             }
         } else {
-            // If a generic player gets disconnected and there are at least two other players online
+            // If a generic player gets disconnected and there are at least two other
+            // players online
             Player tempPlayer = null;
             Event event;
             for (Player p : game.getFromPlayerToId().keySet()) {
@@ -443,7 +439,9 @@ public class PlacedCardState extends ControllerState {
             }
         }
 
-        //Manage the case in which the current player gets disconnected and there are at least other two players online, then his turn is skipped and the game goes on
+        // Manage the case in which the current player gets disconnected and there are
+        // at least other two players online, then his turn is skipped and the game goes
+        // on
         if (keepOn && player.equals((game.getCurrentPlayer()))) { // currentPlayer has disconnected
             if (placed) {
                 super.game.revert();

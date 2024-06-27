@@ -29,15 +29,6 @@ public class ClientMain {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        System.out.println("\033[2J\033[1;1H");
-        String[] cmd = { "/bin/sh", "-c", "stty sane </dev/tty" };
-
-        try {
-            if (!System.getProperty("os.name").contains("Windows"))
-                Runtime.getRuntime().exec(cmd);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         boolean started = false;

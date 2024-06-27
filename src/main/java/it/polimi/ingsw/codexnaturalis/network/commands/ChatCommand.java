@@ -15,16 +15,12 @@ public class ChatCommand extends Command {
     private Player sender;
     private Player receiver;
 
-    // TODO: can the view get the timeStamp information?
-    // private long timeStamp;
-
     public ChatCommand(String clientId, Integer gameId, String message, Player sender, Player receiver) {
         this.clientId = clientId;
         this.gameId = gameId;
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
-        // this.timeStamp = timeStamp;
     }
 
     @Override

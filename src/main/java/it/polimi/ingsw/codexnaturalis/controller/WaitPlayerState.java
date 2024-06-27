@@ -207,7 +207,7 @@ public class WaitPlayerState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-                           Boolean frontUp) {
+            Boolean frontUp) {
         String error = "Can't place card yet";
         super.game.pushEvent(error);
         Event event = new ErrorEvent(clientId, game.getGameId(), error);

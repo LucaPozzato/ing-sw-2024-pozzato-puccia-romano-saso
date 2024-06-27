@@ -1,12 +1,12 @@
 package it.polimi.ingsw.codexnaturalis.view.tui;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
+import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Board;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Deck;
 import it.polimi.ingsw.codexnaturalis.model.game.components.Hand;
@@ -86,7 +86,6 @@ public class Tui implements View {
     public void updateError(String error) {
         System.out.println("got error: " + error);
         printAlert("Error: " + error);
-        terminalPrinter.clearInput();
     }
 
     /**
@@ -375,65 +374,13 @@ public class Tui implements View {
      */
     class ReadThread extends Thread {
         public void run() {
-            String[] cmd = { "/bin/sh", "-c", "stty raw </dev/tty" };
-            String[] cmdReset = { "/bin/sh", "-c", "stty sane </dev/tty" };
-            int width = 0;
-            int height = 0;
-
             try {
                 while (true) {
                     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
                     String move = "";
+                    int c;
 
-                    try {
-                        if (!System.getProperty("os.name").contains("Windows"))
-                            Runtime.getRuntime().exec(cmd);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    int c = input.read();
-                    while (c != 13) {
-                        if (c == 3)
-                            System.exit(0);
-                        else if (c == 127) {
-                            if (move.length() > 0)
-                                move = move.substring(0, move.length() - 1);
-                        } else if (c > 31 && c < 127)
-                            move += Character.toString((char) c);
-                        terminalPrinter.updateInput(move);
-                        print();
-                        c = input.read();
-                    }
-
-                    if (!System.getProperty("os.name").contains("Windows")) {
-                        System.out.println("\033[999;999H");
-                        System.out.println("\033[6n");
-                        System.out.println("\033[1;1H");
-
-                        String size = "";
-                        c = input.read();
-                        while (c != 82) {
-                            size += (char) c;
-                            c = input.read();
-                        }
-
-                        String[] parts = size.split(";");
-                        width = Integer.parseInt(parts[1]);
-                        height = Integer.parseInt(parts[0].substring(parts[0].indexOf("[") + 1));
-
-                        terminalPrinter.setSize(width, height);
-                    }
-
-                    try {
-                        if (!System.getProperty("os.name").contains("Windows"))
-                            Runtime.getRuntime().exec(cmdReset);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    terminalPrinter.clearInput();
-                    // terminalPrinter.clearAlert();
+                    move = input.readLine();
 
                     String tempMove = move.toUpperCase();
                     if (!tempMove.contains("JOIN") && !tempMove.contains("CREATE") && !tempMove.contains("SEND")
@@ -500,7 +447,7 @@ public class Tui implements View {
                             }
                             try {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
-                            } catch (Exception e) {
+                            } catch (IllegalCommandException e) {
                                 e.printStackTrace();
                                 printAlert("Error: " + e.getMessage());
                             }

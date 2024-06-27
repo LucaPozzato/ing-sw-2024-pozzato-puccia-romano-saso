@@ -26,7 +26,6 @@
 | Client Disconnection (FA 3) | :white_check_mark: |
 | Server Persistence (FA 4)   | :x:                |
 
-
 [Project requirements](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/project_requirements.pdf)
 
 Rule book: [Italian](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/CODEX_Rulebook_IT.pdf), [English](https://github.com/LucaPozzato/ing-sw-2024-pozzato-puccia-romano-saso/blob/main/documents/CODEX_Rulebook_EN.pdf)
@@ -230,7 +229,9 @@ mvnw.cmd clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMa
 java -jar target/CodexNaturalis_Server.jar
 ```
 
-## TUI help
+## TUI
+
+### Help
 
 Type `help` and press enter when using the Text-based User Interface or see here the list of all possible commands.
 
@@ -241,25 +242,38 @@ Type `help` and press enter when using the Text-based User Interface or see here
 create: <Game ID>, <nick name>, <password>, <color>, <number of players>
 ```
 
+example -> create: 0, nickname, pswd, red, 3
+
 ```
 join: <Game ID>, <nick name>, <password>, <color>
 ```
+
+example -> join: 0, nickname2, pswd2, green
 
 ```
 rejoin: <Game ID>, <nick name>, <password>
 ```
 
+example -> rejoin: 0, nickname2, pswd2
+
 ```
 choose: <side of card>, <objective card>
 ```
+
+example -> choose: front, 1
 
 ```
 place: <ID of card to place>, <ID of bottom card>, <position>, <side of card>
 ```
 
+example -> place: r01, i01, tr, front
+
 ```
 draw: <ID of card to draw (also RXX/GXX)>
 ```
+
+example -> draw: r01
+example -> draw: rxx
 
 ```
 chat
@@ -268,6 +282,9 @@ chat
 ```
 send: <message> [, <nick name of receiver>]
 ```
+
+example -> send: hello world
+example -> send: hello world, nickname
 
 ```
 next
@@ -309,37 +326,38 @@ quit
 - front
 - back
 
+### Resizing window
+
 ## Coverage Report
 
 ### Controller
 
-| Class              | Method           | Line             | Branch           |
-|--------------------|------------------|------------------|------------------|
-| **controller**     | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green) | ![🔋](https://img.shields.io/badge/-76%25-green)  |
-| ChooseSetUpState   | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-99%25-green) | ![🔋](https://img.shields.io/badge/-88%25-green)  |
-| ControllerState    | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-86%25-green) | ![🔋](https://img.shields.io/badge/-78%25-green)  |
-| DrawnCardState     | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-69%25-orange) |
-| EndGameState       | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-83%25-green)  |
-| ForcedEndState     | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
-| InitState          | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-99%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green)  |
-| PlacedCardState    | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-91%25-green) | ![🔋](https://img.shields.io/badge/-70%25-orange) |
-| WaitPlayerState    | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-96%25-green) | ![🔋](https://img.shields.io/badge/-88%25-green)  |
+| Class            | Method                                            | Line                                             | Branch                                            |
+| ---------------- | ------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
+| **controller**   | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green) | ![🔋](https://img.shields.io/badge/-76%25-green)  |
+| ChooseSetUpState | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-99%25-green) | ![🔋](https://img.shields.io/badge/-88%25-green)  |
+| ControllerState  | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-86%25-green) | ![🔋](https://img.shields.io/badge/-78%25-green)  |
+| DrawnCardState   | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-69%25-orange) |
+| EndGameState     | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-83%25-green)  |
+| ForcedEndState   | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-90%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
+| InitState        | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-99%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green)  |
+| PlacedCardState  | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-91%25-green) | ![🔋](https://img.shields.io/badge/-70%25-orange) |
+| WaitPlayerState  | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-96%25-green) | ![🔋](https://img.shields.io/badge/-88%25-green)  |
 
 ### Model
 
-| Class              | Method           | Line             | Branch           |
-|--------------------|------------------|------------------|------------------|
-| **model**          | ![🔋](https://img.shields.io/badge/-92%25-green) | ![🔋](https://img.shields.io/badge/-94%25-green) | ![🔋](https://img.shields.io/badge/-86%25-green)  |
-| chat               | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-83%25-green)  |
-| enumerations       | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
-| exceptions         | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
-| game               | ![🔋](https://img.shields.io/badge/-91%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green) | ![🔋](https://img.shields.io/badge/-87%25-green)  |
-| **game components**|                  |                  |                  |
-| components         | ![🔋](https://img.shields.io/badge/-86%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green) | ![🔋](https://img.shields.io/badge/-91%25-green)  |
-| parser             | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-92%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
-| player             | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
-| strategies         | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-96%25-green) | ![🔋](https://img.shields.io/badge/-69%25-orange) |
-| Game               | ![🔋](https://img.shields.io/badge/-97%25-green) | ![🔋](https://img.shields.io/badge/-95%25-green) | ![🔋](https://img.shields.io/badge/-93%25-green)  |
-
+| Class               | Method                                            | Line                                              | Branch                                            |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| **model**           | ![🔋](https://img.shields.io/badge/-92%25-green)  | ![🔋](https://img.shields.io/badge/-94%25-green)  | ![🔋](https://img.shields.io/badge/-86%25-green)  |
+| chat                | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-83%25-green)  |
+| enumerations        | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
+| exceptions          | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
+| game                | ![🔋](https://img.shields.io/badge/-91%25-green)  | ![🔋](https://img.shields.io/badge/-93%25-green)  | ![🔋](https://img.shields.io/badge/-87%25-green)  |
+| **game components** |                                                   |                                                   |                                                   |
+| components          | ![🔋](https://img.shields.io/badge/-86%25-green)  | ![🔋](https://img.shields.io/badge/-93%25-green)  | ![🔋](https://img.shields.io/badge/-91%25-green)  |
+| parser              | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-92%25-green)  | ![🔋](https://img.shields.io/badge/-100%25-green) |
+| player              | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-100%25-green) |
+| strategies          | ![🔋](https://img.shields.io/badge/-100%25-green) | ![🔋](https://img.shields.io/badge/-96%25-green)  | ![🔋](https://img.shields.io/badge/-69%25-orange) |
+| Game                | ![🔋](https://img.shields.io/badge/-97%25-green)  | ![🔋](https://img.shields.io/badge/-95%25-green)  | ![🔋](https://img.shields.io/badge/-93%25-green)  |
 
 ## [Javadocs](https://lucapozzato.github.io/ing-sw-2024-pozzato-puccia-romano-saso/javadocs/)

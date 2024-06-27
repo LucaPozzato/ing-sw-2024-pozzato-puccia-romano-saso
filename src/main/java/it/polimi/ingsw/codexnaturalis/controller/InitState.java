@@ -1,6 +1,5 @@
 package it.polimi.ingsw.codexnaturalis.controller;
 
-import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,7 +95,8 @@ public class InitState extends ControllerState {
         // FIXME: clean this up
         super.game.getBoard().updateActualScore(player, 0); // throws illegal command exc
         // Uncomment to start the match with an increased score for player
-        //super.game.getBoard().updateActualScore(player, 19);
+        // super.game.getBoard().updateActualScore(player, 19);
+
     }
 
     /**
@@ -266,7 +266,7 @@ public class InitState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-                           Boolean frontUp) {
+            Boolean frontUp) {
         String error = "Can't place card yet";
         super.game.pushEvent(error);
         Event event = new ErrorEvent(clientId, game.getGameId(), error);
