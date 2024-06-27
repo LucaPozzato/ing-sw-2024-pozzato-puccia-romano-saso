@@ -178,7 +178,7 @@ and then follow the instructions (like typing ip address and then pressing enter
 ```sh
 ./mvnw clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
 
-java -jar target/CodexNaturalis_Client.jar
+java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ```
 
 ###### Server
@@ -186,7 +186,7 @@ java -jar target/CodexNaturalis_Client.jar
 ```sh
 ./mvnw clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
 
-java -jar target/CodexNaturalis_Server.jar
+java -jar target/CodexNaturalis_Server-jar-with-dependencies.jar
 ```
 
 ##### Using shell scripts
@@ -218,7 +218,7 @@ chmod +x server.sh
 ```sh
 mvnw.cmd clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
 
-java -jar target/CodexNaturalis_Client.jar
+java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ```
 
 ###### Server
@@ -226,7 +226,7 @@ java -jar target/CodexNaturalis_Client.jar
 ```sh
 mvnw.cmd clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
 
-java -jar target/CodexNaturalis_Server.jar
+java -jar target/CodexNaturalis_Server-jar-with-dependencies.jar
 ```
 
 ## TUI
@@ -327,6 +327,8 @@ quit
 - back
 
 ### Resizing window
+
+here talk abt window resizing
 
 ## Coverage Report
 

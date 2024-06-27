@@ -74,6 +74,9 @@ public class Tui implements View {
     @Override
     public void updateChat(Chat chat) {
         terminalPrinter.updateChat(drawer.drawChat(chat, myPlayer));
+        if (!chatStage && !initialStage && !chooseStage)
+            terminalPrinter.updateAlert("You got a new message from: "
+                    + chat.getChatMessages().get(chat.getChatMessages().size() - 1).getSender().getNickname());
         print();
     }
 
@@ -84,7 +87,6 @@ public class Tui implements View {
      */
     @Override
     public void updateError(String error) {
-        System.out.println("got error: " + error);
         printAlert("Error: " + error);
     }
 
@@ -378,7 +380,6 @@ public class Tui implements View {
                 while (true) {
                     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
                     String move = "";
-                    int c;
 
                     move = input.readLine();
 
@@ -387,6 +388,8 @@ public class Tui implements View {
                             && !tempMove.contains("REJOIN")) {
                         move = move.toUpperCase();
                     }
+
+                    terminalPrinter.clearAlert();
 
                     switch (move) {
                         case "QUIT", "Q":
@@ -400,8 +403,11 @@ public class Tui implements View {
                             break;
 
                         case "NEXT", "N":
-                            if (!initialStage && !chooseStage)
+                            if (!initialStage && !chooseStage && !chatStage && !helpStage)
                                 printNextPlayerView();
+                            else {
+                                print();
+                            }
                             break;
 
                         case "RESET", "RST", "EXIT", "ESC":
@@ -413,6 +419,8 @@ public class Tui implements View {
                                 print();
                             } else if (!initialStage && !chooseStage)
                                 resetView();
+                            else
+                                print();
                             break;
 
                         case "HELP", "H":
@@ -448,7 +456,6 @@ public class Tui implements View {
                             try {
                                 client.sendCommand(inputVerifier.move(myPlayer, move));
                             } catch (IllegalCommandException e) {
-                                e.printStackTrace();
                                 printAlert("Error: " + e.getMessage());
                             }
                             break;

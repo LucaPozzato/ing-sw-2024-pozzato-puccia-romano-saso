@@ -90,18 +90,15 @@ public class SocketServer implements VirtualServer, Runnable {
                 Command command = null;
                 synchronized (this) {
                     while (this.commandEntryQueue.isEmpty()) {
-                        System.out.println("socket server waiting");
                         this.wait();
-                        System.out.println(
-                                "socket server thread command queue: "
-                                        + System.identityHashCode(this.commandEntryQueue));
-                        System.out.println("socket server woken up");
                     }
                     command = this.commandEntryQueue.poll();
                 }
                 Integer gameId = command.getGameId();
-                System.out.println("socket server received command with gameIdd: " + gameId);
-                System.out.println("socket server command received: " + command.getClass().getName());
+
+                if (!(command instanceof Ping)) {
+                    System.out.println("socket server command received: " + command.getClass().getName());
+                }
 
                 VirtualClient client = null;
                 for (var c : clients) {
@@ -131,12 +128,9 @@ public class SocketServer implements VirtualServer, Runnable {
                         clientIds.put(client, command.getClientId());
 
                     if (timers.keySet().contains(client)) {
-                        // System.out.println("socket server received ping");
                         timers.get(client).cancel();
-                        // System.out.println("socket server timer cancelled");
                         timers.put(client, new Timer());
                         timers.get(client).schedule(new PingTask(client), 6000);
-                        // System.out.println("socket server timer scheduled");
                     } else
                         try {
                             this.timers.put(client, new Timer());
@@ -198,6 +192,9 @@ public class SocketServer implements VirtualServer, Runnable {
                         this.wait();
                     }
                     event = this.eventExitQueue.poll();
+                    String[] eventName = event.getClass().getName().split("\\.");
+                    System.out.println("> " + eventName[eventName.length - 1] + " processed");
+
                 }
 
                 Integer gameId = event.getGameId();
@@ -210,7 +207,6 @@ public class SocketServer implements VirtualServer, Runnable {
                         if (c.getClientId() != null && c.getClientId().equals(event.getClientId())) {
                             client = c;
                             players.get(gameId).add(client);
-                            System.out.println("adding player in players : " + players.get(gameId));
                             break;
                         }
                     }
@@ -220,7 +216,7 @@ public class SocketServer implements VirtualServer, Runnable {
                             client = (SocketSkeleton) c;
                             if (players.get(gameId) == null || !players.get(gameId).contains(client))
                                 c.receiveEvent(event);
-                            System.out.println("> setting error event sent to client");
+                            System.out.println("> error event sent to client");
                             // if (!players.get(gameId).contains(client))
                             // players.get(gameId).add(client);
                             break;

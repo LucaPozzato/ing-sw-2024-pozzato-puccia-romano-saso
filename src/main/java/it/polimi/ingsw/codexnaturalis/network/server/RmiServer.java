@@ -69,7 +69,8 @@ public class RmiServer implements VirtualServer {
     public void receiveCommand(Command command) throws IllegalStateException {
         String[] commandName = command.getClass().getName().split("\\.");
         synchronized (this) {
-            System.out.println("> " + commandName[commandName.length - 1] + " received");
+            if (!(command instanceof Ping))
+                System.out.println("> " + commandName[commandName.length - 1] + " received");
             commandEntryQueue.add(command);
             notifyAll();
         }
@@ -95,17 +96,15 @@ public class RmiServer implements VirtualServer {
                 Command command = null;
                 synchronized (this) {
                     while (this.commandEntryQueue.isEmpty()) {
-                        System.out.println("rmi server command entry queue thread waiting");
                         this.wait();
-                        System.out.println("rmi server command entry queue thread woken up");
                     }
                     command = this.commandEntryQueue.poll();
                 }
 
                 Integer gameId = command.getGameId();
 
-                System.out.println("rmi server received command with gameIdd: " + gameId);
-                System.out.println("rmi server command received: " + command.getClass().getName());
+                if (!(command instanceof Ping))
+                    System.out.println("rmi server command received: " + command.getClass().getName());
 
                 VirtualClient client = null;
                 for (var c : clients) {
@@ -142,7 +141,8 @@ public class RmiServer implements VirtualServer {
 
                 String[] commandName = command.getClass().getName().split("\\.");
 
-                System.out.println("> " + commandName[commandName.length - 1] + " executed");
+                if (!(command instanceof Ping))
+                    System.out.println("> " + commandName[commandName.length - 1] + " executed");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -161,8 +161,6 @@ public class RmiServer implements VirtualServer {
      */
     @Override
     public synchronized void sendEvent(Event event) throws IllegalStateException {
-        String[] eventName = event.getClass().getName().split("\\.");
-        System.out.println("> " + eventName[eventName.length - 1] + " added to queue");
         eventExitQueue.add(event);
         notifyAll();
     }
@@ -189,9 +187,7 @@ public class RmiServer implements VirtualServer {
                 Event event = null;
                 synchronized (this) {
                     while (this.eventExitQueue.isEmpty()) {
-                        System.out.println("server event exit queue thread waiting");
                         this.wait();
-                        System.out.println("server event exit queue thread woken up");
                     }
                     event = this.eventExitQueue.poll();
                     String[] eventName = event.getClass().getName().split("\\.");
@@ -228,7 +224,6 @@ public class RmiServer implements VirtualServer {
                     synchronized (this.players.get(gameId)) {
                         for (var c : this.players.get(gameId)) {
                             c.receiveEvent(event);
-                            System.out.println(c);
                             System.out.println("> event sent to client");
                         }
                     }

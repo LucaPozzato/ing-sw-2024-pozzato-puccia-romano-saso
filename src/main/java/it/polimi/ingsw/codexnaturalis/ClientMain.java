@@ -29,6 +29,8 @@ public class ClientMain {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
+        System.out.println("\033[2J\033[1;1H");
+
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         boolean started = false;

@@ -83,11 +83,11 @@ public class SocketSkeleton implements VirtualClient, Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 Command command = (Command) input.readObject();
                 if (command != null) {
-                    System.out.println("skeleton received command: " + command.getClass().getSimpleName());
+                    if (!(command instanceof Ping))
+                        System.out.println("skeleton received command: " + command.getClass().getSimpleName());
                     if ((command instanceof CreateGameCommand) || (command instanceof JoinGameCommand)
                             || command instanceof RejoinGameCommand || command instanceof Ping) {
                         this.clientId = command.getClientId();
-                        System.out.println("skeleton client id: " + this.clientId);
                     }
                     sendCommand(command);
                 }
