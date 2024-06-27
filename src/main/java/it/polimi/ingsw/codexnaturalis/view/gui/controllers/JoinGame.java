@@ -134,6 +134,8 @@ public class JoinGame implements Initializable {
                     throw new RuntimeException(e);
                 }
             });
+            Stage stage = (Stage) goBack.getScene().getWindow();
+            viewFactory.closeStage(stage);
         }
         else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

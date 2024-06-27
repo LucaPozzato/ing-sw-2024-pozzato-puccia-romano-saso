@@ -36,7 +36,7 @@ public class ChooseStage  {
 
     /**
      * Selecting initialCard (front side) and changing it visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void initialCardBackClicked(MouseEvent event) {
@@ -47,7 +47,7 @@ public class ChooseStage  {
 
     /**
      * Selecting initialCard (back side) and changing it visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void initialCardFrontClicked(MouseEvent event) {
@@ -58,7 +58,7 @@ public class ChooseStage  {
 
     /**
      * Selecting objectiveCard1 and changing it visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void objectiveCard1Clicked(MouseEvent event) {
@@ -70,7 +70,7 @@ public class ChooseStage  {
 
     /**
      * Selecting objectiveCard2 and changing it visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void objectiveCard2Clicked(MouseEvent event) {
@@ -82,8 +82,8 @@ public class ChooseStage  {
 
     /**
      * Used to choose the initial cards before a game using a ChooseCommand
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void play(MouseEvent event) throws RemoteException {
@@ -101,7 +101,7 @@ public class ChooseStage  {
     /**
      * Used the return a front image when given the name of it
      * @param oggetto
-     * @return
+     * @return image given an object
      */
     public Image pathFront(String oggetto) {
         String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";

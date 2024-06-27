@@ -14,7 +14,8 @@ import java.util.List;
 public class EndGameController {
 
     @FXML
-    private Text winnerText;
+    private Text winnerText, winnerSentence;
+
 
 
     /**
@@ -32,6 +33,9 @@ public class EndGameController {
      * @param winners
      */
     public void setWinner(List<Player> winners) {
+        if (winners.size() > 1) {
+            winnerSentence.setText("Winners: ");
+        }
         for(Player player : winners) {
             winnerText.setText(winnerText.getText() + player.getNickname() + " ");
         }
