@@ -193,7 +193,7 @@ public class Game implements Initializable {
 
     /**
      * When the gold deck card is clicked, it is highlighted and its values (image value and card value) are saved
-     * A DrawCommand method is sent.
+     * A DrawCommand method is sent
      * @param event the mouse event that triggered this method
      * @throws RemoteException if a remote communication error occurs
      */
@@ -1261,7 +1261,6 @@ public class Game implements Initializable {
     void showBack(KeyEvent event) {
         if (event.getCode() == KeyCode.B && rPressed == 0) {
 
-            // if (currentSelected != null)
             currentSelectedFrontUp = false;
             rPressed = 1;
             if (fPressed == 1)

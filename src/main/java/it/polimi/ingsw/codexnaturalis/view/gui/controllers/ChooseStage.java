@@ -27,7 +27,7 @@ public class ChooseStage  {
     private int index = 0;
     private ViewFactory viewFactory;
     private Boolean side, objectiveCardSelected = false;
-    private ObjectiveCard objectiveCard; //da levare?
+    private ObjectiveCard objectiveCard;
 
 
     public void setUp(ViewFactory viewFactory) {

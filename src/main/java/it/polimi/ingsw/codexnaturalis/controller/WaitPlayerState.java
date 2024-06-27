@@ -147,7 +147,7 @@ public class WaitPlayerState extends ControllerState {
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution
-            super.game.getBoard().updateActualScore(player, 19);
+            super.game.getBoard().updateActualScore(player, 10);
         } catch (IllegalCommandException e) {
             e.printStackTrace();
         }

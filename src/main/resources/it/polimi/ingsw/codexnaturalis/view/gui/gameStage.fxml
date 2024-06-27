@@ -368,7 +368,7 @@
    <center>
       <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
-            <Pane fx:id="structurePane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFFF;">
+            <Pane fx:id="structurePane" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFF0;">
                <children>
                   <Pane fx:id="chatPane" layoutY="-3.0" prefHeight="488.0" prefWidth="938.0" visible="false">
                      <children>
@@ -441,7 +441,7 @@
                   </ScrollPane>
                   <ScrollPane fx:id="scrollPaneOthers2" layoutX="10.0" layoutY="10.0" prefHeight="483.0" prefWidth="937.0" visible="false">
                      <content>
-                        <Pane fx:id="otherStructuresPane2" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFF0;" visible="false" />
+                        <Pane fx:id="otherStructuresPane2" onMouseClicked="#paneClickReset" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #F0FFFF;" visible="false" />
                      </content>
                   </ScrollPane>
                </children>
