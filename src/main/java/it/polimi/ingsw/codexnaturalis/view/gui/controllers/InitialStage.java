@@ -24,7 +24,7 @@ public class InitialStage{
 
     /**
      * Calls Viewfactory class to open startGame stage and closes initialStage stage
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void startGameFunct(MouseEvent event) {
@@ -35,7 +35,7 @@ public class InitialStage{
 
     /**
      * Calls Viewfactory class to open joinGame stage and closes initialStage stage
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void joinGameFunct(MouseEvent event) {
@@ -46,7 +46,7 @@ public class InitialStage{
 
     /**
      * Calls Viewfactory class to open rejoinGame stage and closes initialStage stage
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void rejoinGameFunct(MouseEvent event) {

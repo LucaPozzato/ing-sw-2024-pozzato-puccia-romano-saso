@@ -8,8 +8,8 @@ import javafx.scene.text.Text;
 import java.util.List;
 
 /**
- * EndGameController class is a javaFx controller used to manage endGame stage
- * Used to display the winner or eventually winners of a game
+ * EndGameController class is a javaFx controller used to manage endGame stage.
+ * Used to display the winner or eventually winners of a game.
  */
 public class EndGameController {
 
@@ -20,7 +20,7 @@ public class EndGameController {
 
     /**
      * When clicked it terminates JavaFX thread
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void exitGameFunction(MouseEvent event) {
@@ -30,7 +30,7 @@ public class EndGameController {
 
     /**
      * Used to change the winnerText with the current winner/winners
-     * @param winners
+     * @param winners of the game
      */
     public void setWinner(List<Player> winners) {
         if (winners.size() > 1) {

@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * WaitStage class is a javaFx controller used to manage waitStage stage
+ * WaitStage class is a javaFx controller used to manage waitStage stage.
  */
 public class WaitStage implements Initializable {
 
@@ -32,8 +32,8 @@ public class WaitStage implements Initializable {
     /**
      * Initialized the controller class
      * Used to set up the timer
-     * @param url
-     * @param resourceBundle
+     * @param url the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the root object was not localized
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

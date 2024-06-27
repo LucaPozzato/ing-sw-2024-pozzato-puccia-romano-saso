@@ -18,7 +18,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 /**
- * JoinGame class is a javaFx controller used to manage joinGame stage
+ * JoinGame class is a javaFx controller used to manage joinGame stage.
  */
 public class JoinGame implements Initializable {
 
@@ -42,7 +42,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Used for blur effect on password
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void changePasswordText(MouseEvent event) {
@@ -67,7 +67,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Selecting blue color and changing the button visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void blueSelected(MouseEvent event) {
@@ -80,7 +80,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Selecting green color and changing the button visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void greenSelected(MouseEvent event) {
@@ -93,7 +93,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Selecting red color and changing the button visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void redSelected(MouseEvent event) {
@@ -106,7 +106,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Selecting yellow color and changing the button visually
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void yellowSelected(MouseEvent event) {
@@ -119,8 +119,8 @@ public class JoinGame implements Initializable {
 
     /**
      * Used to join an existing game using a JoinGameCommand
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void JoinGameFunct(MouseEvent event) throws RemoteException {
@@ -144,7 +144,7 @@ public class JoinGame implements Initializable {
 
     /**
      * Used to go back if a player wants to select another option from the initialStage stage
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void goBackFunct(MouseEvent event) {
@@ -156,8 +156,8 @@ public class JoinGame implements Initializable {
     /**
      * Initialized the controller class
      * Used to set up the blur effect on password TextField
-     * @param url
-     * @param resourceBundle
+     * @param url the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the root object was not localized
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

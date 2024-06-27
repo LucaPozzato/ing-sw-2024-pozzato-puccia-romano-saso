@@ -15,8 +15,8 @@ import java.rmi.RemoteException;
 import java.util.Optional;
 
 /**
- * ChooseStage class is a javaFx controller used to manage chooseStage stage
- * Players here are able to choose the initialCard side and the secrete objectiveCard
+ * ChooseStage class is a javaFx controller used to manage chooseStage stage.
+ * Players here are able to choose the initialCard side and the secrete objectiveCard.
  */
 public class ChooseStage  {
 
@@ -100,11 +100,11 @@ public class ChooseStage  {
 
     /**
      * Used the return a front image when given the name of it
-     * @param oggetto
+     * @param objectForImage object to use
      * @return image given an object
      */
-    public Image pathFront(String oggetto) {
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
+    public Image pathFront(String objectForImage) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + objectForImage + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
@@ -112,11 +112,11 @@ public class ChooseStage  {
 
     /**
      * Used the return a back image when given the name of it
-     * @param oggetto
-     * @return
+     * @param objectForImage object to use
+     * @return image given an object
      */
-    public Image pathBack(String oggetto) {
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + oggetto + "b.jpg";
+    public Image pathBack(String objectForImage) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + objectForImage + "b.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);

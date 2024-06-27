@@ -91,8 +91,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the first card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
-     * @param event
+     * When the first card of the hand is clicked, it is highlighted and its values (image value and card value) are saved
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void handCard1Clicked(MouseEvent event) {
@@ -108,8 +108,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the second card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
-     * @param event
+     * When the second card of the hand is clicked, it is highlighted and its values (image value and card value) are saved
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void handCard2Clicked(MouseEvent event) {
@@ -125,8 +125,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the third card of the hand is clicked, it is highlighted and its values (image value and card value) are saved.
-     * @param event
+     * When the third card of the hand is clicked, it is highlighted and its values (image value and card value) are saved
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void handCard3Clicked(MouseEvent event) {
@@ -142,10 +142,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the first gold card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * When the first gold card is clicked, it is highlighted and its values (image value and card value) are saved
      * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void goldCard1Click(MouseEvent event) throws RemoteException {
@@ -167,10 +167,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the second gold card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * When the second gold card is clicked, it is highlighted and its values (image value and card value) are saved
      * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void goldCard2Click(MouseEvent event) throws RemoteException {
@@ -192,10 +192,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the gold deck card is clicked, it is highlighted and its values (image value and card value) are saved.
+     * When the gold deck card is clicked, it is highlighted and its values (image value and card value) are saved
      * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void goldDeckCardClick(MouseEvent event) throws RemoteException {
@@ -218,10 +218,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the first resource card is clicked, it is highlighted and its values (image value and card value) are saved.
-     * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * When the first resource card is clicked, it is highlighted and its values (image value and card value) are saved
+     * A DrawCommand method is sent
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void resourceCard1Click(MouseEvent event) throws RemoteException {
@@ -243,10 +243,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the second resource card is clicked, it is highlighted and its values (image value and card value) are saved.
-     * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * When the second resource card is clicked, it is highlighted and its values (image value and card value) are saved
+     * A DrawCommand method is sent
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void resourceCard2Click(MouseEvent event) throws RemoteException {
@@ -267,10 +267,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the resource deck card is clicked, it is highlighted and its values (image value and card value) are saved.
-     * A DrawCommand method is sent.
-     * @param event
-     * @throws RemoteException
+     * When the resource deck card is clicked, it is highlighted and its values (image value and card value) are saved
+     * A DrawCommand method is sent
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void resourceDeckCardClick(MouseEvent event) throws RemoteException {
@@ -291,8 +291,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to select the board view and see the player's points.
-     * @param event
+     * Used to select the board view and see the player's points
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void boardVisibility(MouseEvent event) {
@@ -302,8 +302,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to send a message with the message button.
-     * @param event
+     * Used to send a message with the message button
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void sendMessage(MouseEvent event) {
@@ -311,8 +311,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to send a message by clicking "ENTER" on the keyboard.
-     * @param event
+     * Used to send a message by clicking "ENTER" on the keyboard
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void sendMessageByEnter(KeyEvent event) {
@@ -322,7 +322,7 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to send a message. The sender (and eventually receiver) is selected and a ChatCommand is sent.
+     * Used to send a message. The sender (and eventually receiver) is selected and a ChatCommand is sent
      */
     private void textMessageFunct() {
         String message = inputText.getText();
@@ -359,8 +359,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the "eye button" next to the first player is clicked, it shows is structure and underlines the name.
-     * @param event
+     * When the "eye button" next to the first player is clicked, it shows is structure and underlines the name
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void nickname1VisibilityFunct(MouseEvent event) {
@@ -383,8 +383,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the "eye button" next to the second player is clicked, it shows is structure and underlines the name.
-     * @param event
+     * When the "eye button" next to the second player is clicked, it shows is structure and underlines the name
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void nickname2VisibilityFunct(MouseEvent event) {
@@ -425,8 +425,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the "eye button" next to the third player is clicked, it shows is structure and underlines the name.
-     * @param event
+     * When the "eye button" next to the third player is clicked, it shows is structure and underlines the name
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void nickname3VisibilityFunct(MouseEvent event) {
@@ -465,8 +465,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * When the "eye button" next to the fourth player is clicked, it shows is structure and underlines the name.
-     * @param event
+     * When the "eye button" next to the fourth player is clicked, it shows is structure and underlines the name
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void nickname4VisibilityFunct(MouseEvent event) {
@@ -506,8 +506,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to display chat messages.
-     * @param chat
+     * Used to display chat messages
+     * @param chat the chat to set
      */
     public void updateChat(Chat chat) {
         if(!inChat)
@@ -527,8 +527,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update client player.
-     * @param player
+     * Used to update client player
+     * @param player client player
      */
     public void updateMyPlayer(Player player) {
         this.myPlayer = player;
@@ -536,8 +536,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update current player text color to blue.
-     * @param player
+     * Used to update current player text color to blue
+     * @param player the current player
      */
     public void updateCurrentPlayer(Player player) {
         nickname1.setFill(Color.BLACK);
@@ -559,8 +559,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update players features.
-     * @param players
+     * Used to update players features
+     * @param players the players to set
      */
     public void updatePlayers(List<Player> players) {
         List<Player> otherPlayers = players.stream().filter(p->p != miniModel.getMyPlayer()).toList();
@@ -596,11 +596,11 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update structures. When the method is called, every card in a structure is displayed in a specif pane.
-     * On every initial card is displayed the player's pawn.
-     * The method is also used to add points for every visible resource.
-     * If the player is ready to draw, when a structure card's angle is clicked a place command is sent.
-     * @param structures
+     * Used to update structures. When the method is called, every card in a structure is displayed in a specif pane
+     * On every initial card is displayed the player's pawn
+     * The method is also used to add points for every visible resource
+     * If the player is ready to draw, when a structure card's angle is clicked a place command is sent
+     * @param structures the structures to set
      */
     public void updateStructures(List<Structure> structures) {
         int index = miniModel.getPlayers().indexOf(myPlayer);
@@ -613,7 +613,7 @@ public class Game implements Initializable {
         for (Map.Entry<String, Integer> entry : myStructure.getvisibleSymbols().entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
-            if(key != "NULL")
+            if(!Objects.equals(key, "NULL"))
                 addPoints(key, value);
         }
 
@@ -787,16 +787,15 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to update player's hand.
-     * @param hands
+     * Used to update player's hand
+     * @param hands the hands to set
      */
     public void updateHand(List<Hand> hands) {
 
-        System.out.printf("Sono dentro update hand \n Initial setupHand: " + isInitialSetupHand + " \n handturn:" + handTurnCounter);
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
             Platform.runLater(()->{
-                currentSelectedImage.setVisible(false); //errore
+                currentSelectedImage.setVisible(false); 
                 isCardPlaced = true;
                 cardDrawn = false;
 
@@ -813,7 +812,7 @@ public class Game implements Initializable {
                 cardDrawn = true;
                 isCardPlaced = false;
                 currentSelected = null;
-                currentSelectedImage.setImage(currentImageNew); //FIXME
+                currentSelectedImage.setImage(currentImageNew); 
                 currentSelectedImage.setVisible(true);
                 currentSelectedDeck = null;
 
@@ -904,8 +903,8 @@ public class Game implements Initializable {
 
     /**
      * Used to display the board. Paws images are created for every player and displayed in the correct
-     * spot according to points made.
-     * @param board
+     * spot according to points made
+     * @param board the board to set
      */
     public void updateBoard(Board board) {
         currentDeckResource1Card = board.getUncoveredCards().get(0);
@@ -986,173 +985,173 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to move pawns according to points.
-     * @param points
-     * @param posto
+     * Used to move pawns according to points
+     * @param points the points to set
+     * @param place the pawn to set
      */
-    public void addPoint(int points, ImageView posto){
+    public void addPoint(int points, ImageView place){
         switch (points) {
             case 0:
-                posto.setLayoutX(399);
-                posto.setLayoutY(403);
-                setDimension(posto);
+                place.setLayoutX(399);
+                place.setLayoutY(403);
+                setDimension(place);
                 break;
             case 1:
-                posto.setLayoutX(449);
-                posto.setLayoutY(403);
-                setDimension(posto);
+                place.setLayoutX(449);
+                place.setLayoutY(403);
+                setDimension(place);
                 break;
             case 2:
-                posto.setLayoutX(499);
-                posto.setLayoutY(403);
-                setDimension(posto);
+                place.setLayoutX(499);
+                place.setLayoutY(403);
+                setDimension(place);
                 break;
             case 3:
-                posto.setLayoutX(524);
-                posto.setLayoutY(358);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(358);
+                setDimension(place);
                 break;
             case 4:
-                posto.setLayoutX(474);
-                posto.setLayoutY(358);
-                setDimension(posto);
+                place.setLayoutX(474);
+                place.setLayoutY(358);
+                setDimension(place);
                 break;
             case 5:
-                posto.setLayoutX(424);
-                posto.setLayoutY(358);
-                setDimension(posto);
+                place.setLayoutX(424);
+                place.setLayoutY(358);
+                setDimension(place);
                 break;
             case 6:
-                posto.setLayoutX(374);
-                posto.setLayoutY(358);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(358);
+                setDimension(place);
                 break;
             case 7:
-                posto.setLayoutX(374);
-                posto.setLayoutY(313);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(313);
+                setDimension(place);
                 break;
             case 8:
-                posto.setLayoutX(424);
-                posto.setLayoutY(313);
-                setDimension(posto);
+                place.setLayoutX(424);
+                place.setLayoutY(313);
+                setDimension(place);
                 break;
             case 9:
-                posto.setLayoutX(474);
-                posto.setLayoutY(313);
-                setDimension(posto);
+                place.setLayoutX(474);
+                place.setLayoutY(313);
+                setDimension(place);
                 break;
             case 10:
-                posto.setLayoutX(524);
-                posto.setLayoutY(313);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(313);
+                setDimension(place);
                 break;
             case 11:
-                posto.setLayoutX(524);
-                posto.setLayoutY(267);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(267);
+                setDimension(place);
                 break;
             case 12:
-                posto.setLayoutX(474);
-                posto.setLayoutY(267);
-                setDimension(posto);
+                place.setLayoutX(474);
+                place.setLayoutY(267);
+                setDimension(place);
                 break;
             case 13:
-                posto.setLayoutX(424);
-                posto.setLayoutY(267);
-                setDimension(posto);
+                place.setLayoutX(424);
+                place.setLayoutY(267);
+                setDimension(place);
                 break;
             case 14:
-                posto.setLayoutX(374);
-                posto.setLayoutY(267);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(267);
+                setDimension(place);
                 break;
             case 15:
-                posto.setLayoutX(374);
-                posto.setLayoutY(222);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(222);
+                setDimension(place);
                 break;
             case 16:
-                posto.setLayoutX(424);
-                posto.setLayoutY(222);
-                setDimension(posto);
+                place.setLayoutX(424);
+                place.setLayoutY(222);
+                setDimension(place);
                 break;
             case 17:
-                posto.setLayoutX(474);
-                posto.setLayoutY(222);
-                setDimension(posto);
+                place.setLayoutX(474);
+                place.setLayoutY(222);
+                setDimension(place);
                 break;
             case 18:
-                posto.setLayoutX(524);
-                posto.setLayoutY(222);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(222);
+                setDimension(place);
                 break;
             case 19:
-                posto.setLayoutX(524);
-                posto.setLayoutY(176);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(176);
+                setDimension(place);
                 break;
             case 20:
-                posto.setLayoutX(449);
-                posto.setLayoutY(152);
-                setDimension(posto);
+                place.setLayoutX(449);
+                place.setLayoutY(152);
+                setDimension(place);
                 break;
             case 21:
-                posto.setLayoutX(374);
-                posto.setLayoutY(176);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(176);
+                setDimension(place);
                 break;
             case 22:
-                posto.setLayoutX(374);
-                posto.setLayoutY(129);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(129);
+                setDimension(place);
                 break;
             case 23:
-                posto.setLayoutX(374);
-                posto.setLayoutY(83);
-                setDimension(posto);
+                place.setLayoutX(374);
+                place.setLayoutY(83);
+                setDimension(place);
                 break;
             case 24:
-                posto.setLayoutX(403);
-                posto.setLayoutY(45);
-                setDimension(posto);
+                place.setLayoutX(403);
+                place.setLayoutY(45);
+                setDimension(place);
                 break;
             case 25:
-                posto.setLayoutX(449);
-                posto.setLayoutY(38);
-                setDimension(posto);
+                place.setLayoutX(449);
+                place.setLayoutY(38);
+                setDimension(place);
                 break;
             case 26:
-                posto.setLayoutX(495);
-                posto.setLayoutY(46);
-                setDimension(posto);
+                place.setLayoutX(495);
+                place.setLayoutY(46);
+                setDimension(place);
                 break;
             case 27:
-                posto.setLayoutX(524);
-                posto.setLayoutY(83);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(83);
+                setDimension(place);
                 break;
             case 28:
-                posto.setLayoutX(524);
-                posto.setLayoutY(129);
-                setDimension(posto);
+                place.setLayoutX(524);
+                place.setLayoutY(129);
+                setDimension(place);
                 break;
             case 29:
-                posto.setLayoutX(449);
-                posto.setLayoutY(93);
-                setDimension(posto);
+                place.setLayoutX(449);
+                place.setLayoutY(93);
+                setDimension(place);
                 break;
         }
     }
 
-    public void setDimension(ImageView posto) {
-        posto.setFitWidth(40);
-        posto.setFitHeight(40);
+    public void setDimension(ImageView place) {
+        place.setFitWidth(40);
+        place.setFitHeight(40);
     }
 
     /**
-     * Used to update deck cards.
-     * @param deck
+     * Used to update deck cards
+     * @param deck the deck to set
      */
     public void updateDeck(Deck deck) {
 
@@ -1166,8 +1165,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * used to reset values if errors occur.
-     * @param error
+     * used to reset values if errors occur
+     * @param error the error to set
      */
     public void updateError(String error) {
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
@@ -1201,7 +1200,7 @@ public class Game implements Initializable {
 
     /**
      * Used to visually display an error and notify the client.
-     * @param message
+     * @param message the error to see
      */
     public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -1215,8 +1214,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to go back to the client structure.
-     * @param event
+     * Used to go back to the client structure
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void goBackFunct(MouseEvent event) {
@@ -1224,8 +1223,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to "deselect" cards. When the pane is clicked the card opacities go back to one.
-     * @param event
+     * Used to "deselect" cards. When the pane is clicked the card opacities go back to one
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void paneClickReset(MouseEvent event) {
@@ -1242,9 +1241,9 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to open chat pane.
-     * @param event
-     * @throws IOException
+     * Used to open chat pane
+     * @param event the mouse event that triggered this method
+     * @throws IOException IOException if an I/O error occurs during reading the file
      */
     @FXML
     void openChatFunct(MouseEvent event) throws IOException {
@@ -1255,8 +1254,8 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to display back and front of hand cards by pressing "B" and "F".
-     * @param event
+     * Used to display back and front of hand cards by pressing "B" and "F"
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void showBack(KeyEvent event) {
@@ -1303,10 +1302,10 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to display and set initial card for the player structure.
+     * Used to display and set initial card for the player structure
      * When the player's turn occur and a hand card is selected, if the player click one of the available
-     * borders on the initial card it calls the place command placing the card in the correct spot.
-     * @param initialCard1
+     * borders on the initial card it calls the place command placing the card in the correct spot
+     * @param initialCard1 the initial card
      */
     public void setInitialCard(InitialCard initialCard1) {
         int x, y;
@@ -1360,8 +1359,8 @@ public class Game implements Initializable {
 
     /**
      * Used to add points given the obj (e.g. "mushroom") and the points associated.
-     * @param obj
-     * @param points
+     * @param obj the object to set
+     * @param points the points to set
      */
     public void addPoints(String obj, int points) {
         int valueInteger = 0;
@@ -1406,44 +1405,44 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to create a front image of a given object.
-     * @param oggetto
-     * @return
+     * Used to create a front image of a given object
+     * @param objectForImage object to set
+     * @return image
      */
-    public Image pathFront(String oggetto) {
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + oggetto + "f.jpg";
+    public Image pathFront(String objectForImage) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/FrontCards/" + objectForImage + "f.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
     }
 
     /**
-     * Used to create a back image of a given object.
-     * @param oggetto
-     * @return
+     * Used to create a back image of a given object
+     * @param objectForImage object to set
+     * @return image
      */
-    public Image pathBack(String oggetto) {
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + oggetto + "b.jpg";
+    public Image pathBack(String objectForImage) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/BackCards/" + objectForImage + "b.jpg";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
     }
 
     /**
-     * Used to create an image of a given object.
-     * @param oggetto
-     * @return
+     * Used to create an image of a given object
+     * @param objectForImage object to set
+     * @return image
      */
-    public Image symbolPath(String oggetto) {
-        String imagePath = "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + oggetto + ".png";
+    public Image symbolPath(String objectForImage) {
+        String imagePath = "/it/polimi/ingsw/codexnaturalis/SymbolsPng/" + objectForImage + ".png";
         InputStream imageStream = getClass().getResourceAsStream(imagePath);
         assert imageStream != null;
         return new Image(imageStream);
     }
 
     /**
-     * Used when a player wants to quit the game.
-     * @param event
+     * Used when a player wants to quit the game
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void exitGame(MouseEvent event) {
@@ -1452,9 +1451,9 @@ public class Game implements Initializable {
     }
 
     /**
-     * Used to initialize some visual objects and to enable the mouse drag feature on structure panes.
-     * @param url
-     * @param resourceBundle
+     * Used to initialize some visual objects and to enable the mouse drag feature on structure panes
+     * @param url the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the root object was not localized
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

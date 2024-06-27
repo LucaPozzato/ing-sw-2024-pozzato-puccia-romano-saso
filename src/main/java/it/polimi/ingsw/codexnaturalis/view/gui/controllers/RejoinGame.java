@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * RejoinGame class is a javaFx controller used to manage rejoinGame stage
+ * RejoinGame class is a javaFx controller used to manage rejoinGame stage.
  */
 public class RejoinGame implements Initializable {
 
@@ -44,13 +44,14 @@ public class RejoinGame implements Initializable {
 
     /**
      * Used for blur effect on password
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void changePasswordText(MouseEvent event) {
         if (changingText %2 == 0){
             EnterPassword.setEffect(null);
             InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/notvisible.png");
+            assert imageStream != null;
             Image image = new Image(imageStream);
             passwordVisibility.setImage(image);
         }
@@ -59,6 +60,7 @@ public class RejoinGame implements Initializable {
             blur.setRadius(7.5);
             EnterPassword.setEffect(blur);
             InputStream imageStream = getClass().getResourceAsStream("/it/polimi/ingsw/codexnaturalis/SymbolsPng/visibility.png");
+            assert imageStream != null;
             Image image = new Image(imageStream);
             passwordVisibility.setImage(image);
         }
@@ -67,8 +69,8 @@ public class RejoinGame implements Initializable {
 
     /**
      * Used to rejoin a game using a RejoinGameCommand
-     * @param event
-     * @throws RemoteException
+     * @param event the mouse event that triggered this method
+     * @throws RemoteException if a remote communication error occurs
      */
     @FXML
     void rejoinGameFunct(MouseEvent event) throws RemoteException {
@@ -93,7 +95,7 @@ public class RejoinGame implements Initializable {
 
     /**
      * Used to go back if a player wants to select another option from the initialStage stage
-     * @param event
+     * @param event the mouse event that triggered this method
      */
     @FXML
     void goBackFunct(MouseEvent event) {
@@ -105,8 +107,8 @@ public class RejoinGame implements Initializable {
     /**
      * Initialized the controller class
      * Used to set up the blur effect on password TextField
-     * @param url
-     * @param resourceBundle
+     * @param url the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the root object was not localized
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

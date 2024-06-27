@@ -17,6 +17,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * GuiApp class is used to send updates to JavaFx thread.
+ */
 public class GuiApp implements View {
 
     private final VirtualClient virtualClient;
@@ -27,11 +30,7 @@ public class GuiApp implements View {
     private Stage chooseStage;
     private ViewFactory viewFactory;
 
-    /**
-     * GuiApp class is used to send updates to JavaFx thread.
-     * @param virtualClient
-     * @param miniModel
-     */
+
     public GuiApp(VirtualClient virtualClient, MiniModel miniModel) {
         this.virtualClient = virtualClient;
         this.miniModel = miniModel;
@@ -66,7 +65,7 @@ public class GuiApp implements View {
 
     /**
      * Based on current stage it is used to manage the opening and closing of stages
-     * @param state
+     * @param state the state to set
      */
     @Override
     public void updateState(String state) {
