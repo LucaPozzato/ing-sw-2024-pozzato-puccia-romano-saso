@@ -346,7 +346,11 @@ public class EndGameState extends ControllerState {
 
         for (Player player : super.game.getPlayers()) {
             Integer pointsByPlayerX = super.game.getBoard().getActualPoints(player);
-            if (pointsByPlayerX > max) {
+
+            if (currentWinner.isEmpty()) {
+                currentWinner.add(player);
+                max = pointsByPlayerX;
+            } else if (pointsByPlayerX > max) {
                 max = pointsByPlayerX;
                 currentWinner.clear();
                 currentWinner.add(player);
