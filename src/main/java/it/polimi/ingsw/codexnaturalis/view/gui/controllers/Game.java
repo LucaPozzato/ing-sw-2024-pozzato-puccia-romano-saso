@@ -145,11 +145,10 @@ public class Game implements Initializable {
      * When the first gold card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void goldCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void goldCard1Click(MouseEvent event) throws RemoteException {
         if (!cardDrawn) {
             goldDeckCard.setOpacity(.5);
             goldCard1.setOpacity(1);
@@ -171,11 +170,10 @@ public class Game implements Initializable {
      * When the second gold card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void goldCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void goldCard2Click(MouseEvent event) throws RemoteException {
         if (!cardDrawn) {
             goldDeckCard.setOpacity(.5);
             goldCard1.setOpacity(.5);
@@ -197,11 +195,10 @@ public class Game implements Initializable {
      * When the gold deck card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void goldDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void goldDeckCardClick(MouseEvent event) throws RemoteException {
 
         if (!cardDrawn) {
             goldDeckCard.setOpacity(1);
@@ -224,11 +221,10 @@ public class Game implements Initializable {
      * When the first resource card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void resourceCard1Click(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void resourceCard1Click(MouseEvent event) throws RemoteException {
             if (!cardDrawn) {
                 resourceDeckCard.setOpacity(.5);
                 resourceCard1.setOpacity(1);
@@ -250,11 +246,10 @@ public class Game implements Initializable {
      * When the second resource card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void resourceCard2Click(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void resourceCard2Click(MouseEvent event) throws RemoteException {
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(.5);
             resourceCard1.setOpacity(.5);
@@ -275,11 +270,10 @@ public class Game implements Initializable {
      * When the resource deck card is clicked, it is highlighted and its values (image value and card value) are saved.
      * A DrawCommand method is sent.
      * @param event
-     * @throws IllegalCommandException
      * @throws RemoteException
      */
     @FXML
-    void resourceDeckCardClick(MouseEvent event) throws IllegalCommandException, RemoteException {
+    void resourceDeckCardClick(MouseEvent event) throws RemoteException {
         if (!cardDrawn) {
             resourceDeckCard.setOpacity(1);
             resourceCard1.setOpacity(.5);
