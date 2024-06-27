@@ -19,6 +19,8 @@ public class ViewFactory {
     private String nickname;
 
     public static Stage staticJoinGame;
+    public static Stage staticStartGame;
+    public static Stage staticRejoinGame;
 
 
     public ViewFactory(MiniModel miniModel, VirtualClient virtualClient) {
@@ -41,7 +43,7 @@ public class ViewFactory {
      */
     public void showStartGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("startGame.fxml"));
-        createStage(loader);
+        staticStartGame = createStage(loader);
         StartGame startGame = loader.getController();
         startGame.setUp(this);
     }
@@ -61,7 +63,7 @@ public class ViewFactory {
      */
     public void showRejoinGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("rejoinGame.fxml"));
-        createStage(loader);
+        staticRejoinGame = createStage(loader);
         RejoinGame rejoinGame = loader.getController();
         rejoinGame.setUp(this);
     }

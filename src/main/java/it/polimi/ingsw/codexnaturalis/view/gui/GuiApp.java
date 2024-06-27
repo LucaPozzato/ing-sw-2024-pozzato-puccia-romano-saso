@@ -76,6 +76,13 @@ public class GuiApp implements View {
                 if (chooseStage != null)
                     chooseStage.hide();
                 waitingStage = viewFactory.showWait();
+
+                if (ViewFactory.staticJoinGame != null)
+                    ViewFactory.staticJoinGame.close();
+
+                if (ViewFactory.staticStartGame != null)
+                    ViewFactory.staticStartGame.close();
+
             });
             case "Choose" -> Platform.runLater(() -> {
                 waitingStage.hide();
@@ -93,6 +100,10 @@ public class GuiApp implements View {
                 viewFactory.showEndGame();
             });
             default -> Platform.runLater(() -> {
+
+                if (ViewFactory.staticRejoinGame != null)
+                    ViewFactory.staticRejoinGame.close();
+
                 mainStage.show();
                 if (chooseStage != null)
                     chooseStage.hide();

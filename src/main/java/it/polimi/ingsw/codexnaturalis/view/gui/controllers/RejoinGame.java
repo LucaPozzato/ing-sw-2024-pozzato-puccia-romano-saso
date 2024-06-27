@@ -88,8 +88,6 @@ public class RejoinGame implements Initializable {
                     throw new RuntimeException(e);
                 }
             });
-            Stage stage = (Stage) JoinGame.getScene().getWindow();
-            viewFactory.closeStage(stage);
         }
     }
 

@@ -145,9 +145,7 @@ public class StartGame implements Initializable{
                     throw new RuntimeException(e);
                 }
             });
-            Stage stage = (Stage) CreateGame.getScene().getWindow(); //trick for getting current stage
             viewFactory.setNickname(EnterNickname.getText());
-            viewFactory.closeStage(stage);
         }
     }
 

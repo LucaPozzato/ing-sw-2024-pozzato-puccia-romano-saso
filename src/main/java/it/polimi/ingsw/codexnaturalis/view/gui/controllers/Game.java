@@ -82,7 +82,7 @@ public class Game implements Initializable {
     private ImageView currentSelectedImage, pPawn, pPawn1, pPawn2, pPawn3;
     private boolean isCardPlaced = false, cardDrawn = true, isInitialSetupHand = true, isInitialChooseSetup = true, isHandCardSelected, currentSelectedFrontUp = true, initialCardSide, inChat = false;
     private int c = 0;
-    private int handTurnCounter = 0;
+    private int handTurnCounter = 1;
 
 
     public void setUP(MiniModel miniModel, VirtualClient virtualClient) {
@@ -866,6 +866,7 @@ public class Game implements Initializable {
      */
     public void updateHand(List<Hand> hands) {
 
+        System.out.printf("Sono dentro update hand \n Initial setupHand: " + isInitialSetupHand + " \n handturn:" + handTurnCounter);
         if (currentCommand != null && currentCommand instanceof PlaceCommand)
         {
             Platform.runLater(()->{
