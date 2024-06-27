@@ -134,13 +134,13 @@ public class JoinGame implements Initializable {
                     throw new RuntimeException(e);
                 }
             });
-            Stage stage = (Stage) goBack.getScene().getWindow();
-            viewFactory.closeStage(stage);
         }
         else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("What's happening?");
             alert.setContentText("Fields cannot be null");
+            Stage stage = (Stage) goBack.getScene().getWindow();
+            viewFactory.closeStage(stage);
         }
     }
 
