@@ -46,14 +46,19 @@ public class ConcreteChair implements Strategy {
             for (int j = 40 - radius; j <= 40 + radius - 1; j++) {
 
                 Card upper = matrix[j + wholecells[0]][i];
+
                 Card placedUnder;
-                if (wholecells[1] == 0) {
-                    placedUnder = matrix[j + wholecells[0]][i - 2];
+                if (wholecells[1] == wholecells[0]) {
+                    placedUnder = matrix[j + wholecells[1]][i - 2];
                 } else {
-                    placedUnder = matrix[j + wholecells[2]][i - 1];
+                    placedUnder = matrix[j + wholecells[1]][i - 1];
                 }
 
                 Card lower = matrix[j + wholecells[2]][i - 3];
+
+                structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
+                System.out.println("-------------------");
+
 
                 if ((upper instanceof ResourceCard || upper instanceof GoldCard)
                         && upper.getSymbol().equals(properColor[0])

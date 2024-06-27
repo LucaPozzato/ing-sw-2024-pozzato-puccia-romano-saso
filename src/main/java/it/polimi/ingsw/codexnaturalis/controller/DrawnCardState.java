@@ -127,7 +127,7 @@ public class DrawnCardState extends ControllerState {
      */
     @Override
     public void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-                           Boolean frontUp) {
+            Boolean frontUp) {
 
         super.game.pushEvent("Error while placing card");
         Event event = null;
@@ -177,14 +177,17 @@ public class DrawnCardState extends ControllerState {
                 throw new IllegalCommandException("Not your turn");
             }
 
-            if (fromDeck == null || fromDeck.isEmpty())
+            if (fromDeck == null || fromDeck.isEmpty()) {
                 for (Card c : super.game.getBoard().getUncoveredCards()) {
                     if (c.getIdCard().equals(card.getIdCard())) {
                         card = c;
                         break;
                     }
                 }
-            else
+                if (card == null) {
+                    throw new IllegalCommandException("Card not found in uncovered cards");
+                }
+            } else
                 card = null;
 
             updateDeck(card, fromDeck);
@@ -268,7 +271,7 @@ public class DrawnCardState extends ControllerState {
      * Advances the game to the next turn.
      *
      * @return {@code true} if the match has ended after the current turn, otherwise
-     * {@code false}.
+     *         {@code false}.
      */
     private Boolean nextTurn() {
         List<Player> players = super.game.getPlayers();

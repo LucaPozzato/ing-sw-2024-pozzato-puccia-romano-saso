@@ -76,7 +76,8 @@ public class Structure implements Serializable {
         StringBuilder visibleResources = new StringBuilder();
         for (Resource resource : Resource.values()) {
             if (!(resource.name().equals("EMPTY")) && !(resource.name().equals("NULL")))
-                visibleResources.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name())).append("\n");
+                visibleResources.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name()))
+                        .append("\n");
         }
         visibleResources = new StringBuilder(visibleResources.substring(0, visibleResources.length() - 1));
         return visibleResources.toString();
@@ -85,7 +86,8 @@ public class Structure implements Serializable {
     public String getVisibleObjects() {
         StringBuilder visibleObjects = new StringBuilder();
         for (Objects resource : Objects.values()) {
-            visibleObjects.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name())).append("\n");
+            visibleObjects.append(resource.name()).append(": ").append(visibleSymbols.get(resource.name()))
+                    .append("\n");
         }
         visibleObjects = new StringBuilder(visibleObjects.substring(0, visibleObjects.length() - 1));
         return visibleObjects.toString();
@@ -142,7 +144,6 @@ public class Structure implements Serializable {
         return 0;
     }
 
-
     /**
      * This method acts differently according to the type of card the user want to
      * place. <br>
@@ -166,12 +167,11 @@ public class Structure implements Serializable {
      *                   string passed
      * @param frontUp    the side choose for the placement
      * @return true is the card is placeable, exception otherwise. The method never
-     * returns false.
+     *         returns false.
      * @throws IllegalCommandException thrown when a card is not placeable. A proper
      *                                 description message is linked to the
      *                                 exception.
      */
-    // TODO: consider to set as private this method, made public for test purposes
     public Boolean isPlaceable(Card father, Card card, Integer coordinate, Boolean frontUp)
             throws IllegalCommandException {
         // checks if initial card is placeable
@@ -292,7 +292,7 @@ public class Structure implements Serializable {
                 return fatherCoordinate + 99;
             default:
                 throw new IllegalArgumentException("Invalid position"); // -> maybe function that calls calcCoordinates
-                // checks for suitable arguments
+            // checks for suitable arguments
         }
     }
 
@@ -397,7 +397,7 @@ public class Structure implements Serializable {
             else if (y_distance >= radius)
                 radius = y_distance;
         }
-        return radius;
+        return radius + 2;
     }
 
     /**

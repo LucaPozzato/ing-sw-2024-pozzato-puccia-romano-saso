@@ -3,7 +3,6 @@ package it.polimi.ingsw.codexnaturalis.controller;
 import it.polimi.ingsw.codexnaturalis.model.chat.Chat;
 import it.polimi.ingsw.codexnaturalis.model.chat.ChatMessage;
 import it.polimi.ingsw.codexnaturalis.model.enumerations.Color;
-import it.polimi.ingsw.codexnaturalis.model.exceptions.IllegalCommandException;
 import it.polimi.ingsw.codexnaturalis.model.game.Game;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.Card;
 import it.polimi.ingsw.codexnaturalis.model.game.components.cards.ObjectiveCard;
@@ -44,7 +43,7 @@ public abstract class ControllerState {
     public abstract void chooseSetUp(String clientId, Player player, Boolean side, ObjectiveCard objCard);
 
     public abstract void placedCard(String clientId, Player player, Card father, Card placeThis, String position,
-                                    Boolean frontUp);
+            Boolean frontUp);
 
     public abstract void drawnCard(String clientId, Player player, Card card, String fromDeck);
 
@@ -68,32 +67,21 @@ public abstract class ControllerState {
         Player senderPlayer = null;
         Event event = null;
 
-        try {
-            for (Player p : game.getPlayers()) {
-                if (receiver != null && p.getNickname().equals(receiver.getNickname())) {
-                    receiverPlayer = p;
-                }
-                if (sender != null && p.getNickname().equals(sender.getNickname())) {
-                    senderPlayer = p;
-                }
+        for (Player p : game.getPlayers()) {
+            if (receiver != null && p.getNickname().equals(receiver.getNickname())) {
+                receiverPlayer = p;
             }
-
-            // FIXME: is it really necessary? Can it happens to make null sender? In that case does the game crash?
-            if (senderPlayer == null) {
-                throw new IllegalCommandException("The message was sent by a null sender. Game's over.");
+            if (sender != null && p.getNickname().equals(sender.getNickname())) {
+                senderPlayer = p;
             }
-
-            if (receiverPlayer == null) {
-                game.pushEvent("receiver not found");
-            }
-
-            chat.addMessage(new ChatMessage(message, senderPlayer, receiverPlayer, 0));
-            event = new ChatEvent(game.getGameId(), chat);
-
-        } catch (IllegalCommandException e) {
-            this.game.pushEvent(e.getMessage());
-            e.printStackTrace();
         }
+
+        if (receiverPlayer == null) {
+            game.pushEvent("receiver not found");
+        }
+
+        chat.addMessage(new ChatMessage(message, senderPlayer, receiverPlayer, 0));
+        event = new ChatEvent(game.getGameId(), chat);
 
         rmiServer.sendEvent(event);
         try {
