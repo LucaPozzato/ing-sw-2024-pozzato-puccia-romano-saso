@@ -143,7 +143,6 @@ public class WaitPlayerState extends ControllerState {
         super.game.addParticipant();
         super.game.getFromPlayerToId().put(player, clientId);
 
-        // FIXME: clean this up
         try {
             super.game.getBoard().updateActualScore(player, 0);
             // FIXME: this is a temporary solution

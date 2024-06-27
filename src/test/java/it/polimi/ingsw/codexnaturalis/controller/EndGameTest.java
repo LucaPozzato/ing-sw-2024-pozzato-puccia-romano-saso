@@ -223,18 +223,6 @@ public class EndGameTest {
         // Player with the higher number of satisfiedPatterns wins
         assertEquals("No server found", game.getEventTracker().pop());
 
-        // FIXME: a volte Expected :The winner is: nick luca Actual :The winner is: luca
-
-        // if (game.getStructureByPlayer(nick).getSatisfiedObj() >
-        // game.getStructureByPlayer(luca).getSatisfiedObj()) {
-        // assertEquals("The winner is: nick", game.getEventTracker().pop());
-        // } else if (game.getStructureByPlayer(nick).getSatisfiedObj() ==
-        // game.getStructureByPlayer(luca)
-        // .getSatisfiedObj()) {
-        // assertEquals("The winner is: nick luca", game.getEventTracker().pop());
-        // } else
-        // assertEquals("The winner is: luca", game.getEventTracker().pop());
-
         // Series of method's call ineffective in EndGameState
         game.getState().initialized("0", "nick", "pw", Color.BLUE, 2);
         assertEquals("No server found", game.getEventTracker().pop());
