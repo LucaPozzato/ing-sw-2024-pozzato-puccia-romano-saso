@@ -320,8 +320,8 @@ public class GameTest {
 
         try {
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
-            assertEquals(3, game.getBoard().getActualPoints(player));
-            assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
+            assertEquals(6, game.getBoard().getActualPoints(player));
+            assertEquals(2, game.getStructureByPlayer(player).getSatisfiedObj());
 
         } catch (Exception e) {
             fail(e.getMessage());
@@ -540,6 +540,242 @@ public class GameTest {
         try {
             EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
             assertEquals(1, game.getStructureByPlayer(player).getSatisfiedObj());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void ChairCheckOP5() {
+        Game game = new Game(1, null, null);
+        Player player = new Player();
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().getFirst(); // IC1
+        ResourceCard RedTest1 = parser.parse().getFirst(); // R01
+        ResourceCard RedTest2 = parser.parse().get(1); // R02
+        ResourceCard GreenTest1 = parser.parse().get(12); //R11
+        ResourceCard GreenTest2 = parser.parse().get(11); // R02
+        ResourceCard PurpleTest1 = parser.parse().get(33); // R34
+        ResourceCard PurpleTest2 = parser.parse().get(30); // R31
+        ResourceCard BluTest1 = parser.parse().get(22); // R23
+        ResourceCard BluTest2 = parser.parse().get(26); // R27
+
+
+        // Setto l'obiettivo segreto
+        Hand hand = new Hand();
+        game.addPlayer(player);
+        game.setPlayerHand(player, hand);
+        hand = game.getHandByPlayer(player);
+        hand.setSecretObjective(objPars.parse().get(8)); // OR1
+
+        game.setPlayerStructure(player, structure);
+
+        // Setto gli obiettivi comuni
+        List<Card> commonObjective = new ArrayList<>();
+        commonObjective.add(objPars.parse().get(4)); // OP5
+        commonObjective.add(objPars.parse().get(7)); // OP8
+
+        Board board = new Board();
+        game.setBoard(board);
+        board = game.getBoard();
+        board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
+
+        // Piazzo le carte sulla board
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, RedTest1, "BL", false);
+            structure.placeCard(RedTest1, PurpleTest1, "BL", false);
+            structure.placeCard(PurpleTest1, RedTest2, "BR", false);
+            structure.placeCard(RedTest2, GreenTest1, "BR", false);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
+            assertEquals(3, game.getBoard().getActualPoints(player));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void ChairCheckOP6() {
+        Game game = new Game(1, null, null);
+        Player player = new Player();
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().getFirst(); // IC1
+        ResourceCard GreenTest1 = parser.parse().get(12); //R13
+        ResourceCard GreenTest2 = parser.parse().get(11); // R12
+        ResourceCard PurpleTest1 = parser.parse().get(33); // R34
+        ResourceCard PurpleTest2 = parser.parse().get(30); // R31
+        ResourceCard BluTest1 = parser.parse().get(22); // R23
+        ResourceCard BluTest2 = parser.parse().get(26); // R27
+
+
+        // Setto l'obiettivo segreto
+        Hand hand = new Hand();
+        game.addPlayer(player);
+        game.setPlayerHand(player, hand);
+        hand = game.getHandByPlayer(player);
+        hand.setSecretObjective(objPars.parse().get(8)); // OR1
+
+        game.setPlayerStructure(player, structure);
+
+        // Setto gli obiettivi comuni
+        List<Card> commonObjective = new ArrayList<>();
+        commonObjective.add(objPars.parse().get(5)); // OP6
+        commonObjective.add(objPars.parse().get(4)); // OP5
+
+        Board board = new Board();
+        game.setBoard(board);
+        board = game.getBoard();
+        board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
+
+        // Piazzo le carte sulla board
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, GreenTest1, "BR", false);
+            structure.placeCard(GreenTest1, BluTest1, "BR", false);
+            structure.placeCard(BluTest1, GreenTest2, "BL", false);
+            structure.placeCard(GreenTest2, PurpleTest1, "BL", false);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
+            assertEquals(3, game.getBoard().getActualPoints(player));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void ChairCheckOP7() {
+        Game game = new Game(1, null, null);
+        Player player = new Player();
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().getFirst(); // IC1
+        ResourceCard RedTest1 = parser.parse().getFirst(); // R01
+        ResourceCard GreenTest1 = parser.parse().get(12); //R11
+        ResourceCard GreenTest2 = parser.parse().get(11); // R12
+        ResourceCard PurpleTest1 = parser.parse().get(33); // R34
+        ResourceCard PurpleTest2 = parser.parse().get(30); // R31
+        ResourceCard BluTest1 = parser.parse().get(22); // R23
+        ResourceCard BluTest2 = parser.parse().get(26); // R27
+
+
+        // Setto l'obiettivo segreto
+        Hand hand = new Hand();
+        game.addPlayer(player);
+        game.setPlayerHand(player, hand);
+        hand = game.getHandByPlayer(player);
+        hand.setSecretObjective(objPars.parse().get(8)); // OR1
+
+        game.setPlayerStructure(player, structure);
+
+        // Setto gli obiettivi comuni
+        List<Card> commonObjective = new ArrayList<>();
+        commonObjective.add(objPars.parse().get(4)); // OP5
+        commonObjective.add(objPars.parse().get(6)); // OP7
+
+        Board board = new Board();
+        game.setBoard(board);
+        board = game.getBoard();
+        board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
+
+        // Piazzo le carte sulla board
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, RedTest1, "BL", false);
+            structure.placeCard(RedTest1, BluTest1, "BL", false);
+            structure.placeCard(BluTest1, GreenTest2, "BL", false);
+            structure.placeCard(GreenTest2, BluTest2, "BR", false);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
+            assertEquals(3, game.getBoard().getActualPoints(player));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void ChairCheckOP8() {
+        Game game = new Game(1, null, null);
+        Player player = new Player();
+
+        Structure structure = new Structure();
+        ResourceParser parser = new ResourceParser();
+        ObjectiveParser objPars = new ObjectiveParser();
+
+        InitialCard initialCardTest = new InitialParser().parse().getFirst(); // IC1
+        ResourceCard RedTest1 = parser.parse().getFirst(); // R01
+        ResourceCard GreenTest1 = parser.parse().get(12); //R11
+        ResourceCard GreenTest2 = parser.parse().get(11); // R02
+        ResourceCard PurpleTest1 = parser.parse().get(33); // R34
+        ResourceCard PurpleTest2 = parser.parse().get(30); // R31
+        ResourceCard BluTest1 = parser.parse().get(22); // R23
+        ResourceCard BluTest2 = parser.parse().get(26); // R27
+
+
+        // Setto l'obiettivo segreto
+        Hand hand = new Hand();
+        game.addPlayer(player);
+        game.setPlayerHand(player, hand);
+        hand = game.getHandByPlayer(player);
+        hand.setSecretObjective(objPars.parse().get(8)); // OR1
+
+        game.setPlayerStructure(player, structure);
+
+        // Setto gli obiettivi comuni
+        List<Card> commonObjective = new ArrayList<>();
+        commonObjective.add(objPars.parse().get(4)); // OP5
+        commonObjective.add(objPars.parse().get(7)); // OP8
+
+        Board board = new Board();
+        game.setBoard(board);
+        board = game.getBoard();
+        board.setCommonObjectives(commonObjective);
+        board.getActualScores().put(player, 0);
+
+        // Piazzo le carte sulla board
+        try {
+            structure.placeCard(null, initialCardTest, null, true);
+            structure.placeCard(initialCardTest, BluTest1, "BR", false);
+            structure.placeCard(BluTest1, PurpleTest1, "BR", false);
+            structure.placeCard(PurpleTest1, GreenTest2, "BR", false);
+            structure.placeCard(GreenTest2, PurpleTest2, "BL", false);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            EndGameState endState = new EndGameState(game, new RmiServer(), new SocketServer());
+            assertEquals(3, game.getBoard().getActualPoints(player));
         } catch (Exception e) {
             fail(e.getMessage());
         }

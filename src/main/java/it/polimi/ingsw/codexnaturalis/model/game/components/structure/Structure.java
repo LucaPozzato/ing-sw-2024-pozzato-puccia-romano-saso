@@ -397,7 +397,7 @@ public class Structure implements Serializable {
             else if (y_distance >= radius)
                 radius = y_distance;
         }
-        return radius;
+        return radius+2;
     }
 
     /**
