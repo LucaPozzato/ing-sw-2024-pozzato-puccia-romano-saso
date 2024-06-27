@@ -64,7 +64,7 @@
                   <Font name="Apple LiGothic Medium" size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter your nickname...">
+            <TextField fx:id="EnterGameID" prefHeight="25.0" prefWidth="178.0" promptText="Enter game ID...">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

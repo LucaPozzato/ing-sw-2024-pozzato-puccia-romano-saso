@@ -511,7 +511,6 @@ public class Game implements Initializable {
 
         int index = 0;
         for(Player player: miniModel.getPlayers()){
-
             if(Objects.equals(nickname3.getText(), player.getNickname())){
                 showHand1.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(0).toString().substring(6,9)));
                 showHand2.setImage(pathBack(miniModel.getPlayerHands().get(index).getCardsHand().get(1).toString().substring(6,9)));
