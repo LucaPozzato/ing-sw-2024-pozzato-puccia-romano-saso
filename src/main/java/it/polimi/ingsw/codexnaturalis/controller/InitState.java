@@ -94,7 +94,7 @@ public class InitState extends ControllerState {
         // FIXME: clean this up
         super.game.getBoard().updateActualScore(player, 0);
 
-        super.game.getBoard().updateActualScore(player, 10);
+        //super.game.getBoard().updateActualScore(player, 16);
 
     }
 
