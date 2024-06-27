@@ -121,7 +121,8 @@ public class SocketServer implements VirtualServer, Runnable {
                     }
                 }
 
-                if (command instanceof JoinGameCommand && players.get(command.getGameId()).contains(client)) {
+                if ((command instanceof JoinGameCommand || command instanceof CreateGameCommand) && isAlreadyInGame(
+                        command.getClientId())/* players.get(command.getGameId()).contains(client) */) {
                     this.sendEvent(new ErrorEvent(command.getClientId(), command.getGameId(),
                             "Already created or joined a game"));
                 } else if (command instanceof Ping) {
@@ -342,5 +343,21 @@ public class SocketServer implements VirtualServer, Runnable {
             clientIds.remove(client);
         }
 
+    }
+
+    public boolean isAlreadyInGame(String clientId) {
+        for (var gameId : players.keySet()) {
+            for (var client1 : players.get(gameId)) {
+                try {
+                    String cId1 = client1.getClientId();
+                    if (clientId.equals(cId1)) {
+                        return true;
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 }
