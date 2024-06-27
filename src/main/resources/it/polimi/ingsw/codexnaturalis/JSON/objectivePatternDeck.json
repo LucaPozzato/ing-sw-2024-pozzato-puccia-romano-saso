@@ -67,6 +67,6 @@
         "shape": "CHAIR",
         "mustHave": "INSECT, ANIMAL",
         "divideBy_seatColor": "0",
-        "wholeCells": "0,0,1"
+        "wholeCells": "0,1,1"
     }
 ]
