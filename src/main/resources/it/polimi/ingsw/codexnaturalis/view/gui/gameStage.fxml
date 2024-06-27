@@ -311,7 +311,7 @@
                   <Insets left="20.0" />
                </padding>
             </HBox>
-            <VBox alignment="CENTER" prefHeight="239.0" prefWidth="109.0">
+            <VBox alignment="CENTER" prefHeight="239.0" prefWidth="109.0" spacing="10.0">
                <children>
                   <ImageView fx:id="showHand1" fitHeight="54.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" />
                   <ImageView fx:id="showHand2" fitHeight="54.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" />

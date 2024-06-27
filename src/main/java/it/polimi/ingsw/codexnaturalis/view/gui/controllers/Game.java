@@ -1271,9 +1271,13 @@ public class Game implements Initializable {
      * @param message
      */
     public void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("What's happening?");
         alert.setContentText(message);
+
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(ButtonType.OK);
+
         Optional<ButtonType> result = alert.showAndWait();
     }
 
