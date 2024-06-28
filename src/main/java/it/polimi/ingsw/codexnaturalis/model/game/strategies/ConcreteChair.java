@@ -56,10 +56,6 @@ public class ConcreteChair implements Strategy {
 
                 Card lower = matrix[j + wholecells[2]][i - 3];
 
-                structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
-                System.out.println("-------------------");
-
-
                 if ((upper instanceof ResourceCard || upper instanceof GoldCard)
                         && upper.getSymbol().equals(properColor[0])
                         && cardToCoordinate.get(upper).getVisited().equals(false) &&

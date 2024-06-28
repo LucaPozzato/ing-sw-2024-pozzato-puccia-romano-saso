@@ -1,0 +1,809 @@
+@startuml uml
+hide empty fields
+skinparam linetype ortho
+
+package model {
+    class Game {
+        - gameId: int
+        - gameState: State
+        - players: List<Player>
+        - playerHand: List<Hand>
+        - playerStructure: List<Structure>
+        - deck: Deck
+        - board: Board
+        - numPlayers: int
+        - numParticipants: int
+        '- ?StadioGioco
+        - currentPlayer: Player
+        - nextPlayer: Player
+        - observerList: List<View>
+        'General'
+        
+        + Game(gameId: int)
+        + notifyAllObservers(): void
+        + addObserver(view: View): void
+        + removeObserver(view: View): void
+        + addPlayer(player: Player): void
+        + getCurrentPlater(): Player
+        + getNextPlayer(): Player
+        + getState(): State
+        + getDeck(): Deck
+        + getBoard(): Board
+        + getNumPlayers(): int
+        + getNumParticipants(): int
+        + getGameId(): int
+        + getPlayers(): List<Player>
+        + getCurrentPlayer(): Player
+        + getHandByPlayer(player: Player): Hand
+        + getStructureByPlayer(player: Player): Structure
+        + setState(state: State): void
+        + setNumPlayers(numPlayers: int): void
+        + setNumParticipants(numParticipants: int): void
+        + setDeck(deck: Deck): void
+        + setBoard(board: Board): void
+        + setPlayerHand(player: Player, hand: Hand): void
+        + setPlayerStructure(player: Player, structure: Structure): void
+        + setCurrentPlayer(currentPlayer: Player): void 
+        + setNextPlayer(nextPlayer: Player): void 
+    }
+    
+    class Player {
+        - nickname: String
+        - colorPlayer: Color
+        
+        + Player(nickname: String, colorPlayer: Color)
+        + getNickname(): String
+        + getColorPlayer(): Color
+        }
+    
+    class AbstractPlayerFactory{
+        
+        + AbstractPlayerFactory()
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Gui
+
+    }
+    class CliPlayerFactory extends AbstractPlayerFactory{
+        - cliRmi: CliRmiPlayer
+        - cliSocket: CliSocketPlayer
+        
+        + CliPlayerFactory()
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Socket
+    }
+
+    class GuiPlayerFactory extends AbstractPlayerFactory{
+        - guiRmi: GuiRmiPlayer
+        - guiSocket: GuiSocketPlayer
+
+        + GuiPlayerFactory()
+        + createRmiPlayer(): Rmi
+        + createSocketPlayer(): Socket
+    }
+    class CliRmiPlayer extends Player{
+        'override
+        + assemble(): void 
+        ' contiene la logica per costruire un cliRmiPlayer
+    }
+
+    class CliSocketPlayer extends Player{
+        'override
+        + CliSocketPlayer()
+        + assemble(): void 
+        ' contiene la logica per costruire un cliSocketPlayer
+    }
+
+    class GuiRmiPlayer extends Player {
+        'override
+        + GuiRmiPlayer()
+        + assemble(): void 
+        ' contiene la logica per costruire un guiRmiPlayer
+    }
+
+    class GuiSocketPlayer extends Player {
+        'override
+        + GuiSocketPlayer()
+        + assemble(): void 
+        ' contiene la logica per costruire un guiSocketPlayer
+    }
+
+    interface Rmi{
+        + assemble(): void
+        'contiene la logica per costruire un generico RmiPlayer
+    }
+
+    interface Socket{
+        + assemble(): void
+        'contiene la logica per costruire un generico SocketPlayer
+    }
+
+    abstract class State {
+        - game: Game
+
+        + State()
+        + initialize(nick: String, color: Color, numPlayers: int): void throws IllegalCommandException
+        + joinGame(nickname: String, color: Color): void throws IllegalCommandException
+        + placedCard(idBottomCard: String, idCard: String, points: int, position: String): void throws IllegalCommandException
+        + drawnCard(type: String, id: String): void throws IllegalCommandException
+        + matchEnded(): void
+    }
+
+    class InitState {
+        + InitState(game: Game)
+        + initialized(nick: String, color: Color, numPlayers: int): void throws IllegalCommandException
+        - createDecks(): void
+        - createFirstPlayer(nick: String, color: Color, numPlayers: int): void
+        - dealHands(numPlayers: int): void
+        - dealInitialCard(): void
+        - dealSecretObjective(): void
+        - dealCommonObjective(): void
+    }
+
+    ' note right of InitState::createDecks
+    ' createDecks parses the json file and forall 
+    ' card in it calls the Deck's method "addCard". 
+    ' When finished it shuffles the deck calling on 
+    ' it the method "shuffle".
+    ' end note
+
+    ' note right of InitState::createFirstPlayer
+    ' createFirstPlayer creates a new player calling the constructor
+    ' method in Player. The controller will manage to acquire the 
+    ' informations regarding the total number of players admitted inside
+    ' the lobby and will pass them to the createFirstPlayer method so that 
+    ' it sets the state informations in Game.
+    ' end note
+
+    ' note right of InitState::dealHands
+    ' dealHands draws 3 cards for each player from 
+    ' the deck and adds them to each player hand
+    ' end note
+
+    ' note right of InitState::dealSecretObjective
+    ' dealSecretObjective parses the json file searching
+    ' for the "secret objective" cards and selects two 
+    ' of them for each player. Those cards will be added 
+    ' to the "chooseBetweenObj" attribute in the Hand class
+    ' end note
+    
+    ' note right of InitState::dealCommonObjective
+    ' dealCommonObjective parses the json file searching
+    ' for the "common objective" cards andranoy selects two 
+    ' of them. Those cards will be added to the 
+    ' "commonObjectives" atribute in the Board class
+    ' end note
+
+    
+    class WaitPlayerState {
+        + WaitPlayerState(game: Game): void
+        + joinGame(nickname: String, color: Color, numPlayers: int): void throws IllegalCommandException
+        - createNewPlayers(nickname: String, color: Color): void
+        - isFull(): void
+    }
+
+    ' note right of WaitPlayerState::createNewPlayer
+    ' createNewPlayer calls the constructor method in Player, 
+    ' updates the attributes related to the number of players 
+    ' in Game, associates the player with his hands and
+    ' structure by calling the setPlayerHand and setPlayerStructure 
+    ' methods
+    ' end note
+
+    ' note right of WaitPlayerState::isFull
+    ' checks in Game if getNumPartecipants()==getNumPlayers and 
+    ' according to the boolean value returned it allows the state
+    ' to change
+    ' end note
+
+    class PlacedCardState {
+        + PlacedCardState(game: Game)
+        + placedCard(idBottomCard: String, idCard: String, points: int, position: String): void throws IllegalCommandException
+        - addCard(idBottomCard: String, idCard: String, position: String): void
+        - updatePoints(points: int): void
+    }
+
+    ' note right of PlacedCardState::addCard
+    ' calls the Structure's method insertCard and update the 
+    ' currentResources and currentObjects attributes
+    ' end note
+
+    ' note right of PlacedCardState::updatePoints
+    ' takes the new score scenario computed by the controller 
+    ' and calls the Board's method updateScore 
+    ' end note
+
+    class DrawnCardState {
+        + DrawnCardState(game: Game)
+        + drawnCard(type: String, id: String): void throws IllegalCommandException
+        + matchEnded(): void throws IllegalCommandException
+        - updateDeck(type: String, id: String): void
+        - nextTurn(): void
+        - endMatch(): void
+    }
+
+    ' note right of DrawnCardState::updateDeck
+    ' calls the method of Deck responible of drawing a 
+    ' card from one of the decks and add it to a specific
+    ' player's hand
+    ' end note
+
+    ' note right of DrawnCardState::nextTurn
+    ' calls the Game's setter methods so that 
+    ' currentPlayer()==nextPlayer()
+    ' end note
+
+    class EndGameState {
+        + EndGameState(game: Game)
+    }
+
+    class Board {
+        - scores: HashMap<Player, Integer>
+        - commonObjective: ObjectiveCard
+        - uncoveredCards: List<Card>
+
+        + Board()
+        + setCommonObjective(commonObjective: ObjectiveCard): void
+        + getScores(): Map<Player, Integer>
+        + getCommonObjective(): ObjectiveCard
+        + getUncoveredCards(): List<Card>
+        + updateScore(player: Player, newPoints: Integer): void
+        + addUncoveredCard(card: Card): void
+        + removeUncoveredCard(card: Card): void
+        + isLastTurn(): boolean
+    }
+
+    abstract class Card {
+        - idCard: String
+
+        + Card()
+        + getIdCard(): String
+        + print(): void
+    }
+
+    class ObjectiveCard extends Card {
+        - idCard: String
+        - points: int
+        - shape: String
+        - mustHave: String
+
+        + ObjectiveCard(idCard: String, points: int, shape: String, mustHave: String)
+        + getIdCard(): String
+        + getPoints(): int
+        + getShape(): String
+        + getMustHave(): String
+        + setPoints(points: int): void
+        + setShape(shape: String): void
+        + setMustHave(mustHave: String): void
+        + toString(): String
+        + print(): void
+    }
+
+    class InitialCard extends Card {
+        - idCard: String
+        - frontCornerRes: List<String>
+        - frontCenterRes: List<String>
+        - backCornerRes: List<String>
+
+        + InitialCard(idCard: String, frontCornerRes: List<String>, frontCenterRes: List<String>, backCornerRes: List<String>)
+        + getIdCard(): String
+        + getFrontCornerRes(): List<String>
+        + getFrontCenterRes(): List<String>
+        + getBackCornerRes(): List<String>
+        + setFrontCornerRes(frontCornerRes: List<String>): void
+        + setFrontCenterRes(frontCenterRes: List<String>): void
+        + setBackCornerRes(backCornerRes: List<String>): void
+        + toString(): String
+        + print(): void
+    }
+
+    class GoldCard extends Card {
+        - idCard: String
+        - symbol: String
+        - points: int
+        - pointsType: String
+        - corners: List<String>
+        - requirements: List<String>
+        
+        + GoldCard(idCard: String, symbol: String, points: int, pointsType: String, corners: List<String>, requirements: List<String>)
+        + getIdCard(): String
+        + getSymbol(): String
+        + getPoints(): int
+        + getPointsType(): String
+        + getCorners(): List<String>
+        + getRequirements(): List<String>
+        + setIdCard(idCard: String): void
+        + setSymbol(symbol: String): void
+        + setPoints(points: int): void
+        + setPointsType(pointsType: String): void
+        + setCorners(corners: List<String>): void
+        + setRequirements(requirements: List<String>): void
+        + print(): void
+    }
+
+    class ResourceCard extends Card {
+        
+        - idCard: String
+        - symbol: String
+        - points: int
+        - corners: List<String> 
+
+        
+        + ResourceCard(idCard: String, symbol: String, points: int, corners: List<String>)
+        + getIdCard(): String
+        + setIdCard(idCard: String): void
+        + getSymbol(): String
+        + setSymbol(symbol: String): void
+        + getPoints(): int
+        + setPoints(points: int): void
+        + getCorners(): List<String>
+        + setCorners(corners: List<String>)
+        + print(): void
+    }
+
+    class Structure {
+        - root: StructureNode
+        - currentResources: Map<Resource, Integer>
+        - currentObjects: Map<Objects, Integer>
+
+        + Structure(card: Card)
+        + getRoot(): StructureNode
+        + getCurrentResources(): Map<Resource, Integer>
+        + getCurrentObjects(): Map<Objects, Integer>
+        + getCard(id: String): Card
+        + insertCard(idBottomCard: Card, id: Card, position: String): void
+        + updateResources(resource: Resource, quantity: Integer): void
+        + updateObjects(object: Objects, quantity: Integer): void
+    }
+
+    class StructureNode {
+        - card: Card
+        - topLeftChild: StructureNode
+        - topRightChild: StructureNode
+        - bottomRightChild: StructureNode
+        - bottomLeftChild: StructureNode
+        - fathers: List<HashMap<StructureNode, Boolean>>
+
+        + StructureNode(card: Card, father: List<HashMap<StructureNode, Boolean>>)
+        + getCard(): Card
+        + getFathers(): List<HashMap<StructureNode, Boolean>>
+        + getTopLeftChild(): StructureNode
+        + getTopRightChild(): StructureNode
+        + getBottomRightChild(): StructureNode
+        + getBottomLeftChild(): StructureNode
+        + setTopLeftChild(child: StructureNode): void
+        + setTopRightChild(child: StructureNode): void
+        + setBottomRightChild(child: StructureNode): void
+        + setBottomLeftChild(child: StructureNode): void
+    }
+
+    class Deck {
+        'check sul tipo dinamico statico'
+        - goldDeck: Stack<GoldCard>
+        - resourceDeck: Stack<ResourceCard>
+
+        + Deck(goldDeck: Stack<GoldCard>, resourceDeck: Stack<ResourceCard>)
+        + getGoldDeck(): Stack<GoldCard>
+        + getResourceDeck(): Stack<ResourceCard>
+        + addGoldCard(card: GoldCard): void
+        + addResourceCard(card: ResourceCard): void
+        + drawGoldCard(): GoldCard
+        + drawResourceCard(): ResourceCard
+        + shuffleGoldDeck(): void
+        + shuffleResourceDeck(): void
+        + emptyGold(): boolean
+        + emptyRes(): boolean
+        + printGoldDeck(): void
+        + printResourceDeck(): void
+    }
+
+    class Hand {
+        - chooseBetweenObj: List<Card>
+        - secretObjective: Card
+        - cardsHand: List<Card>
+        - initCard: InitialCard
+
+        + Hand()
+        + getSecretObjective(): Card
+        + getCardsHand(): List<Card>
+        + getChooseBetweenObj(): List<Card>
+        + addCard(card: Card): void
+        + removeCard(card: Card): void
+        + setSecretObjective(secretObjective: Card): void
+        + setInitialCard(initCard: InitialCard): void
+    }
+    package enumerations {
+        enum Color {
+            YELLOW
+            BLUE
+            GREEN
+            RED
+        }
+
+        enum CornerType {
+            FEATHER
+            INK
+            SCROLL
+            VEGETABLE
+            INSECT
+            ANIMAL
+            SHROOM
+            EMPTY
+            NULL
+        }
+        
+        enum Resource {
+            VEGETABLE
+            ANIMAL
+            INSECT
+            SHROOM
+            EMPTY
+            NULL
+        }
+
+    enum Objects {
+            FEATHER
+            INK
+            SCROLL
+        }
+
+        enum GoldCardPointType {
+            CORNERS
+            INK
+            FEATHER
+            SCROLL
+            ANGLE 
+            NULL
+        }
+
+        enum ObjectiveCardType {
+            STAIRS 
+            CHAIR
+            IDOL
+            WISEMAN
+        }
+
+        enum Positions{
+            TOP_RIGHT
+            TOP_LEFT
+            BOTTOM_RIGHT
+            BOTTOM_LEFT
+        }
+    }
+
+    abstract class Event {
+        - id: int
+        - timeStamp: long
+
+        + Event(id: int, timeStamp: long)
+        + getEventId(): int
+        + getTimeStamp(): long
+    }
+
+    enum NewPlayerEventType{
+        PLAYER_JOINED
+        ERROR_WHILE_ENTERING
+        PLAYER_READY_TO_PLAY
+        DISCONNECTED_PLAYER
+    }
+
+    enum NewGameEventType{
+        GAME_STARTED
+        GAME_ENDED
+        GAME_ALREADY_FULL
+    }
+
+    class NewPlayerEvent extends Event{
+        - type: NewPlayerEventType
+        + createPlayerEvent(playerView: View): void
+    }
+
+    class NewGameEvent extends Event{
+        - type: NewGameEventType
+        + createGameEvent(gameView: View): void
+    }
+
+    package updategameevent {
+        enum BoardEventType{
+            NEXT_TURN
+            LAST_TURN
+            NEXT_PLAYER
+            NEW_POSITION
+            NEW_POINTS
+        }
+        enum DeckEventType{
+            INIT
+            CARD_PICKED
+            NO_MORE_CARDS
+        }
+        enum HandEventType{
+            CARD_PICKED
+            CARD_PLACED
+        }
+        enum StructureEventType{
+            CARD_PLACED
+            RESOURCE_COUNT
+        }
+
+        class GameBoardUpdateEvent {
+            - type: BoardEventType
+            + createGameBoardUpdateEvent(boardView: View): void
+        }
+
+        class GameDeckUpdateEvent {
+            - type: DeckEventType
+            + createGameDeckUpdateEvent(deckView: View): void
+        }
+
+        class GameHandUpdateEvent {
+            - type: HandEventType
+            + createGameHandUpdateEvent(handView: View): void
+        }
+
+        class GameStructureUpdateEvent {
+            - type: StructureEventType
+            + createGameStructureUpdateEvent(structureView: View): void
+        }
+    }
+
+    class ChatMessage {
+        - messageId: int
+        - message: String
+        - sender: Player
+        - receiver: List<Player>
+        - timeStamp: long
+        + ChatMessage(messageId: int, message: String, sender: Player, receiver: List<Player>, timeStamp: long)
+        + getMessageId(): int
+        + getMessage(): String
+        + getSender(): Player
+        + getReceiver(): List<Player>
+        + getTimeStamp(): long
+    }
+
+    class Chat {
+        - chatMessages: List<ChatMessage>
+
+        + Chat()
+        + getChatMessages(): List<ChatMessage>
+        + addMessage(message: ChatMessage): void
+        + removeMessage(message: ChatMessage): void
+    }
+
+    package exceptions{
+        exception AlreadyExistingNicknameException{
+            + AlreadyExistingNicknameException(message: String)
+        }
+        exception IllegalCommandException{
+            + IllegalCommandException(message: String)
+        }
+        exception IllegalPlacementAnglesException{
+            + IllegalPlacementAnglesException(message: String)
+        }
+        exception IllegalPlacementResourcesException{
+            + IllegalPlacementResourcesException(message: String)
+        }
+        exception IllegalSequenceException{
+            + IllegalSequeceException(message: String)
+        }
+    }
+
+    package parser {
+        class GoldParser {
+            - goldDeck: Stack<GoldCard>
+
+            + GoldParser()
+            + parse(): Stack<GoldCard>
+        }
+
+        class ResourceParser {
+            - resourceDeck: Stack<ResourceCard>
+
+            + ResourceParser()
+            + parse(): Stack<ResourceCard>
+        }
+
+        class ObjectiveParser {
+            - collection: List<ObjectiveCard>
+
+            + ObjectiveParser()
+            + parse(): List<ObjectiveCard>
+        }
+
+        class InitialParser {
+            - collection: List<InitialCard>
+
+            + InitialParser()
+            + parse(): List<InitialCard>
+        }
+    }
+}
+
+package controller {
+    class ServerController{
+        - view: View
+        - modelBoard: Board 
+        - eventQueue: Queue<Event>
+        - modelStructure: Structure
+        - modelHand: Handwritten
+        - modelDeck: Deck 
+        - modelChat: Chat 
+        - modelGame: Game
+        - modelPlayer: Player
+        ' Controller state changes
+        + lastTurn(): void
+        + initialTurn(): void
+        + computePoints(playerList: List<Player>): List<int>
+        + computePointsBy(player: Player): int
+        + turnEnded(): void
+        + cardPlaced(card: angledCard, player: Player): void
+        + computeStructurePointsBy(player: Player)
+        + drawCard(): void
+        + placeCard(): void
+        + sendMessage(message:String): void
+        'User gesture consumer from view 
+        + update(): void
+        + selectView(): void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
+    }
+
+    note bottom
+    It reacts to events thrown by the view by updating 
+    the task queue and holds the logics to compute the 
+    result of user actions and perform changes on the
+    state. It acts selectiong the view that requires changes.
+    end note
+
+    class FlowController{
+        - view: View
+        - modelBoard: Board 
+        - modelGame: Game
+        - eventQueue: Queue<Event>
+        'Controller state changes
+        + createGame(): void
+        + deleteGame(): void
+        + admitPlayer(): void
+        + setNickname(nickName: String): void throws AlreadyExistingNicknameException
+        + setNumPlayers(num: int): void
+        + setConnectionType(): void
+        'User gesture consumer from view 
+        + update(): void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
+    }
+
+    note bottom
+    It holds the multiplayer logic and the management
+    of inital settings
+    end note
+
+    class ClientController{
+        - view: View
+        - eventQueue: Queue<Event>
+        'Action performed by user that doesn't affect the state of the model
+        + whosTurn(): Player throws NotYourTurnException 
+        + suitablePlaced(): boolean throws IllegalPlacementAnglesException , IllegalPlacementResourcesException 
+        + suitableOrder(): boolean throws IllegalSequeceException 
+        + hint(): Card
+        'User gesture consumer from view 
+        + update(): void
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
+    }
+
+    note bottom
+    It handles part of game's logic. Specifically it reacts to user's attempt to make 
+    illegal moves blocking him from changing the state of the model and, given the current state
+    of the game it gives hints on the best card choice.
+    It doesn't interact with the model.
+    end note
+}
+
+package view {
+    abstract View {
+        - gameModel: Game
+        - boardModel: Board
+        - playerModel: Player
+        - deckModel: Deck
+        - handModel: Hand
+        - structureModel: Structure
+        - eventQueue: Queue<Event>
+        - controllerList: List<Controller>
+        + addEvent(event: Event): void
+        + removeEvent(event: Event): void
+        + update(): void
+        + addListener(controller: Controller): void
+        + removeListener(controller: Controller): void
+        + notifyAll(): void
+    }
+
+    package boardview {
+        class BoardViewGui {}
+        class BoardViewCli {}
+    }
+
+    package playerview {
+        class PlayerViewGui {}
+        class PlayerViewCli {}
+    }
+
+    package deckview {
+        class DeckViewGui {}
+        class DeckViewCli {}
+    }
+
+    package handview {
+        class HandViewGui {}
+        class HandViewCli {}
+    }
+
+    package structureview {
+        class StructureViewGui {}
+        class StructureViewCli {}
+    }
+
+    package gameview {
+        class GameViewGui {}
+        class GameViewCli {}
+    }
+}
+
+Game -- Player
+Game -- Deck
+Game -- Board
+Game -- Hand
+Game -- Structure
+Deck -- Card
+Structure -- StructureNode
+StructureNode -- Card
+Hand -- Card
+
+Chat -- ChatMessage
+
+GameStructureUpdateEvent -up-|> Event
+GameHandUpdateEvent -up-|> Event
+GameDeckUpdateEvent -up-|> Event
+GameBoardUpdateEvent -up-|> Event
+
+BoardViewGui --|> View
+BoardViewCli --|> View
+PlayerViewGui --|> View
+PlayerViewCli --|> View
+DeckViewGui --|> View
+DeckViewCli --|> View
+HandViewGui -up-|> View
+HandViewCli -up-|> View
+StructureViewGui -up-|> View
+StructureViewCli -up-|> View
+GameViewGui -up-|> View
+GameViewCli -up-|> View
+
+WaitPlayerState -up-|> State
+InitState -up-|> State
+PlacedCardState -down-|> State
+DrawnCardState -down-|> State
+EndGameState -up-|> State
+
+Game *-down-> State
+
+GameBoardUpdateEvent --> BoardEventType : type
+GameDeckUpdateEvent --> DeckEventType : type
+GameHandUpdateEvent --> HandEventType : type
+GameStructureUpdateEvent --> StructureEventType : type
+
+NewPlayerEvent --> NewPlayerEventType : type
+NewGameEvent --> NewGameEventType : type
+
+CliPlayerFactory -down-> CliRmiPlayer : cliRmi
+CliPlayerFactory -down-> GuiRmiPlayer : cliSocket
+GuiPlayerFactory -down-> CliSocketPlayer : guiRmi
+GuiPlayerFactory -down-> GuiSocketPlayer : guiSocket
+GuiSocketPlayer ..|> Socket
+CliSocketPlayer ..|> Socket
+CliRmiPlayer ..|> Rmi
+GuiRmiPlayer ..|> Rmi
+
+controller -down[hidden]-- view
+parser -down[hidden]- exceptions
+enumerations -down[hidden]- exceptions
+' left to right direction
+@enduml

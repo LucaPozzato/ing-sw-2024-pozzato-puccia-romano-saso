@@ -89,13 +89,9 @@ public class InitState extends ControllerState {
         super.game.getConnected().put(player, true);
         super.game.getFromPlayerToId().put(player, clientId);
         super.game.setCurrentPlayer(super.game.getPlayers().getFirst());
-        super.game.setNumPlayers(numPlayers); // throws illegal command exc
+        super.game.setNumPlayers(numPlayers);
         super.game.addParticipant();
-        // FIXME: clean this up
         super.game.getBoard().updateActualScore(player, 0);
-
-        //super.game.getBoard().updateActualScore(player, 16);
-
     }
 
     /**

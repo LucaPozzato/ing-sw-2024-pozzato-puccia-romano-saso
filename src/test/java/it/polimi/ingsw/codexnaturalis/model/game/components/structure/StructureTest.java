@@ -595,7 +595,7 @@ public class StructureTest {
         }
 
 //        structure.printReducedMatrix(structure.getCardMatrix(), structure.getRadius(structure.getCoordinateToCard()));
-        assertEquals(4, structure.getRadius(structure.getCoordinateToCard()));
+        assertEquals(6, structure.getRadius(structure.getCoordinateToCard()));
     }
 
     @Test

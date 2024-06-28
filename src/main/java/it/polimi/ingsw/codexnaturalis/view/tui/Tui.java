@@ -73,10 +73,20 @@ public class Tui implements View {
      */
     @Override
     public void updateChat(Chat chat) {
+        String senderNickname = "";
+        String receiverNickname = "";
         terminalPrinter.updateChat(drawer.drawChat(chat, myPlayer));
-        if (!chatStage && !initialStage && !chooseStage)
-            terminalPrinter.updateAlert("You got a new message from: "
-                    + chat.getChatMessages().get(chat.getChatMessages().size() - 1).getSender().getNickname());
+        if (!chatStage && !initialStage && !chooseStage) {
+            senderNickname = chat.getChatMessages().get(chat.getChatMessages().size() - 1).getSender().getNickname();
+            if (chat.getChatMessages().get(chat.getChatMessages().size() - 1).getReceiver() != null)
+                receiverNickname = chat.getChatMessages().get(chat.getChatMessages().size() - 1).getReceiver()
+                        .getNickname();
+            else
+                receiverNickname = "Everyone";
+            if (!senderNickname.equals(myPlayer.getNickname())
+                    && (receiverNickname.equals("Everyone") || receiverNickname.equals(myPlayer.getNickname())))
+                terminalPrinter.updateAlert("You got a new message from: " + senderNickname);
+        }
         print();
     }
 
