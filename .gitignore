@@ -7,6 +7,6 @@
 .vscode/
 */**/.DS_Store
 /src/main/.idea
-/deliverables/Jar
+# /deliverables/Jar
 .venv/
 rounder.py
