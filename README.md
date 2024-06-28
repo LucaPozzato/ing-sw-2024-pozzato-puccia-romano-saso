@@ -216,7 +216,7 @@ and then follow the instructions (like typing ip address and then pressing enter
 ###### Client
 
 ```sh
-./mvnw clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
+./mvnw package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
 
 java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ```
@@ -224,7 +224,7 @@ java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ###### Server
 
 ```sh
-./mvnw clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
+./mvnw package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
 
 java -jar target/CodexNaturalis_Server-jar-with-dependencies.jar
 ```
@@ -256,7 +256,7 @@ chmod +x server.sh
 ###### Client
 
 ```sh
-mvnw.cmd clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
+mvnw.cmd package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ClientMain" -Djar.finalName="CodexNaturalis_Client"
 
 java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ```
@@ -264,7 +264,7 @@ java -jar target/CodexNaturalis_Client-jar-with-dependencies.jar
 ###### Server
 
 ```sh
-mvnw.cmd clean package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
+mvnw.cmd package -Dexec.mainClass="it.polimi.ingsw.codexnaturalis.ServerMain" -Djar.finalName="CodexNaturalis_Server"
 
 java -jar target/CodexNaturalis_Server-jar-with-dependencies.jar
 ```
